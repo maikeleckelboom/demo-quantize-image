@@ -47,83 +47,88 @@ const contrastMarksObj = computed(() => ({
 </script>
 
 <template>
-  <div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-6 max-w-md">
+    <fieldset class="flex flex-col bg-surface-container rounded-md  ">
+      <output :style="{ backgroundColor: sourceColor }" class="h-24 w-full rounded-md" />
+    </fieldset>
     <fieldset class="flex flex-col bg-surface-container rounded-md p-4 w-full">
-      <legend>HCT Color</legend>
-      <div class="flex items-center gap-x-4">
-        <div class="aspect-square grid place-items-center">
-          <span class="text-label-lg font-medium leading-none">H</span>
+      <legend>HCT</legend>
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-x-4">
+          <div class="aspect-square grid place-items-center">
+            <span class="text-label-lg font-medium leading-none">H</span>
+          </div>
+          <ExampleRangeSlider v-model="formModel.hue"
+                              :decimals="0"
+                              :stop-marks="false"
+                              class="color-input-range"
+                              contained="true"
+                              help-text="The type of color, such as red, blue, or green"
+                              label="Hue"
+                              max="360"
+                              min="0">
+            <template #handle>
+              <div ref="customHandle" class="custom-handle" />
+            </template>
+            <template #track>
+              <SliderTrack :style="hueSpectrum" class="" fill="false" />
+            </template>
+          </ExampleRangeSlider>
+          <div class="flex flex-col w-12 justify-center">
+            <input v-model.number="formModel.hue" class="numeric-text-input" type="text" />
+          </div>
         </div>
-        <ExampleRangeSlider v-model="formModel.hue"
-                            :decimals="0"
-                            :stop-marks="false"
-                            class="color-input-range"
-                            contained="true"
-                            help-text="The type of color, such as red, blue, or green"
-                            label="Hue"
-                            max="360"
-                            min="0">
-          <template #handle>
-            <div ref="customHandle" class="custom-handle" />
-          </template>
-          <template #track>
-            <SliderTrack :style="hueSpectrum" class="" fill="false" />
-          </template>
-        </ExampleRangeSlider>
-        <div class="flex flex-col w-12 justify-center">
-          <input v-model.number="formModel.hue" class="numeric-text-input" type="text" />
-        </div>
-      </div>
-      <div class="flex items-center gap-x-4">
-        <div class="flex items-center justify-center">
-          <span class="text-label-lg font-medium leading-none">C</span>
-        </div>
-        <ExampleRangeSlider v-model.number="formModel.chroma"
-                            :decimals="0"
-                            :stop-marks="false"
-                            class="color-input-range"
-                            contained="true"
-                            help-text="How colorful or neutral a color appears"
-                            label="Chroma"
-                            max="150"
-                            min="0"
-                            step="1">
+        <div class="flex items-center gap-x-4">
+          <div class="flex items-center justify-center">
+            <span class="text-label-lg font-medium leading-none">C</span>
+          </div>
+          <ExampleRangeSlider v-model.number="formModel.chroma"
+                              :decimals="0"
+                              :stop-marks="false"
+                              class="color-input-range"
+                              contained="true"
+                              help-text="How colorful or neutral a color appears"
+                              label="Chroma"
+                              max="150"
+                              min="0"
+                              step="1">
 
-          <template #handle>
-            <div ref="customHandle" class="custom-handle" />
-          </template>
-          <template #track>
-            <SliderTrack :style="chromaSpectrum" class="slider-track" fill="false" />
-          </template>
-        </ExampleRangeSlider>
-        <div class="flex flex-col w-12 justify-center">
-          <input v-model.number="formModel.chroma" class="numeric-text-input " type="text" />
+            <template #handle>
+              <div ref="customHandle" class="custom-handle" />
+            </template>
+            <template #track>
+              <SliderTrack :style="chromaSpectrum" class="slider-track" fill="false" />
+            </template>
+          </ExampleRangeSlider>
+          <div class="flex flex-col w-12 justify-center">
+            <input v-model.number="formModel.chroma" class="numeric-text-input " type="text" />
+          </div>
         </div>
-      </div>
-      <div class="flex  items-center gap-x-4">
-        <div class="flex items-center justify-center">
-          <span class="text-label-lg font-medium leading-none">T</span>
-        </div>
-        <ExampleRangeSlider v-model.number="formModel.tone"
-                            :contained="true"
-                            :decimals="0"
-                            :stop-marks="false"
-                            class="color-input-range"
-                            help-text="The lightness or darkness of a color"
-                            label="Tone"
-                            max="100"
-                            min="0"
-                            step="1">
+        <div class="flex items-center gap-x-4">
+          <div class="flex items-center justify-center">
+            <span class="text-label-lg font-medium leading-none">T</span>
+          </div>
+          <ExampleRangeSlider v-model.number="formModel.tone"
+                              :contained="true"
+                              :decimals="0"
+                              :stop-marks="false"
+                              class="color-input-range"
+                              help-text="The lightness or darkness of a color"
+                              label="Tone"
+                              max="100"
+                              min="0"
+                              step="1">
 
-          <template #handle>
-            <div ref="customHandle" class="custom-handle" />
-          </template>
-          <template #track>
-            <SliderTrack :style="toneSpectrum" class="slider-track" fill="false" />
-          </template>
-        </ExampleRangeSlider>
-        <div class="flex flex-col w-12 justify-center">
-          <input v-model.number="formModel.tone" class="numeric-text-input" type="text" />
+            <template #handle>
+              <div ref="customHandle" class="custom-handle" />
+            </template>
+            <template #track>
+              <SliderTrack :style="toneSpectrum" class="slider-track" fill="false" />
+            </template>
+          </ExampleRangeSlider>
+          <div class="flex flex-col w-12 justify-center">
+            <input v-model.number="formModel.tone" class="numeric-text-input" type="text" />
+          </div>
         </div>
       </div>
     </fieldset>
@@ -134,6 +139,7 @@ const contrastMarksObj = computed(() => ({
           <Icon class="size-6 leading-none" name="ic:outline-brightness-7" />
         </div>
         <ExampleRangeSlider v-model.number="contrastLevel"
+                            :round="0"
                             contained="true"
                             help-text="The difference in brightness between the fore- and background"
                             label="Contrast Level"
@@ -141,7 +147,7 @@ const contrastMarksObj = computed(() => ({
                             min="0"
                             step="0.1">
           <template #handle>
-            <div ref="customHandle" class="custom-handle" />
+            <div ref="customHandle" class="custom-handle contrast-input-handle" />
           </template>
         </ExampleRangeSlider>
         <div class="flex flex-col w-12 justify-center">
@@ -154,7 +160,7 @@ const contrastMarksObj = computed(() => ({
 
 <style>
 .numeric-text-input {
-  @apply relative overflow-clip rounded-md p-2 bg-transparent border-surface-container-high border-thin outline-none text-center tabular-nums text-body-lg;
+  @apply relative overflow-clip rounded-md px-2 py-1 bg-transparent border-surface-container-high border-thin outline-none text-center tabular-nums text-body-lg;
   @apply after:absolute after:bg-transparent after:inset-0 after:z-0;
   @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-2 active:after:bg-surface-level-3;
 }
@@ -165,6 +171,10 @@ const contrastMarksObj = computed(() => ({
   border-radius: 50%;
   border: solid 2px rgb(var(--primary-rgb));
   outline-color: rgb(var(--primary-rgb));
+
+  &.contrast-input-handle {
+    @apply bg-surface-container-high;
+  }
 
   &:focus {
   }

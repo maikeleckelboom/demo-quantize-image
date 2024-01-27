@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="p-4 flex justify-center items-center flex-col gap-2">
+  <div class="p-4 md:p-12 flex justify-center items-center flex-col gap-2">
     <KeyColorPickers />
   </div>
 </template>
