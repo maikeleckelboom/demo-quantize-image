@@ -91,6 +91,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: row;
+    max-inline-size: calc(100% - 32px);
 
     &.v-label-visible {
         .slider-handle-label-container {
@@ -246,6 +247,7 @@
     border-radius: var(--slider-track-border-radius);
     position: relative;
     overflow: clip;
+    min-width: 100%;
 }
 
 .slider-track-fill {
