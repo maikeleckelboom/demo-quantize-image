@@ -1,0 +1,143 @@
+:root {
+    /* Emphasized decelerate easing (out) */
+    --easing-emphasized-decelerate-x0: 0.05000000074505806;
+    --easing-emphasized-decelerate-y0: 0.699999988079071;
+    --easing-emphasized-decelerate-x1: 0.10000000149011612;
+    --easing-emphasized-decelerate-y1: 1;
+
+    /* Emphasized accelerate easing (in) */
+    --easing-emphasized-accelerate-x0: 0.30000001192092896;
+    --easing-emphasized-accelerate-y0: 0;
+    --easing-emphasized-accelerate-x1: 0.800000011920929;
+    --easing-emphasized-accelerate-y1: 0.15000000596046448;
+
+    /* Standard decelerate easing (out) */
+    --easing-standard-decelerate-x0: 0;
+    --easing-standard-decelerate-y0: 0;
+    --easing-standard-decelerate-x1: 0;
+    --easing-standard-decelerate-y1: 1;
+
+    /* Standard accelerate easing (in) */
+    --easing-standard-accelerate-x0: 0.30000001192092896;
+    --easing-standard-accelerate-y0: 0;
+    --easing-standard-accelerate-x1: 1;
+    --easing-standard-accelerate-y1: 1;
+
+    /* Duration 1000ms */
+    --duration-1000: 1000ms;
+
+    /* Duration 900ms */
+    --duration-900: 900ms;
+
+    /* Duration 800ms */
+    --duration-800: 800ms;
+
+    /* Duration 700ms */
+    --duration-700: 700ms;
+
+    /* Duration 600ms */
+    --duration-600: 600ms;
+
+    /* Duration 550ms */
+    --duration-550: 550ms;
+
+    /* Duration 500ms */
+    --duration-500: 500ms;
+
+    /* Duration 450ms */
+    --duration-450: 450ms;
+
+    /* Duration 400ms */
+    --duration-400: 400ms;
+
+    /* Duration 350ms */
+    --duration-350: 350ms;
+
+    /* Duration 300ms */
+    --duration-300: 300ms;
+
+    /* Duration 250ms */
+    --duration-250: 250ms;
+
+    /* Duration 200ms */
+    --duration-200: 200ms;
+
+    /* Duration 150ms */
+    --duration-150: 150ms;
+
+    /* Duration 100ms */
+    --duration-100: 100ms;
+
+    /* Duration 50ms */
+    --duration-50: 50ms;
+    --duration-short1: var(--duration-short1, 50ms);
+    --duration-short2: var(--duration-short2, 100ms);
+    --duration-short3: var(--duration-short3, 150ms);
+    --duration-short4: var(--duration-short4, 200ms);
+    --duration-medium1: var(--duration-medium1, 250ms);
+    --duration-medium2: var(--duration-medium2, 300ms);
+    --duration-medium3: var(--duration-medium3, 350ms);
+    --duration-medium4: var(--duration-medium4, 400ms);
+    --duration-long1: var(--duration-long1, 450ms);
+    --duration-long2: var(--duration-long2, 500ms);
+    --duration-long3: var(--duration-long3, 550ms);
+    --duration-long4: var(--duration-long4, 600ms);
+    --duration-extra-long1: var(--duration-extra-long1, 700ms);
+    --duration-extra-long2: var(--duration-extra-long2, 800ms);
+    --duration-extra-long3: var(--duration-extra-long3, 900ms);
+    --duration-extra-long4: var(--duration-extra-long4, 1000ms);
+
+    /* Standard easing (in and out) */
+    --easing-standard-x0: 0.20000000298023224;
+    --easing-standard-y0: 0;
+    --easing-standard-x1: 0;
+    --easing-standard-y1: 1;
+
+    /* Linear easing */
+    --easing-linear-x0: 0;
+    --easing-linear-y0: 0;
+    --easing-linear-x1: 1;
+    --easing-linear-y1: 1;
+
+    /* Emphasized */
+    --easing-emphasized-x0: 0.20000000298023224;
+    --easing-emphasized-y0: 0;
+    --easing-emphasized-x1: 0;
+    --easing-emphasized-y1: 1;
+
+    /* Motion path */
+    --path-standard-path: 1;
+
+    /* Custom properties for transition-timing-function */
+    --easing-standard: cubic-bezier(
+            var(--easing-standard-x0),
+            var(--easing-standard-y0),
+            var(--easing-standard-x1),
+            var(--easing-standard-y1)
+    );
+    --easing-linear: cubic-bezier(
+            var(--easing-linear-x0),
+            var(--easing-linear-y0),
+            var(--easing-linear-x1),
+            var(--easing-linear-y1)
+    );
+    --easing-emphasized: cubic-bezier(
+            var(--easing-emphasized-x0),
+            var(--easing-emphasized-y0),
+            var(--easing-emphasized-x1),
+            var(--easing-emphasized-y1)
+    );
+    --easing-standard-decelerate: cubic-bezier(
+            var(--easing-standard-decelerate-x0),
+            var(--easing-standard-decelerate-y0),
+            var(--easing-standard-decelerate-x1),
+            var(--easing-standard-decelerate-y1)
+    );
+    --easing-standard-accelerate: cubic-bezier(
+            var(--easing-standard-accelerate-x0),
+            var(--easing-standard-accelerate-y0),
+            var(--easing-standard-accelerate-x1),
+            var(--easing-standard-accelerate-y1)
+    );
+
+}
