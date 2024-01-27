@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import {hexFromArgb, TonalPalette} from '@material/material-color-utilities'
-import {useHctSpectra} from "~/modules/theme/runtime/composables/useHctSpectra";
 
 const {$dynamicScheme} = useNuxtApp()
 const {sourceColor, contrastLevel} = useThemeConfig()
@@ -69,7 +68,7 @@ const contrastMarksObj = computed(() => ({
           </p>
         </div>
 
-        <Slider
+        <ExampleRangeSlider
             v-model="formModel.hue"
             :custom-track="true"
             :stop-marks="false"
@@ -84,7 +83,7 @@ const contrastMarksObj = computed(() => ({
           <template #track>
             <SliderTrack :style="hueSpectrum" class="" fill="false"/>
           </template>
-        </Slider>
+        </ExampleRangeSlider>
       </fieldset>
       <fieldset class="mb-4">
         <div class="mb-6 mt-4">
@@ -96,7 +95,7 @@ const contrastMarksObj = computed(() => ({
             How colorful or neutral a color appears
           </p>
         </div>
-        <Slider v-model="formModel.chroma" :contained="true" :max="150" :min="0" :step="1"
+        <ExampleRangeSlider v-model="formModel.chroma" :contained="true" :max="150" :min="0" :step="1"
                           :stop-marks="false"
                           class="color-input-range">
 
@@ -106,7 +105,7 @@ const contrastMarksObj = computed(() => ({
           <template #track>
             <SliderTrack :style="chromaSpectrum" class="slider-track" fill="false"/>
           </template>
-        </Slider>
+        </ExampleRangeSlider>
       </fieldset>
       <fieldset class="mb-4">
         <div class="mb-6 mt-4">
@@ -118,7 +117,7 @@ const contrastMarksObj = computed(() => ({
             The amount of white or black mixed with the color
           </p>
         </div>
-        <Slider
+        <ExampleRangeSlider
             v-model="formModel.tone"
             :contained="true"
             :max="100"
@@ -133,7 +132,7 @@ const contrastMarksObj = computed(() => ({
           <template #track>
             <SliderTrack :style="toneSpectrum" class="slider-track" fill="false"/>
           </template>
-        </Slider>
+        </ExampleRangeSlider>
       </fieldset>
       <fieldset class="mb-4">
         <div class="mb-6 mt-4">
@@ -146,7 +145,7 @@ const contrastMarksObj = computed(() => ({
           </p>
         </div>
         <div class="flex flex-col">
-          <Slider
+          <ExampleRangeSlider
               v-model="contrastLevel"
               :marks="contrastMarksObj"
               contained="true"
@@ -162,7 +161,6 @@ const contrastMarksObj = computed(() => ({
 </template>
 
 <style>
-
 .custom-handle {
   width: var(--slider-handle-width);
   height: var(--slider-handle-height);

@@ -6,8 +6,8 @@ import type { Ref } from 'vue'
 const props = defineProps<SliderProps>()
 
 const isVertical = computed(() => props.orientation === 'vertical')
-const isRtl = computed(() => getOption("dir", 'ltr'))
-const isBtt = computed(() => getOption("btt", false))
+const isRtl = computed(() => getOption('dir', 'ltr'))
+const isBtt = computed(() => getOption('btt', false))
 const isContained = computed(() => getOptionAsBool('contained', true))
 
 const rootRef = ref<HTMLElement>()
@@ -24,9 +24,9 @@ const handleValues = computed((): number[] => {
 })
 
 const currentHandle = ref<HTMLElement | null>(null)
-watch(currentHandle, (pointer) =>pointer?.focus())
+watch(currentHandle, (pointer) => pointer?.focus())
 
-const {min, max, step} = useSteps(props)
+const { min, max, step } = useSteps(props)
 
 const convertRange = (min: number, max: number, a: number, b: number, x: number) => {
   const temp = (max - min)
@@ -58,7 +58,7 @@ function getToReversed() {
   return isHorizontalAndRtl || isVerticalAndBtt
 }
 
-function calculateProgress(parentRect: DOMRect, endPos: Position, offsetPos: Position = {x: 0, y: 0}) {
+function calculateProgress(parentRect: DOMRect, endPos: Position, offsetPos: Position = { x: 0, y: 0 }) {
   const isV = unref(isVertical)
   const horizontal = isV ? 'top' : 'left'
   const vertical = isV ? 'bottom' : 'right'
@@ -89,18 +89,18 @@ function getClosestPointer(event: PointerEvent): HTMLElement {
 }
 
 function getClickedPointer(evt: PointerEvent) {
-  return handlesRef.value.find((pointerRef) => pointerRef.contains(<Node>evt.target))
+  return handlesRef.value.find((handleRef) => evt?.target && handleRef.contains(<Node>evt.target))
 }
 
-function getDistanceToCenter(rect: DOMRect, {x, y}: Position) {
+function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
   const center = unref(isVertical) ? rect.top + rect.height / 2 : rect.left + rect.width / 2
   return unref(isVertical) ? y - center : x - center
 }
 
-const clickOffset = shallowReactive<Position>({x: 0, y: 0})
+const clickOffset = shallowReactive<Position>({ x: 0, y: 0 })
 
 function setClickOffset(evt: PointerEvent) {
-  Object.assign(clickOffset, {x: 0, y: 0})
+  Object.assign(clickOffset, { x: 0, y: 0 })
   const clickedPointer = getClickedPointer(evt)
   if (clickedPointer) {
     const pointerRect = getRect(clickedPointer)
@@ -112,7 +112,7 @@ function setClickOffset(evt: PointerEvent) {
   }
 }
 
-const {isSwiping, posEnd} = usePointerSwipe(rootRef, {
+const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
   threshold: 0,
   disableTextSelect: true,
   onSwipeStart: (event) => {
@@ -158,7 +158,7 @@ function getOption<T extends keyof SliderProps, D = SliderProps[T]>(option: T, d
 
 function getSwipeProgress(sliderRect: DOMRect) {
   const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
-  return calculateProgress(maybeContainedRect, posEnd, clickOffset);
+  return calculateProgress(maybeContainedRect, posEnd, clickOffset)
 }
 
 function handleSwipe(event: PointerEvent) {
@@ -167,7 +167,7 @@ function handleSwipe(event: PointerEvent) {
   if (!currentHandleEl || !sliderEl) return
 
   const sliderRect = getRect(sliderEl)
-  const progress = getSwipeProgress(sliderRect);
+  const progress = getSwipeProgress(sliderRect)
   const updatedValue = getValue(progress)
 
   if (isNumber(modelValue.value)) {
@@ -186,7 +186,7 @@ function handleSwipe(event: PointerEvent) {
     } else if (pointerAfter && pointerAfter <= updatedValue + minDistance) {
       modelValue.value.splice(pointerIndex, 1, pointerAfter - minDistance)
     }
-    return;
+    return
   }
 
   modelValue.value.splice(pointerIndex, 1, updatedValue)
@@ -197,15 +197,21 @@ function handleSwipe(event: PointerEvent) {
   <div ref="rootRef" class="slider-root">
     <SliderFrame>
       <Slider ref="sliderRef">
-        <SliderTrack>
-          <SliderTrackFill/>
-        </SliderTrack>
-        <template v-for="(handleValue, idx) in handleValues" :key="idx">
-          <SliderHandle :ref="handlesRef.set">
-            {{ handleValue }}
-          </SliderHandle>
+        <slot name="track">
+          <SliderTrack>
+            <slot name="trackFill">
+              <SliderTrackFill />
+            </slot>
+          </SliderTrack>
+        </slot>
+        <template v-for="(value, idx) in handleValues" :key="idx">
+          <slot :index="idx" :value="value" name="handle">
+            <SliderHandle :ref="handlesRef.set">
+              {{ value }}
+            </SliderHandle>
+          </slot>
         </template>
-        <SliderHandle/>
+        <SliderHandle />
       </Slider>
     </SliderFrame>
   </div>
