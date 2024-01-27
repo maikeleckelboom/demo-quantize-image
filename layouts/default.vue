@@ -3,11 +3,13 @@
 </script>
 
 <template>
-  <div class="default-layout">
+  <div class="relative">
     <slot />
   </div>
 </template>
 
 <style scoped>
+.default-layout {
 
+}
 </style>

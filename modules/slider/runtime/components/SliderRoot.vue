@@ -2,6 +2,7 @@
 import type { SliderProps } from '~/modules/slider/types'
 import { type Position, useTemplateRefsList } from '@vueuse/core'
 import type { Ref } from 'vue'
+import SliderOuter from '~/modules/slider/runtime/components/SliderWrapper.vue'
 
 const props = defineProps<SliderProps>()
 
@@ -195,7 +196,7 @@ function handleSwipe(event: PointerEvent) {
 
 <template>
   <div ref="rootRef" class="slider-root">
-    <SliderFrame>
+    <SliderWrapper>
       <Slider ref="sliderRef">
         <slot name="track">
           <SliderTrack>
@@ -213,7 +214,7 @@ function handleSwipe(event: PointerEvent) {
         </template>
         <SliderHandle />
       </Slider>
-    </SliderFrame>
+    </SliderWrapper>
   </div>
 </template>
 

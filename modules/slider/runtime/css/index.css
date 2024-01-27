@@ -85,8 +85,8 @@
     --upper-bound-value: 0%;
 
     position: relative;
-    min-inline-size: var(--slider-track-width);
-    min-block-size: var(--slider-track-height);
+    inline-size: var(--slider-track-width);
+    block-size: var(--slider-track-height);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -239,8 +239,8 @@
 .slider-track {
     --_height: var(--slider-track-height);
     --_width: var(--slider-track-width);
-    min-block-size: var(--_height, var(--slider-track-height));
-    min-inline-size: var(--_width, var(--slider-track-width));
+    block-size: var(--_height, var(--slider-track-height));
+    inline-size: var(--_width, var(--slider-track-width));
     border: var(--slider-track-border);
     background-color: var(--slider-track-color);
     border-radius: var(--slider-track-border-radius);

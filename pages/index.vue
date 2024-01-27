@@ -1,28 +1,10 @@
 <script lang="ts" setup>
-const emojiArray = ref<string[]>(['😀', '😞', '🤷', '💥', '🦸', '👋', '💖'])
 
 </script>
 
 <template>
-  <div class="mx-auto size-full max-w-4xl px-8 md:px-14">
-    <h1 class="text-display-lg mb-4">
-      Welcome to .. <span class="text-display-sm font-mono text-primary">de index pagina </span> ..
-    </h1>
-    <div class="grid md:grid-cols-2">
-      <div class="flex flex-col gap-y-4">
-        <div>
-          <ul class="list-decimal list-inside">
-            <li v-for="emoji in emojiArray" :key="emoji">{{ emoji }}</li>
-          </ul>
-        </div>
-        <div>
-          <button class="outlined-button" @click="emojiArray.push('👍')">Add 👍</button>
-        </div>
-      </div>
-      <div>
-        <KeyColorPickers />
-      </div>
-    </div>
+  <div class="p-4 flex justify-center items-center flex-col gap-2">
+    <KeyColorPickers />
   </div>
 </template>
 

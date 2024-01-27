@@ -31,6 +31,5 @@ export default defineNuxtModule<ModuleOptions>({
         file: resolve('./runtime/pages/index.vue')
       })
     })
-
   }
 })

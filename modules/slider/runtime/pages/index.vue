@@ -11,7 +11,7 @@ const hctModel = reactive({
 </script>
 
 <template>
-  <div class="mx-auto size-full max-w-7xl">
+  <div class="">
 
   </div>
 </template>

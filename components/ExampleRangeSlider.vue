@@ -212,9 +212,10 @@ function handleSwipe(_event: PointerEvent) {
   const sliderRect = getRect(sliderEl)
   const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
+  const pointerValue = roundDecimals(getValue(progress), Number(props.decimals ?? 2))
 
   if (isNumber(modelValue.value)) {
-    modelValue.value = getValue(progress)
+    modelValue.value = pointerValue
     return
   }
 
@@ -223,7 +224,6 @@ function handleSwipe(_event: PointerEvent) {
   }
 
   const pointerIndex = pointersRef.value.indexOf(currentPointer.value)
-  const pointerValue = getValue(progress)
 
   if (props.preventOverlap) {
     const minDistance = Number(props.minDistance)
@@ -265,6 +265,16 @@ function isMarkActive(mark: { value: number, active: boolean }) {
 
 const marksArray = computed(() => {
   if (!getMarksEnabled()) return []
+  if (isArray(props.marks)) return props.marks.map((mark) => {
+    return {
+      value: Number(mark),
+      active: isMarkActive({ value: Number(mark), active: false })
+    }
+  })
+  if (typeof props.marks === 'object') return Object.keys(props.marks).map((key) => ({
+    value: Number(key),
+    active: isMarkActive({ value: Number(key), active: false })
+  }))
   return [
     { value: 0, active: isMarkActive({ value: 0, active: false }) },
     { value: 100, active: isMarkActive({ value: 100, active: false }) }
@@ -335,70 +345,51 @@ const slots = defineSlots<{
   handle(): void
   labelText(): void
 }>()
-
-
-const getHandleSlot = (index: number = 0) => {
-  const handleSlot = slots.handle
-  if (typeof handleSlot === 'function') {
-    return slots.handle?.()?.[index] ?? slots.handle?.()
-  }
-  return null
-}
-const getLabelSlot = (index: number = 0) => {
-  const labelSlot = slots.labelText
-  if (typeof labelSlot === 'function') {
-    return slots.labelText?.()?.[index] ?? slots.labelText?.()
-  }
-  return null
-}
-const hasHandleSlot = computed(() => !!getHandleSlot())
-const hasLabelSlot = computed(() => !!getLabelSlot())
-
 </script>
 
 <template>
-    <div ref="rootRef"
-         :class="{...stateClasses,...variantClasses}"
-         :dir="dir"
-         :style="styleBinding"
-         class="slider-root">
-      <div ref="sliderRef" class="slider-input">
-        <slot name="default" />
-        <slot name="track">
-          <div :style="trackStyle" class="slider-track">
-            <div class="slider-track-fill" />
-          </div>
+  <div ref="rootRef"
+       :class="{...stateClasses,...variantClasses}"
+       :dir="dir"
+       :style="styleBinding"
+       class="slider-root">
+    <div ref="sliderRef" class="slider-input">
+      <slot name="default" />
+      <slot name="track">
+        <div :style="trackStyle" class="slider-track">
+          <div class="slider-track-fill" />
+        </div>
+      </slot>
+      <div v-for="mark in marksArray"
+           :key="mark.value"
+           :class="{active: mark.active}"
+           :style="{'--_offset': `${mark.value}%`}"
+           class="slider-stop-mark"
+      />
+      <div v-for="(pointerValue, index) in valueProgressProxy"
+           :key="index"
+           :ref="pointersRef.set"
+           :aria-valuemax="max"
+           :aria-valuemin="min"
+           :aria-valuenow="getValue(pointerValue)"
+           :data-index="index"
+           :style="{'--_offset': `${pointerValue}%`}"
+           class="slider-handle"
+           role="slider"
+           tabindex="0">
+        <slot name="handle">
+          <div class="slider-handle-touch-target" />
         </slot>
-        <div v-for="mark in marksArray"
-             :key="mark.value"
-             :class="{active: mark.active}"
-             :style="{'--_offset': `${mark.value}%`}"
-             class="slider-stop-mark"
-        />
-        <div v-for="(pointerValue, index) in valueProgressProxy"
-             :key="index"
-             :ref="pointersRef.set"
-             :aria-valuemax="max"
-             :aria-valuemin="min"
-             :aria-valuenow="getValue(pointerValue)"
-             :data-index="index"
-             :style="{'--_offset': `${pointerValue}%`}"
-             class="slider-handle"
-             role="slider"
-             tabindex="0">
-          <slot name="handle">
-            <div class="slider-handle-touch-target" />
-          </slot>
-          <div class="slider-handle-label-container">
+        <div class="slider-handle-label-container">
           <span class="slider-label-text">
             <slot name="labelText">
               {{ format(getValue(pointerValue)) }}
             </slot>
           </span>
-          </div>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <style lang="postcss">
