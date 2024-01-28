@@ -1,0 +1,38 @@
+:root {
+    /* Tooltip */
+    --slider-tooltip-offset: 8px;
+    --slider-tooltip-padding-x: 16px;
+    --slider-tooltip-padding-y: 12px;
+    --slider-tooltip-border-radius: 50%;
+    --slider-tooltip-background-color: rgb(var(--inverse-surface-rgb));
+    --slider-tooltip-text-color: rgb(var(--inverse-on-surface-rgb));
+
+    /* Handle */
+    --slider-handle-shadow-size: 0px;
+    --slider-handle-border-radius: 50%;
+
+    /* Track */
+    --slider-track-border-radius: 16px;
+    --slider-track-border-width: 0px;
+    --slider-track-border: solid var(--slider-track-border-width) var(--slider-track-border-color);
+    --slider-track-color: rgb(var(--surface-variant-rgb));
+    --slider-track-border-color: rgb(var(--outline-variant-rgb));
+
+    /* Track Fill */
+    --slider-fill-color: rgb(var(--primary-rgb));
+
+    /* Horizontal */
+    --slider-horizontal-height: 8px;
+    --slider-horizontal-width: max(280px, 100%);
+    --slider-horizontal-handle-width: 24px;
+    --slider-horizontal-handle-height: 24px;
+
+    /* Vertical */
+    --slider-vertical-height: 260px;
+    --slider-vertical-width: 8px;
+    --slider-vertical-handle-width: 24px;
+    --slider-vertical-handle-height: 24px;
+
+    --slider-track-width: var(--slider-horizontal-width);
+    --slider-track-height: var(--slider-horizontal-height);
+}

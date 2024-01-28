@@ -2,32 +2,63 @@
 import type { SliderProps } from '~/modules/slider/types'
 import { type Position, useTemplateRefsList } from '@vueuse/core'
 import type { Ref } from 'vue'
-import SliderOuter from '~/modules/slider/runtime/components/SliderWrapper.vue'
+import type { SliderHandle } from '#components'
+import { isArray } from '@vue/shared'
 
-const props = defineProps<SliderProps>()
 
-const isVertical = computed(() => props.orientation === 'vertical')
-const isRtl = computed(() => getOption('dir', 'ltr'))
-const isBtt = computed(() => getOption('btt', false))
-const isContained = computed(() => getOptionAsBool('contained', true))
+/*
+function getOptionAsBool<T extends keyof SliderProps>(option: T, defaultValue?: boolean) {
+  const isTrue = (v: unknown) => [true, 'true', 'always'].includes(v as T)
+  const isFalse = (v: unknown) => [false, 'false', 'never'].includes(v as T)
+  return isTrue(props[option]) ? true : isFalse(props[option]) ? false : defaultValue
+}
+
+function getOption<T extends keyof SliderProps, D = SliderProps[T]>(option: T, defaultValue?: D): D {
+  return (props[option] ?? defaultValue) as D
+}
+*/
+
+const {
+  min = 0,
+  max = 100,
+  step = 1,
+  orientation = 'horizontal',
+  dir = 'ltr',
+  preventOverlap = false,
+  minDistance = 0,
+  btt = false,
+  contained = true,
+  lazy = false,
+  disabled = false,
+  ...restProps
+} = defineProps<SliderProps>()
+
+const isVertical = computed(() => orientation === 'vertical')
+const isRtl = computed(() => dir === 'rtl')
 
 const rootRef = ref<HTMLElement>()
 const sliderRef = ref<HTMLElement>()
-const handlesRef = useTemplateRefsList<HTMLElement>()
+const handlesRef = useTemplateRefsList<InstanceType<typeof SliderHandle>>()
 
 type ModelValue = number | number[]
 const modelValue = defineModel<ModelValue>() as Ref<ModelValue>
 
-const modelValueArray = useToArray(modelValue, 0)
+const modelValueArray = computed({
+  get: () => {
+    return isArray(modelValue.value) ? modelValue.value : [modelValue.value]
+  },
+  set: (value) => {
+    modelValue.value = isArray(value) ? value.map(getValue) : [getValue(value)]
+  }
+})
 
-const handleValues = computed((): number[] => {
-  return unref(modelValueArray).map(getProgress)
+watch(modelValueArray, (values) => {
+  console.log('modelValueArray', values)
 })
 
 const currentHandle = ref<HTMLElement | null>(null)
 watch(currentHandle, (pointer) => pointer?.focus())
 
-const { min, max, step } = useSteps(props)
 
 const convertRange = (min: number, max: number, a: number, b: number, x: number) => {
   const temp = (max - min)
@@ -44,18 +75,18 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function getValue(progress: number) {
-  const value = convertRange(0, 100, unref(min), unref(max), progress)
-  return clamp(value, unref(min), unref(max))
+  const value = convertRange(0, 100, Number(min), Number(max), progress)
+  return clamp(value, Number(min), Number(max))
 }
 
 function getProgress(value: number) {
-  const range = convertRange(unref(min), unref(min), 0, 100, value)
+  const range = convertRange(Number(min), Number(min), 0, 100, value)
   return clamp(range, 0, 100)
 }
 
 function getToReversed() {
   const isHorizontalAndRtl = !unref(isVertical) && isRtl.value
-  const isVerticalAndBtt = unref(isVertical) && isBtt.value
+  const isVerticalAndBtt = unref(isVertical) && btt
   return isHorizontalAndRtl || isVerticalAndBtt
 }
 
@@ -83,14 +114,15 @@ function getProgressFromEvent(event: PointerEvent) {
 function getClosestPointer(event: PointerEvent): HTMLElement {
   const progress = getProgressFromEvent(event)
   const getDistance = (percentage: number) => Math.abs(percentage - progress)
-  const distances = unref(handleValues).map((value) => getDistance(getProgress(value)))
+  const distances = unref(modelValueArray).map((value) => getDistance(getProgress(value)))
   const minDistance = Math.min(...distances)
   const index = distances.indexOf(minDistance)
-  return handlesRef.value[index]
+  return unrefElement(handlesRef.value[index]) as HTMLElement
 }
 
 function getClickedPointer(evt: PointerEvent) {
-  return handlesRef.value.find((handleRef) => evt?.target && handleRef.contains(<Node>evt.target))
+  if (!evt?.target || !handlesRef.value?.length) return
+  return handlesRef.value.map((h) => h.$el).find((h) => h.contains(evt.target))
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
@@ -147,27 +179,16 @@ function getContainedRect(rect: DOMRect) {
   }
 }
 
-function getOptionAsBool<T extends keyof SliderProps>(option: T, defaultValue?: boolean) {
-  const isTrue = (v: unknown) => [true, 'true', 'always'].includes(v as T)
-  const isFalse = (v: unknown) => [false, 'false', 'never'].includes(v as T)
-  return isTrue(props[option]) ? true : isFalse(props[option]) ? false : defaultValue
-}
-
-function getOption<T extends keyof SliderProps, D = SliderProps[T]>(option: T, defaultValue?: D): D {
-  return (props[option] ?? defaultValue) as D
-}
-
 function getSwipeProgress(sliderRect: DOMRect) {
-  const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
+  const maybeContainedRect = contained ? getContainedRect(sliderRect) : sliderRect
   return calculateProgress(maybeContainedRect, posEnd, clickOffset)
 }
 
 function handleSwipe(event: PointerEvent) {
-  const currentHandleEl = unrefElement(currentHandle)
-  const sliderEl = unrefElement(sliderRef)
-  if (!currentHandleEl || !sliderEl) return
+  const sliderElement = unrefElement(sliderRef)
+  if (!unref(currentHandle) || !sliderElement) return
 
-  const sliderRect = getRect(sliderEl)
+  const sliderRect = getRect(sliderElement)
   const progress = getSwipeProgress(sliderRect)
   const updatedValue = getValue(progress)
 
@@ -176,10 +197,9 @@ function handleSwipe(event: PointerEvent) {
     return
   }
 
-  const pointerIndex = handlesRef.value.indexOf(currentHandleEl)
+  const pointerIndex = handlesRef.value.findIndex((h) => h.$el === unref(currentHandle))
 
-  if (getOptionAsBool('preventOverlap')) {
-    const minDistance = getOption('minDistance', 0)
+  if (preventOverlap) {
     const pointerBefore = modelValue.value[pointerIndex - 1]
     const pointerAfter = modelValue.value[pointerIndex + 1]
     if (pointerBefore && pointerBefore >= updatedValue - minDistance) {
@@ -192,29 +212,48 @@ function handleSwipe(event: PointerEvent) {
 
   modelValue.value.splice(pointerIndex, 1, updatedValue)
 }
+
+const rootStyleBinding = computed(() => {
+  const values = unref(modelValueArray)
+  const lowerValue = Math.min(...values)
+  const upperValue = Math.max(...values)
+  return {
+    '--progress': `${values.length > 1 ? upperValue - lowerValue : lowerValue}%`
+  }
+})
+
+const classBindings = computed(() => ({
+  'v-vertical': unref(isVertical),
+  'v-horizontal': !unref(isVertical),
+  'v-ltr': !unref(isRtl),
+  'v-rtl': unref(isRtl),
+  'v-btt': btt,
+  'v-disabled': disabled,
+  'v-contained': contained,
+  'v-lazy': lazy
+}))
 </script>
 
 <template>
-  <div ref="rootRef" class="slider-root">
-    <SliderWrapper>
-      <Slider ref="sliderRef">
-        <slot name="track">
-          <SliderTrack>
-            <slot name="trackFill">
-              <SliderTrackFill />
-            </slot>
-          </SliderTrack>
-        </slot>
-        <template v-for="(value, idx) in handleValues" :key="idx">
-          <slot :index="idx" :value="value" name="handle">
-            <SliderHandle :ref="handlesRef.set">
-              {{ value }}
-            </SliderHandle>
+  <div ref="rootRef" :class="classBindings" :style="rootStyleBinding" class="slider-root">
+    <div ref="sliderRef" class="slider-wrapper">
+      <slot name="track">
+        <SliderTrack>
+          <slot name="trackFill">
+            <SliderTrackFill />
           </slot>
-        </template>
-        <SliderHandle />
-      </Slider>
-    </SliderWrapper>
+        </SliderTrack>
+      </slot>
+      <template v-for="(value, index) in modelValueArray" :key="index">
+        <slot :index="index" :value="value" name="handle">
+          <SliderHandle :ref="handlesRef.set" :style="{'--_offset': `${value}%`}">
+            <SliderLabelContainer>
+              {{ Math.round(value) }}
+            </SliderLabelContainer>
+          </SliderHandle>
+        </slot>
+      </template>
+    </div>
   </div>
 </template>
 

@@ -288,26 +288,6 @@ function isMarkActive(mark: { value: number, active: boolean }) {
   return false
 }
 
-function addOrderProperty() {
-  const pointers = unref(pointersRef)
-  const pointerValues = unref(valueProgressProxy)
-  const pointerValuesWithOrder = pointerValues.map((value, index) => ({
-    value,
-    order: index
-  }))
-  const sortedPointerValues = pointerValuesWithOrder.sort((a, b) => a.value - b.value)
-  const orderedPointerValues = sortedPointerValues.map((pointerValue, index) => ({
-    ...pointerValue,
-    order: index
-  }))
-  const orderedPointerValuesWithOrder = orderedPointerValues.sort((a, b) => a.order - b.order)
-  const orderedPointerValuesWithoutOrder = orderedPointerValuesWithOrder.map((pointerValue) => pointerValue.value)
-  return orderedPointerValuesWithoutOrder.map((value) => {
-    const pointerIndex = pointerValues.indexOf(value)
-    return pointers[pointerIndex]
-  })
-}
-
 function addOrderToMarks() {
   const marks = unref(marksArray)
   const pointerValues = unref(valueProgressProxy)
@@ -352,7 +332,8 @@ const marksArray = computed(() => {
     ]
   }
 
-  const sorted = addOrderToMarks()
+  return addOrderToMarks()
+
 })
 
 const VARIANT_CLASSES = {
@@ -399,15 +380,12 @@ const variantClasses = computed(() => {
 const styleBinding = computed(() => {
   const lowerValue = Math.min(...valueProgressProxy.value)
   const upperValue = Math.max(...valueProgressProxy.value)
-  if (valueProgressProxy.value.length > 1) {
-    return {
-      '--progress': `${upperValue - lowerValue}%`,
-      '--lower-bound-value': `${lowerValue}%`,
-      '--upper-bound-value': `${upperValue}%`
-    }
-  }
   return {
-    '--progress': `${lowerValue}%`
+    '--progress': `${
+      valueProgressProxy.value?.length > 1
+        ? upperValue - lowerValue
+        : lowerValue
+    }%`
   }
 })
 
@@ -432,7 +410,7 @@ const sortedMarksObject = computed(() => {
        :dir="dir"
        :style="styleBinding"
        class="slider-root">
-    <div ref="sliderRef" class="slider-input">
+    <div ref="sliderRef" class="slider-wrapper">
       <slot name="default" />
       <slot name="track">
         <div :style="trackStyle" class="slider-track">
@@ -442,10 +420,6 @@ const sortedMarksObject = computed(() => {
       <div v-for="(pointerValue, index) in valueProgressProxy"
            :key="index"
            :ref="pointersRef.set"
-           :aria-valuemax="max"
-           :aria-valuemin="min"
-           :aria-valuenow="getValue(pointerValue)"
-           :data-index="index"
            :style="{'--_offset': `${pointerValue}%`}"
            class="slider-handle"
            role="slider"
@@ -453,7 +427,7 @@ const sortedMarksObject = computed(() => {
         <slot name="handle">
           <div class="slider-handle-touch-target" />
         </slot>
-        <div class="slider-handle-label-container">
+        <div class="slider-label-container">
           <span class="slider-label-text">
             <slot name="labelText">
               {{ format(getValue(pointerValue)) }}

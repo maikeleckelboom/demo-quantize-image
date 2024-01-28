@@ -3,20 +3,26 @@
 @tailwind utilities;
 
 @layer base {
-    .thin-scrollbar {
-        --_track: rgb(var(--surface-rgb));
-        --_thumb: rgb(var(--surface-rgb));
+    html, body {
+        @apply scrollbar scrollbar-stable;
+    }
+}
+
+@layer utilities {
+    .scrollbar {
+        --_track-color: rgb(var(--surface-rgb));
+        --_thumb-color: rgb(var(--surface-rgb));
         --_size: 4px;
         --_radius: 4px;
 
-        scrollbar-color: var(--_thumb) var(--_track);
+        scrollbar-color: var(--_thumb-color) var(--_track-color);
         scrollbar-width: thin;
         transition-property: scrollbar-color;
         transition-duration: 0.1s;
         transition-timing-function: ease-in;
 
         &:hover {
-            --_thumb: rgb(var(--surface-variant-rgb));
+            --_thumb-color: rgb(var(--surface-variant-rgb));
         }
 
         &::-webkit-scrollbar {
@@ -25,28 +31,25 @@
         }
 
         &::-webkit-scrollbar-track {
-            background: var(--_track);
+            background: var(--_track-color);
         }
 
         &::-webkit-scrollbar-thumb {
-            background-color: var(--_thumb);
+            background-color: var(--_thumb-color);
             border-radius: var(--_radius);
-            border: calc(var(--_size) / 2) solid var(--_track);
+            border: calc(var(--_size) / 2) solid var(--_track-color);
         }
 
         &::-webkit-scrollbar-corner {
-            background: var(--_track);
-        }
-
-        &::-webkit-scrollbar-thumb:vertical {
-            border-radius: var(--_radius);
-        }
-
-        &::-webkit-scrollbar-thumb:horizontal {
-            border-radius: var(--_radius);
+            background: var(--_track-color);
         }
     }
+
+    .scrollbar-stable {
+        scrollbar-gutter: stable;
+    }
 }
+
 
 @layer components {
     .outlined-button {
@@ -54,5 +57,11 @@
         @apply leading-none text-center text-label-lg font-medium;
         @apply after:absolute after:bg-transparent after:inset-0 after:z-0;
         @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-3 active:after:bg-surface-level-2;
+    }
+
+    .numeric-text-input {
+        @apply relative overflow-clip bg-transparent border-none outline-none text-end tabular-nums text-body-lg;
+        @apply after:absolute after:bg-transparent after:inset-0 after:z-0;
+        @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-2 active:after:bg-surface-level-3;
     }
 }

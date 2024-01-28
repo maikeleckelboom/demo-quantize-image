@@ -3,7 +3,7 @@ const modelValue = defineModel<number | number[]>()
 </script>
 
 <template>
-  <Slider v-model="modelValue" class="v-material-slider" />
+  <SliderRoot v-model="modelValue" class="v-material-slider" />
 </template>
 
 <style>
@@ -20,6 +20,8 @@ const modelValue = defineModel<number | number[]>()
   --slider-track-border: 0px;
   --slider-horizontal-height: 12px;
   --slider-vertical-width: 12px;
+  --slider-tack-height: 12px;
+  --slider-track-width: 100px;
 
   .slider-handle {
     background-color: rgb(var(--surface-rgb));

@@ -258,7 +258,7 @@ const currentTimeText = computed(() => {
 
 
     <slot name='track'>
-      <output :id='name' ref='trackWaves' class='  thin-scrollbar' />
+      <output :id='name' ref='trackWaves' class='thin-scrollbar' />
     </slot>
 
     <div class='flex flex-nowrap mt-4 gap-4 bg-surface-level-1 rounded-md  z-10 left-0 bottom-0 right-0'>

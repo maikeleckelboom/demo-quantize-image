@@ -47,8 +47,8 @@ const contrastMarksObj = computed(() => ({
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 max-w-md bg-surface-container">
-    <fieldset class="flex flex-col  justify-center items-center">
+  <div class="flex flex-col gap-4  bg-surface-container overflow-clip">
+    <fieldset class="flex flex-col justify-center items-center">
       <legend class="sr-only">Primary Palette Key Color</legend>
       <div class="flex flex-col relative size-full">
         <output :style="{ backgroundColor: sourceColor }"
@@ -171,33 +171,19 @@ const contrastMarksObj = computed(() => ({
 </template>
 
 <style>
-.numeric-text-input {
-  @apply relative overflow-clip bg-transparent border-none outline-none text-end tabular-nums text-body-lg;
-  @apply after:absolute after:bg-transparent after:inset-0 after:z-0;
-  @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-2 active:after:bg-surface-level-3;
-}
-
 .custom-handle {
   width: var(--slider-handle-width);
   height: var(--slider-handle-height);
   border-radius: 50%;
-  border: solid 2px rgb(var(--outline-rgb));
+  border: solid 2px rgb(var(--on-surface-rgb));
   outline-color: rgb(var(--primary-rgb));
 
   &.contrast-input-handle {
     @apply bg-surface-container-high;
   }
-
-  &:focus {
-  }
 }
 
 .slider-root.color-input-range {
   --slider-track-height: 22px;
-
-  .slider-track {
-    /*
-        --_height: 10px;*/
-  }
 }
 </style>

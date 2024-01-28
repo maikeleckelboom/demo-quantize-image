@@ -1,45 +1,47 @@
 <script lang="ts" setup>
-import type { Track } from '~/types'
 
-const houseTrack = shallowRef<Track[]>([
-  {
-    id: '1',
-    name: 'James Hype - Drums',
-    src: '/sound/tracks/james-hype-drums.mp3',
-    controls: {
-      volume: true,
-      mute: true,
-      playPause: true,
-      stop: true
-    }
-  },
-  {
-    id: '3',
-    name: 'Mau P - Dress Code (Original Mix)',
-    src: '/sound/tracks/mau_p-dress_code.mp3',
-    controls: {
-      volume: true,
-      mute: true,
-      playPause: true,
-      stop: true
-    }
-  }
-])
+
+const modelValue = ref<number | number[]>(30)
 </script>
 
 <template>
-  <div class="flex-col w-svw mx-auto flex justify-center items-center h-svh max-w-full">
-    <div class="flex flex-col">
-      <template v-for="track in houseTrack" :key="track.id">
-        <ClientOnly>
-          <div class="size-full" data-pending-placeholder />
-          <SoundTrack :id="track.id" :key="track.id" :controls="track.controls" :name="track.name" :src="track.src" />
-        </ClientOnly>
-      </template>
+  <div class="custom-grid">
+    <div class="main flex flex-col gap-8">
+      <section>
+        <KeyColorPickers />
+      </section>
+      <section>
+        <div class="my-12 p-12 grid grid-cols-2">
+          <fieldset>
+            <legend>Original</legend>
+            <ExampleRangeSlider v-model="modelValue" />
+          </fieldset>
+          <fieldset>
+            <legend>Refactored</legend>
+            <SliderRoot v-model="modelValue" />
+          </fieldset>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <style lang="postcss">
+fieldset {
+}
 
+legend {
+  @apply text-body-lg mb-4;
+}
+
+.custom-grid {
+  --gutter-size: max(2%, 30svw);
+  display: grid;
+  grid-template-columns: [gutter] var(--gutter-size) [main] 1fr [gutter] var(--gutter-size);
+  gap: 1rem 2rem;
+
+  .main {
+    grid-area: main;
+  }
+}
 </style>

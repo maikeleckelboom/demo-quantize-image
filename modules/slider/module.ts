@@ -18,6 +18,8 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.css = nuxt.options.css || []
     nuxt.options.css.push(resolve(`${runtimeDir}/css/index.css`))
 
+    console.log('css?', nuxt.options.css)
+
     await addComponentsDir({
       path: resolve(`${runtimeDir}/components`)
     })
