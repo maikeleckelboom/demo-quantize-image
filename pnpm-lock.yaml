@@ -4,6 +4,9 @@ dependencies:
   '@nuxt/kit':
     specifier: ^3.9.3
     version: 3.9.3
+  wavesurfer.js:
+    specifier: ^6.4.0
+    version: 6.4.0
 
 devDependencies:
   '@material/material-color-utilities':
@@ -33,6 +36,9 @@ devDependencies:
   '@types/howler':
     specifier: ^2.2.11
     version: 2.2.11
+  '@types/wavesurfer.js':
+    specifier: ^6.0.12
+    version: 6.0.12
   '@vue/shared':
     specifier: ^3.4.15
     version: 3.4.15
@@ -84,9 +90,6 @@ devDependencies:
   vue-tsc:
     specifier: ^1.8.27
     version: 1.8.27(typescript@5.3.3)
-  wavesurfer.js:
-    specifier: ^6.4.0
-    version: 6.4.0
 
 packages:
 
@@ -1879,6 +1882,10 @@ packages:
     resolution: {integrity: sha512-1ly5ly/7S/YF8aD7MxUQnFOZxdegimuOunJl0xDsLlguu5JrwuSTVGVH3UpIUlh6YauI0RMNT4cqjBonhgbdIQ==}
     dev: true
 
+  /@types/debounce@1.2.4:
+    resolution: {integrity: sha512-jBqiORIzKDOToaF63Fm//haOCHuwQuLa2202RK4MozpA6lh93eCBc+/8+wZn5OzjJt3ySdc+74SXWXB55Ewtyw==}
+    dev: true
+
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
@@ -1900,6 +1907,12 @@ packages:
 
   /@types/resolve@1.20.2:
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
+    dev: true
+
+  /@types/wavesurfer.js@6.0.12:
+    resolution: {integrity: sha512-oM9hYlPIVms4uwwoaGs9d0qp7Xk7IjSGkdwgmhUymVUIIilRfjtSQvoOgv4dpKiW0UozWRSyXfQqTobi0qWyCw==}
+    dependencies:
+      '@types/debounce': 1.2.4
     dev: true
 
   /@types/web-bluetooth@0.0.20:
@@ -7018,7 +7031,7 @@ packages:
 
   /wavesurfer.js@6.4.0:
     resolution: {integrity: sha512-+i9GkYdMTm998goOWvycWqCgxfbolnuGTPgrdGss7ZbQDuu+n6AHdnJwYnqxW8RZo5A2ck6ztzXbrXGuCi0m5g==}
-    dev: true
+    dev: false
 
   /webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}

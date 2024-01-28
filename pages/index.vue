@@ -1,65 +1,50 @@
 <script lang="ts" setup>
-import { Howl } from 'howler'
+import type { Track } from '~/types'
 
-const samplesDir = '/sound/samples' as const
-
-const sampleFilenames = [
-  'boom-bap-drums_94bpm.wav',
-  'distorted-house_128bpm.wav'
-]
-
-const samplePaths = sampleFilenames.map(filename => `${samplesDir}/${filename}`)
-
-
-const samples = computed(() => samplePaths.map(path => new Howl({
-  src: path
-})))
-
-const playSample = (index: number) => {
-  samples.value[index].play()
-}
-
-const stopSample = (index: number) => {
-  samples.value[index].stop()
-}
-
-const pauseSample = (index: number) => {
-  samples.value[index].pause()
-}
-
-
+const houseTrack = shallowRef<Track[]>([
+  {
+    id: '1',
+    name: 'James Hype - Drums',
+    src: '/sound/tracks/james-hype-drums.mp3',
+    controls: {
+      volume: true,
+      mute: true,
+      playPause: true,
+      stop: true
+    }
+  },
+  {
+    id: '3',
+    name: 'Mau P - Dress Code (Original Mix)',
+    src: '/sound/tracks/mau_p-dress_code.mp3',
+    controls: {
+      volume: true,
+      mute: true,
+      playPause: true,
+      stop: true
+    }
+  }
+])
 </script>
 
 <template>
-  <div class="w-full max-w-expanded mx-auto flex justify-center items-center h-svh">
-    <ul class="p-4 flex flex-col">
-      <li v-for="(sample, index) in samples" :key="index" class="p-2 border border-outline size-fit rounded">
-        <span class="text-secondary">{{ sampleFilenames[index] }}</span>
-        <!--
-                <audio :src="samplePaths[index]" controls></audio>
-        -->
+  <div class="w-full  flex-col max-w-7xl mx-auto flex justify-center items-center h-svh">
+    <div class=" w-full aspect-video">
+      <ClientOnly>
+        <SoundTrack v-bind="houseTrack[0]" />
+      </ClientOnly>
+    </div>
+    <div class="flex flex-col">
 
-        {{ sample.playing() }}
-        <template v-if="sample.playing()">
-          <button class="border-thin border-transparent rounded-full" @click="pauseSample(index)">
-            <Icon class="size-10" name="ic:round-pause-circle" />
-          </button>
-        </template>
-        <template v-else>
-          <button class="border-thin border-transparent rounded-full" @click="playSample(index)">
-            <Icon class="size-10" name="ic:round-play-circle" />
-          </button>
-        </template>
+      <template v-for="track in houseTrack" :key="track.id">
+        <ClientOnly>
+          <div class="size-full" data-pending-placeholder />
+          <SoundTrack :id="track.id" :key="track.id" :controls="track.controls" :name="track.name" :src="track.src" />
+        </ClientOnly>
+      </template>
 
 
-        <button class="border-thin border-transparent rounded-full"
-                @click="stopSample(index)">
-          <Icon class="size-10" name="ic:round-stop-circle" />
-        </button>
-
-
-      </li>
-    </ul>
+    </div>
   </div>
 </template>
 
