@@ -23,7 +23,7 @@
 
     /* Horizontal */
     --slider-horizontal-height: 8px;
-    --slider-horizontal-width: 260px;
+    --slider-horizontal-width: max(280px, 100%);
     --slider-horizontal-handle-width: 24px;
     --slider-horizontal-handle-height: 24px;
 

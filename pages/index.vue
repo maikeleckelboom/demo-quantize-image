@@ -28,22 +28,14 @@ const houseTrack = shallowRef<Track[]>([
 </script>
 
 <template>
-  <div class="w-full  flex-col max-w-7xl mx-auto flex justify-center items-center h-svh">
-    <div class=" w-full aspect-video">
-      <ClientOnly>
-        <SoundTrack v-bind="houseTrack[0]" />
-      </ClientOnly>
-    </div>
+  <div class="flex-col w-svw mx-auto flex justify-center items-center h-svh max-w-full">
     <div class="flex flex-col">
-
       <template v-for="track in houseTrack" :key="track.id">
         <ClientOnly>
           <div class="size-full" data-pending-placeholder />
           <SoundTrack :id="track.id" :key="track.id" :controls="track.controls" :name="track.name" :src="track.src" />
         </ClientOnly>
       </template>
-
-
     </div>
   </div>
 </template>

@@ -24,6 +24,7 @@ const trackWaves = ref<HTMLElement>()
 onMounted(async () => {
   if (!trackWaves.value) return
 
+  // @ts-expect-error
   const Minimap = (await import('wavesurfer.js/dist/plugin/wavesurfer.minimap.js')).default
 
   track.value = WaveSurfer.create({
@@ -44,7 +45,7 @@ onMounted(async () => {
         height: 20,
         waveColor: hexFromArgb(colorScheme.value.tertiary),
         progressColor: hexFromArgb(colorScheme.value.tertiaryContainer)
-        
+
       })
     ]
   })
@@ -286,14 +287,14 @@ const currentTimeText = computed(() => {
           <Icon v-else class='w-7 h-7' name='ic:round-volume-up' />
         </button>
       </div>
-      <div class='flex flex-nowrap items-center gap-3 flex-1 ml-2'>
-        <ExampleRangeSlider
+      <div class='hidden md:grid items-center gap-3 flex-1 ml-2'>
+        <input
           v-if='controlToggles.volume'
           v-model='context.volume'
           :aria-valuemax='1'
           :aria-valuemin='0'
           :aria-valuenow="context.volume"
-          class='h-14 w-full bg-error flex bottom-0 left-0 right-0 rounded-md accent-primary'
+          class='h-14 w-full bottom-0 left-0 right-0 rounded-md accent-primary '
           max='1'
           min='0'
           step='0.1'
