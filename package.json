@@ -35,7 +35,8 @@
     "vue": "^3.4.14",
     "vue-json-pretty": "^2.3.0",
     "vue-router": "^4.2.5",
-    "vue-tsc": "^1.8.27"
+    "vue-tsc": "^1.8.27",
+    "wavesurfer.js": "^6.4.0"
   },
   "dependencies": {
     "@nuxt/kit": "^3.9.3"

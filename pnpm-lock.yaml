@@ -84,6 +84,9 @@ devDependencies:
   vue-tsc:
     specifier: ^1.8.27
     version: 1.8.27(typescript@5.3.3)
+  wavesurfer.js:
+    specifier: ^6.4.0
+    version: 6.4.0
 
 packages:
 
@@ -7011,6 +7014,10 @@ packages:
       '@vue/server-renderer': 3.4.14(vue@3.4.14)
       '@vue/shared': 3.4.14
       typescript: 5.3.3
+    dev: true
+
+  /wavesurfer.js@6.4.0:
+    resolution: {integrity: sha512-+i9GkYdMTm998goOWvycWqCgxfbolnuGTPgrdGss7ZbQDuu+n6AHdnJwYnqxW8RZo5A2ck6ztzXbrXGuCi0m5g==}
     dev: true
 
   /webidl-conversions@3.0.1:

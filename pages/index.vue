@@ -1,18 +1,68 @@
 <script lang="ts" setup>
+import { Howl } from 'howler'
+
+const samplesDir = '/sound/samples' as const
+
+const sampleFilenames = [
+  'boom-bap-drums_94bpm.wav',
+  'distorted-house_128bpm.wav'
+]
+
+const samplePaths = sampleFilenames.map(filename => `${samplesDir}/${filename}`)
+
+
+const samples = computed(() => samplePaths.map(path => new Howl({
+  src: path
+})))
+
+const playSample = (index: number) => {
+  samples.value[index].play()
+}
+
+const stopSample = (index: number) => {
+  samples.value[index].stop()
+}
+
+const pauseSample = (index: number) => {
+  samples.value[index].pause()
+}
+
 
 </script>
 
 <template>
-  <div class="p-4 md:p-12 flex justify-center items-center flex-col gap-2">
-    <KeyColorPickers />
+  <div class="w-full max-w-expanded mx-auto flex justify-center items-center h-svh">
+    <ul class="p-4 flex flex-col">
+      <li v-for="(sample, index) in samples" :key="index" class="p-2 border border-outline size-fit rounded">
+        <span class="text-secondary">{{ sampleFilenames[index] }}</span>
+        <!--
+                <audio :src="samplePaths[index]" controls></audio>
+        -->
+
+        {{ sample.playing() }}
+        <template v-if="sample.playing()">
+          <button class="border-thin border-transparent rounded-full" @click="pauseSample(index)">
+            <Icon class="size-10" name="ic:round-pause-circle" />
+          </button>
+        </template>
+        <template v-else>
+          <button class="border-thin border-transparent rounded-full" @click="playSample(index)">
+            <Icon class="size-10" name="ic:round-play-circle" />
+          </button>
+        </template>
+
+
+        <button class="border-thin border-transparent rounded-full"
+                @click="stopSample(index)">
+          <Icon class="size-10" name="ic:round-stop-circle" />
+        </button>
+
+
+      </li>
+    </ul>
   </div>
 </template>
 
 <style lang="postcss">
-.outlined-button {
-  @apply relative size-fit overflow-clip rounded-3xl px-6 py-3 bg-transparent border border-primary;
-  @apply leading-none text-center text-label-lg font-medium;
-  @apply after:absolute after:bg-transparent after:inset-0 after:z-0;
-  @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-3 active:after:bg-surface-level-2;
-}
+
 </style>

@@ -3,20 +3,6 @@ import { isMarkObject, type MarksObject, type SliderProps } from '~/modules/slid
 import { type Position, useTemplateRefsList } from '@vueuse/core'
 import type { ComputedRef } from 'vue'
 
-const getRect = (el: HTMLElement) => el.getBoundingClientRect()
-
-const isNumber = (value: unknown): value is number => typeof value === 'number'
-
-const useSteps = (props: SliderProps) => {
-  const min = computed(() => Number(props.min))
-  const max = computed(() => Number(props.max))
-  const step = computed(() => Number(props.step))
-  return { min, max, step }
-}
-
-const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
-
-
 const props = withDefaults(defineProps<SliderProps>(), {
   min: 0,
   max: 100,
@@ -30,6 +16,20 @@ const props = withDefaults(defineProps<SliderProps>(), {
   minDistance: 0,
   labelVisibility: 'auto'
 })
+
+
+defineSlots<{
+  default: void
+  before: void
+  after: void
+  track(): void
+  handle(): void
+  labelText(): void
+}>()
+
+
+const getRect = (el: HTMLElement) => el.getBoundingClientRect()
+
 
 function getOption<T extends keyof SliderProps, D = SliderProps[T]>(option: T, defaultValue?: D): D {
   return (props[option] ?? defaultValue) as D
@@ -410,15 +410,6 @@ const styleBinding = computed(() => {
     '--progress': `${lowerValue}%`
   }
 })
-
-const slots = defineSlots<{
-  default: void
-  before: void
-  after: void
-  track(): void
-  handle(): void
-  labelText(): void
-}>()
 
 const toSortedMarks = (marks: MarksObject) => {
   return Object.keys(marks).sort((a, b) => Number(a) - Number(b)).map((mark, order) => ({
