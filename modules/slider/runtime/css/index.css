@@ -34,7 +34,7 @@
     --slider-vertical-handle-height: 24px;
 }
 
-.slider-stop-mark {
+.slider-stop-indicator {
     --stop-indicator-width: 4px;
     --stop-indicator-height: 4px;
     --stop-indicator-border-radius: 50%;

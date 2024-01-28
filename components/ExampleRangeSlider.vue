@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import type { SliderProps } from '~/modules/slider/types'
+import { isMarkObject, type MarksObject, type SliderProps } from '~/modules/slider/types'
 import { type Position, useTemplateRefsList } from '@vueuse/core'
+import type { ComputedRef } from 'vue'
 
 const getRect = (el: HTMLElement) => el.getBoundingClientRect()
 
@@ -75,14 +76,34 @@ function setClickOffset(evt: PointerEvent) {
   }
 }
 
+/**
+ * @param value - The number to be rounded.
+ * @param decimals - The number of decimal places to round to.
+ */
 function roundDecimals(value: number, decimals: number) {
   return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals)
 }
 
+function getPrecision(step: number) {
+  const stepString = step.toString()
+  if (stepString.indexOf('.') >= 0) {
+    return stepString.length - stepString.indexOf('.') - 1
+  }
+  return 0
+}
+
+function getDecimals(step: number) {
+  return Number(props.decimals ?? Math.max(0, getPrecision(step)))
+}
+
+function getValueAtStep(value: number, step: number) {
+  return Math.round(value / step) * step
+}
+
 function roundFormat(value: number) {
-  const decimals = Number(props.step) % 1 ? String(props.step).split('.')[1].length : 0
+  const decimals = getDecimals(value)
   if (Number(props.step)) {
-    const valueAtStep = Math.round(value / Number(props.step)) * Number(props.step)
+    const valueAtStep = getValueAtStep(value, Number(props.step))
     return roundDecimals(valueAtStep, decimals)
   }
   return roundDecimals(value, decimals)
@@ -189,8 +210,12 @@ function calculateProgress(parentRect: DOMRect, endPos: Position, offsetPos: Pos
   return toReversed ? 100 - range : range
 }
 
-const handleWidthVar = useCssVar('--slider-handle-width', rootRef)
-const handleHeightVar = useCssVar('--slider-handle-height', rootRef)
+const handleWidthVar = useCssVar('--slider-handle-width', rootRef, {
+  observe: true
+})
+const handleHeightVar = useCssVar('--slider-handle-height', rootRef, {
+  observe: true
+})
 
 function getHandleSize() {
   return parseInt(unref(isVertical) ? unref(handleHeightVar) : unref(handleWidthVar))
@@ -212,7 +237,7 @@ function handleSwipe(_event: PointerEvent) {
   const sliderRect = getRect(sliderEl)
   const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
-  const pointerValue = roundDecimals(getValue(progress), Number(props.decimals ?? 2))
+  const pointerValue = roundDecimals(getValue(progress), Number(props.decimals ?? 1))
 
   if (isNumber(modelValue.value)) {
     modelValue.value = pointerValue
@@ -263,22 +288,71 @@ function isMarkActive(mark: { value: number, active: boolean }) {
   return false
 }
 
+function addOrderProperty() {
+  const pointers = unref(pointersRef)
+  const pointerValues = unref(valueProgressProxy)
+  const pointerValuesWithOrder = pointerValues.map((value, index) => ({
+    value,
+    order: index
+  }))
+  const sortedPointerValues = pointerValuesWithOrder.sort((a, b) => a.value - b.value)
+  const orderedPointerValues = sortedPointerValues.map((pointerValue, index) => ({
+    ...pointerValue,
+    order: index
+  }))
+  const orderedPointerValuesWithOrder = orderedPointerValues.sort((a, b) => a.order - b.order)
+  const orderedPointerValuesWithoutOrder = orderedPointerValuesWithOrder.map((pointerValue) => pointerValue.value)
+  return orderedPointerValuesWithoutOrder.map((value) => {
+    const pointerIndex = pointerValues.indexOf(value)
+    return pointers[pointerIndex]
+  })
+}
+
+function addOrderToMarks() {
+  const marks = unref(marksArray)
+  const pointerValues = unref(valueProgressProxy)
+  const pointerValuesWithOrder = pointerValues.map((value, index) => ({
+    value,
+    order: index
+  }))
+  const sortedPointerValues = pointerValuesWithOrder.sort((a, b) => a.value - b.value)
+  const orderedPointerValues = sortedPointerValues.map((pointerValue, index) => ({
+    ...pointerValue,
+    order: index
+  }))
+  const orderedPointerValuesWithOrder = orderedPointerValues.sort((a, b) => a.order - b.order)
+  const orderedPointerValuesWithoutOrder = orderedPointerValuesWithOrder.map((pointerValue) => pointerValue.value)
+  return orderedPointerValuesWithoutOrder.map((value) => {
+    const pointerIndex = pointerValues.indexOf(value)
+    return marks![pointerIndex]
+  })
+}
+
 const marksArray = computed(() => {
   if (!getMarksEnabled()) return []
-  if (isArray(props.marks)) return props.marks.map((mark) => {
-    return {
-      value: Number(mark),
-      active: isMarkActive({ value: Number(mark), active: false })
-    }
-  })
-  if (typeof props.marks === 'object') return Object.keys(props.marks).map((key) => ({
-    value: Number(key),
-    active: isMarkActive({ value: Number(key), active: false })
-  }))
-  return [
-    { value: 0, active: isMarkActive({ value: 0, active: false }) },
-    { value: 100, active: isMarkActive({ value: 100, active: false }) }
-  ]
+
+  let newMarks = []
+
+  if (isArray(props.marks)) {
+    newMarks = props.marks.map((mark) => {
+      return {
+        value: Number(mark),
+        active: isMarkActive({ value: Number(mark), active: false })
+      }
+    })
+  } else if (isObject(props.marks)) {
+    newMarks = Object.keys(props.marks).map((key) => ({
+      value: Number(key),
+      active: isMarkActive({ value: Number(key), active: false })
+    }))
+  } else {
+    newMarks = [
+      { value: 0, active: isMarkActive({ value: 0, active: false }) },
+      { value: 100, active: isMarkActive({ value: 100, active: false }) }
+    ]
+  }
+
+  const sorted = addOrderToMarks()
 })
 
 const VARIANT_CLASSES = {
@@ -345,6 +419,20 @@ const slots = defineSlots<{
   handle(): void
   labelText(): void
 }>()
+
+const toSortedMarks = (marks: MarksObject) => {
+  return Object.keys(marks).sort((a, b) => Number(a) - Number(b)).map((mark, order) => ({
+    order,
+    label: marks[mark],
+    value: Number(mark),
+    active: isMarkActive({ value: Number(mark), active: false })
+  }))
+}
+
+const sortedMarksObject = computed(() => {
+  if (!isMarkObject(props?.marks)) return {}
+  return toSortedMarks(props.marks as MarksObject)
+}) as ComputedRef<{ order: number, value: number, active: boolean, label: string }[]>
 </script>
 
 <template>
@@ -360,12 +448,6 @@ const slots = defineSlots<{
           <div class="slider-track-fill" />
         </div>
       </slot>
-      <div v-for="mark in marksArray"
-           :key="mark.value"
-           :class="{active: mark.active}"
-           :style="{'--_offset': `${mark.value}%`}"
-           class="slider-stop-mark"
-      />
       <div v-for="(pointerValue, index) in valueProgressProxy"
            :key="index"
            :ref="pointersRef.set"
