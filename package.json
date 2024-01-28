@@ -19,6 +19,7 @@
     "@tailwindcss/container-queries": "^0.1.1",
     "@types/chroma-js": "^2.4.3",
     "@types/howler": "^2.2.11",
+    "@types/wavesurfer.js": "^6.0.12",
     "@vue/shared": "^3.4.15",
     "@vueuse/core": "^10.7.2",
     "@vueuse/nuxt": "^10.7.2",
@@ -38,6 +39,7 @@
     "vue-tsc": "^1.8.27"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.9.3"
+    "@nuxt/kit": "^3.9.3",
+    "wavesurfer.js": "^6.4.0"
   }
 }

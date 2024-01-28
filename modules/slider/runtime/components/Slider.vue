@@ -9,7 +9,7 @@ const modelValue = defineModel<number | number[]>()
 </script>
 
 <template>
-  <SliderFrame>
+  <SliderWrapper>
     <template #before>
       <slot name="before" />
     </template>
@@ -21,7 +21,7 @@ const modelValue = defineModel<number | number[]>()
     <template #after>
       <slot name="after" />
     </template>
-  </SliderFrame>
+  </SliderWrapper>
 </template>
 
 <style scoped>

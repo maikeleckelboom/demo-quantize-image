@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    .thin-scrollbar {
+        --_track: rgb(var(--surface-rgb));
+        --_thumb: rgb(var(--surface-rgb));
+        --_size: 4px;
+        --_radius: 4px;
+
+        scrollbar-color: var(--_thumb) var(--_track);
+        scrollbar-width: thin;
+        transition-property: scrollbar-color;
+        transition-duration: 0.1s;
+        transition-timing-function: ease-in;
+
+        &:hover {
+            --_thumb: rgb(var(--surface-variant-rgb));
+        }
+
+        &::-webkit-scrollbar {
+            width: var(--_size);
+            height: var(--_size);
+        }
+
+        &::-webkit-scrollbar-track {
+            background: var(--_track);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--_thumb);
+            border-radius: var(--_radius);
+            border: calc(var(--_size) / 2) solid var(--_track);
+        }
+
+        &::-webkit-scrollbar-corner {
+            background: var(--_track);
+        }
+
+        &::-webkit-scrollbar-thumb:vertical {
+            border-radius: var(--_radius);
+        }
+
+        &::-webkit-scrollbar-thumb:horizontal {
+            border-radius: var(--_radius);
+        }
+    }
+}
+
+@layer components {
+    .outlined-button {
+        @apply relative size-fit overflow-clip rounded-3xl px-6 py-3 bg-transparent border border-primary;
+        @apply leading-none text-center text-label-lg font-medium;
+        @apply after:absolute after:bg-transparent after:inset-0 after:z-0;
+        @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-3 active:after:bg-surface-level-2;
+    }
+}

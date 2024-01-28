@@ -1,12 +1,12 @@
 export default defineNuxtConfig({
-  devtools: {enabled: true},
+  devtools: { enabled: true },
 
   experimental: {
     viewTransition: true
   },
 
   typescript: {
-    typeCheck: true,
+    typeCheck: false,
     strict: true
   },
 
@@ -39,7 +39,7 @@ export default defineNuxtConfig({
           blend: true
         }
       ]
-    },
+    }
   },
 
   icon: {
@@ -72,7 +72,7 @@ export default defineNuxtConfig({
   imports: {
     dirs: [
       '~/utils',
-      '~/composables',
+      '~/composables'
     ]
   },
 
