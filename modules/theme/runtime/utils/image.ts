@@ -1,8 +1,4 @@
-import {
-  argbFromRgb,
-  QuantizerCelebi,
-  Score
-} from '@material/material-color-utilities'
+import { argbFromRgb, QuantizerCelebi, Score } from '@material/material-color-utilities'
 
 async function bytesFromImage(image: HTMLImageElement) {
   return await new Promise<Uint8ClampedArray>((resolve, reject) => {
@@ -53,11 +49,15 @@ async function pixelsFromImage(image: HTMLImageElement) {
   return pixelsFromImageBytes(imageBytes)
 }
 
+function prominentColorsFromPixels(pixels: number[], maxColors: number = 128) {
+  return QuantizerCelebi.quantize(pixels, maxColors)
+}
+
 async function seedColorsFromImage(image: HTMLImageElement) {
   // Step 1 — Image to Pixels
   const pixels = await pixelsFromImage(image)
   // Step 2 — Pixels to Prominent Colors
-  const prominentColors = QuantizerCelebi.quantize(pixels, 128)
+  const prominentColors = prominentColorsFromPixels(pixels)
   // Step 3 — Prominent Colors to Suitable Seed Colors
   return Score.score(prominentColors)
 }
@@ -70,6 +70,7 @@ async function sourceColorFromImage(image: HTMLImageElement) {
 export {
   bytesFromImage,
   pixelsFromImage,
+  prominentColorsFromPixels,
   seedColorsFromImage,
   sourceColorFromImage
 }

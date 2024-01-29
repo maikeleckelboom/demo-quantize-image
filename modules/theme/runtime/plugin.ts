@@ -1,13 +1,10 @@
-import {
-  colorsFromDynamicScheme,
-  makeDynamicScheme,
-  propertiesFromColors
-} from '~/modules/theme/runtime/utils/color'
+import { colorsFromDynamicScheme, makeDynamicScheme, propertiesFromColors } from '~/modules/theme/runtime/utils/color'
 import type { Variant } from '~/modules/theme/types'
 
 export default defineNuxtPlugin((nuxt) => {
   const { sourceColor, isDark, contrastLevel, variant } = useThemeConfig()
 
+  // todo: change brightness suffix to Array<'light' | 'dark'>
   const dynamicSchemes = computed(() =>
     makeDynamicScheme(
       sourceColor.value,

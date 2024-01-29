@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import Button from '~/modules/button/runtime/Button.vue'
-import FileInputPreview from '~/modules/theme/runtime/components/Controls/FileInputPreview.vue'
 
 interface Props {
   file?: File | null
@@ -33,8 +32,11 @@ const { files, open, reset, onChange } = useFileDialog({
   multiple: props.multiple
 })
 
+const count = ref<number>(0)
+
 watch(files, (v) => {
   file.value = v?.[0] ?? null
+  count.value += 1
 })
 
 const file = shallowRef<File | null>(props.file)
@@ -74,12 +76,12 @@ defineExpose({
     <template v-else>
       <FileInputPreview :file="file" />
       <div class="flex gap-3">
-        <button class="outlined-button" type="button" @click="reset()">
-          Reset
-        </button>
-        <slot name="actions">
+        <slot name="actions" v-bind="{open,reset, commit, count}">
+          <button class="outlined-button" type="button" @click="reset()">
+            Reset
+          </button>
           <button class="filled-button" type="button" @click="commit">
-            Extract color palette
+            Commit
           </button>
         </slot>
       </div>

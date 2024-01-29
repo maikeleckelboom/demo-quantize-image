@@ -43,6 +43,7 @@ function groupByBaseColor(
   )
 }
 
+// todo: change brightness suffix to Array<'light' | 'dark'>
 function makeDynamicScheme(
   sourceColor: Hct | string | number,
   isDark: boolean,
