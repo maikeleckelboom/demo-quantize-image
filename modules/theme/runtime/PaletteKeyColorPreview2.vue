@@ -84,23 +84,76 @@ function interpolateColor(color: Color, colorSpace: keyof ColorSpaces) {
   return chroma.interpolate(color, colorSpace)
 }
 
+function inlineString(value: unknown) {
+  if (typeof value === 'string') return value
+  if (typeof value === 'number') return roundNumber(value).toString()
+  if (isArray(value)) {
+
+    return value.map((item) => {
+      if (typeof item === 'string') return item
+      if (typeof item === 'number') return roundNumber(item).toString()
+      return ''
+    }).join(', ')
+  }
+  return ''
+}
+
+
 const paletteKeyColorConverts = computed(() => {
   return {
-    hex: keyColorHex.value,
-    rgb: keyColorRgb.value,
-    hsl: keyColorHsl.value,
-    hsv: keyColorHsv.value,
-    hsi: keyColorHsi.value,
-    lab: keyColorLab.value,
-    lch: keyColorLch.value,
-    cmyk: keyColorCmyk.value,
-    temperature: keyColorTemperature.value,
-    luminance: keyColorLuminance.value,
-    alpha: keyColorAlpha.value
+    hex: {
+      text: inlineString(keyColorHex.value),
+      value: keyColorHex.value
+    },
+    rgb: {
+      text: inlineString(keyColorRgb.value),
+      value: keyColorRgb.value
+    },
+    hsl: {
+      text: inlineString(keyColorHsl.value),
+      value: keyColorHsl.value
+    },
+    hsv: {
+      text: inlineString(keyColorHsv.value),
+      value: keyColorHsv.value
+    },
+    hsi: {
+      text: inlineString(keyColorHsi.value),
+      value: keyColorHsi.value
+    },
+    lab: {
+      text: inlineString(keyColorLab.value),
+      value: keyColorLab.value
+    },
+    lch: {
+      text: inlineString(keyColorLch.value),
+      value: keyColorLch.value
+    },
+    cmyk: {
+      text: inlineString(keyColorCmyk.value),
+      value: keyColorCmyk.value
+    },
+    temperature: {
+      value: keyColorTemperature.value,
+      text: keyColorTemperature.value,
+      readonly: true
+    },
+    luminance: {
+      value: keyColorLuminance.value,
+      text: keyColorLuminance.value,
+      readonly: true
+    },
+    alpha: {
+      value: keyColorAlpha.value,
+      text: keyColorAlpha.value,
+      readonly: true
+    }
   }
 })
 
-const COLOR_SPACES: (keyof ColorSpaces)[] = [
+
+const COLOR_SPACES: (keyof ColorSpaces | 'hex')[] = [
+  'hex',
   'rgb',
   'hsl',
   'hsv',
@@ -118,34 +171,28 @@ function isColorSpace(value: unknown): value is keyof ColorSpaces {
 
 <template>
   <div class="flex flex-col relative size-full">
+
     <output :style="{ backgroundColor: keyColorHex }"
             class="aspect-video size-full rounded-md" />
-    <div class=" inset-0 p-4 scrollbar overflow-y-auto divide-y divide-outline-variant/20">
-      <div v-for="(value, key) in paletteKeyColorConverts" :key="key"
-           class="grid grid-cols-[100px,1fr] items-center group">
-        <label class="leading-none text-on-surface-variant capitalize text-label-lg">
+
+    <div class="inset-0 px-4 scrollbar overflow-y-auto divide-y divide-outline-variant/40 space-y-1">
+      <div v-for="(color, key) in paletteKeyColorConverts" :key="key"
+           class="grid grid-cols-[0.5fr,1fr] group pt-2 items-center">
+        <label class=" text-outline capitalize text-label-lg  leading-loose">
           <span v-if="isColorSpace(key)" class="uppercase">{{ key }}</span>
           <span v-else>{{ key }}</span>
         </label>
-        <div v-if="isArray(value)" class="grid grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8">
-          <div v-for="(v,i) in value" :key="i"
-               class="bg-transparent p-1 outline-none tabular-nums end w-8">
-            {{ roundNumber(v) }}
+        <div :class="{'uppercase': key === 'hex'}" class="grid grid-cols-[1fr,auto]">
+          <div class="p-1 leading-loose tabular-nums tracking-wide">
+            {{ color.text }}
           </div>
           <SaveToClipboard
-            :source="value"
-            class="col-start-5
-                   text-end
-                   invisible
-                   group-hover:visible
-                   [&[data-copied=true]]:visible"
+            :source="color.value"
+            class="text-end invisible group-hover:visible [&[data-copied=true]]:visible"
           />
-        </div>
-        <div v-else class="grid grid-cols-[1fr,auto]">
-          <input :value="value" class="bg-transparent p-1 outline-none" readonly />
-          <SaveToClipboard :source="value" class="invisible group-hover:visible" />
         </div>
       </div>
     </div>
+    <!-- todo: color picker, theme from image, theme from any color string value -->
   </div>
 </template>

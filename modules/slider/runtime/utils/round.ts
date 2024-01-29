@@ -10,13 +10,9 @@ function getPrecision(step: number) {
   return 0
 }
 
-/**
- * Round value to given decimals
- * @param value
- * @param decimals
- */
-function roundNumber(value: number, decimals: number = 0) {
-  return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals)
+function roundNumber(num: number, decimalPlaces: number = 0) {
+  const factorOfTen = Math.pow(10, decimalPlaces)
+  return Math.round(num * factorOfTen) / factorOfTen
 }
 
 /**

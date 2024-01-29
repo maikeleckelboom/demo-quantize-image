@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { hexFromArgb, TonalPalette } from '@material/material-color-utilities'
-import PaletteKeyColorPreview from '~/modules/theme/runtime/components/PaletteKeyColorPreview.vue'
 import type { HctModel } from '~/modules/theme/types'
+import PaletteKeyColorPreview2 from '~/modules/theme/runtime/PaletteKeyColorPreview2.vue'
 
 const { $dynamicScheme } = useNuxtApp()
 const { sourceColor, contrastLevel } = useThemeConfig()
@@ -38,18 +38,13 @@ const contrastLevelMarksArr = computed(() => {
   ]
 })
 
-const contrastMarksObj = computed(() => ({
-  0: 'Low',
-  0.5: 'Medium',
-  1: 'High'
-}))
 </script>
 
 <template>
   <div class="flex flex-col gap-4  bg-surface-container overflow-clip">
     <fieldset class="flex flex-col justify-center items-center">
       <legend class="sr-only">Primary Palette Key Color</legend>
-      <PaletteKeyColorPreview :palette="primaryPalette" />
+      <PaletteKeyColorPreview2 :palette="primaryPalette" />
     </fieldset>
     <fieldset class="flex flex-col rounded-md p-4 w-full">
       <legend class="sr-only">Color Picker</legend>
@@ -142,7 +137,6 @@ const contrastMarksObj = computed(() => ({
           <Icon class="size-6" name="ic:baseline-brightness-medium" />
         </div>
         <ExampleRangeSlider v-model.number="contrastLevel"
-                            :marks="contrastMarksObj"
                             contained="true"
                             help-text="The difference in brightness between the fore- and background"
                             label="Contrast Level"
