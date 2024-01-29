@@ -8,12 +8,18 @@ const sampleFilenames = [
   'distorted-house_128bpm.wav'
 ]
 
-const samplePaths = sampleFilenames.map(filename => `${samplesDir}/${filename}`)
+const samplePaths = sampleFilenames.map(
+  (filename) => `${samplesDir}/${filename}`
+)
 
-
-const samples = computed(() => samplePaths.map(path => new Howl({
-  src: path
-})))
+const samples = computed(() =>
+  samplePaths.map(
+    (path) =>
+      new Howl({
+        src: path
+      })
+  )
+)
 
 const playSample = (index: number) => {
   samples.value[index].play()
@@ -29,27 +35,37 @@ const pauseSample = (index: number) => {
 </script>
 
 <template>
-  <ul class="p-4 flex flex-col">
-    <li v-for="(sample, index) in samples" :key="index" class="p-2 border border-outline size-fit rounded">
+  <ul class="flex flex-col p-4">
+    <li
+      v-for="(sample, index) in samples"
+      :key="index"
+      class="size-fit rounded border border-outline p-2"
+    >
       <span class="text-secondary">{{ sampleFilenames[index] }}</span>
       <template v-if="sample.playing()">
-        <button class="border-thin border-transparent rounded-full" @click="pauseSample(index)">
+        <button
+          class="rounded-full border-thin border-transparent"
+          @click="pauseSample(index)"
+        >
           <Icon class="size-10" name="ic:round-pause-circle" />
         </button>
       </template>
       <template v-else>
-        <button class="border-thin border-transparent rounded-full" @click="playSample(index)">
+        <button
+          class="rounded-full border-thin border-transparent"
+          @click="playSample(index)"
+        >
           <Icon class="size-10" name="ic:round-play-circle" />
         </button>
       </template>
-      <button class="border-thin border-transparent rounded-full"
-              @click="stopSample(index)">
+      <button
+        class="rounded-full border-thin border-transparent"
+        @click="stopSample(index)"
+      >
         <Icon class="size-10" name="ic:round-stop-circle" />
       </button>
     </li>
   </ul>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -88,69 +88,72 @@ function inlineString(value: unknown) {
   if (typeof value === 'string') return value
   if (typeof value === 'number') return roundNumber(value).toString()
   if (isArray(value)) {
-
-    return value.map((item) => {
-      if (typeof item === 'string') return item
-      if (typeof item === 'number') return roundNumber(item).toString()
-      return ''
-    }).join(', ')
+    return value
+      .map((item) => {
+        if (typeof item === 'string') return item
+        if (typeof item === 'number') return roundNumber(item).toString()
+        return ''
+      })
+      .join(', ')
   }
   return ''
 }
 
-
-const paletteKeyColorConverts = computed(() => {
+const paletteKeyColorContext = computed(() => {
   return {
-    hex: {
-      text: inlineString(keyColorHex.value),
-      value: keyColorHex.value
+    formats: {
+      hex: {
+        text: inlineString(keyColorHex.value),
+        value: keyColorHex.value
+      },
+      rgb: {
+        text: inlineString(keyColorRgb.value),
+        value: keyColorRgb.value
+      },
+      hsl: {
+        text: inlineString(keyColorHsl.value),
+        value: keyColorHsl.value
+      },
+      hsv: {
+        text: inlineString(keyColorHsv.value),
+        value: keyColorHsv.value
+      },
+      hsi: {
+        text: inlineString(keyColorHsi.value),
+        value: keyColorHsi.value
+      },
+      lab: {
+        text: inlineString(keyColorLab.value),
+        value: keyColorLab.value
+      },
+      lch: {
+        text: inlineString(keyColorLch.value),
+        value: keyColorLch.value
+      },
+      cmyk: {
+        text: inlineString(keyColorCmyk.value),
+        value: keyColorCmyk.value
+      }
     },
-    rgb: {
-      text: inlineString(keyColorRgb.value),
-      value: keyColorRgb.value
-    },
-    hsl: {
-      text: inlineString(keyColorHsl.value),
-      value: keyColorHsl.value
-    },
-    hsv: {
-      text: inlineString(keyColorHsv.value),
-      value: keyColorHsv.value
-    },
-    hsi: {
-      text: inlineString(keyColorHsi.value),
-      value: keyColorHsi.value
-    },
-    lab: {
-      text: inlineString(keyColorLab.value),
-      value: keyColorLab.value
-    },
-    lch: {
-      text: inlineString(keyColorLch.value),
-      value: keyColorLch.value
-    },
-    cmyk: {
-      text: inlineString(keyColorCmyk.value),
-      value: keyColorCmyk.value
-    },
-    temperature: {
-      value: keyColorTemperature.value,
-      text: keyColorTemperature.value,
-      readonly: true
-    },
-    luminance: {
-      value: keyColorLuminance.value,
-      text: keyColorLuminance.value,
-      readonly: true
-    },
-    alpha: {
-      value: keyColorAlpha.value,
-      text: keyColorAlpha.value,
-      readonly: true
+    params: {
+      temperature: {
+        value: keyColorTemperature.value,
+        text: keyColorTemperature.value,
+        readonly: true
+      },
+      luminance: {
+        value: keyColorLuminance.value,
+        text: keyColorLuminance.value,
+        readonly: true
+      },
+      alpha: {
+        value: keyColorAlpha.value,
+        text: keyColorAlpha.value,
+        readonly: true
+      }
     }
   }
 })
-
 
 const COLOR_SPACES: (keyof ColorSpaces | 'hex')[] = [
   'hex',
@@ -164,35 +167,47 @@ const COLOR_SPACES: (keyof ColorSpaces | 'hex')[] = [
 ] as const
 
 function isColorSpace(value: unknown): value is keyof ColorSpaces {
-  return typeof value === 'string' &&
+  return (
+    typeof value === 'string' &&
     COLOR_SPACES.includes(value as keyof ColorSpaces)
+  )
 }
 </script>
 
 <template>
-  <div class="flex flex-col relative size-full">
-
-    <output :style="{ backgroundColor: keyColorHex }"
-            class="aspect-video size-full rounded-md" />
-
-    <div class="inset-0 px-4 scrollbar overflow-y-auto divide-y divide-outline-variant/40 space-y-1">
-      <div v-for="(color, key) in paletteKeyColorConverts" :key="key"
-           class="grid grid-cols-[0.5fr,1fr] group pt-2 items-center">
-        <label class=" text-outline capitalize text-label-lg  leading-loose">
-          <span v-if="isColorSpace(key)" class="uppercase">{{ key }}</span>
-          <span v-else>{{ key }}</span>
-        </label>
-        <div :class="{'uppercase': key === 'hex'}" class="grid grid-cols-[1fr,auto]">
-          <div class="p-1 leading-loose tabular-nums tracking-wide">
-            {{ color.text }}
+  <div class="relative flex size-full flex-col">
+    <output
+      :style="{ backgroundColor: keyColorHex }"
+      class="aspect-video size-full rounded-md"
+    />
+    <details>
+      <summary class="p-2">Formats</summary>
+      <div
+        class="scrollbar inset-0 space-y-1 divide-y divide-outline-variant/40 overflow-y-auto px-4"
+      >
+        <div
+          v-for="(color, key) in paletteKeyColorContext.formats"
+          :key="key"
+          class="group grid grid-cols-[0.5fr,1fr] items-center pt-2"
+        >
+          <label class="text-label-lg capitalize leading-loose text-outline">
+            <span v-if="isColorSpace(key)" class="uppercase">{{ key }}</span>
+            <span v-else>{{ key }}</span>
+          </label>
+          <div
+            :class="{ uppercase: key === 'hex' }"
+            class="grid grid-cols-[1fr,auto]"
+          >
+            <div class="p-1 tabular-nums leading-loose tracking-wide">
+              {{ color.text }}
+            </div>
+            <SaveToClipboard
+              :source="color.value"
+              class="invisible text-end group-hover:visible [&[data-copied=true]]:visible"
+            />
           </div>
-          <SaveToClipboard
-            :source="color.value"
-            class="text-end invisible group-hover:visible [&[data-copied=true]]:visible"
-          />
         </div>
       </div>
-    </div>
-    <!-- todo: color picker, theme from image, theme from any color string value -->
+    </details>
   </div>
 </template>

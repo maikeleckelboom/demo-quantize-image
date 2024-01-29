@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="relative">
@@ -10,6 +8,5 @@
 
 <style scoped>
 .default-layout {
-
 }
 </style>

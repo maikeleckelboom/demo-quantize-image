@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import { isMarkObject, type MarksObject, type SliderProps } from '~/modules/slider/types'
+import {
+  isMarkObject,
+  type MarksObject,
+  type SliderProps
+} from '~/modules/slider/types'
 import { type Position, useTemplateRefsList } from '@vueuse/core'
 import type { ComputedRef } from 'vue'
 
@@ -17,7 +21,6 @@ const props = withDefaults(defineProps<SliderProps>(), {
   labelVisibility: 'auto'
 })
 
-
 defineSlots<{
   default: void
   before: void
@@ -27,11 +30,12 @@ defineSlots<{
   labelText(): void
 }>()
 
-
 const getRect = (el: HTMLElement) => el.getBoundingClientRect()
 
-
-function getOption<T extends keyof SliderProps, D = SliderProps[T]>(option: T, defaultValue?: D): D {
+function getOption<T extends keyof SliderProps, D = SliderProps[T]>(
+  option: T,
+  defaultValue?: D
+): D {
   return (props[option] ?? defaultValue) as D
 }
 
@@ -56,7 +60,6 @@ const valueProgressProxy = computed(() => {
 const rootRef = ref<HTMLElement>()
 const sliderRef = ref<HTMLElement>()
 const pointersRef = useTemplateRefsList<HTMLElement>()
-
 
 const currentPointer = ref<HTMLElement | null>(null)
 watch(currentPointer, (pointer) => pointer?.focus())
@@ -116,8 +119,14 @@ function format(value: number) {
   return roundFormat(value)
 }
 
-function convertRange(min: number, max: number, a: number, b: number, x: number) {
-  const temp = (max - min)
+function convertRange(
+  min: number,
+  max: number,
+  a: number,
+  b: number,
+  x: number
+) {
+  const temp = max - min
   if (temp === 0) return a
   return ((b - a) * (x - min)) / temp + a
 }
@@ -184,11 +193,15 @@ function getClosestPointer(event: PointerEvent): HTMLElement {
 }
 
 function getClickedPointer(evt: PointerEvent) {
-  return pointersRef.value.find((pointerRef) => pointerRef.contains(<Node>evt.target))
+  return pointersRef.value.find((pointerRef) =>
+    pointerRef.contains(<Node>evt.target)
+  )
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
-  const center = isVertical.value ? rect.top + rect.height / 2 : rect.left + rect.width / 2
+  const center = isVertical.value
+    ? rect.top + rect.height / 2
+    : rect.left + rect.width / 2
   return isVertical.value ? y - center : x - center
 }
 
@@ -198,7 +211,11 @@ function getToReversed() {
   return isHorizontalAndRtl || isVerticalAndBtt
 }
 
-function calculateProgress(parentRect: DOMRect, endPos: Position, offsetPos: Position = { x: 0, y: 0 }) {
+function calculateProgress(
+  parentRect: DOMRect,
+  endPos: Position,
+  offsetPos: Position = { x: 0, y: 0 }
+) {
   const isV = unref(isVertical)
   const horizontal = isV ? 'top' : 'left'
   const vertical = isV ? 'bottom' : 'right'
@@ -218,7 +235,9 @@ const handleHeightVar = useCssVar('--slider-handle-height', rootRef, {
 })
 
 function getHandleSize() {
-  return parseInt(unref(isVertical) ? unref(handleHeightVar) : unref(handleWidthVar))
+  return parseInt(
+    unref(isVertical) ? unref(handleHeightVar) : unref(handleWidthVar)
+  )
 }
 
 function getContainedRect(rect: DOMRect) {
@@ -235,9 +254,14 @@ function getContainedRect(rect: DOMRect) {
 function handleSwipe(_event: PointerEvent) {
   const sliderEl = <HTMLElement>unrefElement(sliderRef)
   const sliderRect = getRect(sliderEl)
-  const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
+  const maybeContainedRect = unref(isContained)
+    ? getContainedRect(sliderRect)
+    : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
-  const pointerValue = roundNumber(getValue(progress), Number(props.decimals ?? 1))
+  const pointerValue = roundNumber(
+    getValue(progress),
+    Number(props.decimals ?? 1)
+  )
 
   if (isNumber(modelValue.value)) {
     modelValue.value = pointerValue
@@ -273,11 +297,11 @@ function getMarksEnabled() {
   const isDefined = !!props?.marks
   const isArr = isDefined && isArray(props.marks)
   const isObj = isDefined && !isArr && typeof props.marks === 'object'
-  const hasLength = isArr || isObj && Object.keys(props.marks).length > 0
+  const hasLength = isArr || (isObj && Object.keys(props.marks).length > 0)
   return isDefined && hasLength
 }
 
-function isMarkActive(mark: { value: number, active: boolean }) {
+function isMarkActive(mark: { value: number; active: boolean }) {
   const value = getValue(mark.value)
   if (isArray(modelValue.value)) {
     return modelValue.value.includes(value)
@@ -363,26 +387,32 @@ const styleBinding = computed(() => {
 })
 
 const toSortedMarks = (marks: MarksObject) => {
-  return Object.keys(marks).sort((a, b) => Number(a) - Number(b)).map((mark, order) => ({
-    order,
-    label: marks[mark],
-    value: Number(mark),
-    active: isMarkActive({ value: Number(mark), active: false })
-  }))
+  return Object.keys(marks)
+    .sort((a, b) => Number(a) - Number(b))
+    .map((mark, order) => ({
+      order,
+      label: marks[mark],
+      value: Number(mark),
+      active: isMarkActive({ value: Number(mark), active: false })
+    }))
 }
 
 const sortedMarksObject = computed(() => {
   if (!isMarkObject(props?.marks)) return {}
   return toSortedMarks(props.marks as MarksObject)
-}) as ComputedRef<{ order: number, value: number, active: boolean, label: string }[]>
+}) as ComputedRef<
+  { order: number; value: number; active: boolean; label: string }[]
+>
 </script>
 
 <template>
-  <div ref="rootRef"
-       :class="{...stateClasses,...variantClasses}"
-       :dir="dir"
-       :style="styleBinding"
-       class="slider-root">
+  <div
+    ref="rootRef"
+    :class="{ ...stateClasses, ...variantClasses }"
+    :dir="dir"
+    :style="styleBinding"
+    class="slider-root"
+  >
     <div ref="sliderRef" class="slider-wrapper">
       <slot name="default" />
       <slot name="track">
@@ -390,13 +420,15 @@ const sortedMarksObject = computed(() => {
           <div class="slider-track-fill" />
         </div>
       </slot>
-      <div v-for="(pointerValue, index) in valueProgressProxy"
-           :key="index"
-           :ref="pointersRef.set"
-           :style="{'--_offset': `${pointerValue}%`}"
-           class="slider-handle"
-           role="slider"
-           tabindex="0">
+      <div
+        v-for="(pointerValue, index) in valueProgressProxy"
+        :key="index"
+        :ref="pointersRef.set"
+        :style="{ '--_offset': `${pointerValue}%` }"
+        class="slider-handle"
+        role="slider"
+        tabindex="0"
+      >
         <slot name="handle">
           <div class="slider-handle-touch-target" />
         </slot>
@@ -412,6 +444,4 @@ const sortedMarksObject = computed(() => {
   </div>
 </template>
 
-<style lang="postcss">
-
-</style>
+<style lang="postcss"></style>

@@ -1,7 +1,5 @@
-@import "variables.css";
-@import "slider.css";
-@import "marks.css";
-@import "dots.css";
-@import "origin-at-center.css";
-
-
+@import 'variables.css';
+@import 'slider.css';
+@import 'marks.css';
+@import 'dots.css';
+@import 'origin-at-center.css';

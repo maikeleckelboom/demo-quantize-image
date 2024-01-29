@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { type Ref } from 'vue'
 import { hexFromArgb } from '@material/material-color-utilities'
 import WaveSurfer from 'wavesurfer.js'
@@ -7,8 +7,10 @@ import type { TrackContext, TrackControls } from '~/types'
 const colorScheme = useSchemeColors()
 
 const props = defineProps<{
-  id?: string,
-  src: string, name: string, controls?: TrackControls
+  id?: string
+  src: string
+  name: string
+  controls?: TrackControls
 }>()
 
 const controlToggles = reactive({
@@ -25,7 +27,9 @@ onMounted(async () => {
   if (!trackWaves.value) return
 
   // @ts-expect-error
-  const Minimap = (await import('wavesurfer.js/dist/plugin/wavesurfer.minimap.js')).default
+  const Minimap = (
+    await import('wavesurfer.js/dist/plugin/wavesurfer.minimap.js')
+  ).default
 
   track.value = WaveSurfer.create({
     container: trackWaves.value as HTMLElement,
@@ -45,7 +49,6 @@ onMounted(async () => {
         height: 20,
         waveColor: hexFromArgb(colorScheme.value.tertiary),
         progressColor: hexFromArgb(colorScheme.value.tertiaryContainer)
-
       })
     ]
   })
@@ -56,7 +59,6 @@ whenever(track, (waveSurfer) => {
   waveSurfer.load(props.src)
 })
 
-
 const context = reactive<TrackContext>({
   playing: false,
   muted: false,
@@ -66,10 +68,13 @@ const context = reactive<TrackContext>({
   timesPlayed: 0
 })
 
-watch(context, (ctx, oldCtx) => {
-  console.log('context changed', ctx)
-
-}, { deep: true })
+watch(
+  context,
+  (ctx, oldCtx) => {
+    console.log('context changed', ctx)
+  },
+  { deep: true }
+)
 
 const replay = () => {
   if (!track.value) return
@@ -84,7 +89,10 @@ whenever(track, (surfer: WaveSurfer) => {
     context.currentTime = value
   })
   surfer.on('interaction', () => {
-    if ('userActivation' in navigator && !navigator.userActivation.hasBeenActive) {
+    if (
+      'userActivation' in navigator &&
+      !navigator.userActivation.hasBeenActive
+    ) {
       return
     }
 
@@ -92,7 +100,6 @@ whenever(track, (surfer: WaveSurfer) => {
       context.playing = true
       surfer.play()
     }
-
   })
   surfer.on('click', (progress: number) => {
     surfer.seekTo(progress)
@@ -148,7 +155,6 @@ const onPlayPause = () => {
   track.value.playPause()
 }
 
-
 const onVolumeChangeEvent = (event: Event) => {
   const value = (event.target as HTMLInputElement).valueAsNumber
   if (!track.value) return
@@ -171,24 +177,27 @@ const onMute = () => {
   context.volume = context.muted ? 0 : 0.6
 }
 
-watch(() => context.volume, async (volume) => {
-  if (!track.value) return
+watch(
+  () => context.volume,
+  async (volume) => {
+    if (!track.value) return
 
-  track.value.setVolume(volume)
-  track.value.setMute(volume === 0)
-
-})
+    track.value.setVolume(volume)
+    track.value.setMute(volume === 0)
+  }
+)
 
 const currentElement = useCurrentElement() as Ref<HTMLDivElement>
 
 const { focused } = useFocus(currentElement)
 
-const { enter, space, m, arrowUp, arrowDown, arrowLeft, arrowRight } = useMagicKeys({
-  passive: false,
-  onEventFired: (ev: KeyboardEvent) => {
-    ev.preventDefault()
-  }
-})
+const { enter, space, m, arrowUp, arrowDown, arrowLeft, arrowRight } =
+  useMagicKeys({
+    passive: false,
+    onEventFired: (ev: KeyboardEvent) => {
+      ev.preventDefault()
+    }
+  })
 
 const enterOrSpace = computed(() => enter.value || space.value)
 
@@ -214,7 +223,8 @@ whenever(arrowDown, () => {
 
 whenever(arrowLeft, () => {
   if (!focused.value) return
-  const progress = Math.floor(context.currentTime / context.duration * 100) / 100
+  const progress =
+    Math.floor((context.currentTime / context.duration) * 100) / 100
   const position = progress - 0.05
   const positionProgress = Math.max(0, position)
   onSeek(positionProgress)
@@ -222,7 +232,8 @@ whenever(arrowLeft, () => {
 
 whenever(arrowRight, () => {
   if (!focused.value) return
-  const progress = Math.floor(context.currentTime / context.duration * 100) / 100
+  const progress =
+    Math.floor((context.currentTime / context.duration) * 100) / 100
   const position = progress + 0.05
   const positionProgress = Math.min(1, position)
   onSeek(positionProgress)
@@ -245,73 +256,94 @@ const currentTimeText = computed(() => {
 
 <template>
   <div
-    class='relative flex flex-col w-full min-w-96 my-4 bg-surface-level-1 rounded-md border border-transparent outline-none hover:opacity-100 focus:opacity-100 focus-within:opacity-100 focus-visible:opacity-100'
-    tabindex='0'
+    class="relative my-4 flex w-full min-w-96 flex-col rounded-md border border-transparent bg-surface-level-1 outline-none focus-within:opacity-100 hover:opacity-100 focus:opacity-100 focus-visible:opacity-100"
+    tabindex="0"
   >
-    <div class='flex justify-between items-center m-2'>
-      <p class='text-title-small text-on-surface-variant leading-loose'>
+    <div class="m-2 flex items-center justify-between">
+      <p class="text-title-small leading-loose text-on-surface-variant">
         {{ name }}
       </p>
     </div>
 
     <!-- full track preview -->
 
-
-    <slot name='track'>
-      <output :id='name' ref='trackWaves' class='thin-scrollbar' />
+    <slot name="track">
+      <output :id="name" ref="trackWaves" class="thin-scrollbar" />
     </slot>
 
-    <div class='flex flex-nowrap mt-4 gap-4 bg-surface-level-1 rounded-md  z-10 left-0 bottom-0 right-0'>
-      <div v-if='controlToggles' class='flex flex-nowrap items-center gap-2 ml-2'>
-        <button class='p-2 rounded-md hover:bg-surface-level-3 hover:disabled:opacity-10 active:bg-surface-level-4'
-                @click='onPlayPause'>
-          <Icon v-if='context.playing' class='w-7 h-7' name='ic:round-pause' />
-          <Icon v-else class='w-7 h-7' name='ic:round-play-arrow' />
-        </button>
-        <button v-if='controlToggles.stop'
-                :aria-disabled='(context.currentTime === context.duration || context.currentTime === 0)'
-                class='p-2 rounded-md aria-disabled:opacity-40 hover:bg-surface-level-3 hover:disabled:opacity-10 active:bg-surface-level-4'
-                @click='onStop'>
-          <Icon class='w-7 h-7' name='ic:round-stop' />
+    <div
+      class="bottom-0 left-0 right-0 z-10 mt-4 flex flex-nowrap gap-4 rounded-md bg-surface-level-1"
+    >
+      <div
+        v-if="controlToggles"
+        class="ml-2 flex flex-nowrap items-center gap-2"
+      >
+        <button
+          class="active:bg-surface-level-4 rounded-md p-2 hover:bg-surface-level-3 hover:disabled:opacity-10"
+          @click="onPlayPause"
+        >
+          <Icon v-if="context.playing" class="h-7 w-7" name="ic:round-pause" />
+          <Icon v-else class="h-7 w-7" name="ic:round-play-arrow" />
         </button>
         <button
-          :aria-disabled='(!context.playing && context.currentTime === context.duration) || context.currentTime === 0'
-          class='p-2 rounded-md aria-disabled:opacity-40 hover:bg-surface-level-3 hover:disabled:opacity-10 active:bg-surface-level-4'
-          @click='onSeek(0)'>
-          <Icon class='w-7 h-7' name='ic:round-replay' />
+          v-if="controlToggles.stop"
+          :aria-disabled="
+            context.currentTime === context.duration ||
+            context.currentTime === 0
+          "
+          class="active:bg-surface-level-4 rounded-md p-2 hover:bg-surface-level-3 hover:disabled:opacity-10 aria-disabled:opacity-40"
+          @click="onStop"
+        >
+          <Icon class="h-7 w-7" name="ic:round-stop" />
         </button>
-        <button v-if='controlToggles.mute'
-                class='p-2 rounded-md hover:bg-surface-level-3 hover:disabled:opacity-10 active:bg-surface-level-4'
-                @click='onMute'>
-          <Icon v-if='context.muted' class='w-7 h-7' name='ic:round-volume-off' />
-          <Icon v-else class='w-7 h-7' name='ic:round-volume-up' />
+        <button
+          :aria-disabled="
+            (!context.playing && context.currentTime === context.duration) ||
+            context.currentTime === 0
+          "
+          class="active:bg-surface-level-4 rounded-md p-2 hover:bg-surface-level-3 hover:disabled:opacity-10 aria-disabled:opacity-40"
+          @click="onSeek(0)"
+        >
+          <Icon class="h-7 w-7" name="ic:round-replay" />
+        </button>
+        <button
+          v-if="controlToggles.mute"
+          class="active:bg-surface-level-4 rounded-md p-2 hover:bg-surface-level-3 hover:disabled:opacity-10"
+          @click="onMute"
+        >
+          <Icon
+            v-if="context.muted"
+            class="h-7 w-7"
+            name="ic:round-volume-off"
+          />
+          <Icon v-else class="h-7 w-7" name="ic:round-volume-up" />
         </button>
       </div>
-      <div class='hidden md:grid items-center gap-3 flex-1 ml-2'>
+      <div class="ml-2 hidden flex-1 items-center gap-3 md:grid">
         <input
-          v-if='controlToggles.volume'
-          v-model='context.volume'
-          :aria-valuemax='1'
-          :aria-valuemin='0'
+          v-if="controlToggles.volume"
+          v-model="context.volume"
+          :aria-valuemax="1"
+          :aria-valuemin="0"
           :aria-valuenow="context.volume"
-          class='h-14 w-full bottom-0 left-0 right-0 rounded-md accent-primary '
-          max='1'
-          min='0'
-          step='0.1'
-
-          type='range'
-          @input='onVolumeChangeEvent'
+          class="bottom-0 left-0 right-0 h-14 w-full rounded-md accent-primary"
+          max="1"
+          min="0"
+          step="0.1"
+          type="range"
+          @input="onVolumeChangeEvent"
         />
-        <p class='tabular-nums text-on-surface-variant text-label-large w-10 text-end'>
+        <p
+          class="text-label-large w-10 text-end tabular-nums text-on-surface-variant"
+        >
           {{ `${context.volume * 100}%` }}
         </p>
       </div>
-      <div class='flex items-center justify-end pr-4'>
-        <p class='text-label-medium tabular-nums text-on-surface-variant '>
+      <div class="flex items-center justify-end pr-4">
+        <p class="text-label-medium tabular-nums text-on-surface-variant">
           {{ currentTimeText }} / {{ durationText }}
         </p>
       </div>
     </div>
-
   </div>
 </template>

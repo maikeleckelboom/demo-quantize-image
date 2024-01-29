@@ -33,6 +33,4 @@ const tracks = shallowRef<Track[]>([
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

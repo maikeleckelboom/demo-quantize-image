@@ -17,7 +17,7 @@ interface SliderProps {
   glide?: boolean
   interval?: number
   labelFormat?: (value: number, rounded?: number) => number | string
-  lazy?: false,
+  lazy?: false
   contained?: boolean | 'true' | 'false'
   trackStyle?: Record<string, any>
   round?: number | boolean | 'true' | 'false' | (string & {})
@@ -31,36 +31,59 @@ type MarkNumberArray = number[]
 type MarkStringArray = string[]
 type MarkFunction = (value: number) => MarksObject | number | string
 
-type Marks = MarksObject | MarkObjectArray | MarkNumberArray | MarkStringArray | MarkFunction
-
+type Marks =
+  | MarksObject
+  | MarkObjectArray
+  | MarkNumberArray
+  | MarkStringArray
+  | MarkFunction
 
 function isMarkObject(marks: Marks | undefined): marks is MarksObject {
   return typeof marks === 'object' && !Array.isArray(marks)
 }
 
 function isMarkObjectArray(marks: Marks): marks is MarkObjectArray {
-  return Array.isArray(marks) && marks.every(item => typeof item === 'object')
+  return Array.isArray(marks) && marks.every((item) => typeof item === 'object')
 }
 
 function isMarkNumberArray(marks: Marks): marks is MarkNumberArray {
-  return Array.isArray(marks) && marks.every(item => typeof item === 'number')
+  return Array.isArray(marks) && marks.every((item) => typeof item === 'number')
 }
 
 function isMarkStringArray(marks: Marks): marks is MarkStringArray {
-  return Array.isArray(marks) && marks.every(item => typeof item === 'string')
+  return Array.isArray(marks) && marks.every((item) => typeof item === 'string')
 }
 
 function isMarkFunction(marks: Marks): marks is MarkFunction {
   return typeof marks === 'function'
 }
 
-function isMarkArray(marks: Marks): marks is MarkObjectArray | MarkNumberArray | MarkStringArray {
-  return isMarkObjectArray(marks) || isMarkNumberArray(marks) || isMarkStringArray(marks)
+function isMarkArray(
+  marks: Marks
+): marks is MarkObjectArray | MarkNumberArray | MarkStringArray {
+  return (
+    isMarkObjectArray(marks) ||
+    isMarkNumberArray(marks) ||
+    isMarkStringArray(marks)
+  )
 }
 
-export type { Marks, MarksObject, MarkObjectArray, MarkNumberArray, MarkStringArray, MarkFunction }
-export { isMarkObject, isMarkObjectArray, isMarkNumberArray, isMarkStringArray, isMarkArray, isMarkFunction }
-
+export type {
+  Marks,
+  MarksObject,
+  MarkObjectArray,
+  MarkNumberArray,
+  MarkStringArray,
+  MarkFunction
+}
+export {
+  isMarkObject,
+  isMarkObjectArray,
+  isMarkNumberArray,
+  isMarkStringArray,
+  isMarkArray,
+  isMarkFunction
+}
 
 const exampleMarkFn = (value: number) => {
   return value % 20 === 0
@@ -84,4 +107,3 @@ const exampleAbcArray: MarkStringArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
 /* number[] */
 const example123Array: MarkNumberArray = [1, 2, 3, 4, 5, 6, 7]
-

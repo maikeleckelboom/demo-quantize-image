@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="slider-label-container">
@@ -10,6 +8,4 @@
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -19,7 +19,8 @@ const toggleColorMode = (mode: ColorModeOption) => {
 const activeBoxStyles = (mode: ColorModeOption) => ({
   'border-primary': mode.selected,
   'border-outline-variant': !mode.selected,
-  'border-2 bg-surface-light border-outline-variant-light': mode.value === 'light',
+  'border-2 bg-surface-light border-outline-variant-light':
+    mode.value === 'light',
   'border bg-surface-dark border-outline-variant-dark': mode.value === 'dark'
 })
 </script>
@@ -29,7 +30,7 @@ const activeBoxStyles = (mode: ColorModeOption) => ({
     <div v-for="mode in modes" :key="mode.value" @click="toggleColorMode(mode)">
       <div
         :class="activeBoxStyles(mode)"
-        class="relative aspect-video min-h-14 overflow-hidden rounded-lg "
+        class="relative aspect-video min-h-14 overflow-hidden rounded-lg"
       >
         <ColorModeSheet :mode="mode" />
       </div>
@@ -37,7 +38,11 @@ const activeBoxStyles = (mode: ColorModeOption) => ({
         :class="mode.selected ? 'text-primary' : 'text-on-surface'"
         class="flex items-center justify-start px-2 py-2"
       >
-        <Icon v-if="mode.selected" class="mr-2 h-3.5 w-3.5 md:h-4 md:w-4" name="ic:round-check" />
+        <Icon
+          v-if="mode.selected"
+          class="mr-2 h-3.5 w-3.5 md:h-4 md:w-4"
+          name="ic:round-check"
+        />
         <span class="text-label-sm md:text-label-md">{{ mode.label }}</span>
       </div>
     </div>

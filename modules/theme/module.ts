@@ -1,4 +1,9 @@
-import { addComponentsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
+import {
+  addComponentsDir,
+  addPlugin,
+  createResolver,
+  defineNuxtModule
+} from '@nuxt/kit'
 import type { ThemeModuleOptions } from '~/modules/theme/types'
 
 const { resolve } = createResolver(import.meta.url)

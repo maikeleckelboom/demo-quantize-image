@@ -70,10 +70,7 @@ export default defineNuxtConfig({
   ],
 
   imports: {
-    dirs: [
-      '~/utils',
-      '~/composables'
-    ]
+    dirs: ['~/utils', '~/composables']
   },
 
   modules: [
@@ -87,5 +84,4 @@ export default defineNuxtConfig({
     '~/modules/theme/module.ts',
     '~/modules/slider/module.ts'
   ]
-
 })

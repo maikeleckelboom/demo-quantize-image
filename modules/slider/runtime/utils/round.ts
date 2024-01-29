@@ -43,7 +43,12 @@ function getClosestStep(value: number, step: number, min: number) {
  * @param min
  * @param max
  */
-function getClosestValue(value: number, step: number, min: number, max: number) {
+function getClosestValue(
+  value: number,
+  step: number,
+  min: number,
+  max: number
+) {
   if (value <= min) return min
   if (value >= max) return max
   if (step) {

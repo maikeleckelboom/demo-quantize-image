@@ -1,9 +1,14 @@
-import { addComponentsDir, addImportsDir, createResolver, defineNuxtModule, extendPages } from '@nuxt/kit'
+import {
+  addComponentsDir,
+  addImportsDir,
+  createResolver,
+  defineNuxtModule,
+  extendPages
+} from '@nuxt/kit'
 
 const { resolve } = createResolver(import.meta.url)
 
-interface ModuleOptions {
-}
+interface ModuleOptions {}
 
 const runtimeDir: string = './runtime' as const
 

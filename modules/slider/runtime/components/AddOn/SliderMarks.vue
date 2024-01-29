@@ -1,5 +1,9 @@
 <script generic="T extends Marks" lang="ts" setup>
-import { isMarkArray, isMarkObjectArray, type Marks } from '~/modules/slider/types'
+import {
+  isMarkArray,
+  isMarkObjectArray,
+  type Marks
+} from '~/modules/slider/types'
 
 interface Props {
   marks: T
@@ -61,7 +65,6 @@ watchEffect(() => {
   inset-inline: 0;
   inset-block-start: 0;
 
-
   &:first-child {
     inset-inline-start: 0;
   }
@@ -82,6 +85,5 @@ watchEffect(() => {
     font-size: 0.75rem;
     font-weight: 500;
   }
-
 }
 </style>

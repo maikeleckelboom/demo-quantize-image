@@ -1,10 +1,9 @@
 <template>
   <NuxtErrorBoundary>
     <NuxtLayout>
-      <NuxtLoadingIndicator/>
-      <NuxtPage/>
+      <NuxtLoadingIndicator />
+      <NuxtPage />
     </NuxtLayout>
   </NuxtErrorBoundary>
 </template>
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>

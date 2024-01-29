@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-    html, body {
+    html,
+    body {
         @apply scrollbar scrollbar-stable;
     }
 }
@@ -50,18 +51,38 @@
     }
 }
 
-
 @layer components {
     .outlined-button {
-        @apply relative size-fit overflow-clip rounded-3xl px-6 py-3 bg-transparent border border-primary;
-        @apply leading-none text-center text-label-lg font-medium;
-        @apply after:absolute after:bg-transparent after:inset-0 after:z-0;
+        @apply relative size-fit overflow-clip rounded-3xl border border-primary bg-transparent px-6 py-3;
+        @apply text-center text-label-lg font-medium leading-none;
+        @apply after:absolute after:inset-0 after:z-0 after:bg-transparent;
+        @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-3 active:after:bg-surface-level-2;
+    }
+
+    .filled-button {
+        @apply relative size-fit overflow-clip rounded-3xl bg-primary text-on-primary px-6 py-3;
+        @apply text-center text-label-lg font-medium leading-none;
+        @apply after:absolute after:inset-0 after:z-0 after:bg-transparent;
+        @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-3 active:after:bg-surface-level-2;
+    }
+
+    .text-button {
+        @apply relative size-fit overflow-clip rounded-3xl bg-transparent px-6 py-3;
+        @apply text-center text-label-lg font-medium leading-none;
+        @apply after:absolute after:inset-0 after:z-0 after:bg-transparent;
+        @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-3 active:after:bg-surface-level-2;
+    }
+
+    .filled-tonal-button {
+        @apply relative size-fit overflow-clip rounded-3xl bg-tonal-1 px-6 py-3;
+        @apply text-center text-label-lg font-medium leading-none;
+        @apply after:absolute after:inset-0 after:z-0 after:bg-transparent;
         @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-3 active:after:bg-surface-level-2;
     }
 
     .numeric-text-input {
-        @apply relative overflow-clip bg-transparent border-none outline-none text-end tabular-nums text-body-lg;
-        @apply after:absolute after:bg-transparent after:inset-0 after:z-0;
+        @apply relative overflow-clip border-none bg-transparent text-end text-body-lg tabular-nums outline-none;
+        @apply after:absolute after:inset-0 after:z-0 after:bg-transparent;
         @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-2 active:after:bg-surface-level-3;
     }
 }

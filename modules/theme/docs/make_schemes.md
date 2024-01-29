@@ -12,25 +12,25 @@ color roles.
 
 It includes the following information:
 
--   The source color (seed color) of the theme
-    *   `sourceColorArgb` is the color in ARGB format, and `sourceColorHct` is
-        in HCT format.
--   The variant this scheme uses - `variant`
--   Whether the scheme is in light mode or dark mode
-    *   using the boolean `isDark`
--   The current contrast level
-    *   stored in `contrastLevel` as a `double`
-    *   `0.0` is the default contrast level
-    *   `0.5` is medium
-    *   `1.0` is high
-    *   `-1.0` is reduced
--   Six tonal palettes:
-    *   `primaryPalette`
-    *   `secondaryPalette`
-    *   `tertiaryPalette`
-    *   `neutralPalette`
-    *   `neutralVariantPalette`
-    *   `errorPalette`
+- The source color (seed color) of the theme
+  - `sourceColorArgb` is the color in ARGB format, and `sourceColorHct` is
+    in HCT format.
+- The variant this scheme uses - `variant`
+- Whether the scheme is in light mode or dark mode
+  - using the boolean `isDark`
+- The current contrast level
+  - stored in `contrastLevel` as a `double`
+  - `0.0` is the default contrast level
+  - `0.5` is medium
+  - `1.0` is high
+  - `-1.0` is reduced
+- Six tonal palettes:
+  - `primaryPalette`
+  - `secondaryPalette`
+  - `tertiaryPalette`
+  - `neutralPalette`
+  - `neutralVariantPalette`
+  - `errorPalette`
 
 A `DynamicScheme` object does not store the ARGB or HCT values of individual
 color roles; they are generated upon demand (see below for more information)
@@ -45,8 +45,8 @@ contrast levels. The functionality of `Scheme` is fully replicated by
 
 ###### TypeScript
 
-| Instead of …                 | Use …                                         |
-| ---------------------------- | --------------------------------------------- |
+| Instead of …                 | Use …                                                 |
+| ---------------------------- | ----------------------------------------------------- |
 | `Scheme.light(color)`        | `new SchemeTonalSpot(Hct.fromInt(color), false, 0.0)` |
 | `Scheme.dark(color)`         | `new SchemeTonalSpot(Hct.fromInt(color), true, 0.0)`  |
 | `Scheme.lightContent(color)` | `new SchemeContent(Hct.fromInt(color), false, 0.0)`   |
@@ -91,21 +91,22 @@ The following example uses an HCT object `hct` as seed, and generates a
 ###### TypeScript
 
 ```typescript
-const scheme = new SchemeTonalSpot(hct, false, 0.0);
+const scheme = new SchemeTonalSpot(hct, false, 0.0)
 ```
+
 </section>
 
 Currently the following variants are available:
 
-*   Content
-*   Expressive
-*   Fidelity
-*   Fruit salad
-*   Monochrome
-*   Neutral
-*   Rainbow
-*   Tonal spot
-*   Vibrant
+- Content
+- Expressive
+- Fidelity
+- Fruit salad
+- Monochrome
+- Neutral
+- Rainbow
+- Tonal spot
+- Vibrant
 
 ### Method 2 — Specifying palettes
 
@@ -119,17 +120,18 @@ dark mode, contrast).
 
 ```typescript
 const scheme = new DynamicScheme({
-    sourceColorArgb: 0xFFEB0057,
-    variant: Variant.VIBRANT,
-    isDark: false,
-    contrastLevel: 0.0,
-    primaryPalette: TonalPalette.fromInt(0xFFEB0057),
-    secondaryPalette: TonalPalette.fromInt(0xFFF46B00),
-    tertiaryPalette: TonalPalette.fromInt(0xFF00AB46),
-    neutralPalette: TonalPalette.fromInt(0xFF949494),
-    neutralVariantPalette: TonalPalette.fromInt(0xFFBC8877)
-});
+  sourceColorArgb: 0xffeb0057,
+  variant: Variant.VIBRANT,
+  isDark: false,
+  contrastLevel: 0.0,
+  primaryPalette: TonalPalette.fromInt(0xffeb0057),
+  secondaryPalette: TonalPalette.fromInt(0xfff46b00),
+  tertiaryPalette: TonalPalette.fromInt(0xff00ab46),
+  neutralPalette: TonalPalette.fromInt(0xff949494),
+  neutralVariantPalette: TonalPalette.fromInt(0xffbc8877)
+})
 ```
+
 </section>
 
 ## Step 2 — Obtaining colors
@@ -149,9 +151,8 @@ color from a given `scheme`.
 ###### TypeScript
 
 ```typescript
-const argb = MaterialDynamicColors.primary.getArgb(scheme);
-const hct = MaterialDynamicColors.primary.getHct(scheme);
+const argb = MaterialDynamicColors.primary.getArgb(scheme)
+const hct = MaterialDynamicColors.primary.getHct(scheme)
 ```
-
 
 </section>

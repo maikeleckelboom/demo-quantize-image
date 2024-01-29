@@ -3,13 +3,21 @@ interface ButtonProps {
   variant?: 'icon' | 'text' | 'outlined' | 'filled' | 'filled-tonal'
 }
 
-const props = defineProps<Partial<ButtonProps>>()
+const props = withDefaults(defineProps<ButtonProps>(), {
+  variant: 'filled'
+})
+
+const { variant } = toRefs(props)
+
+function test() {
+  console.log('test')
+}
 </script>
 
 <template>
-  <span data-touch-target>
-      <button type="button">
-      <slot/>
-    </button>
-  </span>
+  <button class="v-button" type="button">
+    <span data-touch-target>
+      <slot />
+    </span>
+  </button>
 </template>

@@ -1,45 +1,53 @@
 .slider-stop-indicator {
-    --stop-indicator-width: 4px;
-    --stop-indicator-height: 4px;
-    --stop-indicator-border-radius: 50%;
-    --_offset: 0%;
+  --stop-indicator-width: 4px;
+  --stop-indicator-height: 4px;
+  --stop-indicator-border-radius: 50%;
+  --_offset: 0%;
 
-    position: absolute;
-    inline-size: var(--stop-indicator-width);
-    block-size: var(--stop-indicator-height);
-    border-radius: var(--stop-indicator-border-radius);
+  position: absolute;
+  inline-size: var(--stop-indicator-width);
+  block-size: var(--stop-indicator-height);
+  border-radius: var(--stop-indicator-border-radius);
 
-    background: rgb(var(--primary-rgb));
+  background: rgb(var(--primary-rgb));
+
+  &.active {
+    background: rgb(var(--primary-container-rgb));
+  }
+
+  .v-btt & {
+    background: rgb(var(--primary-container-rgb));
 
     &.active {
-        background: rgb(var(--primary-container-rgb));
+      background: rgb(var(--primary-rgb));
     }
+  }
 
-    .v-btt & {
-        background: rgb(var(--primary-container-rgb));
+  .v-vertical & {
+    inset-block-start: calc(
+      var(--_offset) - calc(var(--stop-indicator-height) * 0.5)
+    );
+    inset-inline-start: 50%;
+    transform: translateX(-50%)
+      translateY(calc(var(--slider-handle-height) * 0.5));
 
-        &.active {
-            background: rgb(var(--primary-rgb));
-        }
+    &:last-child {
+      transform: translateX(-50%)
+        translateY(calc(var(--slider-handle-height) * -0.5));
     }
+  }
 
-    .v-vertical & {
-        inset-block-start: calc(var(--_offset) - calc(var(--stop-indicator-height) * 0.5));
-        inset-inline-start: 50%;
-        transform: translateX(-50%) translateY(calc(var(--slider-handle-height) * 0.5));
+  .v-horizontal & {
+    inset-block-start: 50%;
+    inset-inline-start: calc(
+      var(--_offset) - calc(var(--stop-indicator-width) * 0.5)
+    );
+    transform: translateX(calc(var(--slider-handle-width) * 0.5))
+      translateY(-50%);
 
-        &:last-child {
-            transform: translateX(-50%) translateY(calc(var(--slider-handle-height) * -0.5));
-        }
+    &:last-child {
+      transform: translateX(calc(var(--slider-handle-width) * -0.5))
+        translateY(-50%);
     }
-
-    .v-horizontal & {
-        inset-block-start: 50%;
-        inset-inline-start: calc(var(--_offset) - calc(var(--stop-indicator-width) * 0.5));
-        transform: translateX(calc(var(--slider-handle-width) * 0.5)) translateY(-50%);
-
-        &:last-child {
-            transform: translateX(calc(var(--slider-handle-width) * -0.5)) translateY(-50%);
-        }
-    }
+  }
 }

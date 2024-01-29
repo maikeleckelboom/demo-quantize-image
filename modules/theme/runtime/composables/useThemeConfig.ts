@@ -1,7 +1,9 @@
 import type { ThemeModuleOptions } from '~/modules/theme/types'
 
 export const useThemeConfig = () => {
-  const appConfig = useAppConfig() as unknown as { theme: Required<ThemeModuleOptions> }
+  const appConfig = useAppConfig() as unknown as {
+    theme: Required<ThemeModuleOptions>
+  }
   const isDark = computed({
     get: () => appConfig.theme.isDark,
     set: (v) => (appConfig.theme.isDark = v)

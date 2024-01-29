@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type {CSSProperties} from "vue";
+import type { CSSProperties } from 'vue'
 
 interface Props {
   fill?: boolean | 'true' | 'false' | CSSProperties
@@ -23,13 +23,11 @@ const hasFill = computed(() => {
 
 <template>
   <div class="slider-track">
-    <slot/>
+    <slot />
     <SliderTrackFill v-if="hasFill" :style="getFillStyle()">
-      <slot name="fill"/>
+      <slot name="fill" />
     </SliderTrackFill>
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

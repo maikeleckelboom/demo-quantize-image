@@ -12,7 +12,9 @@ function getSourceAsString() {
   return props.source
 }
 
-const { text, copy, copied, isSupported } = useClipboard({ source: getSourceAsString })
+const { text, copy, copied, isSupported } = useClipboard({
+  source: getSourceAsString
+})
 
 if (import.meta.client && !isSupported.value) {
   console.warn('Clipboard API is not supported in this browser.\n', text.value)
@@ -21,7 +23,11 @@ if (import.meta.client && !isSupported.value) {
 
 <template>
   <button :data-copied="copied" class="p-1" @click="copy()">
-    <Icon v-if="copied" class="w-5 h-5" name="ic:round-done" />
-    <Icon v-else class="w-5 h-5 text-on-surface-variant" name="ic:round-content-copy" />
+    <Icon v-if="copied" class="h-5 w-5" name="ic:round-done" />
+    <Icon
+      v-else
+      class="h-5 w-5 text-on-surface-variant"
+      name="ic:round-content-copy"
+    />
   </button>
 </template>

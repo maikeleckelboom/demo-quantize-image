@@ -18,7 +18,9 @@ const setVariant = (v: Variant) => {
 </script>
 
 <template>
-  <div class="scrollbar grid gap-8 overflow-y-auto p-4 sm:grid-cols-[auto,1fr] md:p-0">
+  <div
+    class="scrollbar grid gap-8 overflow-y-auto p-4 sm:grid-cols-[auto,1fr] md:p-0"
+  >
     <div class="w-full max-w-md">
       <section class="mb-4 flex flex-col gap-4"></section>
       <section class="mb-4 flex flex-col gap-4">
@@ -37,7 +39,11 @@ const setVariant = (v: Variant) => {
               class="flex cursor-pointer items-center gap-x-2 rounded-full border-surface-container px-4 py-2 text-label-lg leading-none hover:border-outline-variant/50 hover:bg-surface-level-1"
               @click="setVariant(variant.value)"
             >
-              <Icon v-if="variant.active" class="mr-1 size-4" name="ic:round-check" />
+              <Icon
+                v-if="variant.active"
+                class="mr-1 size-4"
+                name="ic:round-check"
+              />
               {{ variant.text }}
             </button>
           </div>

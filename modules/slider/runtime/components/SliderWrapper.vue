@@ -28,12 +28,12 @@ defineSlots<{
 
   &:has(.v-horizontal) {
     grid-template-columns: auto 1fr auto;
-    grid-template-areas: "leading body trailing";
+    grid-template-areas: 'leading body trailing';
   }
 
   &:has(.v-vertical) {
     grid-template-rows: auto 1fr auto;
-    grid-template-areas: "leading" "body" "trailing";
+    grid-template-areas: 'leading' 'body' 'trailing';
   }
 
   .slider-frame-trailing-slot {
@@ -52,5 +52,4 @@ defineSlots<{
     flex-direction: column;
   }
 }
-
 </style>

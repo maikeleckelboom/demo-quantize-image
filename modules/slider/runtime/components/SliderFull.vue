@@ -24,6 +24,4 @@ const modelValue = defineModel<number | number[]>()
   </SliderWrapper>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

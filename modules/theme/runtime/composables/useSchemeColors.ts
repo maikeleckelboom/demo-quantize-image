@@ -6,7 +6,9 @@ function useSchemeColors(
   const { brightnessSuffix = false } = options ?? {}
   const { $dynamicScheme, $dynamicSchemes } = useNuxtApp()
   return computed(() =>
-    colorsFromDynamicScheme(brightnessSuffix ? $dynamicSchemes.value : $dynamicScheme.value)
+    colorsFromDynamicScheme(
+      brightnessSuffix ? $dynamicSchemes.value : $dynamicScheme.value
+    )
   )
 }
 

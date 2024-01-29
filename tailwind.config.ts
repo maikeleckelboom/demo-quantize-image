@@ -12,8 +12,7 @@ const config = {
     `${srcDir}/modules/**/runtime/pages/**/*.{js,ts,vue}`
   ],
   presets: [materialThemePreset],
-  theme: {
-  }
+  theme: {}
 } satisfies Config
 
 export default config

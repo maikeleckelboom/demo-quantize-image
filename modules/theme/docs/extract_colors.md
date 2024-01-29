@@ -1,7 +1,5 @@
 # Extracting colors from an image
 
-
-
 To extract colors from an image that are suitable for generating schemes, use
 the `quantize` and `score` libraries.
 
@@ -56,7 +54,7 @@ QuantizerResult quantizerResult = QuantizerCelebi.quantize(pixels, maxColors);
 ###### TypeScript
 
 ```typescript
-const quantizerResult = QuantizerCelebi.quantize(pixels, maxColors);
+const quantizerResult = QuantizerCelebi.quantize(pixels, maxColors)
 ```
 
 ###### C++
