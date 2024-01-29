@@ -5,19 +5,6 @@ import type { Ref } from 'vue'
 import type { SliderHandle } from '#components'
 import { isArray } from '@vue/shared'
 
-
-/*
-function getOptionAsBool<T extends keyof SliderProps>(option: T, defaultValue?: boolean) {
-  const isTrue = (v: unknown) => [true, 'true', 'always'].includes(v as T)
-  const isFalse = (v: unknown) => [false, 'false', 'never'].includes(v as T)
-  return isTrue(props[option]) ? true : isFalse(props[option]) ? false : defaultValue
-}
-
-function getOption<T extends keyof SliderProps, D = SliderProps[T]>(option: T, defaultValue?: D): D {
-  return (props[option] ?? defaultValue) as D
-}
-*/
-
 const {
   min = 0,
   max = 100,
@@ -30,6 +17,7 @@ const {
   contained = true,
   lazy = false,
   disabled = false,
+  round = 2,
   ...restProps
 } = defineProps<SliderProps>()
 
@@ -38,12 +26,13 @@ const isRtl = computed(() => dir === 'rtl')
 
 const rootRef = ref<HTMLElement>()
 const sliderRef = ref<HTMLElement>()
+
 const handlesRef = useTemplateRefsList<InstanceType<typeof SliderHandle>>()
 
 type ModelValue = number | number[]
 const modelValue = defineModel<ModelValue>() as Ref<ModelValue>
 
-const modelValueArray = computed({
+const modelValueProxy = computed({
   get: () => {
     return isArray(modelValue.value) ? modelValue.value : [modelValue.value]
   },
@@ -52,11 +41,8 @@ const modelValueArray = computed({
   }
 })
 
-watch(modelValueArray, (values) => {
-  console.log('modelValueArray', values)
-})
-
 const currentHandle = ref<HTMLElement | null>(null)
+
 watch(currentHandle, (pointer) => pointer?.focus())
 
 
@@ -103,8 +89,8 @@ function calculateProgress(parentRect: DOMRect, endPos: Position, offsetPos: Pos
 }
 
 function getProgressFromEvent(event: PointerEvent) {
-  const sliderEl = unrefElement(sliderRef)
-  const sliderRect = getRect(<HTMLElement>sliderEl)
+  const sliderElement = unrefElement(sliderRef)
+  const sliderRect = getRect(<HTMLElement>sliderElement)
   return calculateProgress(sliderRect, {
     x: event.clientX,
     y: event.clientY
@@ -114,7 +100,7 @@ function getProgressFromEvent(event: PointerEvent) {
 function getClosestPointer(event: PointerEvent): HTMLElement {
   const progress = getProgressFromEvent(event)
   const getDistance = (percentage: number) => Math.abs(percentage - progress)
-  const distances = unref(modelValueArray).map((value) => getDistance(getProgress(value)))
+  const distances = unref(modelValueProxy).map((value) => getDistance(getProgress(value)))
   const minDistance = Math.min(...distances)
   const index = distances.indexOf(minDistance)
   return unrefElement(handlesRef.value[index]) as HTMLElement
@@ -214,7 +200,7 @@ function handleSwipe(event: PointerEvent) {
 }
 
 const rootStyleBinding = computed(() => {
-  const values = unref(modelValueArray)
+  const values = unref(modelValueProxy)
   const lowerValue = Math.min(...values)
   const upperValue = Math.max(...values)
   return {
@@ -232,6 +218,25 @@ const classBindings = computed(() => ({
   'v-contained': contained,
   'v-lazy': lazy
 }))
+
+function getClosestHandle(value: number) {
+  const values = unref(modelValueProxy)
+  const distances = values.map((v) => Math.abs(v - value))
+  const minDistance = Math.min(...distances)
+  const index = distances.indexOf(minDistance)
+  return handlesRef.value[index]
+}
+
+function getHandleValue(handle: HTMLElement) {
+  const index = handlesRef.value.findIndex((h) => h.$el === handle)
+  return unref(modelValueProxy)[index]
+}
+
+function getHandleIndex(handle: HTMLElement) {
+  return handlesRef.value.findIndex((h) => h.$el === handle)
+}
+
+
 </script>
 
 <template>
@@ -244,11 +249,14 @@ const classBindings = computed(() => ({
           </slot>
         </SliderTrack>
       </slot>
-      <template v-for="(value, index) in modelValueArray" :key="index">
+      <template v-for="(value, index) in modelValueProxy" :key="index">
         <slot :index="index" :value="value" name="handle">
           <SliderHandle :ref="handlesRef.set" :style="{'--_offset': `${value}%`}">
+            <slot name="handle" />
             <SliderLabelContainer>
-              {{ Math.round(value) }}
+              <slot name="handleLabel">
+                {{ Math.round(value) }}
+              </slot>
             </SliderLabelContainer>
           </SliderHandle>
         </slot>

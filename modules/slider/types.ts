@@ -20,6 +20,7 @@ interface SliderProps {
   lazy?: false,
   contained?: boolean | 'true' | 'false'
   trackStyle?: Record<string, any>
+  round?: number | boolean | 'true' | 'false' | (string & {})
 }
 
 export type { SliderProps }

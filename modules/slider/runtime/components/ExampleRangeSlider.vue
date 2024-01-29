@@ -80,7 +80,7 @@ function setClickOffset(evt: PointerEvent) {
  * @param value - The number to be rounded.
  * @param decimals - The number of decimal places to round to.
  */
-function roundDecimals(value: number, decimals: number) {
+function roundValue(value: number, decimals: number) {
   return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals)
 }
 
@@ -104,9 +104,9 @@ function roundFormat(value: number) {
   const decimals = getDecimals(value)
   if (Number(props.step)) {
     const valueAtStep = getValueAtStep(value, Number(props.step))
-    return roundDecimals(valueAtStep, decimals)
+    return roundNumber(valueAtStep, decimals)
   }
-  return roundDecimals(value, decimals)
+  return roundNumber(value, decimals)
 }
 
 function format(value: number) {
@@ -176,7 +176,7 @@ const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
 function getClosestPointer(event: PointerEvent): HTMLElement {
   const progress = getProgressFromEvent(event)
   const removeNaN = (v: number) => !isNaN(v)
-  const getDistance = (percentage: number) => Math.abs(percentage - progress)
+  const getDistance = (v: number) => Math.abs(v - progress)
   const distances = unref(valueProgressProxy).filter(removeNaN).map(getDistance)
   const minDistance = Math.min(...distances)
   const index = distances.indexOf(minDistance)
@@ -237,7 +237,7 @@ function handleSwipe(_event: PointerEvent) {
   const sliderRect = getRect(sliderEl)
   const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
-  const pointerValue = roundDecimals(getValue(progress), Number(props.decimals ?? 1))
+  const pointerValue = roundNumber(getValue(progress), Number(props.decimals ?? 1))
 
   if (isNumber(modelValue.value)) {
     modelValue.value = pointerValue
@@ -288,6 +288,7 @@ function isMarkActive(mark: { value: number, active: boolean }) {
   return false
 }
 
+/*
 function addOrderToMarks() {
   const marks = unref(marksArray)
   const pointerValues = unref(valueProgressProxy)
@@ -306,35 +307,7 @@ function addOrderToMarks() {
     const pointerIndex = pointerValues.indexOf(value)
     return marks![pointerIndex]
   })
-}
-
-const marksArray = computed(() => {
-  if (!getMarksEnabled()) return []
-
-  let newMarks = []
-
-  if (isArray(props.marks)) {
-    newMarks = props.marks.map((mark) => {
-      return {
-        value: Number(mark),
-        active: isMarkActive({ value: Number(mark), active: false })
-      }
-    })
-  } else if (isObject(props.marks)) {
-    newMarks = Object.keys(props.marks).map((key) => ({
-      value: Number(key),
-      active: isMarkActive({ value: Number(key), active: false })
-    }))
-  } else {
-    newMarks = [
-      { value: 0, active: isMarkActive({ value: 0, active: false }) },
-      { value: 100, active: isMarkActive({ value: 100, active: false }) }
-    ]
-  }
-
-  return addOrderToMarks()
-
-})
+}*/
 
 const VARIANT_CLASSES = {
   contained: 'v-contained',

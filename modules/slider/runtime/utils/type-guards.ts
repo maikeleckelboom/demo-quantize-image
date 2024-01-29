@@ -1,6 +1,7 @@
 export function isNumber(v: unknown): v is number {
   return typeof v === 'number' && !isNaN(v)
 }
+
 export function isString(v: unknown): v is string {
   return typeof v === 'string'
 }
@@ -14,7 +15,7 @@ export function isFuzzyNumber(v: unknown): v is number {
 }
 
 export function isFuzzyBoolean(v: unknown): v is boolean {
-  return isBoolean(v) || v === 'true' || v === 'false'
+  return isBoolean(v) || v === 'true' || v === 'false' || v === 'never'
 }
 
 export function isObject(v: unknown): v is object {
@@ -50,5 +51,5 @@ export function isRegExp(v: unknown): v is RegExp {
 }
 
 export function isTruthy(v: unknown): boolean {
- return [true, 'true', 1, '1', 'yes', 'y'].includes(v as any)
+  return [true, 'true', 1, '1', 'yes', 'y', 'always'].includes(v as any)
 }

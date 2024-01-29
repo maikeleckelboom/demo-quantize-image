@@ -1,27 +1,26 @@
 <script lang="ts" setup>
 import { hexFromArgb, TonalPalette } from '@material/material-color-utilities'
+import PaletteKeyColorPreview from '~/modules/theme/runtime/components/PaletteKeyColorPreview.vue'
+import type { HctModel } from '~/modules/theme/types'
 
 const { $dynamicScheme } = useNuxtApp()
 const { sourceColor, contrastLevel } = useThemeConfig()
 
-const primaryKeyColor = computed(() => {
+const primaryPalette = computed(() => {
+  return $dynamicScheme.value.primaryPalette
+})
+
+const primaryPaletteKeyColor = computed(() => {
   const primaryPalette = $dynamicScheme.value.primaryPalette
   return primaryPalette.keyColor
 })
-
-type FormModel = {
-  hue: number
-  chroma: number
-  tone: number
-}
-
-const formModel = reactive<FormModel>({
-  hue: Math.round(primaryKeyColor.value?.hue) ?? 0,
-  chroma: Math.round(primaryKeyColor.value?.chroma) ?? 0,
-  tone: Math.round(primaryKeyColor.value?.tone) ?? 0
+const formModel = reactive<HctModel>({
+  hue: Math.round(primaryPaletteKeyColor.value?.hue) ?? 0,
+  chroma: Math.round(primaryPaletteKeyColor.value?.chroma) ?? 0,
+  tone: Math.round(primaryPaletteKeyColor.value?.tone) ?? 0
 })
 
-const onHctFormModelChange = ({ hue, chroma, tone }: FormModel) => {
+const onHctFormModelChange = ({ hue, chroma, tone }: HctModel) => {
   sourceColor.value = hexFromArgb(TonalPalette.fromHueAndChroma(hue, chroma).tone(tone))
 }
 
@@ -50,18 +49,10 @@ const contrastMarksObj = computed(() => ({
   <div class="flex flex-col gap-4  bg-surface-container overflow-clip">
     <fieldset class="flex flex-col justify-center items-center">
       <legend class="sr-only">Primary Palette Key Color</legend>
-      <div class="flex flex-col relative size-full">
-        <output :style="{ backgroundColor: sourceColor }"
-                class="aspect-video w-full rounded-md flex justify-center items-center" />
-        <div class="absolute inset-0 flex justify-center items-center">
-        <span class="text-display-sm uppercase font-black tabular-nums">
-          {{ hexFromArgb(primaryKeyColor.toInt()) }}
-        </span>
-        </div>
-      </div>
+      <PaletteKeyColorPreview :palette="primaryPalette" />
     </fieldset>
     <fieldset class="flex flex-col rounded-md p-4 w-full">
-      <legend class="sr-only">HCT Color Picker</legend>
+      <legend class="sr-only">Color Picker</legend>
       <div class="flex flex-col gap-4">
         <div class="flex items-center ">
           <div class="flex justify-center items-center pr-3">

@@ -38,8 +38,16 @@ type ColorModeOption = {
   selected: boolean
 }
 
-// type Variant = Pick<ThemeModuleOptions, 'variant'>
 type StaticColor = Pick<ThemeModuleOptions, 'staticColors'>['staticColors']
 
 export type { Variant, StaticColor, ThemeModuleOptions, ColorModeOption }
 export { SCHEME_VARIANTS }
+
+type HctModel = {
+  hue: number
+  chroma: number
+  tone: number
+}
+
+type HctModelWithHex = HctModel & { hex: string }
+export type { HctModel, HctModelWithHex }
