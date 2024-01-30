@@ -5,8 +5,8 @@ import Button from '~/modules/button/runtime/components/Button.vue'
 
 const sourceElement = ref<HTMLImageElement | null>(null)
 
-const localSeedColors = ref<number[] | null>(null)
-const localProminentColors = ref<Map<number, number> | null>(null)
+const seedColors = ref<number[] | null>(null)
+const prominentColors = ref<Map<number, number> | null>(null)
 
 const isLoading = ref<boolean>(false)
 
@@ -38,15 +38,15 @@ whenever(currentFile, async (file) => {
 
 whenever(sourceElement, async (source) => {
   const pixels = await pixelsFromImage(source)
-  localProminentColors.value = prominentColorsFromPixels(pixels, maxColors.value)
-  localSeedColors.value = Score.score(localProminentColors.value)
+  prominentColors.value = prominentColorsFromPixels(pixels, maxColors.value)
+  seedColors.value = Score.score(prominentColors.value)
   isLoading.value = false
 })
 
 
 function reset() {
-  localSeedColors.value = null
-  localProminentColors.value = null
+  seedColors.value = null
+  prominentColors.value = null
 }
 </script>
 
@@ -74,12 +74,12 @@ function reset() {
     </section>
     <section>
       <div class="flex flex-col gap-4">
-        <template v-if="localProminentColors">
+        <template v-if="prominentColors">
           <section>
             <h1 class="text-title-lg">Prominent Colors<span
-              class="text-on-surface-variant tabular-nums"> ({{ localProminentColors.size }})</span></h1>
+              class="text-on-surface-variant tabular-nums"> ({{ prominentColors.size }})</span></h1>
             <div class="flex flex-wrap gap-2 mt-4">
-              <template v-for="([color], index) in localProminentColors" :key="index">
+              <template v-for="([color], index) in prominentColors" :key="index">
                 <div :style="{ backgroundColor: hexFromArgb(color) }"
                      class="size-8 rounded-md grid place-items-center relative" />
               </template>
@@ -88,10 +88,10 @@ function reset() {
           <section class="flex flex-col">
             <h1 class="text-title-lg">
               Seed Colors
-              <span class="text-on-surface-variant tabular-nums"> ({{ localSeedColors.length }})</span>
+              <span class="text-on-surface-variant tabular-nums"> ({{ seedColors.length }})</span>
             </h1>
             <div class="flex flex-wrap gap-2 mt-4">
-              <template v-for="seedColor in localSeedColors">
+              <template v-for="seedColor in seedColors">
                 <div
                   :style="{ backgroundColor: hexFromArgb(seedColor) }"
                   class="size-24 rounded-md flex" />

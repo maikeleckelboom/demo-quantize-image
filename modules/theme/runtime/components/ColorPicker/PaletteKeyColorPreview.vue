@@ -238,16 +238,4 @@ function isColorSpace(value: unknown): value is keyof ColorSpaces {
 </template>
 
 <style>
-details[open] summary::after {
-}
-
-details[open] summary::after {
-}
-
-details summary {
-  position: relative;
-  list-style: none;
-}
-
-
 </style>

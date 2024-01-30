@@ -23,17 +23,16 @@
 
     /* Horizontal */
     --slider-horizontal-height: 8px;
-    --slider-horizontal-width: max(280px, 100%);
+    --slider-horizontal-width: clamp(100px, 100%, 1000px);
     --slider-horizontal-handle-width: 24px;
     --slider-horizontal-handle-height: 24px;
 
     /* Vertical */
-    --slider-vertical-height: 260px;
+    --slider-vertical-height: clamp(100px, 100%, 1000px);
     --slider-vertical-width: 8px;
     --slider-vertical-handle-width: 24px;
     --slider-vertical-handle-height: 24px;
 
-    --test-color: rgb(1 0 0);
     --slider-track-width: var(--slider-horizontal-width);
     --slider-track-height: var(--slider-horizontal-height);
 }

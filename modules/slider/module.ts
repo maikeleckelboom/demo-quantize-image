@@ -1,14 +1,9 @@
-import {
-  addComponentsDir,
-  addImportsDir,
-  createResolver,
-  defineNuxtModule,
-  extendPages
-} from '@nuxt/kit'
+import { addComponentsDir, addImportsDir, createResolver, defineNuxtModule, extendPages } from '@nuxt/kit'
 
 const { resolve } = createResolver(import.meta.url)
 
-interface ModuleOptions {}
+interface ModuleOptions {
+}
 
 const runtimeDir: string = './runtime' as const
 
@@ -22,13 +17,9 @@ export default defineNuxtModule<ModuleOptions>({
   setup: async (options: ModuleOptions, nuxt) => {
     nuxt.options.css = nuxt.options.css || []
     nuxt.options.css.push(resolve(`${runtimeDir}/css/index.css`))
-
-    console.log('css?', nuxt.options.css)
-
     await addComponentsDir({
       path: resolve(`${runtimeDir}/components`)
     })
-
     addImportsDir(resolve(`${runtimeDir}/composables`))
     addImportsDir(resolve(`${runtimeDir}/utils`))
     extendPages((pages) => {

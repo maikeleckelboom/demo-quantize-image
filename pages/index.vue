@@ -14,9 +14,6 @@
 </template>
 
 <style lang="postcss">
-fieldset {
-}
-
 legend {
   @apply mb-4 text-body-lg;
 }

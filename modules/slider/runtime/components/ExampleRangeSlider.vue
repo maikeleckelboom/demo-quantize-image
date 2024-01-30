@@ -14,7 +14,8 @@ const props = withDefaults(defineProps<SliderProps>(), {
   disabled: false,
   preventOverlap: true,
   minDistance: 0,
-  labelVisibility: 'auto'
+  labelVisibility: 'auto',
+  round: 0
 })
 
 defineSlots<{
@@ -256,7 +257,7 @@ function handleSwipe(_event: PointerEvent) {
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
   const pointerValue = roundNumber(
     getValue(progress),
-    Number(props.decimals ?? props.round ?? 0)
+    Number(props.round ?? 0)
   )
 
   if (isNumber(modelValue.value)) {

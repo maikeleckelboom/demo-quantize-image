@@ -7,6 +7,11 @@
     body {
         @apply scrollbar scrollbar-stable;
     }
+
+    details summary {
+        position: relative;
+        list-style: none;
+    }
 }
 
 @layer utilities {

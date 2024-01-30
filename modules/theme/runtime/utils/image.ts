@@ -15,7 +15,7 @@ async function bytesFromImage(image: HTMLImageElement) {
       let rect = [0, 0, image.width, image.height]
       const area = image.dataset['area']
       if (area && /^\d+(\s*,\s*\d+){3}$/.test(area)) {
-        rect = area.split(/\s*,\s*/).map((s) => parseInt(s, 10))
+        rect = area.split(/\s*,\s*!/).map((s) => parseInt(s, 10))
       }
       const [sx, sy, sw, sh] = rect
       resolve(context.getImageData(sx, sy, sw, sh).data)
