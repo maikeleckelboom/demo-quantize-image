@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
   file: null,
   multiple: true,
   accept: 'image/*',
-  capture: '',
+  capture: undefined,
   reset: false,
   directory: false
 })
@@ -27,9 +27,9 @@ const emit = defineEmits<{
 
 const { files, open, reset, onChange } = useFileDialog({
   accept: props.accept,
-  capture: props.capture,
   reset: props.reset,
   directory: props.directory,
+  capture: props.capture,
   multiple: props.multiple
 })
 

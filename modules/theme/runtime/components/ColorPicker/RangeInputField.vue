@@ -19,7 +19,7 @@ const modelValue = defineModel<number>()
     <label :for="localUid" class="text-label-lg">
       {{ label }}
     </label>
-    <div class="flex flex-row items-center gap-6">
+    <div class="flex flex-row items-center gap-6 mt-2">
       <MaterialSlider
         v-model.number="modelValue"
         v-bind="{min,max,step,round}"

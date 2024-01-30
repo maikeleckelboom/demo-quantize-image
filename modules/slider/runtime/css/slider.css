@@ -36,7 +36,7 @@
         --slider-handle-width: var(--slider-horizontal-handle-width);
         --slider-handle-height: var(--slider-horizontal-handle-height);
 
-        inline-size: 100%;
+        min-block-size: var(--slider-handle-height);
 
         .slider-track-fill {
             transform: scaleX(var(--progress));
@@ -87,7 +87,8 @@
         --slider-track-width: var(--slider-vertical-width);
         --slider-handle-width: var(--slider-vertical-handle-width);
         --slider-handle-height: var(--slider-vertical-handle-height);
-        block-size: 100%;
+
+        min-inline-size: var(--slider-handle-height);
 
         .slider-handle {
             inset-inline-start: calc(50% - calc(var(--slider-handle-width) / 2));

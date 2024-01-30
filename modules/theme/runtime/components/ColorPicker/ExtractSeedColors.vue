@@ -85,16 +85,18 @@ function reset() {
               </template>
             </div>
           </section>
+        </template>
+        <template v-if="seedColors">
           <section class="flex flex-col">
             <h1 class="text-title-lg">
               Seed Colors
               <span class="text-on-surface-variant tabular-nums"> ({{ seedColors.length }})</span>
             </h1>
-            <div class="flex flex-wrap gap-2 mt-4">
+            <div class="grid grid-cols-4 gap-2 mt-4">
               <template v-for="seedColor in seedColors">
                 <div
                   :style="{ backgroundColor: hexFromArgb(seedColor) }"
-                  class="size-24 rounded-md flex" />
+                  class="size-20 md:size-24 rounded-md flex" />
               </template>
             </div>
           </section>
