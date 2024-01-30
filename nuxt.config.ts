@@ -86,6 +86,7 @@ export default defineNuxtConfig({
     'nuxt-icon',
     'nuxt-viewport',
     '~/modules/theme/module.ts',
-    '~/modules/slider/module.ts'
+    '~/modules/slider/module.ts',
+    '~/modules/json-pretty/module.ts'
   ]
 })

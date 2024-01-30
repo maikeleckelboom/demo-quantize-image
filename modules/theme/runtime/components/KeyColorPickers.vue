@@ -74,7 +74,7 @@ const customHandle = ref<HTMLElement | null>(null)
               <SliderTrack :style="hueSpectrum" class="" fill="false" />
             </template>
           </ExampleRangeSlider>
-          <div class="flex w-9 flex-col justify-center">
+          <div class="flex min-w-10 max-w-[35px] ml-4 flex-col justify-center">
             <input
               v-model.number="formModel.hue"
               class="numeric-text-input"
@@ -111,7 +111,7 @@ const customHandle = ref<HTMLElement | null>(null)
               />
             </template>
           </ExampleRangeSlider>
-          <div class="flex w-9 flex-col justify-center">
+          <div class="flex min-w-10 max-w-[35px] ml-4 flex-col justify-center">
             <input
               v-model.number="formModel.chroma"
               class="numeric-text-input"
@@ -148,7 +148,7 @@ const customHandle = ref<HTMLElement | null>(null)
               />
             </template>
           </ExampleRangeSlider>
-          <div class="flex w-9 flex-col justify-center">
+          <div class="flex min-w-10 max-w-[35px] ml-4 flex-col justify-center">
             <input
               v-model.number="formModel.tone"
               class="numeric-text-input"
@@ -166,21 +166,14 @@ const customHandle = ref<HTMLElement | null>(null)
         </div>
         <ExampleRangeSlider
           v-model.number="contrastLevel"
-          contained="true"
           help-text="The difference in brightness between the fore- and background"
           label="Contrast Level"
           max="1"
           min="0"
-          round="0"
+          step="0.1"
         >
-          <template #handle>
-            <div
-              ref="customHandle"
-              class="custom-handle contrast-input-handle"
-            />
-          </template>
         </ExampleRangeSlider>
-        <div class="flex w-10 flex-col justify-center">
+        <div class="flex min-w-10 max-w-[35px] ml-4 flex-col justify-center">
           <input
             v-model.number="contrastLevel"
             class="numeric-text-input"

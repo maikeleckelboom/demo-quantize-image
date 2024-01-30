@@ -1,9 +1,15 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const { $dynamicSchemes, $dynamicScheme } = useNuxtApp()
+</script>
 
 <template>
   <div class="custom-grid">
-    <div class="main grid md:grid-cols-2 gap-8">
+    <div class="main grid md:grid-cols-[auto,1fr,1fr] gap-8">
       <section>
+        <JsonPretty :data="$dynamicScheme" />
+      </section>
+      <section>
+        <ColorMode />
         <KeyColorPickers />
       </section>
       <section>

@@ -14,8 +14,7 @@ const props = withDefaults(defineProps<SliderProps>(), {
   disabled: false,
   preventOverlap: true,
   minDistance: 0,
-  labelVisibility: 'auto',
-  round: 0
+  labelVisibility: 'auto'
 })
 
 defineSlots<{
@@ -85,6 +84,7 @@ function roundValue(value: number, decimals: number) {
 }
 
 function getPrecision(step: number) {
+  if (!isNumber(step)) return 0
   const stepString = step.toString()
   if (stepString.indexOf('.') >= 0) {
     return stepString.length - stepString.indexOf('.') - 1
@@ -101,7 +101,7 @@ function getValueAtStep(value: number, step: number) {
 }
 
 function roundFormat(value: number) {
-  const decimals = getDecimals(value)
+  const decimals = getDecimals(Number(props.step))
   if (Number(props.step)) {
     const valueAtStep = getValueAtStep(value, Number(props.step))
     return roundNumber(valueAtStep, decimals)
@@ -111,7 +111,7 @@ function roundFormat(value: number) {
 
 function format(value: number) {
   if (props.labelFormat && typeof props.labelFormat === 'function') {
-    return props.labelFormat(roundFormat(value), value)
+    return props.labelFormat(value)
   }
   return roundFormat(value)
 }
@@ -255,10 +255,7 @@ function handleSwipe(_event: PointerEvent) {
     ? getContainedRect(sliderRect)
     : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
-  const pointerValue = roundNumber(
-    getValue(progress),
-    Number(props.round ?? 0)
-  )
+  const pointerValue = getValue(progress)
 
   if (isNumber(modelValue.value)) {
     modelValue.value = pointerValue

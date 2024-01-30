@@ -12,10 +12,9 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   file: null,
-  multiple: true,
-  accept: 'image/*',
-  capture: undefined,
-  reset: false,
+  multiple: false,
+  accept: '*',
+  reset: true,
   directory: false
 })
 
