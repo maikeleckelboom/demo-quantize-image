@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Button from '~/modules/button/runtime/Button.vue'
+import Button from '~/modules/button/runtime/components/Button.vue'
 
 interface Props {
   file?: File | null
@@ -14,13 +14,14 @@ const props = withDefaults(defineProps<Props>(), {
   file: null,
   multiple: true,
   accept: 'image/*',
-  capture: undefined,
+  capture: '',
   reset: false,
   directory: false
 })
 
 const emit = defineEmits<{
   change: [file: File | null]
+  reset: []
   commit: [file: File]
 }>()
 
@@ -36,7 +37,6 @@ const count = ref<number>(0)
 
 watch(files, (v) => {
   file.value = v?.[0] ?? null
-  count.value += 1
 })
 
 const file = shallowRef<File | null>(props.file)
@@ -64,27 +64,37 @@ defineExpose({
   file,
   files
 })
+
+function onReset() {
+  emit('reset')
+  file.value = null
+  count.value += 1
+  reset()
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-7">
-    <template v-if="!file">
+    <div class="flex gap-4">
       <button class="outlined-button" type="button" @click="open()">
-        Choose an image
+        {{ file ? 'Change image' : 'Choose an image' }}
       </button>
-    </template>
-    <template v-else>
+      <button v-if="file" class="outlined-button" type="button" @click="onReset()">
+        Reset
+      </button>
+    </div>
+    <template v-if="file">
       <FileInputPreview :file="file" />
-      <div class="flex gap-3">
-        <slot name="actions" v-bind="{open,reset, commit, count}">
+      <slot name="chosen" v-bind="{open,reset, commit, count}">
+        <div class="flex gap-3">
           <button class="outlined-button" type="button" @click="reset()">
             Reset
           </button>
           <button class="filled-button" type="button" @click="commit">
             Commit
           </button>
-        </slot>
-      </div>
+        </div>
+      </slot>
     </template>
   </div>
 </template>

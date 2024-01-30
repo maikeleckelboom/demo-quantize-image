@@ -99,20 +99,42 @@ function inlineString(value: unknown) {
   return ''
 }
 
-const paletteKeyColorContext = computed(() => {
+interface PaletteKeyColorContext {
+  formats: Record<
+    keyof ColorSpaces | 'hex',
+    {
+      text: string
+      value: unknown
+      css?: string
+    }
+  >
+  params: Record<
+    'temperature' | 'luminance' | 'alpha',
+    {
+      value: unknown
+      text: string
+      readonly?: boolean
+    }
+  >
+}
+
+const paletteKeyColorContext = computed<PaletteKeyColorContext>(() => {
   return {
     formats: {
       hex: {
         text: inlineString(keyColorHex.value),
-        value: keyColorHex.value
+        value: keyColorHex.value,
+        css: keyColorHex.value
       },
       rgb: {
         text: inlineString(keyColorRgb.value),
-        value: keyColorRgb.value
+        value: keyColorRgb.value,
+        css: `rgb(${inlineString(keyColorRgb.value)})`
       },
       hsl: {
         text: inlineString(keyColorHsl.value),
-        value: keyColorHsl.value
+        value: keyColorHsl.value,
+        css: `hsl(${inlineString(keyColorHsl.value)})`
       },
       hsv: {
         text: inlineString(keyColorHsv.value),
@@ -181,7 +203,10 @@ function isColorSpace(value: unknown): value is keyof ColorSpaces {
       class="aspect-video size-full rounded-md"
     />
     <details>
-      <summary class="p-2">Formats</summary>
+      <summary class="p-2 mt-4 flex items-center [&[open]]:text-error">
+        <span class="leading-none">Formats</span>
+        <Icon class="size-4 ml-2" name="ic:round-unfold-more" />
+      </summary>
       <div
         class="scrollbar inset-0 space-y-1 divide-y divide-outline-variant/40 overflow-y-auto px-4"
       >
@@ -211,3 +236,18 @@ function isColorSpace(value: unknown): value is keyof ColorSpaces {
     </details>
   </div>
 </template>
+
+<style>
+details[open] summary::after {
+}
+
+details[open] summary::after {
+}
+
+details summary {
+  position: relative;
+  list-style: none;
+}
+
+
+</style>

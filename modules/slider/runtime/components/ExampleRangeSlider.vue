@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import {
-  isMarkObject,
-  type MarksObject,
-  type SliderProps
-} from '~/modules/slider/types'
+import { isMarkObject, type MarksObject, type SliderProps } from '~/modules/slider/types'
 import { type Position, useTemplateRefsList } from '@vueuse/core'
 import type { ComputedRef } from 'vue'
 
@@ -260,7 +256,7 @@ function handleSwipe(_event: PointerEvent) {
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
   const pointerValue = roundNumber(
     getValue(progress),
-    Number(props.decimals ?? 1)
+    Number(props.decimals ?? props.round ?? 0)
   )
 
   if (isNumber(modelValue.value)) {

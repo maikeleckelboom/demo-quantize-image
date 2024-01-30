@@ -1,11 +1,9 @@
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="custom-grid">
     <div class="main grid md:grid-cols-2 gap-8">
-      <section class="">
+      <section>
         <KeyColorPickers />
       </section>
       <section>

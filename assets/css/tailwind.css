@@ -52,6 +52,69 @@
 }
 
 @layer components {
+    .v-input {
+        /* Custom */
+        --input-inline-size: 100%;
+        --input-block-size: 100%;
+        --input-min-width: 80px;
+        --input-min-height: 40px;
+
+        --input-padding-x: 6px;
+        --input-padding-y: 8px;
+
+        --input-border-radius: 4px;
+        --input-border-width: 1px;
+        --input-border-color: rgb(var(--outline-rgb));
+        --input-border: solid var(--input-border-width) var(--input-border-color);
+
+        --input-background-color: rgb(var(--surface-rgb));
+        --input-text-color: rgb(var(--on-surface-rgb));
+        --input-placeholder-color: rgb(var(--on-surface-rgb) / 0.5);
+
+        --input-text-align: center;
+
+        padding-inline: var(--input-padding-x);
+        padding-block: var(--input-padding-y);
+        border-radius: var(--input-border-radius);
+        border: var(--input-border);
+        background-color: var(--input-background-color);
+        color: var(--input-text-color);
+        text-align: var(--input-text-align);
+        accent-color: rgb(var(--primary-rgb));
+        @apply text-body-lg;
+
+        &:focus-visible {
+            --input-border-color: rgb(var(--primary-rgb));
+            --input-border: solid var(--input-border-width) var(--input-border-color);
+            outline: none;
+        }
+
+        &::placeholder {
+            color: var(--input-placeholder-color);
+        }
+    }
+
+    .v-input-type-number {
+
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        &[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        &[type="number"]::-webkit-outer-spin-button,
+        &[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+}
+
+@layer components {
     .outlined-button {
         @apply relative size-fit overflow-clip rounded-3xl border border-primary bg-transparent px-6 py-3;
         @apply text-center text-label-lg font-medium leading-none;

@@ -16,6 +16,10 @@ export default defineNuxtConfig({
     }
   },
 
+  css: [
+    '~/assets/css/input.css'
+  ],
+
   tailwindcss: {
     viewer: false,
     configPath: '~/tailwind.config',

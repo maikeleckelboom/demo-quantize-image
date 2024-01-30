@@ -45,13 +45,13 @@ const customHandle = ref<HTMLElement | null>(null)
       </fieldset>
     </section>
     <fieldset class="flex w-full flex-col rounded-md p-4">
-      <legend class="sr-only">Color Picker</legend>
+      <legend class="sr-only">HCT Color Picker</legend>
       <div class="flex flex-col gap-4">
         <div class="flex items-center">
           <div class="flex items-center justify-center pr-3">
-            <span class="text-label-lg font-medium leading-none text-outline"
-            >H</span
-            >
+            <span class="text-label-lg font-medium leading-none text-outline">
+              H
+            </span>
           </div>
           <ExampleRangeSlider
             v-model="formModel.hue"
@@ -84,9 +84,9 @@ const customHandle = ref<HTMLElement | null>(null)
         </div>
         <div class="flex items-center">
           <div class="flex items-center justify-center pr-3">
-            <span class="text-label-lg font-medium leading-none text-outline"
-            >C</span
-            >
+            <span class="text-label-lg font-medium leading-none text-outline">
+              C
+            </span>
           </div>
           <ExampleRangeSlider
             v-model.number="formModel.chroma"
@@ -121,9 +121,9 @@ const customHandle = ref<HTMLElement | null>(null)
         </div>
         <div class="flex items-center">
           <div class="flex items-center justify-center pr-3">
-            <span class="text-label-lg font-medium leading-none text-outline"
-            >T</span
-            >
+            <span class="text-label-lg font-medium leading-none text-outline">
+              T
+            </span>
           </div>
           <ExampleRangeSlider
             v-model.number="formModel.tone"

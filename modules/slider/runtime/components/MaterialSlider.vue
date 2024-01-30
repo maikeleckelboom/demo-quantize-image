@@ -3,7 +3,7 @@ const modelValue = defineModel<number | number[]>()
 </script>
 
 <template>
-  <SliderRoot v-model="modelValue" class="v-material-slider" />
+  <ExampleRangeSlider v-model="modelValue" class="v-material-slider" />
 </template>
 
 <style>
