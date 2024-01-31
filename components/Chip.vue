@@ -17,7 +17,7 @@ const slots = defineSlots<{
 
 const root = ref<HTMLElement>()
 
-const transitionDuration = ref<string>('200ms')
+const transitionDuration = ref<string>('240ms')
 const transitionDelay = ref<string>('160ms')
 const transitionTotalDuration = computed<number>(
   () => parseInt(unref(transitionDuration)) + parseInt(unref(transitionDelay))
@@ -49,15 +49,12 @@ const transitionTotalDuration = computed<number>(
   --_transition-delay: v-bind(transitionDelay);
   --_height: 32px;
   --_border-radius: 8px;
-
   --_icon-size: 18px;
   --_icon-color: rgb(var(--on-surface-rgb));
   --_icon-color-selected: rgb(var(--primary-rgb));
-
   --_padding: 16px;
   --_padding-with-icon: 8px;
   --_padding-between-elements: 8px;
-
   --_outline-color: rgb(var(--outline-rgb));
   --_text-color: rgb(var(--on-surface-rgb));
 
@@ -75,8 +72,8 @@ const transitionTotalDuration = computed<number>(
   grid-template-columns: 0 1fr;
   grid-template-rows: 1fr;
   place-content: start;
-  @apply text-label-lg;
   text-shadow: 0 1px 0 rgb(var(--on-surface-rgb) / 0);
+  @apply text-label-lg;
 
   transition:
     grid-template-columns var(--_transition-duration) ease,
@@ -94,9 +91,9 @@ const transitionTotalDuration = computed<number>(
     top: 50%;
     transform: translateY(-50%) scale(0);
     opacity: 0;
-    transition-duration: calc(var(--_transition-duration) * 0.4);
+    transition-duration: calc(var(--_transition-duration) * 0.6);
     transition-property: transform, opacity;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-timing-function: ease-out;
     transition-delay: 0ms;
   }
 
@@ -105,11 +102,10 @@ const transitionTotalDuration = computed<number>(
     --_text-color: rgb(var(--on-surface-rgb));
     --_outline-color: rgb(var(--surface-tint-rgb) / 0.26);
     --_icon-color: rgb(var(--primary-rgb));
-    text-shadow: 0 1px 0 rgb(var(--on-surface-rgb) / 0.15);
 
+    gap: var(--_padding-between-elements);
     grid-template-columns: calc(var(--_icon-size) + 1px) 1fr;
-
-    gap: 8px;
+    text-shadow: 0 1px 0 rgb(var(--on-surface-rgb) / 0.15);
     padding-inline-start: var(--_padding-with-icon);
 
     .icon {
