@@ -1,33 +1,48 @@
 <script lang="ts" setup>
-interface ButtonProps {
-  variant?: 'icon' | 'text' | 'outlined' | 'filled' | 'filled-tonal'
-}
-
-const props = withDefaults(defineProps<ButtonProps>(), {
-  variant: 'filled'
-})
-
-const { variant } = toRefs(props)
-
-function test() {
-  console.log('test')
-}
+const props = withDefaults(
+  defineProps<{
+    variant:
+      | 'text'
+      | 'elevated'
+      | 'filled'
+      | 'filledTonal'
+      | 'outlined'
+      | 'icon'
+  }>(),
+  {
+    variant: 'text'
+  }
+)
 </script>
 
 <template>
-  <button class="v-button" type="button">
-    <slot name="leading" />
-    <span data-touch-target>
-      <slot />
-    </span>
-    <slot name="trailing" />
+  <button :class="`v-variant-${variant}`" class="button" type="button">
+    <slot name="trailingIcon" />
+    <slot name="icon" />
+    <slot></slot>
+    <slot name="trailingIcon" />
   </button>
 </template>
 
 <style scoped>
-.v-button {
-  @apply px-2 py-1.5 rounded-md flex items-center gap-2;
-  @apply transition-colors duration-200;
-  @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white;
+.button {
+  @apply relative inline-flex items-center justify-center rounded-4xl border border-transparent text-label-lg;
+  @apply opacity-0 after:pointer-events-none after:absolute after:inset-0 after:z-20 after:rounded-4xl after:bg-primary;
+  @apply hover:after:opacity-50;
+
+  &:hover {
+    @apply after:opacity-100;
+  }
+
+  &:focus {
+    @apply after:opacity-100;
+  }
+}
+
+button:slotted(.icon) {
+  margin-right: 0.25em;
+}
+
+button:has(.icon) {
 }
 </style>

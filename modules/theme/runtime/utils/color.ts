@@ -10,9 +10,7 @@ import { capitalize } from 'vue'
 import type { Variant } from '~/modules/theme/types'
 import { SCHEME_VARIANTS } from '~/modules/theme/types'
 
-const variantKeys = Object.keys(
-  SCHEME_VARIANTS
-) as (keyof typeof SCHEME_VARIANTS)[]
+const variantKeys = Object.keys(SCHEME_VARIANTS) as (keyof typeof SCHEME_VARIANTS)[]
 
 function getColorAsHct(color: Hct | string | number): Hct {
   if (typeof color === 'number') {
@@ -23,9 +21,7 @@ function getColorAsHct(color: Hct | string | number): Hct {
   return color
 }
 
-function groupByBaseColor(
-  colors: Record<string, number>
-): Record<string, Record<string, number>> {
+function groupByBaseColor(colors: Record<string, number>): Record<string, Record<string, number>> {
   return Object.entries(colors).reduce(
     (acc, [key, value]) => {
       const splitCamelCase = key
@@ -66,25 +62,18 @@ function makeDynamicScheme(
   return schemes
 }
 
-function colorsFromDynamicSchemeMap(
-  dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>
-) {
+function colorsFromDynamicSchemeMap(dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>) {
   return Array.from(dynamicSchemes.entries()).reduce(
     (acc, [key, value]) => ({
       ...acc,
-      ...colorsFromDynamicScheme(
-        value,
-        key !== 'system' ? `${capitalize(key)}` : ''
-      )
+      ...colorsFromDynamicScheme(value, key !== 'system' ? `${capitalize(key)}` : '')
     }),
     {}
   )
 }
 
 function colorsFromDynamicScheme(
-  dynamicScheme:
-    | Map<'system' | 'light' | 'dark', DynamicScheme>
-    | DynamicScheme,
+  dynamicScheme: Map<'system' | 'light' | 'dark', DynamicScheme> | DynamicScheme,
   suffix?: string
 ): Record<string, number> {
   if (dynamicScheme instanceof Map) {
@@ -92,8 +81,7 @@ function colorsFromDynamicScheme(
   }
   const schemeContentColors: Record<string, number> = {}
   for (const colorName of Object.getOwnPropertyNames(MaterialDynamicColors)) {
-    const color =
-      MaterialDynamicColors[colorName as keyof typeof MaterialDynamicColors]
+    const color = MaterialDynamicColors[colorName as keyof typeof MaterialDynamicColors]
     if (color instanceof DynamicColor) {
       const colorKey = suffix ? `${colorName}${suffix && suffix}` : colorName
       schemeContentColors[colorKey] = color.getArgb(dynamicScheme)
@@ -102,16 +90,11 @@ function colorsFromDynamicScheme(
   return schemeContentColors
 }
 
-function propertiesFromColors(
-  schemeColors: Record<string, number>,
-  options: {} = {}
-) {
+function propertiesFromColors(schemeColors: Record<string, number>, options: {} = {}) {
   return Object.keys(schemeColors).reduce(
     (acc, key) => {
       const { r, g, b } = rgbaFromArgb(schemeColors[key])
-      const kebabKey = key
-        .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2')
-        .toLowerCase()
+      const kebabKey = key.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase()
       acc[`--${kebabKey}-rgb`] = `${r} ${g} ${b}`
       return acc
     },

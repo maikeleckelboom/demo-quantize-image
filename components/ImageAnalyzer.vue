@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="box">
@@ -10,17 +8,6 @@
 </template>
 
 <style scoped>
-body {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-}
-
 @keyframes slidefirstleft {
   from {
     transform: translate(0);
@@ -74,14 +61,17 @@ body {
 }
 
 .box {
+  --current-image: var(--background-image-1);
+
+  --background-w: 600px;
+  --background-h: 400px;
+
   position: relative;
-  width: 600px;
-  height: 600px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /*     background-image: url(https://fastly.4sqi.net/img/general/600x600/330945952_7mO3x4E65QKvNNnt2N4ya-eB7b7kSq645nISunkGDts.jpg); */
+  width: var(--background-w);
+  height: var(--background-h);
+  background-image: var(--current-image);
   background-repeat: no-repeat;
+  background-size: var(--background-w) var(--background-h);
 }
 
 .box__block {
@@ -89,8 +79,9 @@ body {
   width: 50%;
   height: 50%;
   filter: grayscale(1);
-  background-image: url(https://fastly.4sqi.net/img/general/600x600/330945952_7mO3x4E65QKvNNnt2N4ya-eB7b7kSq645nISunkGDts.jpg);
+  background-image: var(--current-image);
   transition: transform 1s ease;
+  background-size: var(--background-w) var(--background-h);
 }
 
 .box__block:first-child {

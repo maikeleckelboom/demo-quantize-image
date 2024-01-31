@@ -1,17 +1,10 @@
 import { type Config } from 'tailwindcss'
-import {
-  tailwindCustomVariants,
-  tailwindMaterialColorTheme
-} from './tailwind.plugin'
+import { tailwindCustomVariants, tailwindMaterialColorTheme } from './tailwind.plugin'
 import tailwindContainerQueries from '@tailwindcss/container-queries'
 
 export const materialThemePreset = {
   content: [],
-  plugins: [
-    tailwindMaterialColorTheme(),
-    tailwindCustomVariants(),
-    tailwindContainerQueries
-  ],
+  plugins: [tailwindMaterialColorTheme(), tailwindCustomVariants(), tailwindContainerQueries],
   darkMode: 'class',
   theme: {
     extend: {
@@ -29,34 +22,27 @@ export const materialThemePreset = {
       colors: {
         'primary-palette-key-color': {
           DEFAULT: 'rgb(var(--primary-palette-key-color-rgb) / <alpha-value>)',
-          light:
-            'rgb(var(--primary-palette-key-color-light-rgb) / <alpha-value>)',
+          light: 'rgb(var(--primary-palette-key-color-light-rgb) / <alpha-value>)',
           dark: 'rgb(var(--primary-palette-key-color-dark-rgb) / <alpha-value>)'
         },
         'secondary-palette-key-color': {
-          DEFAULT:
-            'rgb(var(--secondary-palette-key-color-rgb) / <alpha-value>)',
-          light:
-            'rgb(var(--secondary-palette-key-color-light-rgb) / <alpha-value>)',
+          DEFAULT: 'rgb(var(--secondary-palette-key-color-rgb) / <alpha-value>)',
+          light: 'rgb(var(--secondary-palette-key-color-light-rgb) / <alpha-value>)',
           dark: 'rgb(var(--secondary-palette-key-color-dark-rgb) / <alpha-value>)'
         },
         'tertiary-palette-key-color': {
           DEFAULT: 'rgb(var(--tertiary-palette-key-color-rgb) / <alpha-value>)',
-          light:
-            'rgb(var(--tertiary-palette-key-color-light-rgb) / <alpha-value>)',
+          light: 'rgb(var(--tertiary-palette-key-color-light-rgb) / <alpha-value>)',
           dark: 'rgb(var(--tertiary-palette-key-color-dark-rgb) / <alpha-value>)'
         },
         'neutral-palette-key-color': {
           DEFAULT: 'rgb(var(--neutral-palette-key-color-rgb) / <alpha-value>)',
-          light:
-            'rgb(var(--neutral-palette-key-color-light-rgb) / <alpha-value>)',
+          light: 'rgb(var(--neutral-palette-key-color-light-rgb) / <alpha-value>)',
           dark: 'rgb(var(--neutral-palette-key-color-dark-rgb) / <alpha-value>)'
         },
         'neutral-variant-palette-key-color': {
-          DEFAULT:
-            'rgb(var(--neutral-variant-palette-key-color-rgb) / <alpha-value>)',
-          light:
-            'rgb(var(--neutral-variant-palette-key-color-light-rgb) / <alpha-value>)',
+          DEFAULT: 'rgb(var(--neutral-variant-palette-key-color-rgb) / <alpha-value>)',
+          light: 'rgb(var(--neutral-variant-palette-key-color-light-rgb) / <alpha-value>)',
           dark: 'rgb(var(--neutral-variant-palette-key-color-dark-rgb) / <alpha-value>)'
         },
         primary: {
@@ -221,8 +207,7 @@ export const materialThemePreset = {
         },
         'surface-container-lowest': {
           DEFAULT: 'rgb(var(--surface-container-lowest-rgb) / <alpha-value>)',
-          light:
-            'rgb(var(--surface-container-lowest-light-rgb) / <alpha-value>)',
+          light: 'rgb(var(--surface-container-lowest-light-rgb) / <alpha-value>)',
           dark: 'rgb(var(--surface-container-lowest-dark-rgb) / <alpha-value>)'
         },
         'surface-container-low': {
@@ -242,30 +227,21 @@ export const materialThemePreset = {
         },
         'surface-container-highest': {
           DEFAULT: 'rgb(var(--surface-container-highest-rgb) / <alpha-value>)',
-          light:
-            'rgb(var(--surface-container-highest-light-rgb) / <alpha-value>)',
+          light: 'rgb(var(--surface-container-highest-light-rgb) / <alpha-value>)',
           dark: 'rgb(var(--surface-container-highest-dark-rgb) / <alpha-value>)'
         },
         'primary-fixed': 'rgb(var(--primary-fixed-rgb) / <alpha-value>)',
-        'primary-fixed-dim':
-          'rgb(var(--primary-fixed-dim-rgb) / <alpha-value>)',
+        'primary-fixed-dim': 'rgb(var(--primary-fixed-dim-rgb) / <alpha-value>)',
         'on-primary-fixed': 'rgb(var(--on-primary-fixed-rgb) / <alpha-value>)',
-        'on-primary-fixed-variant':
-          'rgb(var(--on-primary-fixed-variant-rgb) / <alpha-value>)',
+        'on-primary-fixed-variant': 'rgb(var(--on-primary-fixed-variant-rgb) / <alpha-value>)',
         'secondary-fixed': 'rgb(var(--secondary-fixed-rgb) / <alpha-value>)',
-        'secondary-fixed-dim':
-          'rgb(var(--secondary-fixed-dim-rgb) / <alpha-value>)',
-        'on-secondary-fixed':
-          'rgb(var(--on-secondary-fixed-rgb) / <alpha-value>)',
-        'on-secondary-fixed-variant':
-          'rgb(var(--on-secondary-fixed-variant-rgb) / <alpha-value>)',
+        'secondary-fixed-dim': 'rgb(var(--secondary-fixed-dim-rgb) / <alpha-value>)',
+        'on-secondary-fixed': 'rgb(var(--on-secondary-fixed-rgb) / <alpha-value>)',
+        'on-secondary-fixed-variant': 'rgb(var(--on-secondary-fixed-variant-rgb) / <alpha-value>)',
         'tertiary-fixed': 'rgb(var(--tertiary-fixed-rgb) / <alpha-value>)',
-        'tertiary-fixed-dim':
-          'rgb(var(--tertiary-fixed-dim-rgb) / <alpha-value>)',
-        'on-tertiary-fixed':
-          'rgb(var(--on-tertiary-fixed-rgb) / <alpha-value>)',
-        'on-tertiary-fixed-variant':
-          'rgb(var(--on-tertiary-fixed-variant-rgb) / <alpha-value>)',
+        'tertiary-fixed-dim': 'rgb(var(--tertiary-fixed-dim-rgb) / <alpha-value>)',
+        'on-tertiary-fixed': 'rgb(var(--on-tertiary-fixed-rgb) / <alpha-value>)',
+        'on-tertiary-fixed-variant': 'rgb(var(--on-tertiary-fixed-variant-rgb) / <alpha-value>)',
         'surface-level-1': 'rgb(var(--primary-rgb) / 0.04)',
         'surface-level-2': 'rgb(var(--primary-rgb) / 0.08)',
         'surface-level-3': 'rgb(var(--primary-rgb) / 0.12)'
@@ -361,7 +337,7 @@ export const materialThemePreset = {
           }
         ],
         'title-lg': [
-          '1.125rem', // 18px
+          '18px', // 18px
           {
             letterSpacing: '0px',
             lineHeight: '28px',
@@ -369,7 +345,7 @@ export const materialThemePreset = {
           }
         ],
         'title-md': [
-          '1rem', // 16px
+          '16px', // 16px
           {
             letterSpacing: '0.15000000596046448px',
             lineHeight: '24px',
@@ -377,7 +353,7 @@ export const materialThemePreset = {
           }
         ],
         'title-sm': [
-          '0.875rem', // 14px
+          '14px', // 14px
           {
             letterSpacing: '0.10000000149011612px',
             lineHeight: '20px',
@@ -385,7 +361,7 @@ export const materialThemePreset = {
           }
         ],
         'label-lg': [
-          '0.875rem', // 14px
+          '14px', // 14px
           {
             letterSpacing: '0.10000000149011612px',
             lineHeight: '20px',
@@ -393,7 +369,7 @@ export const materialThemePreset = {
           }
         ],
         'label-md': [
-          '0.75rem', // 12px
+          '12px', // 12px
           {
             letterSpacing: '0.5px',
             lineHeight: '16px',
@@ -401,7 +377,7 @@ export const materialThemePreset = {
           }
         ],
         'label-sm': [
-          '0.625rem', // 10px
+          '10px', // 10px
           {
             letterSpacing: '0.5px',
             lineHeight: '16px',
@@ -409,7 +385,7 @@ export const materialThemePreset = {
           }
         ],
         'body-lg': [
-          '0.9375rem', // 15px
+          '15px', // 15px
           {
             letterSpacing: '0.35px',
             lineHeight: '24px',
@@ -417,7 +393,7 @@ export const materialThemePreset = {
           }
         ],
         'body-md': [
-          '0.875rem', // 14px
+          '14px', // 14px
           {
             letterSpacing: '0.25px',
             lineHeight: '20px',
@@ -425,7 +401,7 @@ export const materialThemePreset = {
           }
         ],
         'body-sm': [
-          '0.8125rem', // 13px
+          '13px', // 13px
           {
             letterSpacing: '0.4000000059604645px;',
             lineHeight: '16px',

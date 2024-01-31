@@ -6,7 +6,7 @@ const isAppearanceTransition =
   document.startViewTransition &&
   !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-function toggle(event?: MouseEvent) {
+function toggle(event: MouseEvent) {
   if (!event || !isAppearanceTransition || !document.startViewTransition) {
     isDark.value = !isDark.value
     return
@@ -27,13 +27,22 @@ function toggle(event?: MouseEvent) {
   })
 
   transition.ready.then(() => {
-    const clipPath = [
+    const circleClipPath = [
       `circle(0px at ${x}px ${y}px)`,
       `circle(${endRadius}px at ${x}px ${y}px)`
     ]
+
+    const element = event.target as HTMLElement
+    const { top, left, width, height } = element.getBoundingClientRect()
+
+    const insetClipPath = [
+      `inset(${top}px ${innerWidth - left - width}px ${innerHeight - top - height}px ${left}px)`,
+      `inset(0px 0px 0px 0px)`
+    ]
+
     document.documentElement.animate(
       {
-        clipPath: isDark.value ? clipPath.reverse() : clipPath
+        clipPath: isDark.value ? circleClipPath.reverse() : circleClipPath
       },
       {
         duration: 400,

@@ -16,7 +16,7 @@ const toggleColorMode = (mode: ColorModeOption) => {
   })
 }
 
-const activeBoxStyles = (mode: ColorModeOption) => ({
+const boxStyles = (mode: ColorModeOption) => ({
   'border-primary': mode.selected,
   'border-outline-variant': !mode.selected,
   'border-2 bg-surface-light border-outline-variant-light':
@@ -27,9 +27,14 @@ const activeBoxStyles = (mode: ColorModeOption) => ({
 
 <template>
   <div class="flex flex-row gap-4">
-    <div v-for="mode in modes" :key="mode.value" @click="toggleColorMode(mode)">
+    <div
+      v-for="mode in modes"
+      :key="mode.value"
+      role="button"
+      @click="toggleColorMode(mode)"
+    >
       <div
-        :class="activeBoxStyles(mode)"
+        :class="boxStyles(mode)"
         class="relative aspect-video min-h-14 overflow-hidden rounded-lg"
       >
         <ColorModeSheet :mode="mode" />

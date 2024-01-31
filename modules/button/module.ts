@@ -1,9 +1,17 @@
-import { addComponentsDir, createResolver, defineNuxtModule } from '@nuxt/kit'
-import type { ThemeModuleOptions } from '~/modules/theme/types'
+import {
+  addComponentsDir,
+  createResolver,
+  defineNuxtModule,
+  extendPages
+} from '@nuxt/kit'
 
 const { resolve } = createResolver(import.meta.url)
 
-export default defineNuxtModule<ThemeModuleOptions>({
+interface ModuleOptions {}
+
+const runtimeDir: string = './runtime' as const
+
+export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'button',
     configKey: 'button',
@@ -11,11 +19,18 @@ export default defineNuxtModule<ThemeModuleOptions>({
   },
   defaults: {},
   hooks: {},
-  setup: async (options: ThemeModuleOptions, nuxt) => {
+  setup: async (options: ModuleOptions, nuxt) => {
     await addComponentsDir({
-      path: resolve('./runtime/components'),
+      path: resolve(`${runtimeDir}/components`),
       extensions: ['vue'],
       prefix: ''
+    })
+    extendPages((pages) => {
+      pages.push({
+        name: 'slider',
+        path: '/modules/button',
+        file: resolve(`${runtimeDir}/pages/index.vue`)
+      })
     })
   }
 })

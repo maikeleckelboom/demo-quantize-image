@@ -3,11 +3,11 @@ import Button from '~/modules/button/runtime/components/Button.vue'
 
 interface Props {
   file?: File | null
-  multiple?: boolean;
-  accept?: string;
-  capture?: string;
-  reset?: boolean;
-  directory?: boolean;
+  multiple?: boolean
+  accept?: string
+  capture?: string
+  reset?: boolean
+  directory?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -78,13 +78,18 @@ function onReset() {
       <button class="outlined-button" type="button" @click="open()">
         {{ file ? 'Change image' : 'Choose an image' }}
       </button>
-      <button v-if="file" class="outlined-button" type="button" @click="onReset()">
+      <button
+        v-if="file"
+        class="outlined-button"
+        type="button"
+        @click="onReset()"
+      >
         Reset
       </button>
     </div>
     <template v-if="file">
       <FileInputPreview :file="file" />
-      <slot name="chosen" v-bind="{open,reset, commit, count}">
+      <slot name="chosen" v-bind="{ open, reset, commit, count }">
         <div class="flex gap-3">
           <button class="outlined-button" type="button" @click="reset()">
             Reset

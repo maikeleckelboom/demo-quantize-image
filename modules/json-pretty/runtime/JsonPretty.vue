@@ -1,19 +1,22 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import VueJsonPretty from 'vue-json-pretty'
-import type { JSONDataType } from 'vue-json-pretty/types/utils'
+import type { JsonPrettyProps } from '~/modules/json-pretty/types'
 
-defineProps<{
-  data: any | JSONDataType
-}>()
+withDefaults(defineProps<Partial<JsonPrettyProps>>(), {
+  data: null,
+  deep: 1,
+  showLineNumbers: false,
+  showDoubleQuotes: false,
+  highlightSelectedNode: false
+})
 </script>
 
 <template>
   <VueJsonPretty
-    :highlight-selected-node="false"
     :data="data"
-    :show-line-number="false"
-    :show-double-quotes="false"
-    :deep="1"
+    :deep="deep"
+    :highlight-selected-node="highlightSelectedNode"
+    :show-double-quotes="showDoubleQuotes"
     class="scrollbar"
   />
 </template>

@@ -53,7 +53,7 @@ const customHandle = ref<HTMLElement | null>(null)
               H
             </span>
           </div>
-          <ExampleRangeSlider
+          <InputRangeSlider
             v-model="formModel.hue"
             :stop-marks="false"
             class="color-input-range"
@@ -73,8 +73,8 @@ const customHandle = ref<HTMLElement | null>(null)
             <template #track>
               <SliderTrack :style="hueSpectrum" class="" fill="false" />
             </template>
-          </ExampleRangeSlider>
-          <div class="flex min-w-10 max-w-[35px] ml-4 flex-col justify-center">
+          </InputRangeSlider>
+          <div class="ml-4 flex min-w-10 max-w-[35px] flex-col justify-center">
             <input
               v-model.number="formModel.hue"
               class="numeric-text-input"
@@ -88,7 +88,7 @@ const customHandle = ref<HTMLElement | null>(null)
               C
             </span>
           </div>
-          <ExampleRangeSlider
+          <InputRangeSlider
             v-model.number="formModel.chroma"
             :stop-marks="false"
             class="color-input-range"
@@ -110,8 +110,8 @@ const customHandle = ref<HTMLElement | null>(null)
                 fill="false"
               />
             </template>
-          </ExampleRangeSlider>
-          <div class="flex min-w-10 max-w-[35px] ml-4 flex-col justify-center">
+          </InputRangeSlider>
+          <div class="ml-4 flex min-w-10 max-w-[35px] flex-col justify-center">
             <input
               v-model.number="formModel.chroma"
               class="numeric-text-input"
@@ -125,7 +125,7 @@ const customHandle = ref<HTMLElement | null>(null)
               T
             </span>
           </div>
-          <ExampleRangeSlider
+          <InputRangeSlider
             v-model.number="formModel.tone"
             :stop-marks="false"
             class="color-input-range"
@@ -147,8 +147,8 @@ const customHandle = ref<HTMLElement | null>(null)
                 fill="false"
               />
             </template>
-          </ExampleRangeSlider>
-          <div class="flex min-w-10 max-w-[35px] ml-4 flex-col justify-center">
+          </InputRangeSlider>
+          <div class="ml-4 flex min-w-10 max-w-[35px] flex-col justify-center">
             <input
               v-model.number="formModel.tone"
               class="numeric-text-input"
@@ -164,7 +164,7 @@ const customHandle = ref<HTMLElement | null>(null)
         <div class="flex items-center justify-center pr-3">
           <Icon class="size-6" name="ic:baseline-brightness-medium" />
         </div>
-        <ExampleRangeSlider
+        <InputRangeSlider
           v-model.number="contrastLevel"
           help-text="The difference in brightness between the fore- and background"
           label="Contrast Level"
@@ -172,8 +172,8 @@ const customHandle = ref<HTMLElement | null>(null)
           min="0"
           step="0.1"
         >
-        </ExampleRangeSlider>
-        <div class="flex min-w-10 max-w-[35px] ml-4 flex-col justify-center">
+        </InputRangeSlider>
+        <div class="ml-4 flex min-w-10 max-w-[35px] flex-col justify-center">
           <input
             v-model.number="contrastLevel"
             class="numeric-text-input"

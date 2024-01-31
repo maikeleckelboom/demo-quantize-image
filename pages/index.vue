@@ -1,16 +1,24 @@
-<script lang="ts" setup>
-const { $dynamicSchemes, $dynamicScheme } = useNuxtApp()
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="custom-grid">
-    <div class="main grid md:grid-cols-[auto,1fr,1fr] gap-8">
+    <div class="main grid gap-8 md:grid-cols-[1fr,1fr]">
+      <!--
+        <section>
+          <JsonPretty :data="$dynamicScheme" />
+        </section>
+      -->
       <section>
-        <JsonPretty :data="$dynamicScheme" />
-      </section>
-      <section>
-        <ColorMode />
-        <KeyColorPickers />
+        <div class="mb-2">
+          <ColorMode />
+        </div>
+
+        <section class="mb-4">
+          <SelectVariant />
+        </section>
+        <div class="mb-2">
+          <KeyColorPickers />
+        </div>
       </section>
       <section>
         <ExtractSeedColors />
@@ -37,9 +45,7 @@ legend {
   grid-template-columns: 1fr 1fr;
 
   @screen sm {
-    grid-template-columns: [gutter] var(--gutter-size) [main] 1fr [gutter] var(
-        --gutter-size
-      );
+    grid-template-columns: [gutter] var(--gutter-size) [main] 1fr [gutter] var(--gutter-size);
     gap: 1rem 2rem;
 
     .main {

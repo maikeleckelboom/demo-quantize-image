@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 import { hexFromArgb, Score } from '@material/material-color-utilities'
 import Button from '~/modules/button/runtime/components/Button.vue'
 
@@ -16,7 +15,10 @@ const onFileCommit = (file: File) => {
   currentFile.value = file
 }
 
-function readSourceElement(file: File, onLoad: (img: HTMLImageElement) => void) {
+function readSourceElement(
+  file: File,
+  onLoad: (img: HTMLImageElement) => void
+) {
   const reader = new FileReader()
   const img = new Image()
   reader.onload = (e) => {
@@ -30,19 +32,18 @@ function readSourceElement(file: File, onLoad: (img: HTMLImageElement) => void) 
 
 const maxColors = ref<number>(128)
 
-whenever(currentFile, async (file) => {
+whenever(currentFile, async (file: File) => {
   isLoading.value = true
-  const onLoad = (img: HTMLImageElement) => sourceElement.value = img
+  const onLoad = (img: HTMLImageElement) => (sourceElement.value = img)
   readSourceElement(file, onLoad)
 })
 
-whenever(sourceElement, async (source) => {
+whenever(sourceElement, async (source: HTMLImageElement) => {
   const pixels = await pixelsFromImage(source)
   prominentColors.value = prominentColorsFromPixels(pixels, maxColors.value)
   seedColors.value = Score.score(prominentColors.value)
   isLoading.value = false
 })
-
 
 function reset() {
   seedColors.value = null
@@ -54,7 +55,7 @@ function reset() {
   <div class="flex flex-col gap-y-8">
     <section>
       <FileInput class="mb-4" @commit="onFileCommit" @reset="reset">
-        <template #chosen="{reset, commit}">
+        <template #chosen="{ reset, commit }">
           <RangeInputField
             v-model.number="maxColors"
             class="mb-4"
@@ -65,7 +66,12 @@ function reset() {
             step="1"
           />
           <div class="flex gap-4">
-            <button :disabled="isLoading" class="filled-button" type="button" @click="commit()">
+            <button
+              :disabled="isLoading"
+              class="filled-button"
+              type="button"
+              @click="commit()"
+            >
               {{ isLoading ? 'Extracting colors ...' : 'Extract colors' }}
             </button>
           </div>
@@ -76,12 +82,21 @@ function reset() {
       <div class="flex flex-col gap-4">
         <template v-if="prominentColors">
           <section>
-            <h1 class="text-title-lg">Prominent Colors<span
-              class="text-on-surface-variant tabular-nums"> ({{ prominentColors.size }})</span></h1>
-            <div class="flex flex-wrap gap-2 mt-4">
-              <template v-for="([color], index) in prominentColors" :key="index">
-                <div :style="{ backgroundColor: hexFromArgb(color) }"
-                     class="size-8 rounded-md grid place-items-center relative" />
+            <h1 class="text-title-lg">
+              Prominent Colors
+              <span class="tabular-nums text-on-surface-variant">
+                ({{ prominentColors.size }})
+              </span>
+            </h1>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <template
+                v-for="([color], index) in prominentColors"
+                :key="index"
+              >
+                <div
+                  :style="{ backgroundColor: hexFromArgb(color) }"
+                  class="relative grid size-8 place-items-center rounded-md"
+                />
               </template>
             </div>
           </section>
@@ -90,13 +105,16 @@ function reset() {
           <section class="flex flex-col">
             <h1 class="text-title-lg">
               Seed Colors
-              <span class="text-on-surface-variant tabular-nums"> ({{ seedColors.length }})</span>
+              <span class="tabular-nums text-on-surface-variant">
+                ({{ seedColors.length }})</span
+              >
             </h1>
-            <div class="grid grid-cols-4 gap-2 mt-4">
+            <div class="mt-4 grid grid-cols-4 gap-2">
               <template v-for="seedColor in seedColors">
                 <div
                   :style="{ backgroundColor: hexFromArgb(seedColor) }"
-                  class="size-20 md:size-24 rounded-md flex" />
+                  class="flex size-20 rounded-md md:size-24"
+                />
               </template>
             </div>
           </section>
@@ -106,6 +124,4 @@ function reset() {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

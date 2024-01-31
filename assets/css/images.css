@@ -1,0 +1,11 @@
+/*noinspection ALL*/
+:root {
+    --background-image-1: url('/img/firewatch-fox.jpg');
+    --background-image-2: url('/img/lily-pad-gray.jpg');
+    --background-image-3: url('/img/hedgehog.jpg');
+    --background-image-4: url('/img/purplish-landscape.jpg');
+    --background-image-5: url('/img/islands.jpg');
+    --background-image-6: url('/img/flying-bird-landscape.jpg');
+    --background-image-7: url('/img/firewatch-wolf.jpg');
+    --background-image-8: url('/img/mountains-midnight.jpg');
+}

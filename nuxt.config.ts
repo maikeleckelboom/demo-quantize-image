@@ -16,9 +16,7 @@ export default defineNuxtConfig({
     }
   },
 
-  css: [
-    '~/assets/css/input.css'
-  ],
+  css: ['~/assets/css/input.css', '~/assets/css/images.css'],
 
   tailwindcss: {
     viewer: false,
@@ -43,11 +41,10 @@ export default defineNuxtConfig({
           blend: true
         }
       ]
+    },
+    nuxtIcon: {
+      size: '1.5em'
     }
-  },
-
-  icon: {
-    size: '24px'
   },
 
   viewport: {
@@ -87,6 +84,8 @@ export default defineNuxtConfig({
     'nuxt-viewport',
     '~/modules/theme/module.ts',
     '~/modules/slider/module.ts',
-    '~/modules/json-pretty/module.ts'
+    '~/modules/json-pretty/module.ts',
+    '~/modules/button/module.ts',
+    'nuxt-xstate'
   ]
 })
