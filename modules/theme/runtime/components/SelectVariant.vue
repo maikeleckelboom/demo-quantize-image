@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { variantKeys } from '~/modules/theme/runtime/utils/color'
 import type { Variant } from '~/modules/theme/types'
 
 const { variant } = useThemeConfig()
@@ -18,26 +17,18 @@ const setVariant = (v: Variant) => {
 </script>
 
 <template>
-  <div>
-    <div class="flex flex-row gap-3">
-      <Chip
-        v-for="variant in variants"
-        :key="variant.value"
-        :aria-pressed="variant.active"
-        :selected="variant.active"
-        selected-icon="ic:round-check"
-        @click="setVariant(variant.value)"
-      >
-        {{ variant.text }}
-      </Chip>
-    </div>
+  <div class="scrollbar flex max-w-[calc(100svw-24px)] flex-row gap-3 overflow-x-auto px-1 py-2">
+    <Chip
+      v-for="variant in variants"
+      :key="variant.value"
+      :aria-pressed="variant.active"
+      :selected="variant.active"
+      selected-icon="ic:round-check"
+      @click="setVariant(variant.value)"
+    >
+      {{ variant.text }}
+    </Chip>
   </div>
 </template>
 
-<style scoped>
-.inline-box {
-}
-
-.chip-box {
-}
-</style>
+<style scoped></style>

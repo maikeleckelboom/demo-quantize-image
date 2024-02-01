@@ -1,24 +1,30 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import ColorFormatsDetails from '~/modules/theme/runtime/components/ColorPicker/PaletteColorFormats.vue'
+
+const { $dynamicScheme } = useNuxtApp()
+const { sourceColor, contrastLevel } = useThemeConfig()
+
+const primaryPalette = computed(() => {
+  return $dynamicScheme.value.primaryPalette
+})
+</script>
 
 <template>
   <div class="custom-grid">
-    <div class="main grid gap-8 md:grid-cols-[1fr,1fr]">
-      <!--
-        <section>
-          <JsonPretty :data="$dynamicScheme" />
-        </section>
-      -->
+    <div class="main grid gap-8 md:grid-cols-3">
       <section>
-        <div class="mb-2">
-          <ColorMode />
-        </div>
+        <JsonPretty :data="$dynamicScheme" />
+      </section>
 
-        <section class="mb-4">
-          <SelectVariant />
-        </section>
-        <div class="mb-2">
+      <section>
+        <section></section>
+        <div class="mb-2 mt-4">
           <KeyColorPickers />
         </div>
+      </section>
+      <section>
+        <ColorModelSupportText />
+        <ColorFormatsDetails :palette="primaryPalette" />
       </section>
       <section>
         <ExtractSeedColors />
@@ -28,10 +34,6 @@
 </template>
 
 <style lang="postcss">
-legend {
-  @apply mb-4 text-body-lg;
-}
-
 .custom-grid {
   --gutter-size: max(2%, 5svw);
   display: grid;

@@ -1,17 +1,16 @@
 <script lang="ts" setup>
 type ChipProps = {
   variant?: 'assist' | 'filter' | 'input' | 'suggestion'
-  icon?: string
   selectedIcon?: string
   selected?: boolean
 }
 
-const props = withDefaults(defineProps<ChipProps>(), {
+withDefaults(defineProps<ChipProps>(), {
   variant: 'filter',
   selected: false
 })
 
-const slots = defineSlots<{
+defineSlots<{
   default(): void
 }>()
 
@@ -58,6 +57,7 @@ const transitionTotalDuration = computed<number>(
   --_outline-color: rgb(var(--outline-rgb));
   --_text-color: rgb(var(--on-surface-rgb));
 
+  position: relative;
   height: var(--_height);
   border-radius: var(--_border-radius);
   background-color: var(--_background-color);
@@ -80,7 +80,6 @@ const transitionTotalDuration = computed<number>(
     outline-color calc(var(--_transition-duration) * 0.4) ease,
     background-color var(--_transition-duration),
     text-shadow var(--_transition-duration);
-  position: relative;
 
   .icon {
     width: var(--_icon-size);
