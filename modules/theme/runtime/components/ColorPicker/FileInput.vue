@@ -13,7 +13,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   file: null,
   multiple: false,
-  accept: '*',
+  accept: 'image/**',
   reset: true,
   directory: false
 })
@@ -89,14 +89,6 @@ watch(customSelectedFile, (v) => {
 <template>
   <div class="flex flex-col gap-7">
     <div class="flex gap-4">
-      <input
-        ref="input"
-        :accept="props.accept"
-        :multiple="props.multiple"
-        class="file-input"
-        type="file"
-        @change="onCustomFileChange"
-      />
       <button class="outlined-button" type="button" @click="open()">
         {{ file ? 'Change image' : 'Choose an image' }}
       </button>
