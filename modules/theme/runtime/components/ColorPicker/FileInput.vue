@@ -116,25 +116,32 @@ watch(customSelectedFile, (v) => {
 
 <style scoped>
 .file-input {
-  ::-webkit-file-upload-button {
-    visibility: hidden;
-  }
-
   position: relative;
   visibility: hidden;
 
   &::after {
     content: 'Choose file';
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.375rem;
-    background-color: #fff;
-    color: #4a5568;
     cursor: pointer;
     visibility: visible;
     position: absolute;
     left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @apply rounded-4xl bg-primary-container px-4 py-3 text-on-primary-container;
+
+    &:hover {
+      @apply bg-primary-container/90;
+    }
+
+    &:active {
+      @apply bg-primary-container/80;
+    }
   }
 }
 </style>
