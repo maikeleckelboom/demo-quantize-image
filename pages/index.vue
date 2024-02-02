@@ -1,33 +1,53 @@
 <script lang="ts" setup>
-import ColorFormatsDetails from '~/modules/theme/runtime/components/ColorPicker/PaletteColorFormats.vue'
+import KeyColorModel from '~/modules/theme/runtime/components/KeyColorModel.vue'
 
-const { $dynamicScheme } = useNuxtApp()
+const { $dynamicScheme, $schemeCssVariables } = useNuxtApp()
 const { sourceColor, contrastLevel } = useThemeConfig()
-
-const primaryPalette = computed(() => {
-  return $dynamicScheme.value.primaryPalette
-})
 </script>
 
 <template>
   <div class="custom-grid">
-    <div class="main grid gap-8 md:grid-cols-3">
-      <section>
-        <JsonPretty :data="$dynamicScheme" />
-      </section>
-
-      <section>
-        <section></section>
+    <div class="main grid gap-8 md:grid-cols-1 lg:grid-cols-3">
+      <section class="mb-6">
+        <div class="mb-6 grid grid-cols-[1fr,auto]">
+          <div class="">
+            <div class="mb-4">
+              <h2 class="mb-0.5 text-label-lg">Source Color</h2>
+              <p class="text-sm text-on-surface-variant">The color that is used as the base for the theme.</p>
+            </div>
+            <div :style="{ background: sourceColor }" class="aspect-video size-24 rounded-md"></div>
+          </div>
+          <div class="flex">
+            <DarkToggle v-slot="{ toggle, isDark }">
+              <button class="p-4" @click="toggle">
+                <Icon v-if="isDark.value" class="size-6" name="ic:round-light-mode" />
+                <Icon v-else class="size-6" name="ic:round-dark-mode" />
+              </button>
+            </DarkToggle>
+          </div>
+        </div>
         <div class="mb-2 mt-4">
-          <KeyColorPickers />
+          <KeyColorModel />
         </div>
       </section>
       <section>
-        <ColorModelSupportText />
-        <ColorFormatsDetails :palette="primaryPalette" />
-      </section>
-      <section>
         <ExtractSeedColors />
+      </section>
+      <section class="flex flex-col gap-4">
+        <div>
+          <div class="mb-3">
+            <h2 class="mb-2 text-title-lg">Definition</h2>
+            <p></p>
+          </div>
+          <JsonPretty :data="$dynamicScheme" :deep="0" />
+        </div>
+        <div>
+          <div class="mb-3">
+            <h2 class="mb-2 text-title-lg">Scheme</h2>
+            <p></p>
+          </div>
+          <SchemeColors />
+        </div>
       </section>
     </div>
   </div>

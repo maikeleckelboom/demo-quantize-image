@@ -46,16 +46,17 @@ const transitionTotalDuration = computed<number>(
 .chip-root {
   --_transition-duration: v-bind(transitionDuration);
   --_transition-delay: v-bind(transitionDelay);
+  --_icon-color: rgb(var(--on-surface-rgb));
+  --_icon-color-selected: rgb(var(--primary-rgb));
+  --_outline-color: rgb(var(--outline-rgb));
+  --_text-color: rgb(var(--on-surface-rgb));
+
   --_height: 32px;
   --_border-radius: 8px;
   --_icon-size: 18px;
-  --_icon-color: rgb(var(--on-surface-rgb));
-  --_icon-color-selected: rgb(var(--primary-rgb));
   --_padding: 16px;
   --_padding-with-icon: 8px;
   --_padding-between-elements: 8px;
-  --_outline-color: rgb(var(--outline-rgb));
-  --_text-color: rgb(var(--on-surface-rgb));
 
   position: relative;
   height: var(--_height);

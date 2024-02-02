@@ -1,14 +1,9 @@
 <script lang="ts" setup>
-const colors = useSchemeColors()
-
+const dynamicSchemeColors = useSchemeColors({ brightnessSuffix: true })
 </script>
 
 <template>
-  <div>
-    <pre>{{ colors }}</pre>
-  </div>
+  <JsonPretty :data="dynamicSchemeColors" :deep="0" />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

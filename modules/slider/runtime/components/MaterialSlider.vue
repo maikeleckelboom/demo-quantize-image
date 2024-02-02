@@ -20,7 +20,7 @@ const modelValue = defineModel<number | number[]>()
   --slider-track-border: 0px;
   --slider-horizontal-height: 12px;
   --slider-vertical-width: 12px;
-  --slider-tack-height: 12px;
+  --slider-track-height: 12px;
   --slider-track-width: 100px;
 
   .slider-handle {

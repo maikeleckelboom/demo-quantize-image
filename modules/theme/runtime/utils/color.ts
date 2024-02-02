@@ -39,24 +39,24 @@ function groupByBaseColor(colors: Record<string, number>): Record<string, Record
   )
 }
 
-// todo: change brightness suffix to Array<'light' | 'dark'>
 function makeDynamicScheme(
   sourceColor: Hct | string | number,
   isDark: boolean,
   contrastLevel: number,
   variant: Variant,
-  options?: {
-    brightnessSuffix?: boolean
-  }
+  include: ('system' | 'light' | 'dark')[] = ['system', 'light', 'dark']
 ) {
-  const { brightnessSuffix = false } = options ?? {}
   const Scheme = SCHEME_VARIANTS[variant]
-  if (!Scheme) throw new Error(`Invalid scheme variant ${variant}`)
+  if (!Scheme) throw new Error(`Invalid scheme variant: ${variant}`)
   const schemes = new Map<'system' | 'light' | 'dark', DynamicScheme>()
   const sourceColorHct = getColorAsHct(sourceColor)
-  schemes.set('system', new Scheme(sourceColorHct, isDark, contrastLevel))
-  if (brightnessSuffix) {
+  if (!include.length || include.includes('system')) {
+    schemes.set('system', new Scheme(sourceColorHct, isDark, contrastLevel))
+  }
+  if (include.includes('light')) {
     schemes.set('light', new Scheme(sourceColorHct, false, contrastLevel))
+  }
+  if (include.includes('dark')) {
     schemes.set('dark', new Scheme(sourceColorHct, true, contrastLevel))
   }
   return schemes

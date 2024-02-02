@@ -55,22 +55,17 @@ const customHandle = ref<HTMLElement | null>(null)
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 overflow-clip">
-    <section>
-      <h1 class="mb-3 text-headline-sm">Source Color</h1>
-      <div :style="{ background: hexFromArgb(sourceColorArgb) }" class="aspect-video size-32 rounded-md"></div>
-    </section>
-
+  <div class="flex flex-col gap-12">
     <section class="flex w-full flex-col rounded-md">
-      <h1 class="mb-3 text-headline-sm">
-        <!-- title -->
-        Color Model
-      </h1>
+      <div class="mb-4">
+        <h1 class="mb-0.5 text-label-lg">HCT Color</h1>
+        <p class="text-sm text-on-surface-variant">
+          The HCT color model is a perceptually uniform color space that is designed to be more intuitive and easier to
+          use than other color models.
+        </p>
+      </div>
       <div class="flex flex-col gap-4">
         <div class="flex items-center">
-          <div class="flex items-center justify-center pr-3">
-            <span class="text-label-lg font-medium leading-none text-outline"> H </span>
-          </div>
           <InputRangeSlider
             v-model="formModel.hue"
             :stop-marks="false"
@@ -92,14 +87,8 @@ const customHandle = ref<HTMLElement | null>(null)
               <SliderTrack :style="hueSpectrum" class="" fill="false" />
             </template>
           </InputRangeSlider>
-          <div class="ml-4 flex min-w-10 max-w-[35px] flex-col justify-center">
-            <input v-model.number="formModel.hue" class="numeric-text-input" type="text" />
-          </div>
         </div>
         <div class="flex items-center">
-          <div class="flex items-center justify-center pr-3">
-            <span class="text-label-lg font-medium leading-none text-outline"> C </span>
-          </div>
           <InputRangeSlider
             v-model.number="formModel.chroma"
             :stop-marks="false"
@@ -119,14 +108,8 @@ const customHandle = ref<HTMLElement | null>(null)
               <SliderTrack :style="chromaSpectrum" class="slider-track" fill="false" />
             </template>
           </InputRangeSlider>
-          <div class="ml-4 flex min-w-10 max-w-[35px] flex-col justify-center">
-            <input v-model.number="formModel.chroma" class="numeric-text-input" type="text" />
-          </div>
         </div>
         <div class="flex items-center">
-          <div class="flex items-center justify-center pr-3">
-            <span class="text-label-lg font-medium leading-none text-outline"> T </span>
-          </div>
           <InputRangeSlider
             v-model.number="formModel.tone"
             class="color-input-range"
@@ -145,45 +128,35 @@ const customHandle = ref<HTMLElement | null>(null)
               <SliderTrack :style="toneSpectrum" class="slider-track" fill="false" />
             </template>
           </InputRangeSlider>
-          <div class="ml-4 flex min-w-10 max-w-[35px] flex-col justify-center">
-            <input v-model.number="formModel.tone" class="numeric-text-input" type="text" />
-          </div>
         </div>
       </div>
     </section>
     <section class="flex flex-col rounded-md">
-      <h1 class="mb-3 text-headline-sm">Contrast Level</h1>
-      <div class="flex items-center">
-        <div class="mr-4 flex items-center justify-center">
-          <Icon class="size-6" name="ic:baseline-brightness-medium" />
-        </div>
-        <MaterialSlider
-          v-model.number="contrastLevel"
-          help-text="The difference in brightness between the fore- and background"
-          label="Contrast Level"
-          max="1"
-          min="0"
-          step="0.1"
-        >
-        </MaterialSlider>
-      </div>
+      <ContrastSlider v-model.number="contrastLevel" max="1" min="0" step="0.1" />
     </section>
-    <section class="grid grid-cols-3 gap-4">
-      <h1 class="col-span-full mb-2 text-headline-sm">Palettes</h1>
-      <div v-for="({ key, palette }, idx) in palettes" class="flex flex-col">
-        <h1 class="mb-2 capitalize">
-          {{
-            splitByCases(key)
-              .split(' ')
-              .filter((s) => s !== 'palette' && s !== 'key' && s !== 'color')
-              .join(' ')
-          }}
-        </h1>
-        <PaletteKeyColorPreview :palette="palette" />
+    <section>
+      <div class="mb-4">
+        <h1 class="col-span-full mb-0.5 text-title-lg">Palettes</h1>
+        <p class="col-span-full text-sm text-on-surface-variant">
+          The color palettes that are generated from the source color.
+        </p>
+      </div>
+      <div class="grid grid-cols-3 gap-4">
+        <div v-for="({ key, palette }, idx) in palettes" class="flex flex-col">
+          <h1 class="mb-2 capitalize">
+            {{
+              splitByCases(key)
+                .split(' ')
+                .filter((s) => s !== 'palette' && s !== 'key' && s !== 'color')
+                .join(' ')
+            }}
+          </h1>
+          <PaletteKeyColorPreview :palette="palette" />
+        </div>
       </div>
     </section>
     <section class="">
-      <h1 class="mb-2 text-headline-sm">Scheme Variant</h1>
+      <h1 class="sr-only mb-2 text-headline-sm">Variant</h1>
       <SelectVariant />
     </section>
   </div>

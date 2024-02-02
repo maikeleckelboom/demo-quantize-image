@@ -1,13 +1,7 @@
 <script lang="ts" setup>
 const props = withDefaults(
   defineProps<{
-    variant:
-      | 'text'
-      | 'elevated'
-      | 'filled'
-      | 'filledTonal'
-      | 'outlined'
-      | 'icon'
+    variant?: 'text' | 'elevated' | 'filled' | 'filledTonal' | 'outlined' | 'icon'
   }>(),
   {
     variant: 'text'

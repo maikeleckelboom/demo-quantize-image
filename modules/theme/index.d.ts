@@ -6,6 +6,7 @@ declare module '#app' {
   interface NuxtApp {
     $dynamicScheme: Ref<DynamicScheme>
     $dynamicSchemes: Ref<Map<'system' | 'light' | 'dark', DynamicScheme>>
+    $schemeCssVariables: Ref<string>
     $isDark: Ref<boolean>
   }
 
@@ -24,6 +25,7 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $dynamicScheme: Ref<DynamicScheme>
     $dynamicSchemes: Ref<Map<'system' | 'light' | 'dark', DynamicScheme>>
+    $schemeCssVariables: Ref<string>
     $isDark: Ref<boolean>
   }
 }

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { isMarkObject, type MarksObject, type SliderProps } from '~/modules/slider/types'
+import { type SliderProps } from '~/modules/slider/types'
 import { type Position, useTemplateRefsList } from '@vueuse/core'
-import type { ComputedRef } from 'vue'
 
 const props = withDefaults(defineProps<SliderProps>(), {
   min: 0,
@@ -28,10 +27,7 @@ defineSlots<{
 
 const getRect = (el: HTMLElement) => el.getBoundingClientRect()
 
-function getOption<T extends keyof SliderProps, D = SliderProps[T]>(
-  option: T,
-  defaultValue?: D
-): D {
+function getOption<T extends keyof SliderProps, D = SliderProps[T]>(option: T, defaultValue?: D): D {
   return (props[option] ?? defaultValue) as D
 }
 
@@ -75,14 +71,6 @@ function setClickOffset(evt: PointerEvent) {
   }
 }
 
-/**
- * @param value - The number to be rounded.
- * @param decimals - The number of decimal places to round to.
- */
-function roundValue(value: number, decimals: number) {
-  return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals)
-}
-
 function getPrecision(step: number) {
   if (!isNumber(step)) return 0
   const stepString = step.toString()
@@ -116,13 +104,7 @@ function format(value: number) {
   return roundFormat(value)
 }
 
-function convertRange(
-  min: number,
-  max: number,
-  a: number,
-  b: number,
-  x: number
-) {
+function convertRange(min: number, max: number, a: number, b: number, x: number) {
   const temp = max - min
   if (temp === 0) return a
   return ((b - a) * (x - min)) / temp + a
@@ -151,18 +133,6 @@ function getProgressFromEvent(event: PointerEvent) {
   })
 }
 
-/*
-function animateModelValue(to: number, duration = 300) {
-  animate({
-    from: modelValue.value,
-    to,
-    duration,
-    ease: (v) => cubicBezier(...TransitionPresets.easeInOutCubic)(v),
-    onUpdate: (v) => modelValue.value = v
-  })
-}
-*/
-
 const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
   threshold: 0,
   disableTextSelect: true,
@@ -190,15 +160,11 @@ function getClosestPointer(event: PointerEvent): HTMLElement {
 }
 
 function getClickedPointer(evt: PointerEvent) {
-  return pointersRef.value.find((pointerRef) =>
-    pointerRef.contains(<Node>evt.target)
-  )
+  return pointersRef.value.find((pointerRef) => pointerRef.contains(<Node>evt.target))
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
-  const center = isVertical.value
-    ? rect.top + rect.height / 2
-    : rect.left + rect.width / 2
+  const center = isVertical.value ? rect.top + rect.height / 2 : rect.left + rect.width / 2
   return isVertical.value ? y - center : x - center
 }
 
@@ -208,11 +174,7 @@ function getToReversed() {
   return isHorizontalAndRtl || isVerticalAndBtt
 }
 
-function calculateProgress(
-  parentRect: DOMRect,
-  endPos: Position,
-  offsetPos: Position = { x: 0, y: 0 }
-) {
+function calculateProgress(parentRect: DOMRect, endPos: Position, offsetPos: Position = { x: 0, y: 0 }) {
   const isV = unref(isVertical)
   const horizontal = isV ? 'top' : 'left'
   const vertical = isV ? 'bottom' : 'right'
@@ -232,9 +194,7 @@ const handleHeightVar = useCssVar('--slider-handle-height', rootRef, {
 })
 
 function getHandleSize() {
-  return parseInt(
-    unref(isVertical) ? unref(handleHeightVar) : unref(handleWidthVar)
-  )
+  return parseInt(unref(isVertical) ? unref(handleHeightVar) : unref(handleWidthVar))
 }
 
 function getContainedRect(rect: DOMRect) {
@@ -251,9 +211,7 @@ function getContainedRect(rect: DOMRect) {
 function handleSwipe(_event: PointerEvent) {
   const sliderEl = <HTMLElement>unrefElement(sliderRef)
   const sliderRect = getRect(sliderEl)
-  const maybeContainedRect = unref(isContained)
-    ? getContainedRect(sliderRect)
-    : sliderRect
+  const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
   const pointerValue = getValue(progress)
 
@@ -284,6 +242,7 @@ function handleSwipe(_event: PointerEvent) {
       return
     }
   }
+
   modelValue.value.splice(pointerIndex, 1, pointerValue)
 }
 
@@ -305,27 +264,6 @@ function isMarkActive(mark: { value: number; active: boolean }) {
   }
   return false
 }
-
-/*
-function addOrderToMarks() {
-  const marks = unref(marksArray)
-  const pointerValues = unref(valueProgressProxy)
-  const pointerValuesWithOrder = pointerValues.map((value, index) => ({
-    value,
-    order: index
-  }))
-  const sortedPointerValues = pointerValuesWithOrder.sort((a, b) => a.value - b.value)
-  const orderedPointerValues = sortedPointerValues.map((pointerValue, index) => ({
-    ...pointerValue,
-    order: index
-  }))
-  const orderedPointerValuesWithOrder = orderedPointerValues.sort((a, b) => a.order - b.order)
-  const orderedPointerValuesWithoutOrder = orderedPointerValuesWithOrder.map((pointerValue) => pointerValue.value)
-  return orderedPointerValuesWithoutOrder.map((value) => {
-    const pointerIndex = pointerValues.indexOf(value)
-    return marks![pointerIndex]
-  })
-}*/
 
 const VARIANT_CLASSES = {
   contained: 'v-contained',
@@ -372,31 +310,9 @@ const styleBinding = computed(() => {
   const lowerValue = Math.min(...valueProgressProxy.value)
   const upperValue = Math.max(...valueProgressProxy.value)
   return {
-    '--progress': `${
-      valueProgressProxy.value?.length > 1
-        ? upperValue - lowerValue
-        : lowerValue
-    }%`
+    '--progress': `${valueProgressProxy.value?.length > 1 ? upperValue - lowerValue : lowerValue}%`
   }
 })
-
-const toSortedMarks = (marks: MarksObject) => {
-  return Object.keys(marks)
-    .sort((a, b) => Number(a) - Number(b))
-    .map((mark, order) => ({
-      order,
-      label: marks[mark],
-      value: Number(mark),
-      active: isMarkActive({ value: Number(mark), active: false })
-    }))
-}
-
-const sortedMarksObject = computed(() => {
-  if (!isMarkObject(props?.marks)) return {}
-  return toSortedMarks(props.marks as MarksObject)
-}) as ComputedRef<
-  { order: number; value: number; active: boolean; label: string }[]
->
 </script>
 
 <template>
@@ -437,5 +353,3 @@ const sortedMarksObject = computed(() => {
     </div>
   </div>
 </template>
-
-<style lang="postcss"></style>
