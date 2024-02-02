@@ -13,7 +13,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   file: null,
   multiple: false,
-  accept: 'image/**',
+  accept: 'false',
   reset: true,
   directory: false
 })
