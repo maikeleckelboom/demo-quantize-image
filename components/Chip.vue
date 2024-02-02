@@ -48,7 +48,7 @@ const transitionTotalDuration = computed<number>(
   --_transition-delay: v-bind(transitionDelay);
   --_icon-color: rgb(var(--on-surface-rgb));
   --_icon-color-selected: rgb(var(--primary-rgb));
-  --_outline-color: rgb(var(--outline-rgb));
+  --_outline-color: rgb(var(--outline-variant-rgb));
   --_text-color: rgb(var(--on-surface-rgb));
 
   --_height: 32px;
