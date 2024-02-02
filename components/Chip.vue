@@ -48,7 +48,7 @@ const transitionTotalDuration = computed<number>(
   --_transition-delay: v-bind(transitionDelay);
   --_icon-color: rgb(var(--on-surface-rgb));
   --_icon-color-selected: rgb(var(--primary-rgb));
-  --_outline-color: rgb(var(--outline-variant-rgb));
+  --_outline-color: rgb(var(--outline-rgb));
   --_text-color: rgb(var(--on-surface-rgb));
 
   --_height: 32px;
@@ -63,6 +63,7 @@ const transitionTotalDuration = computed<number>(
   border-radius: var(--_border-radius);
   background-color: var(--_background-color);
   color: var(--_text-color);
+  border: solid 1px transparent;
   outline: 1px solid var(--_outline-color);
   padding-block: 0;
   text-align: center;
@@ -78,7 +79,7 @@ const transitionTotalDuration = computed<number>(
 
   transition:
     grid-template-columns var(--_transition-duration) ease,
-    outline-color calc(var(--_transition-duration) * 0.4) ease,
+    outline-color calc(var(--_transition-duration) * 1) ease,
     background-color var(--_transition-duration),
     text-shadow var(--_transition-duration);
 
@@ -110,9 +111,15 @@ const transitionTotalDuration = computed<number>(
 
     .icon {
       transform: translateY(-50%) scale(1);
-      opacity: 1;
       transition-delay: var(--_transition-delay);
+      opacity: 1;
     }
+  }
+
+  &:hover {
+    --_background-color: rgb(var(--surface-tint-rgb) / 0.13);
+    --_text-color: rgb(var(--on-surface-rgb));
+    --_icon-color: rgb(var(--primary-rgb));
   }
 }
 </style>

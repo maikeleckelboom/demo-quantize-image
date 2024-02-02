@@ -70,37 +70,52 @@ function onReset() {
   count.value += 1
   reset()
 }
+
+const customSelectedFile = ref<File | null>(null)
+
+function onCustomFileChange(event: Event) {
+  const ff = (event.target as HTMLInputElement).files
+  if (!ff) return
+  const [selectedFile] = ff
+  customSelectedFile.value = selectedFile
+}
+
+watch(customSelectedFile, (v) => {
+  file.value = v
+  emit('change', file.value)
+})
 </script>
 
 <template>
   <div class="flex flex-col gap-7">
     <div class="flex gap-4">
+      <input
+        ref="input"
+        :accept="props.accept"
+        :multiple="props.multiple"
+        class="file-input"
+        type="file"
+        @change="onCustomFileChange"
+      />
       <button class="outlined-button" type="button" @click="open()">
         {{ file ? 'Change image' : 'Choose an image' }}
       </button>
-      <button
-        v-if="file"
-        class="outlined-button"
-        type="button"
-        @click="onReset()"
-      >
-        Reset
-      </button>
+      <button v-if="file" class="outlined-button" type="button" @click="onReset()">Reset</button>
     </div>
     <template v-if="file">
       <FileInputPreview :file="file" />
       <slot name="chosen" v-bind="{ open, reset, commit, count }">
         <div class="flex gap-3">
-          <button class="outlined-button" type="button" @click="reset()">
-            Reset
-          </button>
-          <button class="filled-button" type="button" @click="commit">
-            Commit
-          </button>
+          <button class="outlined-button" type="button" @click="reset()">Reset</button>
+          <button class="filled-button" type="button" @click="commit">Commit</button>
         </div>
       </slot>
     </template>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.file-input {
+  appearance: none;
+}
+</style>

@@ -246,25 +246,6 @@ function handleSwipe(_event: PointerEvent) {
   modelValue.value.splice(pointerIndex, 1, pointerValue)
 }
 
-function getMarksEnabled() {
-  const isDefined = !!props?.marks
-  const isArr = isDefined && isArray(props.marks)
-  const isObj = isDefined && !isArr && typeof props.marks === 'object'
-  const hasLength = isArr || (isObj && Object.keys(props.marks).length > 0)
-  return isDefined && hasLength
-}
-
-function isMarkActive(mark: { value: number; active: boolean }) {
-  const value = getValue(mark.value)
-  if (isArray(modelValue.value)) {
-    return modelValue.value.includes(value)
-  }
-  if (isNumber(modelValue.value)) {
-    return value <= modelValue.value
-  }
-  return false
-}
-
 const VARIANT_CLASSES = {
   contained: 'v-contained',
   horizontal: 'v-horizontal',

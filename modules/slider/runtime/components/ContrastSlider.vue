@@ -16,19 +16,18 @@ const marks = ref<Mark[]>([
 ])
 
 function onMarkClick(mark: Mark) {
-  console.log('mark clicked', mark)
   modelValue.value = mark.value
 }
 </script>
 
 <template>
   <div class="grid grid-cols-[auto,1fr,auto] gap-y-2">
-    <div class="col-span-full">
-      <label class="text-label-lg"> Contrast Level </label>
+    <details class="col-span-full">
+      <summary class="text-label-lg">Contrast Level</summary>
       <p class="text-sm leading-loose text-on-surface-variant">
         The difference in brightness between the fore- and background.
       </p>
-    </div>
+    </details>
     <div class="col-span-full flex w-full items-center">
       <InputRangeSlider v-model="modelValue" class="v-contrast-slider" max="1" min="0" step="0.1" />
     </div>

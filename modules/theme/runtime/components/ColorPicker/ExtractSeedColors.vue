@@ -15,10 +15,7 @@ const onFileCommit = (file: File) => {
   currentFile.value = file
 }
 
-function readSourceElement(
-  file: File,
-  onLoad: (img: HTMLImageElement) => void
-) {
+function readSourceElement(file: File, onLoad: (img: HTMLImageElement) => void) {
   const reader = new FileReader()
   const img = new Image()
   reader.onload = (e) => {
@@ -40,7 +37,7 @@ whenever(currentFile, async (file: File) => {
 
 whenever(sourceElement, async (source: HTMLImageElement) => {
   const pixels = await pixelsFromImage(source)
-  prominentColors.value = prominentColorsFromPixels(pixels, maxColors.value)
+  prominentColors.value = prominentColorsFromPixels(pixels, Math.round(maxColors.value))
   seedColors.value = Score.score(prominentColors.value)
   isLoading.value = false
 })
@@ -66,12 +63,7 @@ function reset() {
             step="1"
           />
           <div class="flex gap-4">
-            <button
-              :disabled="isLoading"
-              class="filled-button"
-              type="button"
-              @click="commit()"
-            >
+            <button :disabled="isLoading" class="filled-button" type="button" @click="commit()">
               {{ isLoading ? 'Extracting colors ...' : 'Extract colors' }}
             </button>
           </div>
@@ -84,15 +76,10 @@ function reset() {
           <section>
             <h1 class="text-title-lg">
               Prominent Colors
-              <span class="tabular-nums text-on-surface-variant">
-                ({{ prominentColors.size }})
-              </span>
+              <span class="tabular-nums text-on-surface-variant"> ({{ prominentColors.size }}) </span>
             </h1>
             <div class="mt-4 flex flex-wrap gap-2">
-              <template
-                v-for="([color], index) in prominentColors"
-                :key="index"
-              >
+              <template v-for="([color], index) in prominentColors" :key="index">
                 <div
                   :style="{ backgroundColor: hexFromArgb(color) }"
                   class="relative grid size-8 place-items-center rounded-md"
@@ -105,16 +92,11 @@ function reset() {
           <section class="flex flex-col">
             <h1 class="text-title-lg">
               Seed Colors
-              <span class="tabular-nums text-on-surface-variant">
-                ({{ seedColors.length }})</span
-              >
+              <span class="tabular-nums text-on-surface-variant"> ({{ seedColors.length }})</span>
             </h1>
             <div class="mt-4 grid grid-cols-4 gap-2">
               <template v-for="seedColor in seedColors">
-                <div
-                  :style="{ backgroundColor: hexFromArgb(seedColor) }"
-                  class="flex size-20 rounded-md md:size-24"
-                />
+                <div :style="{ backgroundColor: hexFromArgb(seedColor) }" class="flex size-20 rounded-md md:size-24" />
               </template>
             </div>
           </section>
