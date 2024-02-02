@@ -1,16 +1,7 @@
 <script lang="ts" setup>
 import { hexFromArgb, Score } from '@material/material-color-utilities'
 
-const wallpapers = [
-  '/img/supernova.jpg',
-  '/img/firewatch-fox.jpg',
-  /*
-    '/img/mountains-midnight.jpg',
-  */
-  '/img/islands.jpg',
-  '/img/purplish-landscape.jpg' /*
-   '/img/flying-bird-landscape.jpg'*/
-]
+const wallpapers = ['/img/firewatch-fox.jpg', '/img/islands.jpg', '/img/purplish-landscape.jpg']
 
 const wallpapersRef = useTemplateRefsList<HTMLImageElement>()
 

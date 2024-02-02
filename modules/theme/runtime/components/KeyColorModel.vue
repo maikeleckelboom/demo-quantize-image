@@ -155,10 +155,6 @@ const customHandle = ref<HTMLElement | null>(null)
         </div>
       </div>
     </section>
-    <section class="">
-      <h1 class="sr-only mb-2 text-headline-sm">Variant</h1>
-      <SelectVariant />
-    </section>
   </div>
 </template>
 

@@ -7,8 +7,8 @@ const { sourceColor, contrastLevel } = useThemeConfig()
 
 <template>
   <div class="custom-grid">
-    <div class="main grid gap-8 md:grid-cols-1 lg:grid-cols-3">
-      <section class="mb-6">
+    <div class="main mx-auto grid gap-8 md:grid-cols-1 lg:max-w-expanded lg:grid-cols-1">
+      <section>
         <div class="mb-6 grid grid-cols-[1fr,auto]">
           <div class="">
             <div class="mb-4">
@@ -26,7 +26,17 @@ const { sourceColor, contrastLevel } = useThemeConfig()
             </DarkToggle>
           </div>
         </div>
-        <div class="mb-2 mt-4">
+      </section>
+      <section class="">
+        <div class="mb-4">
+          <h2 class="mb-0.5 text-label-lg">Scheme Variants</h2>
+          <p class="text-sm text-on-surface-variant">The different color schemes that are available.</p>
+        </div>
+        <h1 class="sr-only mb-2 text-headline-sm">Variant</h1>
+        <SelectVariant />
+      </section>
+      <section class="mb-6">
+        <div class="mb-6 mt-4">
           <KeyColorModel />
         </div>
       </section>
