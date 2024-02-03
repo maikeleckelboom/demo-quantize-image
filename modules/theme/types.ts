@@ -11,9 +11,9 @@ const SCHEME_VARIANTS = {
   content: SchemeContent,
   expressive: SchemeExpressive,
   fidelity: SchemeFidelity,
-  monochrome: SchemeMonochrome,
+  vibrant: SchemeVibrant,
   neutral: SchemeNeutral,
-  vibrant: SchemeVibrant
+  monochrome: SchemeMonochrome
   // fruit_salad: SchemeFruitSalad,
   // rainbow: SchemeRainbow,
 } as const

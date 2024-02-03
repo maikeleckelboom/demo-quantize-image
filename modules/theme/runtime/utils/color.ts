@@ -10,7 +10,7 @@ import { capitalize } from 'vue'
 import type { Variant } from '~/modules/theme/types'
 import { SCHEME_VARIANTS } from '~/modules/theme/types'
 
-const variantKeys = Object.keys(SCHEME_VARIANTS) as (keyof typeof SCHEME_VARIANTS)[]
+const schemeVariants = Object.keys(SCHEME_VARIANTS) as (keyof typeof SCHEME_VARIANTS)[]
 
 function getColorAsHct(color: Hct | string | number): Hct {
   if (typeof color === 'number') {
@@ -21,7 +21,9 @@ function getColorAsHct(color: Hct | string | number): Hct {
   return color
 }
 
-function groupByBaseColor(colors: Record<string, number>): Record<string, Record<string, number>> {
+function groupByBaseColor(
+  colors: Record<string, number>
+): Record<string, Record<string, number>> {
   return Object.entries(colors).reduce(
     (acc, [key, value]) => {
       const splitCamelCase = key
@@ -62,7 +64,9 @@ function makeDynamicScheme(
   return schemes
 }
 
-function colorsFromDynamicSchemeMap(dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>) {
+function colorsFromDynamicSchemeMap(
+  dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>
+) {
   return Array.from(dynamicSchemes.entries()).reduce(
     (acc, [key, value]) => ({
       ...acc,
@@ -135,5 +139,5 @@ export {
   textFromProperties,
   groupByBaseColor,
   repeatingLinearGradient,
-  variantKeys
+  schemeVariants
 }

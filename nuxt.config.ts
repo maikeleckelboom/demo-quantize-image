@@ -70,10 +70,6 @@ export default defineNuxtConfig({
     }
   ],
 
-  imports: {
-    dirs: ['~/utils', '~/composables']
-  },
-
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
@@ -85,7 +81,32 @@ export default defineNuxtConfig({
     '~/modules/theme/module.ts',
     '~/modules/slider/module.ts',
     '~/modules/json-pretty/module.ts',
-    '~/modules/button/module.ts',
-    'nuxt-xstate'
-  ]
+    '~/modules/button/module.ts'
+  ],
+
+  imports: {
+    dirs: ['~/utils', '~/composables'],
+    presets: [
+      {
+        from: 'xstate',
+        imports: ['createMachine']
+      },
+      {
+        from: '@xstate/vue',
+        imports: ['useMachine']
+      },
+      {
+        from: 'chroma-js',
+        imports: ['chroma']
+      },
+      {
+        from: 'tailwind-merge',
+        imports: ['twMerge']
+      },
+      {
+        from: 'cva',
+        imports: ['cva']
+      }
+    ]
+  }
 })

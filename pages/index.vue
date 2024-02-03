@@ -31,15 +31,20 @@ const palettes = computed(() => {
 
 <template>
   <div class="custom-grid">
-    <div class="main mx-auto grid gap-8 md:grid-cols-1 lg:max-w-expanded lg:grid-cols-1">
+    <div class="main mx-auto grid gap-8 md:grid-cols-1 lg:max-w-md lg:grid-cols-1">
       <section>
         <div class="mb-6 grid grid-cols-[1fr,auto]">
           <div class="">
             <details class="mb-4">
               <summary class="mb-0.5 text-label-lg">Source Color</summary>
-              <p class="text-sm text-on-surface-variant">The color that is used as the base for the theme.</p>
+              <p class="text-sm text-on-surface-variant">
+                The color that is used as the base for the theme.
+              </p>
             </details>
-            <div :style="{ background: sourceColor }" class="aspect-video size-24 rounded-md"></div>
+            <div
+              :style="{ background: sourceColor }"
+              class="aspect-video size-24 rounded-md"
+            ></div>
           </div>
           <div class="flex">
             <DarkToggle v-slot="{ toggle, isDark }">
@@ -75,7 +80,9 @@ const palettes = computed(() => {
       <section class="">
         <details class="mb-4">
           <summary class="mb-0.5 text-label-lg">Variants</summary>
-          <p class="text-sm text-on-surface-variant">The different color schemes that are available.</p>
+          <p class="text-sm text-on-surface-variant">
+            The different color schemes that are available.
+          </p>
         </details>
         <h1 class="sr-only mb-2 text-headline-sm">Variant</h1>
         <SelectVariant />
@@ -125,7 +132,9 @@ const palettes = computed(() => {
   grid-template-columns: 1fr 1fr;
 
   @screen sm {
-    grid-template-columns: [gutter] var(--gutter-size) [main] 1fr [gutter] var(--gutter-size);
+    grid-template-columns: [gutter] var(--gutter-size) [main] 1fr [gutter] var(
+        --gutter-size
+      );
     gap: 1rem 2rem;
 
     .main {

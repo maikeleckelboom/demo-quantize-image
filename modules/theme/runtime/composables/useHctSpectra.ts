@@ -80,11 +80,7 @@ export function useHctSpectra(gradientType: 'conic' | 'linear' = 'linear') {
 
   const getChromaColors = () => [
     hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.min,
-        formModel.tone.default
-      ).toInt()
+      Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.default).toInt()
     ),
     hexFromArgb(
       Hct.from(
@@ -108,21 +104,13 @@ export function useHctSpectra(gradientType: 'conic' | 'linear' = 'linear') {
       ).toInt()
     ),
     hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.max,
-        formModel.tone.default
-      ).toInt()
+      Hct.from(formModel.hue.value, formModel.chroma.max, formModel.tone.default).toInt()
     )
   ]
 
   const getToneColors = () => [
     hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.min,
-        formModel.tone.min
-      ).toInt()
+      Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.min).toInt()
     ),
     hexFromArgb(
       Hct.from(
@@ -146,11 +134,7 @@ export function useHctSpectra(gradientType: 'conic' | 'linear' = 'linear') {
       ).toInt()
     ),
     hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.min,
-        formModel.tone.max
-      ).toInt()
+      Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.max).toInt()
     )
   ]
 
@@ -163,11 +147,7 @@ export function useHctSpectra(gradientType: 'conic' | 'linear' = 'linear') {
   return {
     hue: computed(() => ({
       background: gradientMap[gradientType](
-        chroma
-          .scale(getHueColors())
-          .mode('lab')
-          .colors(formModel.hue.max)
-          .join(', ')
+        chroma.scale(getHueColors()).mode('lab').colors(formModel.hue.max).join(', ')
       )
     })),
     chroma: computed(() => ({
@@ -181,11 +161,7 @@ export function useHctSpectra(gradientType: 'conic' | 'linear' = 'linear') {
     })),
     tone: computed(() => ({
       background: gradientMap[gradientType](
-        chroma
-          .scale(getToneColors())
-          .mode('lab')
-          .colors(formModel.tone.max)
-          .join(', ')
+        chroma.scale(getToneColors()).mode('lab').colors(formModel.tone.max).join(', ')
       )
     }))
   }

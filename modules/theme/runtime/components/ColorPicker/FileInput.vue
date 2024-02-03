@@ -4,7 +4,7 @@ import Button from '~/modules/button/runtime/components/Button.vue'
 interface Props {
   file?: File | null
   multiple?: boolean
-  accept?: string
+  accept?: string | false
   capture?: string
   reset?: boolean
   directory?: boolean
