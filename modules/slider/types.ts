@@ -21,6 +21,8 @@ interface SliderProps {
   contained?: boolean | 'true' | 'false'
   trackStyle?: Record<string, any>
   round?: number | boolean | 'true' | 'false' | (string & {})
+  snapping?: boolean | 'true' | 'false'
+  snapValues?: number[]
 }
 
 export type { SliderProps }
@@ -61,11 +63,7 @@ function isMarkFunction(marks: Marks): marks is MarkFunction {
 function isMarkArray(
   marks: Marks
 ): marks is MarkObjectArray | MarkNumberArray | MarkStringArray {
-  return (
-    isMarkObjectArray(marks) ||
-    isMarkNumberArray(marks) ||
-    isMarkStringArray(marks)
-  )
+  return isMarkObjectArray(marks) || isMarkNumberArray(marks) || isMarkStringArray(marks)
 }
 
 export type {

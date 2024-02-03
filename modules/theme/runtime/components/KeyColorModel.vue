@@ -4,7 +4,7 @@ import type { HctModel } from '~/modules/theme/types'
 import { useHCTSpectra } from '~/modules/theme/runtime/composables/useHCTSpectra'
 
 const { $dynamicScheme } = useNuxtApp()
-const { sourceColor, contrastLevel } = useThemeConfig()
+const { sourceColor } = useThemeConfig()
 
 const sourceColorArgb = computed(() => {
   return $dynamicScheme.value.sourceColorArgb

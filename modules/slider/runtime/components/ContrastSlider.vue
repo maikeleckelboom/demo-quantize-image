@@ -6,14 +6,30 @@ const modelValue = defineModel<number | number[]>()
 type Mark = {
   value: number
   label: string
-  icon: string
+  offset?: number
 }
 
-const marks = ref<Mark[]>([
-  { value: 0, label: 'Low', icon: 'ic:baseline-brightness-low' },
-  { value: 0.5, label: 'Medium', icon: 'ic:baseline-brightness-medium' },
-  { value: 1, label: 'High', icon: 'ic:baseline-brightness-high' }
-])
+const marks: Mark[] = [
+  { value: -1, label: 'Reduced' },
+  { value: 0, label: 'Low' },
+  { value: 0.5, label: 'Medium' },
+  { value: 1, label: 'High' }
+]
+
+function calculateOffset(value: number, min: number, max: number) {
+  return ((value - min) / (max - min)) * 100
+}
+
+function getOffset(mark: Mark) {
+  return calculateOffset(mark.value, -1, 1)
+}
+
+const computedMarks = computed(() =>
+  marks.map((mark) => {
+    mark.offset = getOffset(mark)
+    return mark
+  })
+)
 
 function onMarkClick(mark: Mark) {
   modelValue.value = mark.value
@@ -21,35 +37,48 @@ function onMarkClick(mark: Mark) {
 </script>
 
 <template>
-  <div class="grid grid-cols-[auto,1fr,auto] gap-y-2">
-    <details class="col-span-full">
-      <summary class="text-label-lg">Contrast Level</summary>
-      <p class="text-sm leading-loose text-on-surface-variant">
-        The difference in brightness between the fore- and background.
-      </p>
-    </details>
-    <div class="col-span-full flex w-full items-center">
-      <InputRangeSlider v-model="modelValue" class="v-contrast-slider" max="1" min="0" step="0.1" />
-    </div>
-    <div class="col-span-full flex w-full justify-between">
-      <button
-        v-for="mark in marks"
-        :key="mark.value"
-        :class="
-          twMerge([
-            'relative flex flex-col items-center justify-center',
-            'first-of-type:left-1.5 first-of-type:-translate-x-1/2',
-            'last-of-type:right-1.5 last-of-type:translate-x-1/2',
-            'filter hover:hue-rotate-0',
-            'transition duration-200 ease-linear'
-          ])
-        "
-        @click="onMarkClick(mark)"
-      >
-        <span class="h-3 w-1 rounded-lg bg-outline" />
-        <span class="mt-2.5 text-label-sm font-medium leading-none text-outline">{{ mark.label }}</span>
-      </button>
-    </div>
+  <div class="mt-4 rounded-md bg-surface-container">
+    <fieldset
+      class="grid grid-cols-[auto,1fr,auto] gap-y-2 rounded-md bg-surface-container px-10 pb-0 pt-4"
+    >
+      <div class="col-span-full flex w-full items-center">
+        <InputRangeSlider
+          v-model="modelValue"
+          :snap-values="marks.map((mark) => mark.value)"
+          class="v-contrast-slider"
+          contained="false"
+          max="1"
+          min="-1"
+          snapping="directional"
+          step="0.1"
+        />
+      </div>
+      <div class="relative col-span-full flex h-[38px] items-start justify-start">
+        <div
+          v-for="mark in computedMarks"
+          :key="mark.value"
+          :class="
+            twMerge([
+              'absolute flex flex-col items-center justify-center',
+              'hover:opacity-80 active:opacity-90',
+              'transition duration-100 ease-linear',
+              '-translate-x-1/2'
+            ])
+          "
+          :style="{ left: `${mark.offset}%` }"
+          class="mark"
+          @click="onMarkClick(mark)"
+        >
+          <span class="h-2 w-1 rounded-lg bg-outline" />
+
+          <span
+            class="mt-2.5 flex flex-col items-center justify-center gap-1.5 text-label-sm font-medium leading-none text-outline"
+          >
+            <span>{{ mark.label }}</span>
+          </span>
+        </div>
+      </div>
+    </fieldset>
   </div>
 </template>
 

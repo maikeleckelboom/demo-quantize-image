@@ -13,7 +13,7 @@ function getPrecision(step: number) {
 function roundNumber(num: number, decimalPlaces: number = 0) {
   const extraNum = Math.pow(10, decimalPlaces + 1)
   const roundedNum = Math.round((num + Number.EPSILON) * extraNum) / extraNum
-  return roundedNum.toFixed(decimalPlaces)
+  return Number(roundedNum.toFixed(decimalPlaces))
 }
 
 /**
@@ -51,6 +51,18 @@ function getClosestValue(value: number, step: number, min: number, max: number) 
     return getClosestStep(value, step, min)
   }
   return value
+}
+
+export const convertRange = (
+  min: number,
+  max: number,
+  a: number,
+  b: number,
+  x: number
+) => {
+  const temp = max - min
+  if (temp === 0) return a
+  return ((b - a) * (x - min)) / temp + a
 }
 
 export { getPrecision, roundNumber, roundValueToStep, getClosestStep, getClosestValue }

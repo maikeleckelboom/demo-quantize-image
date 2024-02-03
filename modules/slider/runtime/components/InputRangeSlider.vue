@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { type SliderProps } from '~/modules/slider/types'
 import { type Position, useTemplateRefsList } from '@vueuse/core'
+import { animate, snap } from 'popmotion'
 
 const props = withDefaults(defineProps<SliderProps>(), {
   min: 0,
@@ -27,14 +28,29 @@ defineSlots<{
 
 const getRect = (el: HTMLElement) => el.getBoundingClientRect()
 
-function getOption<T extends keyof SliderProps, D = SliderProps[T]>(option: T, defaultValue?: D): D {
-  return (props[option] ?? defaultValue) as D
-}
-
+const isSnapping = computed(
+  () =>
+    props.step !== 'any' &&
+    ['directional', 'true', true, ''].includes(String(props.snapping))
+)
 const isVertical = computed(() => props.orientation === 'vertical')
-const isRtl = computed(() => props.dir === 'rtl')
-const isBtt = computed(() => props.btt)
-const isContained = computed(() => getOption('contained', true))
+
+const isRtl = computed(() => {
+  return ['rtl', 'ltr'].includes(props.dir)
+    ? props.dir === 'rtl'
+    : getComputedStyle(document.documentElement).direction === 'rtl'
+})
+
+const isBtt = computed(() => {
+  if (!isVertical.value) {
+    return false
+  }
+  return ['true', true, ''].includes(String(props.btt))
+})
+
+const isContained = computed(() => {
+  return ['true', true, ''].includes(String(props.contained))
+})
 const isDisabled = computed(() => props.disabled)
 
 const modelValue = defineModel<number | number[]>()
@@ -133,6 +149,13 @@ function getProgressFromEvent(event: PointerEvent) {
   })
 }
 
+function getClosestSnapValue(value: number) {
+  if (!isSnapping.value || !isArray(props.snapValues)) return value
+  const decimals = getDecimals(Number(props.step))
+  const valueAtStep = snap(props.snapValues)(value)
+  return roundNumber(valueAtStep, decimals)
+}
+
 const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
   threshold: 0,
   disableTextSelect: true,
@@ -140,12 +163,24 @@ const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
     event.preventDefault()
     currentPointer.value = getClosestPointer(event)
     setClickOffset(event)
-    handleSwipe(event)
+    if (!isSnapping.value) {
+      handleSwipe(event)
+    }
   },
   onSwipe: handleSwipe,
   onSwipeEnd: (event, direction) => {
-    handleSwipe(event)
-    currentPointer.value = null
+    const removePointer = () => (currentPointer.value = null)
+    if (isSnapping.value && isNumber(modelValue.value)) {
+      animate({
+        from: modelValue.value,
+        to: getClosestSnapValue(modelValue.value),
+        duration: 100,
+        onUpdate: (v) => (modelValue.value = v),
+        onComplete: () => removePointer()
+      })
+      return
+    }
+    removePointer()
   }
 })
 
@@ -164,7 +199,9 @@ function getClickedPointer(evt: PointerEvent) {
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
-  const center = isVertical.value ? rect.top + rect.height / 2 : rect.left + rect.width / 2
+  const center = isVertical.value
+    ? rect.top + rect.height / 2
+    : rect.left + rect.width / 2
   return isVertical.value ? y - center : x - center
 }
 
@@ -174,7 +211,11 @@ function getToReversed() {
   return isHorizontalAndRtl || isVerticalAndBtt
 }
 
-function calculateProgress(parentRect: DOMRect, endPos: Position, offsetPos: Position = { x: 0, y: 0 }) {
+function calculateProgress(
+  parentRect: DOMRect,
+  endPos: Position,
+  offsetPos: Position = { x: 0, y: 0 }
+) {
   const isV = unref(isVertical)
   const horizontal = isV ? 'top' : 'left'
   const vertical = isV ? 'bottom' : 'right'
@@ -211,7 +252,9 @@ function getContainedRect(rect: DOMRect) {
 function handleSwipe(_event: PointerEvent) {
   const sliderEl = <HTMLElement>unrefElement(sliderRef)
   const sliderRect = getRect(sliderEl)
-  const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
+  const maybeContainedRect = unref(isContained)
+    ? getContainedRect(sliderRect)
+    : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
   const pointerValue = getValue(progress)
 
@@ -228,22 +271,31 @@ function handleSwipe(_event: PointerEvent) {
 
   if (props.preventOverlap) {
     const minDistance = Number(props.minDistance)
-
-    const pointerBefore = modelValue.value[pointerIndex - 1]
-    const pointerAfter = modelValue.value[pointerIndex + 1]
-
-    if (pointerBefore && pointerBefore >= pointerValue - minDistance) {
-      modelValue.value.splice(pointerIndex, 1, pointerBefore + minDistance)
+    const pointerPrev = modelValue.value[pointerIndex - 1]
+    const pointerNext = modelValue.value[pointerIndex + 1]
+    if (shouldAdjustPointer(pointerPrev, pointerValue, minDistance)) {
+      modelValue.value.splice(pointerIndex, 1, pointerPrev + minDistance)
       return
     }
-
-    if (pointerAfter && pointerAfter <= pointerValue + minDistance) {
-      modelValue.value.splice(pointerIndex, 1, pointerAfter - minDistance)
+    if (shouldAdjustPointer(pointerNext, pointerValue, minDistance)) {
+      modelValue.value.splice(pointerIndex, 1, pointerNext - minDistance)
       return
     }
   }
 
   modelValue.value.splice(pointerIndex, 1, pointerValue)
+}
+
+function shouldAdjustPointer(
+  pointer: number | undefined,
+  pointerValue: number,
+  minDistance: number
+): boolean {
+  return (
+    pointer !== undefined &&
+    pointer >= pointerValue - minDistance &&
+    pointer <= pointerValue + minDistance
+  )
 }
 
 const VARIANT_CLASSES = {
@@ -287,6 +339,10 @@ const variantClasses = computed(() => {
   }
 })
 
+const classes = computed(() => {
+  return []
+})
+
 const styleBinding = computed(() => {
   const lowerValue = Math.min(...valueProgressProxy.value)
   const upperValue = Math.max(...valueProgressProxy.value)
@@ -299,7 +355,7 @@ const styleBinding = computed(() => {
 <template>
   <div
     ref="rootRef"
-    :class="{ ...stateClasses, ...variantClasses }"
+    :class="[{ ...stateClasses, ...variantClasses }]"
     :dir="dir"
     :style="styleBinding"
     class="slider-root"

@@ -12,7 +12,6 @@
 
     /* Size */
     inline-size: var(--slider-track-width, var(--slider-horizontal-width));
-    block-size: var(--slider-track-height), var(--slider-horizontal-height);
 
 
     &.v-label-visible {
@@ -130,6 +129,8 @@
     }
 
     &.v-contained {
+        padding-inline: 0;
+
         &.v-horizontal {
             &.v-ltr {
                 .slider-handle {

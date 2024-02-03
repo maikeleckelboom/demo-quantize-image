@@ -7,7 +7,6 @@ declare module '#app' {
     $dynamicScheme: Ref<DynamicScheme>
     $dynamicSchemes: Ref<Map<'system' | 'light' | 'dark', DynamicScheme>>
     $schemeCssVariables: Ref<string>
-    $isDark: Ref<boolean>
   }
 
   interface RuntimeConfig {
@@ -26,7 +25,6 @@ declare module '@vue/runtime-core' {
     $dynamicScheme: Ref<DynamicScheme>
     $dynamicSchemes: Ref<Map<'system' | 'light' | 'dark', DynamicScheme>>
     $schemeCssVariables: Ref<string>
-    $isDark: Ref<boolean>
   }
 }
 
