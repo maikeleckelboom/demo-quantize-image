@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { variantKeys } from '~/modules/theme/runtime/utils/color'
+import { schemeVariants } from '~/modules/theme/runtime/utils/color'
 import type { Variant } from '~/modules/theme/types'
 
 const { variant, contrastLevel } = useThemeConfig()
+
+const variantKeys = Object.keys(variantKeys) as any
 
 const variantOptions = computed(() =>
   variantKeys.map((v) => ({
