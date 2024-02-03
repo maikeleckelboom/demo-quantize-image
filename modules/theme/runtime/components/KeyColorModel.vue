@@ -42,7 +42,7 @@ function onUpdate(event: Event, key: keyof HctModel) {
     <div class="flex flex-col items-center">
       <div class="flex w-full flex-nowrap justify-between pb-2">
         <label
-          class="mx-1 mt-3 text-label-lg leading-none text-on-surface-variant"
+          class="mx-1 px-1 px-1 py-2 py-2 text-label-lg leading-none text-on-surface-variant"
           for="hue"
         >
           Hue
@@ -82,7 +82,7 @@ function onUpdate(event: Event, key: keyof HctModel) {
     <div class="flex flex-col items-center">
       <div class="flex w-full flex-nowrap justify-between pb-2">
         <label
-          class="mx-1 mt-3 flex text-label-lg leading-none text-on-surface-variant"
+          class="mx-1 flex px-1 py-2 text-label-lg leading-none text-on-surface-variant"
           for="hue"
         >
           Chroma
@@ -120,7 +120,7 @@ function onUpdate(event: Event, key: keyof HctModel) {
     <div class="flex flex-col items-center">
       <div class="flex w-full flex-nowrap justify-between pb-2">
         <label
-          class="mx-1 mt-3 text-label-lg leading-none text-on-surface-variant"
+          class="mx-1 px-1 py-2 text-label-lg leading-none text-on-surface-variant"
           for="tone"
         >
           Tone

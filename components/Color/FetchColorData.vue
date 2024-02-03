@@ -61,9 +61,6 @@ const filteredData = computed(() => {
 
 <template>
   <div class="relative flex h-fit flex-col gap-y-3 py-3">
-    <div v-if="isLoading" class="absolute inset-0 grid place-items-center bg-surface-dim">
-      <p class="text-headline-sm text-on-surface">Loading...</p>
-    </div>
     <JsonPretty v-if="exception" :data="exception" />
     <JsonPretty v-else :data="filteredData" :deep="1" />
   </div>
