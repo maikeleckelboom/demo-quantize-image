@@ -16,7 +16,7 @@ type FormModelBounds = {
   }
 }
 
-export function useHctSpectra(gradientType: 'conic' | 'linear' = 'linear') {
+export function useHCTSpectra(gradientType: 'conic' | 'linear' = 'linear') {
   const { $dynamicScheme } = useNuxtApp()
 
   const hctColor = computed(() => {

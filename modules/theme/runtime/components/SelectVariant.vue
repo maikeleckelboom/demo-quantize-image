@@ -20,21 +20,22 @@ function bbox(el: HTMLElement): DOMRect {
 }
 
 const setVariant = async (v: Variant) => {
-  const chip = chips.value[variants.value.findIndex((variant) => variant.value === v)]
+  const index = variants.value.findIndex((variant) => variant.value === v)
+  const chip = chips.value[index]
   if (!chip || !root.value) return
+
   const chipRect = bbox(chip.$el)
   const containerRect = bbox(root.value)
-  if (chipRect.left < containerRect.left) {
-    root.value.scrollTo({
-      left: 0,
-      behavior: 'smooth'
-    })
-  } else if (chipRect.right > containerRect.right) {
-    root.value.scrollTo({
-      left: root.value.scrollWidth,
-      behavior: 'smooth'
-    })
-  }
+  root.value.scrollTo({
+    left:
+      root.value.scrollLeft +
+      chipRect.left -
+      containerRect.left -
+      containerRect.width / 2 +
+      chipRect.width / 2,
+    behavior: 'smooth'
+  })
+
   await new Promise((resolve) => {
     chip.$el.addEventListener('transitionend', resolve, { once: true })
     variant.value = v

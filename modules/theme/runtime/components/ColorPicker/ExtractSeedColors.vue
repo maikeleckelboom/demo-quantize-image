@@ -63,7 +63,12 @@ function reset() {
             step="1"
           />
           <div class="flex gap-4">
-            <button :disabled="isLoading" class="filled-button" type="button" @click="commit()">
+            <button
+              :disabled="isLoading"
+              class="filled-button"
+              type="button"
+              @click="commit()"
+            >
               {{ isLoading ? 'Extracting colors ...' : 'Extract colors' }}
             </button>
           </div>
@@ -76,7 +81,9 @@ function reset() {
           <section>
             <h1 class="text-title-lg">
               Prominent Colors
-              <span class="tabular-nums text-on-surface-variant"> ({{ prominentColors.size }}) </span>
+              <span class="tabular-nums text-on-surface-variant">
+                ({{ prominentColors.size }})
+              </span>
             </h1>
             <div class="mt-4 flex flex-wrap gap-2">
               <template v-for="([color], index) in prominentColors" :key="index">
@@ -91,12 +98,17 @@ function reset() {
         <template v-if="seedColors">
           <section class="flex flex-col">
             <h1 class="text-title-lg">
-              Seed Colors
-              <span class="tabular-nums text-on-surface-variant"> ({{ seedColors.length }})</span>
+              Suitable Seed Colors
+              <span class="tabular-nums text-on-surface-variant">
+                ({{ seedColors.length }})</span
+              >
             </h1>
             <div class="mt-4 grid grid-cols-4 gap-2">
               <template v-for="seedColor in seedColors">
-                <div :style="{ backgroundColor: hexFromArgb(seedColor) }" class="flex size-20 rounded-md md:size-24" />
+                <div
+                  :style="{ backgroundColor: hexFromArgb(seedColor) }"
+                  class="flex size-20 rounded-md md:size-24"
+                />
               </template>
             </div>
           </section>

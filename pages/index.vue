@@ -5,10 +5,11 @@ import { TonalPalette } from '@material/material-color-utilities'
 const { $dynamicScheme, $schemeCssVariables } = useNuxtApp()
 const { sourceColor, contrastLevel } = useThemeConfig()
 
-function splitByCases(str: string) {
-  return str
+function formatKey(key: string) {
+  return key
     .split(/(?=[A-Z])/)
     .map((s) => s.toLowerCase())
+    .filter((s) => s !== 'palette' && s !== 'key' && s !== 'color')
     .join(' ')
 }
 
@@ -18,7 +19,7 @@ const palettes = computed(() => {
       const palette = $dynamicScheme.value[key as keyof typeof $dynamicScheme.value]
       if (palette instanceof TonalPalette) {
         acc.push({
-          key,
+          key: formatKey(key),
           palette
         })
       }
@@ -31,7 +32,7 @@ const palettes = computed(() => {
 
 <template>
   <div class="custom-grid">
-    <div class="main mx-auto grid gap-8 md:grid-cols-1 lg:max-w-md lg:grid-cols-1">
+    <div class="main">
       <section>
         <div class="mb-6 grid grid-cols-[1fr,auto]">
           <div class="">
@@ -66,12 +67,7 @@ const palettes = computed(() => {
         <div class="grid grid-cols-3 gap-4">
           <div v-for="({ key, palette }, idx) in palettes" class="flex flex-col">
             <h1 class="mb-2 capitalize">
-              {{
-                splitByCases(key)
-                  .split(' ')
-                  .filter((s) => s !== 'palette' && s !== 'key' && s !== 'color')
-                  .join(' ')
-              }}
+              {{ key }}
             </h1>
             <PaletteKeyColorPreview :palette="palette" />
           </div>
@@ -126,10 +122,8 @@ const palettes = computed(() => {
 
   .main {
     grid-area: main;
-    @apply col-span-full;
+    @apply mx-auto grid gap-8 md:grid-cols-1 lg:max-w-md lg:grid-cols-1;
   }
-
-  grid-template-columns: 1fr 1fr;
 
   @screen sm {
     grid-template-columns: [gutter] var(--gutter-size) [main] 1fr [gutter] var(

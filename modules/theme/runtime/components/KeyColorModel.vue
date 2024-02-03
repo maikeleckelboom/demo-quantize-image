@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Hct, hexFromArgb, TonalPalette } from '@material/material-color-utilities'
 import type { HctModel } from '~/modules/theme/types'
+import { useHCTSpectra } from '~/modules/theme/runtime/composables/useHCTSpectra'
 
 const { $dynamicScheme } = useNuxtApp()
 const { sourceColor, contrastLevel } = useThemeConfig()
@@ -9,24 +10,25 @@ const sourceColorArgb = computed(() => {
   return $dynamicScheme.value.sourceColorArgb
 })
 
-const primaryPaletteKeyColor = computed(() => {
-  const primaryPalette = $dynamicScheme.value.primaryPalette
-  return primaryPalette.keyColor
-})
-
 const formModel = reactive<HctModel>({
   hue: Hct.fromInt(sourceColorArgb.value).hue,
   chroma: Hct.fromInt(sourceColorArgb.value).chroma,
   tone: Hct.fromInt(sourceColorArgb.value).tone
 })
 
-const onHctFormModelChange = ({ hue, chroma, tone }: HctModel) => {
-  sourceColor.value = hexFromArgb(TonalPalette.fromHueAndChroma(hue, chroma).tone(tone))
-}
+watch(
+  formModel,
+  ({ hue, chroma, tone }: HctModel) => {
+    sourceColor.value = hexFromArgb(TonalPalette.fromHueAndChroma(hue, chroma).tone(tone))
+  },
+  { deep: true }
+)
 
-watch(formModel, onHctFormModelChange, { deep: true })
-
-const { hue: hueSpectrum, chroma: chromaSpectrum, tone: toneSpectrum } = useHctSpectra('linear')
+const {
+  hue: hueSpectrum,
+  chroma: chromaSpectrum,
+  tone: toneSpectrum
+} = useHCTSpectra('linear')
 
 const customHandle = ref<HTMLElement | null>(null)
 </script>
