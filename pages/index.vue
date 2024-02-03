@@ -33,6 +33,9 @@ const palettes = computed(() => {
 <template>
   <div class="custom-grid">
     <div class="main">
+      <NuxtLink class="text-link mb-4" to="/app">
+        <Button intent="outlined"> Go to App </Button>
+      </NuxtLink>
       <section>
         <div class="mb-6 grid grid-cols-[1fr,auto]">
           <div class="">

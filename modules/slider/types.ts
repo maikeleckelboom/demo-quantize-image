@@ -6,6 +6,7 @@ interface SliderProps {
   marks?: Marks
 
   decimals?: string | number
+  round?: number | boolean | 'true' | 'false' | (string & {})
 
   orientation?: 'horizontal' | 'vertical'
   dir?: 'ltr' | 'rtl'
@@ -20,7 +21,7 @@ interface SliderProps {
   lazy?: false
   contained?: boolean | 'true' | 'false'
   trackStyle?: Record<string, any>
-  round?: number | boolean | 'true' | 'false' | (string & {})
+
   snapping?: boolean | 'true' | 'false'
   snapValues?: number[]
 }

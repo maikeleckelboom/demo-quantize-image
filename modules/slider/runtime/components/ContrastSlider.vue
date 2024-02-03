@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { twMerge } from 'tailwind-merge'
+import type { Ref } from 'vue'
 
-const modelValue = defineModel<number | number[]>()
+const modelValue = defineModel() as Ref<number | number[]>
 
 type Mark = {
   value: number
@@ -37,10 +38,8 @@ function onMarkClick(mark: Mark) {
 </script>
 
 <template>
-  <div class="mt-4 rounded-md bg-surface-container">
-    <fieldset
-      class="grid grid-cols-[auto,1fr,auto] gap-y-2 rounded-md bg-surface-container px-10 pb-0 pt-4"
-    >
+  <div class="mt-4 rounded-md">
+    <fieldset class="grid grid-cols-[auto,1fr,auto] gap-y-2 rounded-md pb-0 pt-4">
       <div class="col-span-full flex w-full items-center">
         <InputRangeSlider
           v-model="modelValue"
@@ -49,13 +48,12 @@ function onMarkClick(mark: Mark) {
           contained="false"
           max="1"
           min="-1"
-          snapping="directional"
           step="0.1"
         />
       </div>
       <div class="relative col-span-full flex h-[38px] items-start justify-start">
         <div
-          v-for="mark in computedMarks"
+          v-for="(mark, idx) in computedMarks"
           :key="mark.value"
           :class="
             twMerge([
@@ -72,6 +70,9 @@ function onMarkClick(mark: Mark) {
           <span class="h-2 w-1 rounded-lg bg-outline" />
 
           <span
+            :class="[
+              idx === 0 ? 'ml-[50%]' : idx === computedMarks.length - 1 ? 'mr-[50%]' : ''
+            ]"
             class="mt-2.5 flex flex-col items-center justify-center gap-1.5 text-label-sm font-medium leading-none text-outline"
           >
             <span>{{ mark.label }}</span>

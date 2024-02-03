@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { type SliderProps } from '~/modules/slider/types'
 import { type Position, useTemplateRefsList } from '@vueuse/core'
-import { animate, snap } from 'popmotion'
+import { snap } from 'popmotion'
 
 const props = withDefaults(defineProps<SliderProps>(), {
   min: 0,
@@ -171,13 +171,7 @@ const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
   onSwipeEnd: (event, direction) => {
     const removePointer = () => (currentPointer.value = null)
     if (isSnapping.value && isNumber(modelValue.value)) {
-      animate({
-        from: modelValue.value,
-        to: getClosestSnapValue(modelValue.value),
-        duration: 100,
-        onUpdate: (v) => (modelValue.value = v),
-        onComplete: () => removePointer()
-      })
+      modelValue.value = getClosestSnapValue(modelValue.value)
       return
     }
     removePointer()

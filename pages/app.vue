@@ -1,10 +1,40 @@
-<script lang="ts" setup>
-const { contrastLevel } = useThemeConfig()
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="mx-auto h-svh w-full max-w-2xl p-4">
-    <ContrastSlider v-model.number="contrastLevel" max="1" min="0" step="0.1" />
+    <div class="flex flex-col gap-12">
+      <Button intent="filled">
+        <Icon name="ic:round-add" />
+        Add a new color
+      </Button>
+      <Button intent="filled-tonal">
+        <Icon name="ic:round-remove" />
+        Remove a color
+      </Button>
+      <Button intent="outlined">
+        <Icon name="ic:round-save" />
+        Save
+      </Button>
+      <Button intent="text">
+        <Icon name="ic:round-cancel" />
+        Cancel
+      </Button>
+      <Button intent="elevated">
+        <Icon name="ic:round-add" />
+        Extract from image
+      </Button>
+
+      <Button color="tertiary" intent="fab" size="sm">
+        <Icon name="ic:round-add" />
+      </Button>
+      <Button color="secondary" intent="extended-fab" size="md">
+        <Icon name="ic:round-add" />
+        Add a new color
+      </Button>
+      <Button color="primary" intent="fab" size="lg">
+        <Icon name="ic:round-add" />
+      </Button>
+    </div>
   </div>
 </template>
 

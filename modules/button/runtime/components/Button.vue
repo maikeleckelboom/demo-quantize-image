@@ -26,15 +26,14 @@ const variants = cva({
     'items-center',
     'justify-center',
     'flex',
+    'gap-3',
     'items-center',
     'justify-center',
-    'gap-3',
     'shrink-0',
     'relative',
     'overflow-hidden',
     'before:z-0',
     'before:opacity-0',
-    'before:content',
     'before:absolute',
     'before:inset-0',
     'before:bg-current',
@@ -42,11 +41,8 @@ const variants = cva({
     'hover:before:opacity-[0.08]',
     'hover:before:active:opacity-[0.18]',
     'active:before:opacity-[0.16]',
-    'label-text:text-ellipsis',
-    'label-text:font-semibold',
-    'label-text:capitalize',
-    'label-text:shrink-0',
-    'icon:shrink-0'
+    'icon:shrink-0',
+    'text-label-lg'
   ],
   variants: {
     dir: {
@@ -88,16 +84,9 @@ const variants = cva({
       ]
     },
     size: {
-      sm: ['px-5', 'label-text:text-sm', 'h-[38px]', 'icon:w-[24px]', 'icon:h-[24px]'],
-      md: [
-        'label-text:text-base',
-        'py-5',
-        'px-5',
-        'icon:w-[24px]',
-        'icon:h-[24px]',
-        'h-[38px]'
-      ],
-      lg: ['label-text:text-lg', 'p-5', 'icon:w-[24px]', 'icon:h-[24px]', 'h-[56px]']
+      sm: ['px-5', 'text-sm', 'h-[38px]', 'icon:w-[24px]', 'icon:h-[24px]'],
+      md: ['text-base', 'py-5', 'px-5', 'icon:w-[24px]', 'icon:h-[24px]', 'h-[38px]'],
+      lg: ['text-lg', 'p-5', 'icon:w-[24px]', 'icon:h-[24px]', 'h-[56px]']
     },
     color: {
       primary: '',
@@ -144,7 +133,7 @@ const variants = cva({
     {
       intent: 'fab',
       size: 'lg',
-      class: 'rounded-3.5xl h-[96px] w-[96px] icon:w-[40px] icon:h-[40px]'
+      class: 'rounded-4xl h-[96px] w-[96px] icon:w-[40px] icon:h-[40px]'
     },
     {
       intent: 'extended-fab',
@@ -159,7 +148,7 @@ const variants = cva({
     {
       intent: 'extended-fab',
       size: 'lg',
-      class: 'rounded-3.5xl h-[96px] icon:w-[40px] icon:h-[40px]'
+      class: 'rounded-4xl h-[96px] icon:w-[40px] icon:h-[40px]'
     }
   ]
 })
