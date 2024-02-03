@@ -7,7 +7,8 @@ withDefaults(defineProps<Partial<JsonPrettyProps>>(), {
   deep: 1,
   showLineNumbers: false,
   showDoubleQuotes: false,
-  highlightSelectedNode: false
+  highlightSelectedNode: false,
+  virtual: false
 })
 </script>
 
@@ -17,6 +18,7 @@ withDefaults(defineProps<Partial<JsonPrettyProps>>(), {
     :deep="deep"
     :highlight-selected-node="highlightSelectedNode"
     :show-double-quotes="showDoubleQuotes"
+    :virtual="virtual"
     class="scrollbar"
   />
 </template>

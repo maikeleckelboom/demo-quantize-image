@@ -34,16 +34,13 @@ const palettes = computed(() => {
   <div class="custom-grid">
     <div class="main">
       <NuxtLink class="text-link mb-4" to="/app">
-        <Button intent="outlined"> Go to App </Button>
+        <Button intent="outlined"> Go to App</Button>
       </NuxtLink>
       <section>
         <div class="mb-6 grid grid-cols-[1fr,auto]">
           <div class="">
             <details class="mb-4">
               <summary class="mb-0.5 text-label-lg">Source Color</summary>
-              <p class="text-sm text-on-surface-variant">
-                The color that is used as the base for the theme.
-              </p>
             </details>
             <div
               :style="{ background: sourceColor }"
@@ -63,9 +60,6 @@ const palettes = computed(() => {
       <section>
         <details class="mb-4">
           <summary class="col-span-full mb-0.5 text-title-lg">Palettes</summary>
-          <p class="col-span-full text-sm text-on-surface-variant">
-            The color palettes that are generated from the source color.
-          </p>
         </details>
         <div class="grid grid-cols-3 gap-4">
           <div v-for="({ key, palette }, idx) in palettes" class="flex flex-col">
@@ -114,6 +108,9 @@ const palettes = computed(() => {
         </div>
       </section>
     </div>
+    <div class="aside-right">
+      <Glossary />
+    </div>
   </div>
 </template>
 
@@ -123,9 +120,18 @@ const palettes = computed(() => {
   display: grid;
   padding: 12px;
 
+  grid-template-columns:
+    [gutter] var(--gutter-size) [main] 1fr [aside-right] auto [gutter] var(--gutter-size)
+    [gutter] var(--gutter-size);
+
   .main {
     grid-area: main;
-    @apply mx-auto grid gap-8 md:grid-cols-1 lg:max-w-md lg:grid-cols-1;
+    @apply mx-auto grid gap-8;
+  }
+
+  .aside-right {
+    grid-area: aside-right;
+    @apply hidden w-[300px] flex-col items-start gap-8 md:flex;
   }
 
   @screen sm {

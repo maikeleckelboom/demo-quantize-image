@@ -57,12 +57,32 @@ const filteredData = computed(() => {
     cmyk: data.value.cmyk.value
   }
 })
+
+function highlightColorCode(str: string) {
+  if (str.startsWith('#')) {
+    return `${str.slice(0, 1)}<span class="text-primary">${str.slice(1)}</span>`
+  }
+  return str.replace(/(\d+)/g, '<span class="text-primary">$1</span>')
+}
 </script>
 
 <template>
-  <div class="relative flex h-fit flex-col gap-y-3 py-3">
-    <JsonPretty v-if="exception" :data="exception" />
-    <JsonPretty v-else :data="filteredData" :deep="1" />
+  <div class="relative flex h-fit w-fit flex-col gap-y-1">
+    <JsonPretty v-if="exception" :data="exception" :virtual="true" />
+    <div v-else-if="filteredData">
+      <fieldset v-for="(value, key) in filteredData" :key="key" class="group">
+        <div
+          class="relative flex size-full rounded-md p-2 pr-12 hover:bg-surface-bright/50"
+        >
+          <div class="w-full text-nowrap" v-html="highlightColorCode(value)" />
+          <div
+            class="invisible absolute right-0 top-1/2 -translate-x-1/4 -translate-y-1/2 group-hover:visible"
+          >
+            <SaveToClipboard :source="value" />
+          </div>
+        </div>
+      </fieldset>
+    </div>
   </div>
 </template>
 

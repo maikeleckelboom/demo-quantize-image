@@ -38,11 +38,32 @@ function onUpdate(event: Event, key: keyof HctModel) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-y-3">
+  <div class="flex flex-col gap-y-3 p-1">
+    <div class="flex flex-col items-center">
+      <div class="flex-no-wrap flex w-full">
+        <div class="mb-12 flex gap-4">
+          <input v-model="sourceColor" class="color-input-field" type="color" />
+          <label
+            class="mx-1 px-1 py-2 text-title-lg leading-none text-on-surface-variant"
+            for="source-color"
+          >
+            Source
+          </label>
+        </div>
+        <TextField
+          id="source-color"
+          v-model="sourceColor"
+          class="ml-auto w-[78px] text-center"
+          inputmode="text"
+          label="Source Color"
+          type="text"
+        />
+      </div>
+    </div>
     <div class="flex flex-col items-center">
       <div class="flex w-full flex-nowrap justify-between pb-2">
         <label
-          class="mx-1 px-1 px-1 py-2 py-2 text-label-lg leading-none text-on-surface-variant"
+          class="mx-1 px-1 py-2 text-label-md leading-none text-on-surface-variant"
           for="hue"
         >
           Hue
@@ -70,19 +91,17 @@ function onUpdate(event: Event, key: keyof HctModel) {
         round="0"
       >
         <template #handle>
-          <div ref="customHandle" class="custom-handle">
-            <div :style="hueSpectrum" class="custom-handle-color" />
-          </div>
+          <div ref="customHandle" class="custom-handle"></div>
         </template>
         <template #track>
-          <SliderTrack :style="hueSpectrum" class="" fill="false" />
+          <SliderTrack :style="hueSpectrum" class="size-full" fill="false" />
         </template>
       </InputRangeSlider>
     </div>
     <div class="flex flex-col items-center">
       <div class="flex w-full flex-nowrap justify-between pb-2">
         <label
-          class="mx-1 flex px-1 py-2 text-label-lg leading-none text-on-surface-variant"
+          class="mx-1 flex px-1 py-2 text-label-md leading-none text-on-surface-variant"
           for="hue"
         >
           Chroma
@@ -120,7 +139,7 @@ function onUpdate(event: Event, key: keyof HctModel) {
     <div class="flex flex-col items-center">
       <div class="flex w-full flex-nowrap justify-between pb-2">
         <label
-          class="mx-1 px-1 py-2 text-label-lg leading-none text-on-surface-variant"
+          class="mx-1 px-1 py-2 text-label-md leading-none text-on-surface-variant"
           for="tone"
         >
           Tone
@@ -158,6 +177,27 @@ function onUpdate(event: Event, key: keyof HctModel) {
 </template>
 
 <style>
+input[type='color'] {
+  --size: 48px;
+  padding: 0;
+  margin: 0;
+  width: var(--size);
+  height: var(--size);
+  border-radius: calc(var(--size) / 2);
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: calc(var(--size) / 2);
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch-wrapper {
+    border: none;
+    border-radius: calc(var(--size) / 2);
+    padding: 0;
+  }
+}
+
 .custom-handle {
   width: var(--slider-handle-width);
   height: var(--slider-handle-height);
@@ -176,13 +216,9 @@ function onUpdate(event: Event, key: keyof HctModel) {
   &.active {
     @apply bg-surface-bright/20;
   }
-
-  &.contrast-input-handle {
-    @apply bg-surface-container-high;
-  }
 }
 
 .slider-root.color-input-range {
-  --slider-track-height: 22px;
+  --slider-track-height: 24px;
 }
 </style>

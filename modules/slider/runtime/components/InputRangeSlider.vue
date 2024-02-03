@@ -265,14 +265,17 @@ function handleSwipe(_event: PointerEvent) {
 
   if (props.preventOverlap) {
     const minDistance = Number(props.minDistance)
-    const pointerPrev = modelValue.value[pointerIndex - 1]
-    const pointerNext = modelValue.value[pointerIndex + 1]
-    if (shouldAdjustPointer(pointerPrev, pointerValue, minDistance)) {
-      modelValue.value.splice(pointerIndex, 1, pointerPrev + minDistance)
+
+    const pointerBefore = modelValue.value[pointerIndex - 1]
+    const pointerAfter = modelValue.value[pointerIndex + 1]
+
+    if (pointerBefore && pointerBefore >= pointerValue - minDistance) {
+      modelValue.value.splice(pointerIndex, 1, pointerBefore + minDistance)
       return
     }
-    if (shouldAdjustPointer(pointerNext, pointerValue, minDistance)) {
-      modelValue.value.splice(pointerIndex, 1, pointerNext - minDistance)
+
+    if (pointerAfter && pointerAfter <= pointerValue + minDistance) {
+      modelValue.value.splice(pointerIndex, 1, pointerAfter - minDistance)
       return
     }
   }
@@ -280,7 +283,7 @@ function handleSwipe(_event: PointerEvent) {
   modelValue.value.splice(pointerIndex, 1, pointerValue)
 }
 
-function shouldAdjustPointer(
+function reachedBounds(
   pointer: number | undefined,
   pointerValue: number,
   minDistance: number
@@ -333,15 +336,12 @@ const variantClasses = computed(() => {
   }
 })
 
-const classes = computed(() => {
-  return []
-})
-
 const styleBinding = computed(() => {
   const lowerValue = Math.min(...valueProgressProxy.value)
   const upperValue = Math.max(...valueProgressProxy.value)
   return {
-    '--progress': `${valueProgressProxy.value?.length > 1 ? upperValue - lowerValue : lowerValue}%`
+    '--progress': `${valueProgressProxy.value?.length > 1 ? upperValue - lowerValue : lowerValue}%`,
+    '--lower-bound-value': `${lowerValue}%`
   }
 })
 </script>

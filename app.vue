@@ -1,9 +1,9 @@
 <template>
   <NuxtErrorBoundary>
     <NuxtLayout>
-      <NuxtLoadingIndicator />
+      <NuxtLoadingIndicator :color="repeatingLinearGradient" />
       <NuxtPage />
     </NuxtLayout>
   </NuxtErrorBoundary>
 </template>
-<script setup lang="ts"></script>
+<script lang="ts" setup></script>

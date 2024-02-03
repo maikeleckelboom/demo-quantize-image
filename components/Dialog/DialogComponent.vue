@@ -14,7 +14,7 @@ const dialogVariant = cva({
     'p-4',
     'text-on-surface',
     'rounded-xl',
-    'w-[560px]',
+    'w-[360px]',
     'max-w-[calc(100svw-32px)]',
     'mx-[16px]',
     'md:mx-auto'
@@ -43,6 +43,9 @@ onClickOutside(dialogRef, () => {
     <article class="scrollbar relative size-full overflow-y-auto overflow-x-clip">
       <slot></slot>
     </article>
+    <footer class="mt-4 flex justify-end">
+      <slot name="footer"></slot>
+    </footer>
   </dialog>
 </template>
 
