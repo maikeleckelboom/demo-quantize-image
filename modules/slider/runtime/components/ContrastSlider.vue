@@ -59,7 +59,6 @@ function onMarkClick(mark: Mark) {
             twMerge([
               'absolute flex flex-col items-center justify-center',
               'hover:opacity-80 active:opacity-90',
-              'transition duration-100 ease-linear',
               '-translate-x-1/2'
             ])
           "
@@ -68,11 +67,11 @@ function onMarkClick(mark: Mark) {
           @click="onMarkClick(mark)"
         >
           <span class="h-2 w-1 rounded-lg bg-outline" />
-
           <span
-            :class="[
-              idx === 0 ? 'ml-[50%]' : idx === computedMarks.length - 1 ? 'mr-[50%]' : ''
-            ]"
+            :class="{
+              'ml-[50%]': idx === 0,
+              'mr-[50%]': idx === computedMarks.length - 1
+            }"
             class="mt-2.5 flex flex-col items-center justify-center gap-1.5 text-label-sm font-medium leading-none text-outline"
           >
             <span>{{ mark.label }}</span>

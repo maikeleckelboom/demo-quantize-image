@@ -2,6 +2,9 @@
 
 <template>
   <div class="mx-auto h-svh w-full max-w-2xl p-4">
+    <div class="p-12">
+      <ContrastSlider />
+    </div>
     <div class="flex flex-col gap-12">
       <Button intent="filled">
         <Icon name="ic:round-add" />
