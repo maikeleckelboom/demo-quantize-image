@@ -2,26 +2,6 @@
 const isVisible = ref<boolean>(true)
 
 const { sourceColor } = useThemeConfig()
-
-const {
-  steps,
-  stepNames,
-  index,
-  current,
-  next,
-  previous,
-  isFirst,
-  isLast,
-  goTo,
-  goToNext,
-  goToPrevious,
-  goBackTo,
-  isNext,
-  isPrevious,
-  isCurrent,
-  isBefore,
-  isAfter
-} = useStepper(['choosing-source-color', 'terms', 'payment'])
 </script>
 
 <template>
@@ -35,7 +15,7 @@ const {
         <Buttons>
           <Button intent="outlined">
             <icon name="ic:round-arrow-right-alt" />
-            Apply
+            Cancel
           </Button>
         </Buttons>
       </template>

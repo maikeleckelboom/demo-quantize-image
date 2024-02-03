@@ -13,7 +13,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   file: null,
   multiple: false,
-  accept: 'false',
   reset: true,
   directory: false
 })
@@ -70,29 +69,17 @@ function onReset() {
   count.value += 1
   reset()
 }
-
-const customSelectedFile = ref<File | null>(null)
-
-function onCustomFileChange(event: Event) {
-  const ff = (event.target as HTMLInputElement).files
-  if (!ff) return
-  const [selectedFile] = ff
-  customSelectedFile.value = selectedFile
-}
-
-watch(customSelectedFile, (v) => {
-  file.value = v
-  emit('change', file.value)
-})
 </script>
 
 <template>
   <div class="flex flex-col gap-7">
     <div class="flex gap-4">
-      <button class="outlined-button" type="button" @click="open()">
+      <button class="outlined-button" type="button" @click="() => open()">
         {{ file ? 'Change image' : 'Choose an image' }}
       </button>
-      <button v-if="file" class="outlined-button" type="button" @click="onReset()">Reset</button>
+      <button v-if="file" class="outlined-button" type="button" @click="onReset()">
+        Reset
+      </button>
     </div>
     <template v-if="file">
       <FileInputPreview :file="file" />

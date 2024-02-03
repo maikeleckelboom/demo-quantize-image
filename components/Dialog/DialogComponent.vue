@@ -14,7 +14,7 @@ const dialogVariant = cva({
     'p-4',
     'text-on-surface',
     'rounded-xl',
-    'w-[360px]',
+    'w-[560px]',
     'max-w-[calc(100svw-32px)]',
     'mx-[16px]',
     'md:mx-auto'
