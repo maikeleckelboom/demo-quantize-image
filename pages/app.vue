@@ -6,14 +6,6 @@
       <ContrastSlider />
     </div>
     <div class="flex flex-col gap-12">
-      <Button intent="filled">
-        <Icon name="ic:round-add" />
-        Add a new color
-      </Button>
-      <Button intent="filled-tonal">
-        <Icon name="ic:round-remove" />
-        Remove a color
-      </Button>
       <Button intent="outlined">
         <Icon name="ic:round-save" />
         Save
@@ -22,17 +14,10 @@
         <Icon name="ic:round-cancel" />
         Cancel
       </Button>
-      <Button intent="elevated">
-        <Icon name="ic:round-add" />
-        Extract from image
-      </Button>
+      <Button intent="elevated"> Extract from image</Button>
 
       <Button color="tertiary" intent="fab" size="sm">
         <Icon name="ic:round-add" />
-      </Button>
-      <Button color="secondary" intent="extended-fab" size="md">
-        <Icon name="ic:round-add" />
-        Add a new color
       </Button>
       <Button color="primary" intent="fab" size="lg">
         <Icon name="ic:round-add" />

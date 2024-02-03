@@ -14,7 +14,7 @@ const dialogVariant = cva({
     'p-4',
     'text-on-surface',
     'rounded-xl',
-    'w-[420px]',
+    'w-[560px]',
     'max-w-[calc(100svw-32px)]',
     'mx-[16px]',
     'md:mx-auto'
@@ -40,7 +40,7 @@ onClickOutside(dialogRef, () => {
 
 <template>
   <dialog ref="dialogRef" :class="dialogVariant({ open })" :open="open">
-    <article>
+    <article class="scrollbar relative size-full overflow-y-auto overflow-x-clip">
       <slot></slot>
     </article>
   </dialog>

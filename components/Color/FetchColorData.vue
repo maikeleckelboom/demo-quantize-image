@@ -22,10 +22,15 @@ function getColorAsRgb(color: chroma.Color) {
   return chroma(color).alpha(1).rgb()
 }
 
+const isLoading = ref<boolean>(false)
+
+const debounce = ref<number>(180)
+
 watchDebounced(
   color,
   async (v) => {
     if (!v || (v && !isValid(v))) return
+    isLoading.value = true
     try {
       data.value = await $fetch(`${theColorApiBaseUrl}/id?rgb=${getColorAsRgb(v)}`)
     } catch (err) {
@@ -34,16 +39,33 @@ watchDebounced(
         return
       }
       exception.value = err
+    } finally {
+      isLoading.value = false
     }
   },
-  { deep: true, immediate: true, debounce: 500 }
+  { deep: true, immediate: true, debounce }
 )
+
+const filteredData = computed(() => {
+  if (!data.value) return
+  return {
+    name: data.value.name.value,
+    hex: data.value.hex.value,
+    rgb: data.value.rgb.value,
+    hsl: data.value.hsl.value,
+    hsv: data.value.hsv.value,
+    cmyk: data.value.cmyk.value
+  }
+})
 </script>
 
 <template>
-  <div>
-    <pre v-if="exception">{{ exception }}</pre>
-    <pre>{{ data }}</pre>
+  <div class="relative flex h-fit flex-col gap-y-3 py-3">
+    <div v-if="isLoading" class="absolute inset-0 grid place-items-center bg-surface-dim">
+      <p class="text-headline-sm text-on-surface">Loading...</p>
+    </div>
+    <JsonPretty v-if="exception" :data="exception" />
+    <JsonPretty v-else :data="filteredData" :deep="1" />
   </div>
 </template>
 
