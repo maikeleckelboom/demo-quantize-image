@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { ColorModeOption } from '~/modules/theme/types'
-import ColorModeSheet from '~/modules/theme/runtime/components/ColorMode/Opt1/ColorModeSheet.vue'
 
 const { isDark } = useThemeConfig()
 
