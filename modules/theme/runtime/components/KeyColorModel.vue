@@ -10,7 +10,7 @@ defineProps<{
   <div class="grid grid-cols-1 grid-rows-[auto,1fr]">
     <InputColorField v-model="sourceColor" v-model:toggled="isToggled" :label="label" />
     <Collapsible v-model:open="isToggled">
-      <AdvancedColorData :color="sourceColor" />
+      <AdvancedColorData :color="sourceColor" :labels="true" />
     </Collapsible>
     <HctColorPicker v-model="sourceColor" />
   </div>

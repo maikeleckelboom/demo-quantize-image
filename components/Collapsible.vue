@@ -43,6 +43,7 @@ const open = defineModel<boolean>('open', { type: Boolean, default: false })
   display: grid;
   place-content: start;
   grid-template-rows: auto 0fr;
+  grid-template-columns: 1fr;
 
   &[aria-expanded='true'] {
     grid-template-rows: auto 1fr;
@@ -50,6 +51,7 @@ const open = defineModel<boolean>('open', { type: Boolean, default: false })
 
   .v-collapsible-content {
     overflow: hidden;
+    min-inline-size: 100%;
   }
 
   .collapsible-enter-active *,

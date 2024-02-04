@@ -68,38 +68,28 @@ function highlightColorCode(str: string) {
     <template v-if="error">
       <pre class="text-error">{{ error }}</pre>
     </template>
-    <template v-else-if="isLoading">
-      <div class="grid size-full place-items-center">
+    <Transition v-else mode="out-in" name="fade">
+      <div v-if="isLoading" class="grid size-full place-items-center">
         <Spinner />
       </div>
-    </template>
-    <template v-else>
       <div
-        v-if="filteredData"
-        :class="{
-          'grid-cols-[auto,1fr]': labels
-        }"
-        class="grid"
+        v-else-if="filteredData"
+        :class="labels ? 'grid-cols-[60px,1fr]' : 'grid-cols-1'"
+        class="grid w-full"
       >
         <template v-for="(value, key) in filteredData" :key="key">
           <div v-if="labels" class="p-1">
             <label
-              :class="{
-                uppercase: key !== 'name',
-                capitalize: key === 'name'
-              }"
-              class="flex items-center text-nowrap p-1 italic text-on-surface-variant"
+              :class="key === 'name' ? 'capitalize' : 'uppercase'"
+              class="flex h-full items-center text-nowrap p-1 text-xs italic text-on-surface-variant"
               v-html="highlightColorCode(key)"
             />
           </div>
-
           <div
             class="group relative flex size-full rounded-md p-1 pr-12 hover:bg-surface-bright/50"
           >
             <div
-              :class="{
-                'text-title-md font-medium text-primary': key === 'name'
-              }"
+              :class="key === 'name' ? 'text-title-md font-medium text-primary' : ''"
               class="w-full text-nowrap p-1"
               v-html="highlightColorCode(value)"
             />
@@ -111,7 +101,7 @@ function highlightColorCode(str: string) {
           </div>
         </template>
       </div>
-    </template>
+    </Transition>
   </div>
 </template>
 

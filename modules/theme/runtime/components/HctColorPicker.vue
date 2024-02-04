@@ -1,10 +1,5 @@
 <script lang="ts" setup>
-import {
-  argbFromHex,
-  Hct,
-  hexFromArgb,
-  TonalPalette
-} from '@material/material-color-utilities'
+import { Hct, hexFromArgb, TonalPalette } from '@material/material-color-utilities'
 import type { HctModel } from '~/modules/theme/types'
 
 const { $dynamicScheme } = useNuxtApp()
@@ -25,17 +20,6 @@ watch(
   formModel,
   ({ hue, chroma, tone }: HctModel) => {
     sourceColor.value = hexFromArgb(TonalPalette.fromHueAndChroma(hue, chroma).tone(tone))
-  },
-  { deep: true }
-)
-
-watch(
-  sourceColor,
-  (color) => {
-    const hct = Hct.fromInt(argbFromHex(color))
-    formModel.hue = hct.hue
-    formModel.chroma = hct.chroma
-    formModel.tone = hct.tone
   },
   { deep: true }
 )
