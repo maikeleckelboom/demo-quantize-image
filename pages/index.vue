@@ -13,7 +13,14 @@ function formatKey(key: string) {
   return key
     .split(/(?=[A-Z])/)
     .map((s) => s.toLowerCase())
+    .join(' ')
+}
+
+function removePaletteFromKey(key: string) {
+  return key
+    .split(/(?=[A-Z])/)
     .filter((s) => s !== 'palette' && s !== 'key' && s !== 'color')
+    .map((s) => s.toLowerCase())
     .join(' ')
 }
 
@@ -23,7 +30,7 @@ const palettes = computed(() => {
       const palette = $dynamicScheme.value[key as keyof typeof $dynamicScheme.value]
       if (palette instanceof TonalPalette) {
         acc.push({
-          name: formatKey(key),
+          name: key,
           palette
         })
       }
@@ -38,19 +45,11 @@ function tonalPaletteFromHex(hex: string) {
 }
 
 const selectedPalette = ref<TonalPalette>(tonalPaletteFromHex(sourceColor.value))
+const selectedName = ref<string>('')
 
-function onSelectPalette(palette: TonalPalette) {
+function onSelectPalette(name: string, palette: TonalPalette) {
   selectedPalette.value = palette
-}
-
-function findPaletteInDynScheme() {
-  let s = unref($dynamicScheme)
-  for (let key in s) {
-    if (s[key as keyof typeof s] instanceof TonalPalette) {
-      console.log('key', key)
-      console.log('palette', s[key as keyof typeof s])
-    }
-  }
+  selectedName.value = name
 }
 
 const selectedPaletteModel = computed({
@@ -67,20 +66,22 @@ const selectedPaletteModel = computed({
       <SelectVariant />
     </div>
   </header>
-  {{ selectedPaletteKey }}
   <div class="mx-auto mt-[74px] w-full max-w-2xl p-3">
     <section class="mb-2">
       <div class="grid grid-cols-3 gap-4">
         <div v-for="{ name, palette } in palettes" :key="name" class="flex flex-col">
           <h1 class="mb-2 capitalize">
-            {{ name }}
+            {{ removePaletteFromKey(name) }}
           </h1>
-          <PaletteKeyColorPreview :palette="palette" @click="onSelectPalette(palette)" />
+          <PaletteKeyColorPreview
+            :palette="palette"
+            @click="onSelectPalette(name, palette)"
+          />
         </div>
       </div>
     </section>
     <section v-if="selectedPaletteModel" class="mb-6">
-      <KeyColorModel v-model="selectedPaletteModel"></KeyColorModel>
+      <KeyColorModel v-model="selectedPaletteModel" :label="selectedName" />
     </section>
   </div>
 </template>

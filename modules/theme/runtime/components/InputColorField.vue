@@ -13,7 +13,7 @@ function toggle() {
   <div class="relative grid w-full gap-2">
     <div class="my-2 flex flex-nowrap">
       <label
-        class="flex w-full items-center text-title-md font-medium md:text-headline-sm"
+        class="flex w-full items-center text-title-md font-medium capitalize md:text-headline-sm"
         for="source-color"
       >
         <slot name="label">

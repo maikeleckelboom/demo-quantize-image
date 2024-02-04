@@ -70,7 +70,7 @@ const id = useId()
   .collapsible-enter-from .v-collapsible-content-inner,
   .collapsible-leave-to .v-collapsible-content-inner {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(-2px);
   }
 
   .collapsible-enter-active .v-collapsible-content-inner {
