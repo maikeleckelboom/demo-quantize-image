@@ -81,7 +81,9 @@ export default defineNuxtConfig({
     '~/modules/theme/module.ts',
     '~/modules/slider/module.ts',
     '~/modules/json-pretty/module.ts',
-    '~/modules/button/module.ts'
+    '~/modules/button/module.ts',
+    '~/modules/list/module.ts',
+    '~/modules/tree/module.ts'
   ],
 
   imports: {
@@ -97,7 +99,8 @@ export default defineNuxtConfig({
       },
       {
         from: 'chroma-js',
-        imports: ['chroma']
+        imports: ['chroma'],
+        package: 'chroma-js'
       },
       {
         from: 'tailwind-merge',

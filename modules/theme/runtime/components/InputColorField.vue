@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-defineProps<{
-  label?: string
-  modelValue?: string
-  toggled?: boolean
-}>()
+defineProps<{ label?: string }>()
 
 const modelValue = defineModel<string>('modelValue', { type: String, default: '' })
 const toggled = defineModel<boolean>('toggled', { type: Boolean, default: false })
@@ -29,16 +25,16 @@ function toggle() {
       <InputText
         id="source-color"
         v-model="modelValue"
-        class="h-[38px] w-full min-w-[80px] pl-[46px] uppercase"
+        class="h-[38px] w-full pl-[46px] uppercase"
         inputmode="text"
         label="Source Color"
         type="text"
       />
       <InputSRGBHex v-model="modelValue" />
-      <div class="absolute right-0 top-0">
+      <div class="absolute right-0 top-0 w-[52px]">
         <Button
           :title="`Show ${toggled ? 'less' : 'more'} details about the color`"
-          class="rounded-lg pl-3 pr-3"
+          class="w-full rounded-lg pl-3 pr-3"
           intent="text"
           size="sm"
           @click="toggle"

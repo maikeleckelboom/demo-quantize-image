@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ColorModeOption } from '~/modules/theme/types'
-import ColorModeSheet from '~/modules/theme/runtime/components/ColorModeSheet.vue'
+import ColorModeSheet from '~/modules/theme/runtime/components/ColorMode/Opt1/ColorModeSheet.vue'
 
 const { isDark } = useThemeConfig()
 
@@ -19,8 +19,7 @@ const toggleColorMode = (mode: ColorModeOption) => {
 const boxStyles = (mode: ColorModeOption) => ({
   'border-primary': mode.selected,
   'border-outline-variant': !mode.selected,
-  'border-2 bg-surface-light border-outline-variant-light':
-    mode.value === 'light',
+  'border-2 bg-surface-light border-outline-variant-light': mode.value === 'light',
   'border bg-surface-dark border-outline-variant-dark': mode.value === 'dark'
 })
 </script>

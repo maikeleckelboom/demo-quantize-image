@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { Hct, hexFromArgb, TonalPalette } from '@material/material-color-utilities'
+import {
+  argbFromHex,
+  Hct,
+  hexFromArgb,
+  TonalPalette
+} from '@material/material-color-utilities'
 import type { HctModel } from '~/modules/theme/types'
 
 const { $dynamicScheme } = useNuxtApp()
@@ -24,6 +29,17 @@ watch(
   { deep: true }
 )
 
+watch(
+  sourceColor,
+  (color) => {
+    const hct = Hct.fromInt(argbFromHex(color))
+    formModel.hue = hct.hue
+    formModel.chroma = hct.chroma
+    formModel.tone = hct.tone
+  },
+  { deep: true }
+)
+
 const { hue: hueSpectrum, chroma: chromaSpectrum, tone: toneSpectrum } = useHCTSpectra()
 
 function onUpdate(event: Event, key: keyof HctModel) {
@@ -34,10 +50,10 @@ const customHandle = ref<HTMLElement | null>(null)
 </script>
 
 <template>
-  <div class="flex flex-col space-y-1">
+  <div class="flex flex-col space-y-1.5">
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
       <label
-        class="mr-4 flex items-center text-label-md leading-none text-on-surface-variant"
+        class="mr-4 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
         for="hue"
       >
         H
@@ -72,7 +88,7 @@ const customHandle = ref<HTMLElement | null>(null)
     </div>
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
       <label
-        class="mr-4 flex items-center text-label-md leading-none text-on-surface-variant"
+        class="mr-4 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
         for="hue"
       >
         C
@@ -106,7 +122,7 @@ const customHandle = ref<HTMLElement | null>(null)
     </div>
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
       <label
-        class="mr-4 flex items-center text-label-md leading-none text-on-surface-variant"
+        class="mr-4 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
         for="tone"
       >
         T

@@ -6,10 +6,9 @@ const srcDir: string = '.' as const
 
 const config = {
   content: [
-    `${srcDir}/modules/**/runtime/*.{js,ts,vue}`,
-    `${srcDir}/modules/**/runtime/components/**/*.{js,ts,vue}`,
-    `${srcDir}/modules/**/runtime/layouts/**/*.{js,ts,vue}`,
-    `${srcDir}/modules/**/runtime/pages/**/*.{js,ts,vue}`
+    `${srcDir}/modules/**/runtime/*.{ts,vue}`,
+    `${srcDir}/modules/**/runtime/components/**/*.vue`,
+    `${srcDir}/modules/**/runtime/pages/**/*.vue`
   ],
   presets: [materialThemePreset],
   theme: {}

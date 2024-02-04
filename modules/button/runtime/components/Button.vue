@@ -84,8 +84,8 @@ const variants = cva({
       ]
     },
     size: {
-      sm: ['px-5', 'text-sm', 'h-[38px]', 'icon:w-[24px]', 'icon:h-[24px]'],
-      md: ['text-base', 'py-5', 'px-5', 'icon:w-[24px]', 'icon:h-[24px]', 'h-[38px]'],
+      sm: ['px-5', 'text-sm', 'h-[38px]', 'icon:size-[18px]'],
+      md: ['text-base', 'py-5', 'px-5', 'icon:size-[20px]', 'h-[38px]'],
       lg: ['text-lg', 'p-5', 'icon:w-[24px]', 'icon:h-[24px]', 'h-[56px]']
     },
     color: {

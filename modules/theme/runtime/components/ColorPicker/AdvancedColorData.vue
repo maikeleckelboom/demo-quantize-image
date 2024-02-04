@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import chroma from 'chroma-js'
-import { z } from 'zod'
-import Spinner from '~/components/Spinner.vue'
 
 const theColorApiBaseUrl = 'https://www.thecolorapi.com' as const
 
@@ -15,7 +13,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { color, labels } = toRefs(props)
-
 const data = shallowRef<any>()
 const error = ref<unknown>()
 
@@ -28,7 +25,6 @@ function getColorAsRgb(color: chroma.Color) {
 }
 
 const isLoading = ref<boolean>(false)
-
 const debounce = ref<number>(300)
 
 watchDebounced(
@@ -39,10 +35,6 @@ watchDebounced(
     try {
       data.value = await $fetch(`${theColorApiBaseUrl}/id?rgb=${getColorAsRgb(v)}`)
     } catch (err) {
-      if (err instanceof z.ZodError) {
-        error.value = err.issues
-        return
-      }
       error.value = err
     } finally {
       isLoading.value = false
