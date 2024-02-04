@@ -50,6 +50,8 @@ onClickOutside(dialogRef, () => {
 </template>
 
 <style scoped>
-dialog {
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
 }
 </style>

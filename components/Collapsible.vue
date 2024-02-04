@@ -5,6 +5,8 @@ const transitionTotalDuration = computed<number>(
   () => parseInt(unref(transitionDuration)) + parseInt(unref(transitionDelay))
 )
 const modelValue = defineModel<boolean>('modelValue', { type: Boolean, default: false })
+
+const id = useId()
 </script>
 
 <template>
@@ -23,7 +25,7 @@ const modelValue = defineModel<boolean>('modelValue', { type: Boolean, default: 
         class="v-collapsible-content"
         data-collapsible-content
       >
-        <div>
+        <div class="v-collapsible-content-inner">
           <slot></slot>
         </div>
       </div>
@@ -47,6 +49,11 @@ const modelValue = defineModel<boolean>('modelValue', { type: Boolean, default: 
 
   &[aria-expanded='true'] {
     grid-template-rows: auto 1fr;
+    transition-delay: 0ms;
+  }
+
+  &[aria-expanded='false'] {
+    transition-delay: var(--transition-delay);
   }
 
   .v-collapsible-content {
@@ -54,22 +61,19 @@ const modelValue = defineModel<boolean>('modelValue', { type: Boolean, default: 
     min-inline-size: 100%;
   }
 
-  .collapsible-enter-active *,
-  .collapsible-leave-active * {
+  .collapsible-enter-active .v-collapsible-content-inner,
+  .collapsible-leave-active .v-collapsible-content-inner {
     transition-duration: var(--transition-duration);
-    transition-property: transform, opacity;
+    transition-property: opacity, transform;
   }
 
-  .collapsible-enter-from *,
-  .collapsible-leave-to * {
+  .collapsible-enter-from .v-collapsible-content-inner,
+  .collapsible-leave-to .v-collapsible-content-inner {
     opacity: 0;
+    transform: translateY(-4px);
   }
 
-  .collapsible-leave-active {
-    transition-delay: var(--transition-delay);
-  }
-
-  .collapsible-enter-active * {
+  .collapsible-enter-active .v-collapsible-content-inner {
     transition-delay: var(--transition-delay);
   }
 }

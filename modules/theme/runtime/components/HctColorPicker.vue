@@ -1,28 +1,34 @@
 <script lang="ts" setup>
-import { Hct, hexFromArgb, TonalPalette } from '@material/material-color-utilities'
+import {
+  argbFromHex,
+  Hct,
+  hexFromArgb,
+  TonalPalette
+} from '@material/material-color-utilities'
 import type { HctModel } from '~/modules/theme/types'
 
-const { $dynamicScheme } = useNuxtApp()
-
-const sourceColorArgb = computed(() => {
-  return $dynamicScheme.value.sourceColorArgb
-})
+const modelValue = defineModel<string>('modelValue', { type: String, default: '' })
 
 const formModel = reactive<HctModel>({
-  hue: Hct.fromInt(sourceColorArgb.value).hue,
-  chroma: Hct.fromInt(sourceColorArgb.value).chroma,
-  tone: Hct.fromInt(sourceColorArgb.value).tone
+  hue: Hct.fromInt(argbFromHex(modelValue.value)).hue,
+  chroma: Hct.fromInt(argbFromHex(modelValue.value)).chroma,
+  tone: Hct.fromInt(argbFromHex(modelValue.value)).tone
 })
 
-const { sourceColor } = useThemeConfig()
-
+// todo: replace with a controlled watcher that has manual trigger
 watch(
-  formModel,
-  ({ hue, chroma, tone }: HctModel) => {
-    sourceColor.value = hexFromArgb(TonalPalette.fromHueAndChroma(hue, chroma).tone(tone))
+  modelValue,
+  (value: string) => {
+    formModel.hue = Hct.fromInt(argbFromHex(value)).hue
+    formModel.chroma = Hct.fromInt(argbFromHex(value)).chroma
+    formModel.tone = Hct.fromInt(argbFromHex(value)).tone
   },
-  { deep: true }
+  { immediate: true }
 )
+
+watch(formModel, ({ hue, chroma, tone }: HctModel) => {
+  modelValue.value = hexFromArgb(TonalPalette.fromHueAndChroma(hue, chroma).tone(tone))
+})
 
 const { hue: hueSpectrum, chroma: chromaSpectrum, tone: toneSpectrum } = useHCTSpectra()
 
@@ -37,7 +43,7 @@ const customHandle = ref<HTMLElement | null>(null)
   <div class="flex flex-col space-y-1.5">
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
       <label
-        class="mr-4 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
+        class="mr-2 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
         for="hue"
       >
         H
@@ -72,7 +78,7 @@ const customHandle = ref<HTMLElement | null>(null)
     </div>
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
       <label
-        class="mr-4 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
+        class="mr-2 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
         for="hue"
       >
         C
@@ -106,7 +112,7 @@ const customHandle = ref<HTMLElement | null>(null)
     </div>
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
       <label
-        class="mr-4 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
+        class="mr-2 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
         for="tone"
       >
         T

@@ -10,8 +10,8 @@ function toggle() {
 </script>
 
 <template>
-  <div class="relative w-full gap-x-2">
-    <div class="mb-2 flex flex-nowrap">
+  <div class="relative grid w-full gap-2">
+    <div class="my-2 flex flex-nowrap">
       <label
         class="flex w-full items-center text-title-md font-medium md:text-headline-sm"
         for="source-color"
@@ -31,7 +31,7 @@ function toggle() {
         type="text"
       />
       <InputSRGBHex v-model="modelValue" />
-      <div class="absolute right-0 top-0 w-[52px]">
+      <div class="absolute right-0 top-0 w-[48px]">
         <Button
           :title="`Show ${toggled ? 'less' : 'more'} details about the color`"
           class="w-full rounded-lg pl-3 pr-3"

@@ -5,7 +5,7 @@ const modelValue = defineModel<string | number>()
 <template>
   <input
     v-model="modelValue"
-    class="rounded-md bg-transparent px-3 py-2 text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-none active:bg-surface-container"
+    class="rounded-md bg-transparent px-3 py-2 text-on-surface-variant focus:outline-none"
     type="text"
   />
 </template>

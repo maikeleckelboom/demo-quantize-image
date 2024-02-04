@@ -8,17 +8,7 @@ const { sourceColor } = useThemeConfig()
   <div>
     <Button @click="isVisible = true">Open dialog</Button>
     <DialogComponent :open="isVisible" @close="isVisible = false">
-      <div class="grid gap-4">
-        <KeyColorModel />
-      </div>
-      <template #footer>
-        <Buttons>
-          <Button intent="outlined">
-            <icon name="ic:round-arrow-right-alt" />
-            Cancel
-          </Button>
-        </Buttons>
-      </template>
+      <KeyColorModel />
     </DialogComponent>
   </div>
 </template>

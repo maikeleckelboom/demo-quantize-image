@@ -94,7 +94,7 @@ function highlightColorCode(str: string) {
               v-html="highlightColorCode(value)"
             />
             <div
-              class="invisible absolute right-0 top-1/2 -translate-x-1/4 -translate-y-1/2 group-hover:visible"
+              class="invisible absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 group-hover:visible"
             >
               <SaveToClipboard :source="value" />
             </div>
