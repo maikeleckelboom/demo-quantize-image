@@ -25,7 +25,7 @@ function toggle() {
       <InputText
         id="source-color"
         v-model="modelValue"
-        class="h-[38px] w-full pl-[46px] uppercase"
+        class="h-[38px] w-full pl-[54px] uppercase"
         inputmode="text"
         label="Source Color"
         type="text"

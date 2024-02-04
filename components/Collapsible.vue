@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-const transitionDuration = ref<string>('300ms')
-const transitionDelay = ref<string>('50ms')
+const transitionDuration = ref<string>('400ms')
+const transitionDelay = ref<string>('150ms')
 const transitionTotalDuration = computed<number>(
   () => parseInt(unref(transitionDuration)) + parseInt(unref(transitionDelay))
 )
-const open = defineModel<boolean>('open', { type: Boolean, default: false })
+const modelValue = defineModel<boolean>('modelValue', { type: Boolean, default: false })
 </script>
 
 <template>
   <div
-    :aria-expanded="open"
+    :aria-expanded="modelValue"
     class="v-collapsible flex flex-col space-y-1.5"
     data-collapsible
   >
@@ -18,7 +18,7 @@ const open = defineModel<boolean>('open', { type: Boolean, default: false })
     </div>
     <Transition :duration="transitionTotalDuration" name="collapsible">
       <div
-        v-show="open"
+        v-show="modelValue"
         key="content"
         class="v-collapsible-content"
         data-collapsible-content

@@ -74,7 +74,7 @@ function highlightColorCode(str: string) {
       </div>
       <div
         v-else-if="filteredData"
-        :class="labels ? 'grid-cols-[60px,1fr]' : 'grid-cols-1'"
+        :class="labels ? 'grid-cols-[48px,1fr]' : 'grid-cols-1'"
         class="grid w-full"
       >
         <template v-for="(value, key) in filteredData" :key="key">

@@ -62,7 +62,7 @@ const customHandle = ref<HTMLElement | null>(null)
         <input
           id="hue"
           :value="Math.round(formModel.hue)"
-          class="w-[52px] min-w-0 rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-1 focus-visible:outline focus-visible:outline-on-surface active:bg-surface-container"
+          class="h-[38px] w-[52px] min-w-0 rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-1 focus-visible:outline focus-visible:outline-on-surface active:bg-surface-container"
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"
@@ -96,7 +96,7 @@ const customHandle = ref<HTMLElement | null>(null)
         <input
           id="chroma"
           :value="Math.round(formModel.chroma)"
-          class="w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-1 focus-visible:outline focus-visible:outline-on-surface active:bg-surface-container"
+          class="h-[38px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-1 focus-visible:outline focus-visible:outline-on-surface active:bg-surface-container"
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"
@@ -131,7 +131,7 @@ const customHandle = ref<HTMLElement | null>(null)
         <input
           id="tone"
           :value="Math.round(formModel.tone)"
-          class="w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-1 focus-visible:outline focus-visible:outline-on-surface active:bg-surface-container"
+          class="h-[38px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-1 focus-visible:outline focus-visible:outline-on-surface active:bg-surface-container"
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"
