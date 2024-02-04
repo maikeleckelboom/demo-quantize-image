@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const transitionDuration = ref<string>('300ms')
-const transitionDelay = ref<string>('100ms')
+const transitionDelay = ref<string>('50ms')
 const transitionTotalDuration = computed<number>(
   () => parseInt(unref(transitionDuration)) + parseInt(unref(transitionDelay))
 )
@@ -63,8 +63,8 @@ const open = defineModel<boolean>('open', { type: Boolean, default: false })
     opacity: 0;
   }
 
-  .collapsible-leave-active * {
-    transition-delay: calc(var(--transition-duration) + var(--transition-delay));
+  .collapsible-leave-active {
+    transition-delay: var(--transition-delay);
   }
 
   .collapsible-enter-active * {
