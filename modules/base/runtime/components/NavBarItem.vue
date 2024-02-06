@@ -46,13 +46,16 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
 
   .v-state-indicator {
     transform: scaleX(0) scaleY(0.95);
-    transform-origin: center top;
+    transform-origin: center;
+    opacity: 0.5;
+    transition: all 160ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &.router-link-active,
   &.router-link-exact-active {
     .v-state-indicator {
       transform: scaleX(1) scaleY(1);
+      opacity: 1;
     }
 
     .v-icon {
@@ -67,12 +70,13 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
   &:hover:not(.router-link-active):not(.router-link-exact-active) {
     .v-state-indicator {
       transform: scaleX(1) scaleY(1);
+      opacity: 1;
     }
   }
 
   &:focus-visible {
     .v-state-indicator {
-      background: rgb(var(--secondary-rgb) / 0.2);
+      background: rgb(var(--secondary-rgb) / 0.3);
       transform: scaleX(0.98) scaleY(0.98);
     }
   }
@@ -102,7 +106,6 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
   inset: 0;
   background: rgb(var(--secondary-container-rgb) / 0.38);
   grid-area: state-indicator;
-  transition: transform 140ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .v-icon {
@@ -147,6 +150,6 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
     bottom: 4px;
   }
 
-  @apply text-label-sm;
+  @apply text-label-sm leading-none;
 }
 </style>
