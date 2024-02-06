@@ -86,8 +86,8 @@ const stateClasses = computed(() => ({}))
   position: relative;
   z-index: 2;
   transition: font-weight 200ms ease-out;
-  @apply text-lable-sm;
-  
+  @apply text-label-sm;
+
   @screen md {
     @apply text-label-md;
   }
