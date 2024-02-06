@@ -21,7 +21,7 @@ const proxyValue = computed({
 </script>
 
 <template>
-  <div class="relative grid w-full justify-start">
+  <div class="relative flex w-full flex-col justify-start">
     <div class="my-2 flex flex-nowrap">
       <label
         :for="id"
@@ -35,7 +35,7 @@ const proxyValue = computed({
     <div>
       <ColorPreview :color="modelValue" />
     </div>
-    <div class="relative flex flex-row">
+    <div class="relative my-4 flex flex-row">
       <InputText
         :id="id"
         v-model="proxyValue"
