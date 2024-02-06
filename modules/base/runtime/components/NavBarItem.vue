@@ -140,6 +140,7 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
   align-items: center;
   justify-content: center;
   text-align: center;
+  text-transform: capitalize;
 
   &.v-large {
     --size: var(--large-size);
