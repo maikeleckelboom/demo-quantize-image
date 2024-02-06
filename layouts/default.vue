@@ -3,7 +3,7 @@ const { state, active } = storeToRefs(useNavStore())
 </script>
 
 <template>
-  <div class="">
+  <div class="pb-[80px]">
     <slot />
     <NavBar :active="active" :items="state" />
   </div>
