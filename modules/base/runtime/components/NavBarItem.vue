@@ -38,8 +38,16 @@ const stateClasses = computed(() => ({}))
 .v-nav-item {
   display: grid;
   place-items: center;
+  --_row-gap: 4px;
+
+  @screen md {
+    --_row-gap: 8px;
+  }
+
   grid-template-columns: [icon state-indicator label badge] auto;
-  grid-template-rows: [margin-top] 12px [icon state-indicator badge] 32px [row-gap] 8px [label] auto [margin-bottom] 12px;
+  grid-template-rows:
+    [margin-top] 12px [icon state-indicator badge] 32px [row-gap] var(--_row-gap)
+    [label] auto [margin-bottom] 12px;
 
   &.router-link-active,
   &.router-link-exact-active {
@@ -56,20 +64,16 @@ const stateClasses = computed(() => ({}))
     }
   }
 
-  &:hover {
+  &:hover:not(.router-link-active):not(.router-link-exact-active) {
     .v-state-indicator {
-      transform: scale(1);
-    }
-
-    .v-label-text {
-      font-weight: 700;
+      transform: scale(0.9);
     }
   }
 
   &:focus-visible {
     .v-state-indicator {
       background: rgb(var(--secondary-rgb) / 0.2);
-      transform: scale(1);
+      transform: scale(0.95);
     }
   }
 }
@@ -85,7 +89,7 @@ const stateClasses = computed(() => ({}))
   grid-area: label;
   position: relative;
   z-index: 2;
-  transition: font-weight 200ms ease-out;
+  transition: font-weight 300ms ease-out;
   @apply text-label-sm;
 
   @screen md {
@@ -99,9 +103,9 @@ const stateClasses = computed(() => ({}))
   border-radius: 16px;
   pointer-events: none;
   inset: 0;
-  background: rgb(var(--secondary-container-rgb) / 0.2);
+  background: rgb(var(--secondary-container-rgb) / 0.38);
   grid-area: state-indicator;
   transform: scale(0);
-  transition: transform 200ms ease-out;
+  transition: transform 240ms ease-out;
 }
 </style>

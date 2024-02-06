@@ -119,7 +119,7 @@ const transitionTotalDuration = computed<number>(
     }
   }
 
-  &:hover {
+  &:not(.v-mobile-or-tablet &):hover {
     --_background-color: rgb(var(--surface-tint-rgb) / 0.13);
     --_text-color: rgb(var(--on-surface-rgb));
     --_icon-color: rgb(var(--primary-rgb));

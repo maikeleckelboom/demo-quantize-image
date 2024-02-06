@@ -47,11 +47,6 @@ const selectedColor = computed({
 </script>
 
 <template>
-  <section class="sticky inset-0 top-0 mb-2 bg-surface">
-    <div class="mx-auto flex w-full max-w-2xl justify-center">
-      <SelectVariant />
-    </div>
-  </section>
   <div class="mx-auto w-full max-w-2xl p-4">
     <section class="mb-2">
       <div class="grid grid-cols-3 gap-4">
@@ -75,6 +70,11 @@ const selectedColor = computed({
             @click="setColor(key, hexFromArgb(palette.keyColor.toInt()))"
           />
         </div>
+      </div>
+    </section>
+    <section class="sticky inset-0 top-0 mb-2 bg-surface">
+      <div class="mx-auto flex w-full max-w-2xl justify-center">
+        <SelectVariant />
       </div>
     </section>
     <section class="mb-2">
