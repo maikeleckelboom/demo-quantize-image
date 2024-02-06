@@ -32,21 +32,20 @@ const proxyValue = computed({
         </slot>
       </label>
     </div>
+    <div>
+      <ColorPreview :color="modelValue" />
+    </div>
     <div class="relative flex flex-row">
       <InputText
         :id="id"
         v-model="proxyValue"
-        class="h-[38px] w-full pl-[48px] uppercase"
+        class="h-[38px] w-full uppercase"
         inputmode="text"
         label="Source Color"
         type="text"
       />
-      <InputSRGBHex v-model="proxyValue" />
       <div class="left-0 right-0 top-0">
         <Button aria-label="Paste from clipboard" class="rounded-lg" intent="text">
-          <!--
-                    <span class="whitespace-nowrap">Clipboard</span>
-          -->
           <template #icon>
             <Icon name="ic:outline-content-paste-go" />
           </template>

@@ -11,7 +11,7 @@ const isToggled = ref<boolean>(false)
 </script>
 
 <template>
-  <div class="grid grid-cols-1 grid-rows-[auto,1fr]">
+  <div class="grid">
     <InputColorField v-model="modelValue" v-model:toggled="isToggled" :label="label" />
     <Collapsible v-model="isToggled">
       <AdvancedColorData :color="hexFromArgb(modelValue)" :labels="false" />

@@ -32,7 +32,7 @@ const colorValue = computed({
   <DialogBackdrop>
     <div ref="root" class="v-dialog-container">
       <DialogComponent open>
-        <KeyColorModel v-model="colorValue" :label="keyColor" />
+        <KeyColorModel v-model="colorValue" :label="sentenceCase(keyColor)" />
       </DialogComponent>
     </div>
   </DialogBackdrop>
