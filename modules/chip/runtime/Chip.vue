@@ -30,7 +30,6 @@ const transitionTotalDuration = computed<number>(
       selected
     }"
     :data-variant="variant"
-    :data-with-icon="true"
     class="chip"
   >
     <span>

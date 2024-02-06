@@ -7,9 +7,7 @@ const { contrastLevel, isDark } = useThemeConfig()
 <template>
   <div class="mx-auto w-full max-w-2xl p-4">
     <h1>Settings</h1>
-
     <form>
-      <!-- Color Mode -->
       <fieldset>
         <legend>Color Mode</legend>
         <div class="grid grid-cols-[100px,1fr]">
@@ -40,12 +38,7 @@ const { contrastLevel, isDark } = useThemeConfig()
             <label for="labelled">Show Labels</label>
           </div>
           <div class="flex justify-center">
-            <input
-              id="labelled"
-              v-model="isLabelled"
-              type="checkbox"
-              @change="toggleLabelled"
-            />
+            <input id="labelled" v-model="isLabelled" type="checkbox" @change="toggleLabelled" />
           </div>
         </div>
         <div class="grid grid-cols-[140px,1fr]">

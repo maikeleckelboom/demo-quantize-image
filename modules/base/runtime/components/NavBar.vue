@@ -51,7 +51,7 @@ const itemsCount = computed(() => props.items.length)
 .v-nav-bar-container {
   display: grid;
   grid-template-columns: repeat(var(--_items-count), 1fr);
-  background-color: rgb(var(--surface-dim-rgb));
+  background-color: rgb(var(--surface-container-rgb));
   column-gap: 8px;
   max-width: 600px;
   margin-inline: auto;

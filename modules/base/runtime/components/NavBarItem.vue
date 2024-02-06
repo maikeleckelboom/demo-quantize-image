@@ -36,11 +36,7 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
 
 <style lang="postcss" scoped>
 .v-nav-item {
-  --_row-gap: 4px;
-
-  @screen md {
-    --_row-gap: 8px;
-  }
+  --_row-gap: 8px;
 
   display: grid;
   place-items: center;
@@ -97,10 +93,6 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
   z-index: 2;
   transition: font-weight 240ms ease-out;
   @apply text-label-sm;
-
-  @screen md {
-    @apply text-label-md;
-  }
 }
 
 .v-state-indicator {

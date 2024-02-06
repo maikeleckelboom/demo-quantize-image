@@ -5,28 +5,15 @@ const useNavStore = defineStore('nav', () => {
     {
       label: 'Home',
       path: '/',
-      icon: ['ic:outline-home-max', 'ic:baseline-home-max'],
-      badge: {
-        label: '99+',
-        type: 'large'
-      }
+      icon: ['ic:outline-home-max', 'ic:baseline-home-max']
     },
     {
       label: 'Favorites',
       path: '/favorites',
       icon: ['ic:baseline-favorite-border', 'ic:baseline-favorite'],
       badge: {
-        label: 'new',
+        label: '999',
         type: 'large'
-      }
-    },
-    {
-      label: 'Dialog',
-      path: '/dialog',
-      icon: ['ic:outline-chat', 'ic:baseline-chat'],
-      badge: {
-        label: 3,
-        type: 'small'
       }
     },
     {
@@ -42,9 +29,7 @@ const useNavStore = defineStore('nav', () => {
 
   const router = useRouter()
 
-  const active = computed(() =>
-    state.value.find((item) => item.path === router.currentRoute.value.path)
-  )
+  const active = computed(() => state.value.find((item) => item.path === router.currentRoute.value.path))
 
   const isLabelled = ref<boolean>(false)
 

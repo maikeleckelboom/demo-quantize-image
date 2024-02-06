@@ -1,7 +1,9 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div></div>
+  <span class="v-ripple">
+    <slot></slot>
+  </span>
 </template>
 
 <style scoped></style>

@@ -39,7 +39,7 @@ onClickOutside(dialogRef, () => {
 </script>
 
 <template>
-  <dialog ref="dialogRef" :class="dialogVariant({ open })" :open="open">
+  <dialog ref="dialogRef" :class="dialogVariant({ open })" open>
     <article class="scrollbar relative size-full overflow-y-auto overflow-x-clip">
       <slot></slot>
     </article>
