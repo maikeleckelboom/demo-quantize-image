@@ -24,7 +24,7 @@ const initialColor = inject('initialColor', 0)
 
 <template>
   <div class="relative flex w-full flex-col justify-start">
-    <div class="my-2 flex flex-nowrap">
+    <div class="mb-4 mt-2 flex flex-nowrap">
       <label
         :for="id"
         class="flex w-full items-center text-title-lg font-medium capitalize md:text-headline-md"
@@ -38,7 +38,7 @@ const initialColor = inject('initialColor', 0)
       <ColorPreview :color="modelValue">
         <div
           :style="{ backgroundColor: hexFromArgb(initialColor) }"
-          class="absolute bottom-3 right-3 size-24 rounded-md"
+          class="absolute bottom-3 right-3 size-14 rounded-md md:size-24"
         />
       </ColorPreview>
     </div>
