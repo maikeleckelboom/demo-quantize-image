@@ -33,11 +33,11 @@ const { contrastLevel, isDark } = useThemeConfig()
         </div>
       </fieldset>
       <!-- Navigation Bar -->
-      <fieldset>
+      <fieldset class="flex flex-col gap-8">
         <legend>Navigation Bar</legend>
         <div class="grid grid-cols-[100px,1fr]">
           <div>
-            <label for="labelled">Labelled</label>
+            <label for="labelled">Show Labels</label>
           </div>
           <div class="flex justify-center">
             <input
@@ -46,6 +46,14 @@ const { contrastLevel, isDark } = useThemeConfig()
               type="checkbox"
               @change="toggleLabelled"
             />
+          </div>
+        </div>
+        <div class="grid grid-cols-[140px,1fr]">
+          <div>
+            <label for="">Background Color</label>
+          </div>
+          <div class="flex justify-center">
+            <!-- -->
           </div>
         </div>
       </fieldset>

@@ -143,7 +143,7 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
     --radius: var(--large-size-radius);
     width: calc(var(--size) * 1.75);
     height: var(--size);
-    left: 10px;
+    left: 12px;
     bottom: 4px;
   }
 
