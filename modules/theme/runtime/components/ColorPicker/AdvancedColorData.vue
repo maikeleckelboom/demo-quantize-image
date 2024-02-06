@@ -65,7 +65,7 @@ const filteredData = computed(() => {
 </script>
 
 <template>
-  <div class="relative flex h-[214px] w-full flex-col">
+  <div class="relative flex h-[238px] w-full flex-col">
     <div v-if="error" class="text-error">{{ error }}</div>
     <Transition v-else mode="out-in" name="fade">
       <div v-if="isLoading" class="grid size-full place-items-center">
@@ -88,7 +88,7 @@ const filteredData = computed(() => {
             class="group relative flex size-full rounded-md pr-12 hover:bg-surface-bright/50"
           >
             <div
-              :class="key === 'name' ? 'text-title-md font-medium text-primary' : ''"
+              :class="key === 'name' ? 'text-title-lg font-medium text-primary' : ''"
               class="w-full text-nowrap p-2"
               v-html="highlightColorCode(value)"
             />

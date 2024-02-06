@@ -18,6 +18,8 @@ const proxyValue = computed({
     modelValue.value = argbFromHex(value)
   }
 })
+
+const initialColor = inject('initialColor', 0)
 </script>
 
 <template>
@@ -33,7 +35,12 @@ const proxyValue = computed({
       </label>
     </div>
     <div>
-      <ColorPreview :color="modelValue" />
+      <ColorPreview :color="modelValue">
+        <div
+          :style="{ backgroundColor: hexFromArgb(initialColor) }"
+          class="absolute bottom-3 right-3 size-24 rounded-md"
+        />
+      </ColorPreview>
     </div>
     <div class="relative my-4 flex flex-row">
       <InputText

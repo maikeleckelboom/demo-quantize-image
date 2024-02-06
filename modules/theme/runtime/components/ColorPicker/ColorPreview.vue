@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <div
     :style="{ background: hexFromArgb(color) }"
-    class="aspect-video size-full rounded-md"
+    class="relative aspect-video size-full rounded-md"
   >
     <slot />
   </div>
