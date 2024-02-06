@@ -36,7 +36,7 @@ const proxyValue = computed({
       <InputText
         :id="id"
         v-model="proxyValue"
-        class="h-[34px] w-full pl-[54px] uppercase"
+        class="h-[38px] w-full pl-[54px] uppercase"
         inputmode="text"
         label="Source Color"
         type="text"
