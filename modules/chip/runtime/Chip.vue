@@ -79,7 +79,6 @@ const transitionTotalDuration = computed<number>(
   place-content: start;
   width: fit-content;
   @apply text-label-lg;
-  flex-shrink: 0;
 
   transition:
     grid-template-columns var(--_transition-duration) ease,
@@ -100,7 +99,6 @@ const transitionTotalDuration = computed<number>(
     transition-property: transform, opacity;
     transition-timing-function: ease-out;
     transition-delay: 0ms;
-    flex-shrink: 0;
   }
 
   &.selected {

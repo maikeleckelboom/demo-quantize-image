@@ -86,7 +86,11 @@ const stateClasses = computed(() => ({}))
   position: relative;
   z-index: 2;
   transition: font-weight 200ms ease-out;
-  @apply text-label-md;
+  @apply text-lable-sm;
+  
+  @screen md {
+    @apply text-label-md;
+  }
 }
 
 .v-state-indicator {
