@@ -45,7 +45,7 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
     [label] auto [margin-bottom] 16px;
 
   .v-state-indicator {
-    transform: scaleX(0) scaleY(0.95);
+    transform: scaleX(0);
     transform-origin: center;
     opacity: 0.5;
     transition: all 160ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -54,7 +54,7 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
   &.router-link-active,
   &.router-link-exact-active {
     .v-state-indicator {
-      transform: scaleX(1) scaleY(1);
+      transform: scaleX(1);
       opacity: 1;
     }
 
@@ -69,7 +69,7 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
 
   &:hover:not(.router-link-active):not(.router-link-exact-active) {
     .v-state-indicator {
-      transform: scaleX(1) scaleY(1);
+      transform: scaleX(1);
       opacity: 1;
     }
   }
@@ -77,7 +77,7 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
   &:focus-visible {
     .v-state-indicator {
       background: rgb(var(--secondary-rgb) / 0.3);
-      transform: scaleX(0.98) scaleY(0.98);
+      transform: scaleX(0.98);
     }
   }
 
