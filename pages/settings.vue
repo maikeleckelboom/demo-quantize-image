@@ -5,7 +5,7 @@ const { contrastLevel, isDark } = useThemeConfig()
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-2xl p-4">
+  <div class="mx-auto w-full max-w-xl p-4">
     <h1>Settings</h1>
     <form>
       <fieldset>

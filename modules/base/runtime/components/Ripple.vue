@@ -23,7 +23,7 @@ const textContent = `
         @keyframes ripple {
             to {
                 opacity: 0;
-                transform: scale(2);
+                transform: scale(10);
             }
         }
     `
@@ -36,6 +36,9 @@ function createRipple(diameter: number, x: number, y: number) {
   const ripple = document.createElement('div')
   ripple.style.left = `${x - diameter / 2}px`
   ripple.style.top = `${y - diameter / 2}px`
+  const duration = Math.sqrt(diameter) * 100
+  const durationBasedOnDiameter = Math.min(duration, 1000)
+  ripple.style.setProperty('--ripple-duration', `${durationBasedOnDiameter}ms`)
   ripple.style.setProperty('--ripple-diameter', `${diameter}px`)
   ripple.classList.add('ripple')
   return ripple

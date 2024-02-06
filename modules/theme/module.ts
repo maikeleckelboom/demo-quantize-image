@@ -31,23 +31,6 @@ export default defineNuxtModule<ThemeModuleOptions>({
   hooks: {
     'imports:dirs'(dirs) {
       dirs.push(resolve('./runtime/composables'), resolve('./runtime/utils'))
-    },
-    'pages:extend'(pages) {
-      pages.push({
-        name: 'Theme',
-        path: '/modules/theme',
-        file: resolve(`${runtimeDir}/pages/index.vue`)
-      })
-      pages.push({
-        name: 'Colors',
-        path: '/modules/theme/colors',
-        file: resolve(`${runtimeDir}/pages/colors.vue`)
-      })
-      pages.push({
-        name: 'Typography',
-        path: '/modules/theme/typography',
-        file: resolve(`${runtimeDir}/pages/typography.vue`)
-      })
     }
   },
   setup: async (options: ThemeModuleOptions, nuxt) => {
@@ -55,9 +38,7 @@ export default defineNuxtModule<ThemeModuleOptions>({
       nuxt.options.appConfig.theme = defu(nuxt.options.appConfig?.theme || {}, options)
     */
     addPlugin({ src: resolve(`${runtimeDir}/plugin.ts`), mode: 'all' })
-    /*
-        addPlugin({ src: resolve(`${runtimeDir}/ripple.ts`) })
-    */
+
     await addComponentsDir({
       pathPrefix: false,
       path: resolve(`${runtimeDir}/components`)

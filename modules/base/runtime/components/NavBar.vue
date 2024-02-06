@@ -6,14 +6,12 @@ const props = withDefaults(
   defineProps<{
     items?: T[]
     active?: T | null
-    setActive?: (item: T) => void
     labeled?: boolean
   }>(),
   {
     active: null,
     labeled: true,
-    items: () => [],
-    setActive: () => {}
+    items: () => []
   }
 )
 
@@ -53,7 +51,7 @@ const itemsCount = computed(() => props.items.length)
   grid-template-columns: repeat(var(--_items-count), 1fr);
   background-color: rgb(var(--surface-container-rgb));
   column-gap: 8px;
-  max-width: 600px;
+  @apply max-w-xl;
   margin-inline: auto;
   height: 100%;
 

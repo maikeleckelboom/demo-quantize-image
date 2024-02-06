@@ -5,16 +5,11 @@ const transitionTotalDuration = computed<number>(
   () => parseInt(unref(transitionDuration)) + parseInt(unref(transitionDelay))
 )
 const modelValue = defineModel<boolean>('modelValue', { type: Boolean, default: false })
-
 const id = useId()
 </script>
 
 <template>
-  <div
-    :id="id"
-    :aria-expanded="modelValue"
-    class="v-collapsible flex flex-col space-y-1.5"
-  >
+  <div :id="id" :aria-expanded="modelValue" class="v-collapsible flex flex-col space-y-1.5">
     <div class="v-collapsible-trigger">
       <slot name="trigger" />
     </div>
@@ -30,11 +25,11 @@ const id = useId()
 
 <style scoped>
 .v-collapsible {
-  --transition-duration: v-bind(transitionDuration);
-  --transition-delay: v-bind(transitionDelay);
+  --_duration: v-bind(transitionDuration);
+  --_delay: v-bind(transitionDelay);
 
   transition-property: grid-template-rows;
-  transition-duration: var(--transition-duration);
+  transition-duration: var(--_duration);
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
   display: grid;
@@ -48,7 +43,7 @@ const id = useId()
   }
 
   &[aria-expanded='false'] {
-    transition-delay: var(--transition-delay);
+    transition-delay: var(--_delay);
   }
 
   .v-collapsible-content {
@@ -64,7 +59,7 @@ const id = useId()
 
   .collapsible-enter-active .v-collapsible-content-inner,
   .collapsible-leave-active .v-collapsible-content-inner {
-    transition-duration: var(--transition-duration);
+    transition-duration: var(--_duration);
     transition-property: opacity, transform;
   }
 

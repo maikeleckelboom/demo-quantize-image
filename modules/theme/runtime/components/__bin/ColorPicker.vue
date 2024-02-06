@@ -60,21 +60,10 @@ const customHandle = ref<HTMLElement>()
 <template>
   <div class="flex flex-col space-y-1.5">
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
-      <label
-        class="mr-2 flex items-center p-2 text-label-md leading-none text-on-surface-variant"
-        for="hue"
-      >
+      <label class="mr-2 flex items-center p-2 text-label-md leading-none text-on-surface-variant" for="hue">
         H
       </label>
-      <InputRangeSlider
-        v-model="formModel.hue"
-        class="color-input-range"
-        contained="true"
-        help-text="The type of color, such as red, blue, or green"
-        label="Hue"
-        max="360"
-        min="0"
-      >
+      <InputRangeSlider v-model="formModel.hue" class="color-input-range" contained="true" max="360" min="0">
         <template #handle>
           <div ref="customHandle" class="custom-handle" />
         </template>
@@ -97,17 +86,13 @@ const customHandle = ref<HTMLElement>()
       </div>
     </div>
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
-      <label
-        class="mr-2 flex items-center p-2 text-label-md leading-none text-on-surface-variant"
-        for="hue"
-      >
+      <label class="mr-2 flex items-center p-2 text-label-md leading-none text-on-surface-variant" for="hue">
         C
       </label>
       <InputRangeSlider
         v-model.number="formModel.chroma"
         class="color-input-range"
         contained="true"
-        label="Chroma"
         max="150"
         min="0"
       >
@@ -131,20 +116,15 @@ const customHandle = ref<HTMLElement>()
       </div>
     </div>
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
-      <label
-        class="mr-2 flex items-center p-2 text-label-md leading-none text-on-surface-variant"
-        for="tone"
-      >
+      <label class="mr-2 flex items-center p-2 text-label-md leading-none text-on-surface-variant" for="tone">
         T
       </label>
       <InputRangeSlider
         v-model.number="formModel.tone"
         class="color-input-range"
         contained="true"
-        decimals="0"
         max="100"
         min="0"
-        round="0"
       >
         <template #handle>
           <div ref="customHandle" class="custom-handle" />

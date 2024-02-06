@@ -14,7 +14,7 @@ const isToggled = ref<boolean>(false)
   <div class="grid">
     <InputColorField v-model="modelValue" v-model:toggled="isToggled" :label="label" />
     <Collapsible v-model="isToggled">
-      <AdvancedColorData :color="hexFromArgb(modelValue)" :labels="false" />
+      <ColorDataFetcher :color="hexFromArgb(modelValue)" :labels="false" />
     </Collapsible>
     <ColorPicker v-model="modelValue" />
   </div>

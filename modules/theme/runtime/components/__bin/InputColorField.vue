@@ -58,7 +58,6 @@ const initialColor = inject('initialColor', 0)
           </template>
         </Button>
       </div>
-      <EyeDropper v-model="proxyValue" />
       <Button
         :title="`Show ${toggled ? 'less' : 'more'} details about the color`"
         class="rounded-lg pl-3 pr-3"

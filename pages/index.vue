@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { TonalPalette } from '@material/material-color-utilities'
-import { openColorPicker } from '~/modules/dialog/runtime/dialogs'
+import { openColorPicker } from '~/modules/dialog/runtime/factory'
 
 const { $dynamicScheme } = useNuxtApp()
 
@@ -49,15 +49,15 @@ async function onOpenColorPicker(keyColor: string, initialColor: number) {
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-2xl p-4">
+  <div class="mx-auto w-full max-w-xl p-4">
     <section class="mb-2"></section>
   </div>
   <!--  <section class="sticky inset-0 top-0 z-10 mb-2 bg-surface">
-      <div class="mx-auto flex w-full max-w-2xl justify-center">
+      <div class="mx-auto flex w-full max-w-xl justify-center">
         <SelectVariant />
       </div>
     </section>-->
-  <div class="mx-auto w-full max-w-2xl p-4">
+  <div class="mx-auto w-full max-w-xl p-4">
     <div class="flex flex-col gap-4">
       <div>
         <h1 class="mb-2 overflow-hidden overflow-ellipsis text-nowrap capitalize">Source Color</h1>

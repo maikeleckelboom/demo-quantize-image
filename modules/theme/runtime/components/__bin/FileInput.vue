@@ -4,7 +4,7 @@ import Button from '~/modules/button/runtime/components/Button.vue'
 interface Props {
   file?: File | null
   multiple?: boolean
-  accept?: string | false
+  accept?: string | 'false'
   capture?: string
   reset?: boolean
   directory?: boolean
@@ -77,9 +77,7 @@ function onReset() {
       <button class="outlined-button" type="button" @click="() => open()">
         {{ file ? 'Change image' : 'Choose an image' }}
       </button>
-      <button v-if="file" class="outlined-button" type="button" @click="onReset()">
-        Reset
-      </button>
+      <button v-if="file" class="outlined-button" type="button" @click="onReset()">Reset</button>
     </div>
     <template v-if="file">
       <FileInputPreview :file="file" />
