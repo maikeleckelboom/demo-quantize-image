@@ -38,7 +38,7 @@ const initialColor = inject('initialColor', 0)
       <ColorPreview :color="modelValue">
         <div
           :style="{ backgroundColor: hexFromArgb(initialColor) }"
-          class="absolute bottom-3 right-3 aspect-video h-14 rounded-md md:h-24"
+          class="absolute bottom-3 right-3 hidden aspect-video h-14 rounded-md md:h-24"
         />
       </ColorPreview>
     </div>
