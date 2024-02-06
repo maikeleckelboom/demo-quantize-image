@@ -7,9 +7,6 @@ const { isMobileOrTablet, isMobile, isTablet, isDesktop } = useDevice()
 <template>
   <div
     :class="{
-      'v-mobile': isMobile,
-      'v-tablet': isTablet,
-      'v-desktop': isDesktop,
       'v-mobile-or-tablet': isMobileOrTablet
     }"
     class="pb-[80px]"
@@ -17,7 +14,12 @@ const { isMobileOrTablet, isMobile, isTablet, isDesktop } = useDevice()
     <slot />
     <div class="fixed inset-x-0 bottom-24">
       <div class="pointer-events-none mx-auto flex size-full max-w-2xl justify-end px-4">
-        <Button class="pointer-events-auto" color="primary" intent="extended-fab">
+        <Button
+          class="pointer-events-auto"
+          color="primary"
+          intent="extended-fab"
+          size="md"
+        >
           <Icon name="ic:round-add" />
         </Button>
       </div>
