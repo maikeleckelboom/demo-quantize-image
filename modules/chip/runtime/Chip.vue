@@ -54,7 +54,7 @@ const transitionTotalDuration = computed<number>(
   --_text-color: rgb(var(--on-surface-rgb));
 
   --_height: 32px;
-  --_border-radius: 8px;
+  --_border-radius: 6px;
   --_icon-size: 18px;
   --_padding: 16px;
   --_padding-with-icon: 8px;
@@ -65,8 +65,9 @@ const transitionTotalDuration = computed<number>(
   border-radius: var(--_border-radius);
   background-color: var(--_background-color);
   color: var(--_text-color);
-  border: solid 1px transparent;
+
   outline: 1px solid var(--_outline-color);
+
   padding-block: 0;
   text-align: center;
   user-select: none;

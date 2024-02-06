@@ -47,7 +47,7 @@ const selectedColor = computed({
 </script>
 
 <template>
-  <section class="sticky inset-0 top-0 mb-2 bg-surface">
+  <section class="sticky inset-0 top-0 z-10 mb-2 bg-surface">
     <div class="mx-auto flex w-full max-w-2xl justify-center">
       <SelectVariant />
     </div>
