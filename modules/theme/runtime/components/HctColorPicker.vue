@@ -83,7 +83,7 @@ const customHandle = ref<HTMLElement>()
           <SliderTrack :style="hueSpectrum" class="size-full" fill="false" />
         </template>
       </InputRangeSlider>
-      <div class="ml-2 flex">
+      <div class="flex">
         <input
           id="hue"
           :value="Math.round(formModel.hue)"
@@ -119,7 +119,7 @@ const customHandle = ref<HTMLElement>()
           <SliderTrack :style="chromaSpectrum" class="slider-track" fill="false" />
         </template>
       </InputRangeSlider>
-      <div class="ml-2 flex">
+      <div class="flex">
         <input
           id="chroma"
           :value="Math.round(formModel.chroma)"
@@ -154,7 +154,7 @@ const customHandle = ref<HTMLElement>()
           <SliderTrack :style="toneSpectrum" class="slider-track" fill="false" />
         </template>
       </InputRangeSlider>
-      <div class="ml-2 flex">
+      <div class="flex">
         <input
           id="tone"
           :value="Math.round(formModel.tone)"

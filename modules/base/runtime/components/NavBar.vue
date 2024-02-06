@@ -55,6 +55,6 @@ const itemsCount = computed(() => props.items.length)
   height: 100%;
   box-shadow: 0 4px 5px -3px rgb(var(--error-container-rgb) / 0.3);
 
-  @appy max-w-expanded mx-auto relative;
+  @appy max-w-2xl mx-auto relative;
 }
 </style>

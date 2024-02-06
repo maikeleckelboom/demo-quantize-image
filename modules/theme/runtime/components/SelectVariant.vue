@@ -44,7 +44,7 @@ const setVariant = async (v: Variant) => {
 </script>
 
 <template>
-  <div ref="root" class="scrollbar flex w-full flex-row gap-3 overflow-x-auto p-1 pb-2">
+  <div ref="root" class="scrollbar flex w-fit flex-row gap-3 overflow-x-auto p-2">
     <Chip
       v-for="variant in variants"
       :key="variant.value"

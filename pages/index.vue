@@ -47,10 +47,12 @@ const selectedColor = computed({
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-2xl p-12">
-    <section class="mb-2">
+  <section class="sticky inset-0 top-0 mb-2 bg-surface">
+    <div class="mx-auto flex w-full max-w-2xl justify-center">
       <SelectVariant />
-    </section>
+    </div>
+  </section>
+  <div class="mx-auto w-full max-w-2xl p-8">
     <section class="mb-2">
       <div class="grid grid-cols-3 gap-4">
         <div class="col-span-3 flex h-fit flex-col">
