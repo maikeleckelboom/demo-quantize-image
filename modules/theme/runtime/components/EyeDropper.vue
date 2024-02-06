@@ -9,13 +9,8 @@ whenever(sRGBHex, () => {
 </script>
 
 <template>
-  <Button
-    class="h-[38px] w-[38px] rounded-md border-none"
-    intent="text"
-    size="sm"
-    @click="open"
-  >
-    <Icon class="size-4" name="ic:round-colorize" />
+  <Button class="rounded-lg" intent="text" @click="open">
+    <Icon class="h-3 w-3" name="ic:baseline-colorize" />
   </Button>
 </template>
 

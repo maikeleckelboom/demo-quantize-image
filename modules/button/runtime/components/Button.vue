@@ -165,9 +165,9 @@ const buttonClasses = computed(() => twMerge(variants(props)))
 
 <template>
   <button :class="buttonClasses">
+    <slot />
     <slot name="icon">
       <Icon v-if="icon" :name="icon" />
     </slot>
-    <slot />
   </button>
 </template>

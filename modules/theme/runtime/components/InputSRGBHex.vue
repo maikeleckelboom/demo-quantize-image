@@ -3,31 +3,38 @@ const modelValue = defineModel<string>()
 </script>
 
 <template>
-  <div class="flex flex-col items-center">
+  <div class="v-input-srgb-hex flex flex-col items-center">
     <input
       v-model="modelValue"
-      class="peer absolute bottom-0 left-0 top-0 rounded-md border-none opacity-0"
+      class="peer absolute bottom-0 left-[2px] top-[2px] border-none opacity-0"
       type="color"
     />
     <div
       :style="{ backgroundColor: modelValue }"
-      class="duration-125 pointer-events-none absolute bottom-0 left-0 top-0 h-[34px] w-[34px] rounded-md"
+      class="duration-125 v-input-color-swatch pointer-events-none absolute bottom-[2px] left-[2px] top-[2px] h-[34px] w-[34px]"
     />
   </div>
 </template>
 
 <style>
-input[type='color'] {
-  --_s: 34px;
-  --_r: 8px;
-  position: absolute;
-  width: var(--_s);
-  height: var(--_s);
+.v-input-srgb-hex {
+  --_radius: 4px;
+  --_size: 38px;
 
-  &::-webkit-color-swatch-wrapper {
-    border-radius: var(--_r);
-    border: none;
-    padding: 0;
+  .v-input-color-swatch {
+    border-radius: var(--_radius);
+  }
+
+  input[type='color'] {
+    position: absolute;
+    width: var(--_size);
+    height: var(--_size);
+
+    &::-webkit-color-swatch-wrapper {
+      border-radius: var(--_radius);
+      border: none;
+      padding: 0;
+    }
   }
 }
 </style>

@@ -21,14 +21,14 @@ const proxyValue = computed({
 </script>
 
 <template>
-  <div class="relative grid w-full gap-2">
+  <div class="relative grid w-full justify-start">
     <div class="my-2 flex flex-nowrap">
       <label
         :for="id"
-        class="flex w-full items-center text-title-md font-medium capitalize md:text-headline-sm"
+        class="flex w-full items-center text-title-lg font-medium capitalize md:text-headline-md"
       >
         <slot name="label">
-          {{ label || 'Source color' }}
+          {{ label || 'Untitled Color' }}
         </slot>
       </label>
     </div>
@@ -36,24 +36,34 @@ const proxyValue = computed({
       <InputText
         :id="id"
         v-model="proxyValue"
-        class="h-[38px] w-full pl-[54px] uppercase"
+        class="h-[38px] w-full pl-[48px] uppercase"
         inputmode="text"
         label="Source Color"
         type="text"
       />
       <InputSRGBHex v-model="proxyValue" />
-      <div class="absolute right-0 top-0 w-[48px]">
-        <Button
-          :title="`Show ${toggled ? 'less' : 'more'} details about the color`"
-          class="w-full rounded-lg pl-3 pr-3"
-          intent="text"
-          size="sm"
-          @click="toggle"
-        >
-          <Icon v-if="toggled" class="h-3 w-3" name="ic:baseline-unfold-less" />
-          <Icon v-else class="h-3 w-3" name="ic:baseline-unfold-more" />
+      <div class="left-0 right-0 top-0">
+        <Button aria-label="Paste from clipboard" class="rounded-lg" intent="text">
+          <!--
+                    <span class="whitespace-nowrap">Clipboard</span>
+          -->
+          <template #icon>
+            <Icon name="ic:outline-content-paste-go" />
+          </template>
         </Button>
       </div>
+      <EyeDropper v-model="proxyValue" />
+      <Button
+        :title="`Show ${toggled ? 'less' : 'more'} details about the color`"
+        class="rounded-lg pl-3 pr-3"
+        intent="text"
+        size="sm"
+        @click="toggle"
+      >
+        <span class="whitespace-nowrap">Details</span>
+        <Icon v-if="toggled" class="h-3 w-3" name="ic:baseline-unfold-less" />
+        <Icon v-else class="h-3 w-3" name="ic:baseline-unfold-more" />
+      </Button>
     </div>
   </div>
 </template>
