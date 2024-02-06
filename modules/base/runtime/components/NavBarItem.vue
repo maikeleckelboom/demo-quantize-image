@@ -24,8 +24,7 @@ const target = ref<HTMLElement>()
 
 <template>
   <NuxtLink ref="itemRef" :to="item.path" class="v-nav-item">
-    <Ripple :target="target" />
-    <span ref="target" class="v-state-indicator" />
+    <span class="v-state-indicator" />
     <Transition>
       <Icon v-if="active" :name="activeIcon" class="v-icon" />
       <Icon v-else :name="baseIcon" class="v-icon" />
@@ -47,6 +46,9 @@ const target = ref<HTMLElement>()
   grid-template-rows:
     [margin-top] 12px [icon state-indicator badge] 32px [row-gap] var(--_row-gap)
     [label] auto [margin-bottom] 16px;
+
+  position: relative;
+  overflow: hidden;
 
   .v-state-indicator {
     transform: scaleX(0);
@@ -114,6 +116,7 @@ const target = ref<HTMLElement>()
   width: 24px;
   z-index: 2;
   transition: color 140ms ease-out;
+  pointer-events: none;
 }
 
 .v-badge {
