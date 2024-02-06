@@ -7,14 +7,16 @@ const toggled = defineModel<boolean>('toggled', { type: Boolean, default: false 
 function toggle() {
   toggled.value = !toggled.value
 }
+
+const id = useId()
 </script>
 
 <template>
   <div class="relative grid w-full gap-2">
     <div class="my-2 flex flex-nowrap">
       <label
+        :for="id"
         class="flex w-full items-center text-title-md font-medium capitalize md:text-headline-sm"
-        for="source-color"
       >
         <slot name="label">
           {{ label || 'Source color' }}
@@ -23,9 +25,9 @@ function toggle() {
     </div>
     <div class="relative flex flex-row">
       <InputText
-        id="source-color"
+        :id="id"
         v-model="modelValue"
-        class="h-[38px] w-full pl-[54px] uppercase"
+        class="h-[34px] w-full pl-[54px] uppercase"
         inputmode="text"
         label="Source Color"
         type="text"

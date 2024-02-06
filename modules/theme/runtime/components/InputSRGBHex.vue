@@ -11,15 +11,15 @@ const modelValue = defineModel<string>()
     />
     <div
       :style="{ backgroundColor: modelValue }"
-      class="duration-125 pointer-events-none absolute bottom-0 left-[4px] top-[0px] h-[34px] w-[34px] rounded-md outline outline-offset-2 outline-transparent transition-all peer-hover:outline-2 peer-hover:outline-primary/75"
+      class="duration-125 pointer-events-none absolute bottom-0 left-0 top-0 h-[34px] w-[34px] rounded-md"
     />
   </div>
 </template>
 
-<style lang="postcss">
+<style>
 input[type='color'] {
   --_s: 34px;
-  --_r: 5px;
+  --_r: 8px;
   position: absolute;
   width: var(--_s);
   height: var(--_s);

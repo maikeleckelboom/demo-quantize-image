@@ -44,14 +44,13 @@ const setVariant = async (v: Variant) => {
 </script>
 
 <template>
-  <div ref="root" class="scrollbar flex flex-row gap-3 overflow-x-auto px-2 py-6">
+  <div ref="root" class="scrollbar flex w-full flex-row gap-3 overflow-x-auto p-1 pb-2">
     <Chip
       v-for="variant in variants"
       :key="variant.value"
       :ref="chips.set"
       :aria-pressed="variant.active"
       :selected="variant.active"
-      selected-icon="ic:round-check"
       @click="setVariant(variant.value)"
     >
       {{ variant.text }}

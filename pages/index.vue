@@ -1,20 +1,24 @@
 <script lang="ts" setup>
-import KeyColorModel from '~/modules/theme/runtime/components/KeyColorModel.vue'
-import {
-  argbFromHex,
-  hexFromArgb,
-  TonalPalette
-} from '@material/material-color-utilities'
+import { hexFromArgb, TonalPalette } from '@material/material-color-utilities'
 
 const { $dynamicScheme } = useNuxtApp()
-const { sourceColor } = useThemeConfig()
+const { sourceColor, contrastLevel } = useThemeConfig()
 
-function formatKey(key: string) {
-  return key
-    .split(/(?=[A-Z])/)
-    .map((s) => s.toLowerCase())
-    .join(' ')
-}
+const palettes = computed(() =>
+  Object.keys($dynamicScheme.value).reduce(
+    (acc, key) => {
+      const palette = $dynamicScheme.value[key as keyof typeof $dynamicScheme.value]
+      if (palette instanceof TonalPalette) {
+        acc.push({
+          key,
+          palette
+        })
+      }
+      return acc
+    },
+    [] as { key: string; palette: TonalPalette }[]
+  )
+)
 
 function removePaletteFromKey(key: string) {
   return key
@@ -24,69 +28,65 @@ function removePaletteFromKey(key: string) {
     .join(' ')
 }
 
-const palettes = computed(() => {
-  return Object.keys($dynamicScheme.value).reduce(
-    (acc, key) => {
-      const palette = $dynamicScheme.value[key as keyof typeof $dynamicScheme.value]
-      if (palette instanceof TonalPalette) {
-        acc.push({
-          name: key,
-          palette
-        })
-      }
-      return acc
-    },
-    [] as { name: string; palette: TonalPalette }[]
-  )
+const color = shallowReactive({
+  key: 'sourceColor',
+  value: sourceColor.value
 })
 
-function tonalPaletteFromHex(hex: string) {
-  return TonalPalette.fromInt(argbFromHex(hex))
+function setColor(key: string, value: string) {
+  color.key = key
+  color.value = value
 }
 
-const selectedPalette = ref<TonalPalette>(tonalPaletteFromHex(sourceColor.value))
-const selectedName = ref<string>('')
-
-function onSelectPalette(name: string, palette: TonalPalette) {
-  selectedPalette.value = palette
-  selectedName.value = name
-}
-
-const selectedPaletteModel = computed({
-  get: () => hexFromArgb(selectedPalette.value.keyColor.toInt() || 0),
-  set: (value: string) => {
-    selectedPalette.value = tonalPaletteFromHex(value)
+const selectedColor = computed({
+  get: () => color,
+  set: (value) => {
+    setColor(value.key, value.value)
   }
 })
 </script>
 
 <template>
-  <header class="fixed left-0 right-0 top-0 z-40 bg-surface-dim">
-    <div class="flex w-full justify-center">
+  <div class="mx-auto w-full max-w-2xl p-12">
+    <section class="mb-2">
       <SelectVariant />
-    </div>
-  </header>
-  <div class="mx-auto mt-[74px] w-full max-w-2xl p-3">
+    </section>
     <section class="mb-2">
       <div class="grid grid-cols-3 gap-4">
-        <div v-for="{ name, palette } in palettes" :key="name" class="flex flex-col">
-          <h1 class="mb-2 capitalize">
-            {{ removePaletteFromKey(name) }}
+        <div class="col-span-3 flex h-fit flex-col">
+          <h1 class="mb-2 capitalize">Source Color</h1>
+          <ColorPreview
+            :color="$dynamicScheme.sourceColorArgb"
+            @click="setColor('sourceColor', hexFromArgb($dynamicScheme.sourceColorArgb))"
+          />
+        </div>
+        <div
+          v-for="{ key, palette } in palettes"
+          :key="key"
+          class="grid h-fit grid-rows-[auto,1fr] flex-col"
+        >
+          <h1 class="mb-2 overflow-hidden overflow-ellipsis text-nowrap capitalize">
+            {{ removePaletteFromKey(key) }}
           </h1>
-          <PaletteKeyColorPreview
-            :palette="palette"
-            @click="onSelectPalette(name, palette)"
+          <ColorPreview
+            :color="palette.keyColor.toInt()"
+            @click="setColor(key, hexFromArgb(palette.keyColor.toInt()))"
           />
         </div>
       </div>
     </section>
-    <section v-if="selectedPaletteModel" class="mb-6">
-      <KeyColorModel v-model="selectedPaletteModel" :label="selectedName" />
+    <section class="mb-2">
+      <KeyColorModel
+        v-if="selectedColor"
+        v-model="selectedColor.value"
+        :label="selectedColor.key"
+      />
+    </section>
+    <section class="mb-2">
+      <ContrastSlider v-model="contrastLevel" />
+    </section>
+    <section class="mb-2">
+      <DarkToggleButton />
     </section>
   </div>
 </template>
-
-<style lang="postcss">
-.custom-grid {
-}
-</style>

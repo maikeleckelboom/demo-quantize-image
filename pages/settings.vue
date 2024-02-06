@@ -1,7 +1,9 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div class="mx-auto w-full max-w-2xl p-4"></div>
+  <div>
+    <h1>Settings</h1>
+  </div>
 </template>
 
 <style scoped></style>

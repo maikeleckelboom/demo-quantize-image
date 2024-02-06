@@ -1,22 +1,32 @@
-import { addComponentsDir, createResolver, defineNuxtModule } from '@nuxt/kit'
-import type { ThemeModuleOptions } from '~/modules/theme/types'
-import type { CvaModuleOptions } from '~/modules/cva/types'
+import {
+  addComponentsDir,
+  createResolver,
+  defineNuxtModule,
+  extendPages
+} from '@nuxt/kit'
+
+interface ModuleOptions {}
 
 const { resolve } = createResolver(import.meta.url)
 
-export default defineNuxtModule<CvaModuleOptions>({
+export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'cva',
-    configKey: 'cva',
+    name: 'base',
+    configKey: 'base',
     dependencies: {}
   },
   defaults: {},
-  hooks: {},
-  setup: async (options: ThemeModuleOptions, nuxt) => {
+  setup: async (options: ModuleOptions, nuxt) => {
     await addComponentsDir({
       path: resolve('./runtime/components'),
       extensions: ['vue'],
       prefix: ''
+    })
+    extendPages((pages) => {
+      pages.push({
+        path: '/base',
+        file: resolve('./runtime/pages/base.vue')
+      })
     })
   }
 })

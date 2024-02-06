@@ -9,25 +9,44 @@ import type { HctModel } from '~/modules/theme/types'
 
 const modelValue = defineModel<string>('modelValue', { type: String, default: '' })
 
+function getHue() {
+  return Hct.fromInt(argbFromHex(modelValue.value)).hue
+}
+
+function getChroma() {
+  return Hct.fromInt(argbFromHex(modelValue.value)).chroma
+}
+
+function getTone() {
+  return Hct.fromInt(argbFromHex(modelValue.value)).tone
+}
+
+function hexFromHct({ hue, chroma, tone }: HctModel) {
+  return hexFromArgb(TonalPalette.fromHueAndChroma(hue, chroma).tone(tone))
+}
+
 const formModel = reactive<HctModel>({
-  hue: Hct.fromInt(argbFromHex(modelValue.value)).hue,
-  chroma: Hct.fromInt(argbFromHex(modelValue.value)).chroma,
-  tone: Hct.fromInt(argbFromHex(modelValue.value)).tone
+  hue: getHue(),
+  chroma: getChroma(),
+  tone: getTone()
 })
 
-// todo: replace with a controlled watcher that has manual trigger
-watch(
+const { pause, resume } = watchPausable(
   modelValue,
-  (value: string) => {
-    formModel.hue = Hct.fromInt(argbFromHex(value)).hue
-    formModel.chroma = Hct.fromInt(argbFromHex(value)).chroma
-    formModel.tone = Hct.fromInt(argbFromHex(value)).tone
+  (v) => {
+    formModel.hue = getHue()
+    formModel.chroma = getChroma()
+    formModel.tone = getTone()
   },
   { immediate: true }
 )
 
-watch(formModel, ({ hue, chroma, tone }: HctModel) => {
-  modelValue.value = hexFromArgb(TonalPalette.fromHueAndChroma(hue, chroma).tone(tone))
+watch(formModel, (v: HctModel) => {
+  pause()
+  modelValue.value = hexFromHct(v)
+  nextTick(() => {
+    resume()
+  })
 })
 
 const { hue: hueSpectrum, chroma: chromaSpectrum, tone: toneSpectrum } = useHCTSpectra()
@@ -36,14 +55,14 @@ function onUpdate(event: Event, key: keyof HctModel) {
   formModel[key] = parseInt((event.target as HTMLInputElement).value, 10)
 }
 
-const customHandle = ref<HTMLElement | null>(null)
+const customHandle = ref<HTMLElement>()
 </script>
 
 <template>
   <div class="flex flex-col space-y-1.5">
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
       <label
-        class="mr-2 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
+        class="mr-2 flex items-center p-2 text-label-md leading-none text-on-surface-variant"
         for="hue"
       >
         H
@@ -68,8 +87,10 @@ const customHandle = ref<HTMLElement | null>(null)
         <input
           id="hue"
           :value="Math.round(formModel.hue)"
-          class="h-[38px] w-[52px] min-w-0 rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-1 focus-visible:outline focus-visible:outline-on-surface active:bg-surface-container"
+          class="h-[38px] w-[52px] min-w-0 rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none"
           inputmode="numeric"
+          max="0"
+          min="360"
           pattern="[0-9\s]{13,19}"
           type="text"
           @input="onUpdate($event, 'hue')"
@@ -78,7 +99,7 @@ const customHandle = ref<HTMLElement | null>(null)
     </div>
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
       <label
-        class="mr-2 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
+        class="mr-2 flex items-center p-2 text-label-md leading-none text-on-surface-variant"
         for="hue"
       >
         C
@@ -102,7 +123,7 @@ const customHandle = ref<HTMLElement | null>(null)
         <input
           id="chroma"
           :value="Math.round(formModel.chroma)"
-          class="h-[38px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-1 focus-visible:outline focus-visible:outline-on-surface active:bg-surface-container"
+          class="h-[38px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"
@@ -112,7 +133,7 @@ const customHandle = ref<HTMLElement | null>(null)
     </div>
     <div class="grid grid-cols-[auto,1fr,auto] items-center">
       <label
-        class="mr-2 flex items-center p-2 text-title-sm leading-none text-on-surface-variant"
+        class="mr-2 flex items-center p-2 text-label-md leading-none text-on-surface-variant"
         for="tone"
       >
         T
@@ -137,7 +158,7 @@ const customHandle = ref<HTMLElement | null>(null)
         <input
           id="tone"
           :value="Math.round(formModel.tone)"
-          class="h-[38px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant hover:bg-surface-container-high focus:bg-surface-container focus:outline-1 focus-visible:outline focus-visible:outline-on-surface active:bg-surface-container"
+          class="h-[38px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"

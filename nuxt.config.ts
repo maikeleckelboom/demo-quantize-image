@@ -83,25 +83,15 @@ export default defineNuxtConfig({
     '~/modules/json-pretty/module.ts',
     '~/modules/button/module.ts',
     '~/modules/list/module.ts',
-    '~/modules/tree/module.ts'
+    '~/modules/tree/module.ts',
+    '~/modules/base/module.ts',
+    '~/modules/chip/module.ts',
+    '~/modules/collapsible/module.ts'
   ],
 
   imports: {
-    dirs: ['~/utils', '~/composables'],
+    dirs: ['~/utils', '~/composables', '~/stores'],
     presets: [
-      {
-        from: 'xstate',
-        imports: ['createMachine']
-      },
-      {
-        from: '@xstate/vue',
-        imports: ['useMachine']
-      },
-      {
-        from: 'chroma-js',
-        imports: ['chroma'],
-        package: 'chroma-js'
-      },
       {
         from: 'tailwind-merge',
         imports: ['twMerge']

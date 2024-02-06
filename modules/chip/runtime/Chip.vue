@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 type ChipProps = {
   variant?: 'assist' | 'filter' | 'input' | 'suggestion'
-  selectedIcon?: string
+  icon?: string
   selected?: boolean
 }
 
@@ -30,25 +30,27 @@ const transitionTotalDuration = computed<number>(
       selected
     }"
     :data-variant="variant"
-    :data-with-icon="!!selectedIcon"
-    class="chip-root"
+    :data-with-icon="true"
+    class="chip"
   >
-    <Transition :duration="transitionTotalDuration" name="chip">
-      <span v-if="selectedIcon" key="icon">
-        <Icon :name="selectedIcon" class="icon" />
-      </span>
-    </Transition>
-    <slot />
+    <span>
+      <Transition :duration="transitionTotalDuration" name="chip">
+        <Icon key="check" class="v-icon icon" name="ic:round-check" />
+      </Transition>
+    </span>
+    <span class="label-text">
+      <slot />
+    </span>
   </div>
 </template>
 
-<style>
-.chip-root {
+<style scoped>
+.chip {
   --_transition-duration: v-bind(transitionDuration);
   --_transition-delay: v-bind(transitionDelay);
   --_icon-color: rgb(var(--on-surface-rgb));
   --_icon-color-selected: rgb(var(--primary-rgb));
-  --_outline-color: rgb(var(--outline-rgb));
+  --_outline-color: rgb(var(--outline-variant-rgb));
   --_text-color: rgb(var(--on-surface-rgb));
 
   --_height: 32px;
@@ -70,12 +72,14 @@ const transitionTotalDuration = computed<number>(
   user-select: none;
   padding-inline: var(--_padding);
   display: grid;
+
   align-items: center;
   grid-template-columns: 0 1fr;
   grid-template-rows: 1fr;
   place-content: start;
-  text-shadow: 0 1px 0 rgb(var(--on-surface-rgb) / 0);
+  width: fit-content;
   @apply text-label-lg;
+  flex-shrink: 0;
 
   transition:
     grid-template-columns var(--_transition-duration) ease,
@@ -83,7 +87,7 @@ const transitionTotalDuration = computed<number>(
     background-color var(--_transition-duration),
     text-shadow var(--_transition-duration);
 
-  .icon {
+  .v-icon {
     width: var(--_icon-size);
     height: var(--_icon-size);
     color: var(--_icon-color);
@@ -96,6 +100,7 @@ const transitionTotalDuration = computed<number>(
     transition-property: transform, opacity;
     transition-timing-function: ease-out;
     transition-delay: 0ms;
+    flex-shrink: 0;
   }
 
   &.selected {

@@ -38,7 +38,7 @@ function onMarkClick(mark: Mark) {
 </script>
 
 <template>
-  <div class="mt-4 rounded-md">
+  <div class="flex max-w-full flex-col px-6 py-4">
     <fieldset class="grid grid-cols-[auto,1fr,auto] gap-y-2 rounded-md pb-0 pt-4">
       <div class="col-span-full flex w-full items-center">
         <InputRangeSlider
