@@ -2,6 +2,10 @@
 const { state, active, isLabelled } = storeToRefs(useNavStore())
 
 const { isMobileOrTablet, isMobile, isTablet, isDesktop, isApple, isAndroid } = useDevice()
+
+function onFabClick() {
+  console.log('FAB clicked')
+}
 </script>
 
 <template>
@@ -9,7 +13,13 @@ const { isMobileOrTablet, isMobile, isTablet, isDesktop, isApple, isAndroid } = 
     <slot />
     <div class="fixed inset-x-0 bottom-[92px]">
       <div class="pointer-events-none mx-auto flex size-full max-w-2xl justify-end px-4">
-        <Button class="pointer-events-auto" intent="extended-fab" size="lg" variant="primary">
+        <Button
+          class="pointer-events-auto"
+          intent="extended-fab"
+          size="lg"
+          variant="primary"
+          @click="onFabClick"
+        >
           <Icon name="ic:round-add" />
         </Button>
       </div>

@@ -1,12 +1,5 @@
 <script lang="ts" setup>
-type Intent =
-  | 'elevated'
-  | 'filled'
-  | 'filled-tonal'
-  | 'outlined'
-  | 'text'
-  | 'fab'
-  | 'extended-fab'
+type Intent = 'elevated' | 'filled' | 'filled-tonal' | 'outlined' | 'text' | 'fab' | 'extended-fab'
 type Size = 'sm' | 'md' | 'lg'
 type Color = 'primary' | 'secondary' | 'tertiary' | 'surface'
 
@@ -42,7 +35,8 @@ const variants = cva({
     'hover:before:active:opacity-[0.18]',
     'active:before:opacity-[0.16]',
     'icon:shrink-0',
-    'text-label-lg'
+    'text-label-lg',
+    'icon:pointer-events-none'
   ],
   variants: {
     dir: {
@@ -165,6 +159,7 @@ const buttonClasses = computed(() => twMerge(variants(props)))
 
 <template>
   <button :class="buttonClasses">
+    <Ripple />
     <slot />
     <slot name="icon">
       <Icon v-if="icon" :name="icon" />

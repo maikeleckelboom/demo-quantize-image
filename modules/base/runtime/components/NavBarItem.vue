@@ -18,11 +18,14 @@ const baseIcon = computed(() => {
 const activeIcon = computed(() => props.item?.icon?.[1])
 
 const isLarge = computed(() => props.item?.badge?.type === 'large')
+
+const target = ref<HTMLElement>()
 </script>
 
 <template>
   <NuxtLink ref="itemRef" :to="item.path" class="v-nav-item">
-    <span class="v-state-indicator" />
+    <Ripple :target="target" />
+    <span ref="target" class="v-state-indicator" />
     <Transition>
       <Icon v-if="active" :name="activeIcon" class="v-icon" />
       <Icon v-else :name="baseIcon" class="v-icon" />

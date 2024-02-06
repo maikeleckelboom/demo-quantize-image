@@ -1,27 +1,25 @@
-import {
-  addComponentsDir,
-  addPlugin,
-  createResolver,
-  defineNuxtModule
-} from '@nuxt/kit'
+import { addComponentsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
 import type { ThemeModuleOptions } from '~/modules/theme/types'
 
 const { resolve } = createResolver(import.meta.url)
+
+const runtimeDir = './runtime' as const
 
 export default defineNuxtModule<ThemeModuleOptions>({
   meta: {
     name: 'theme',
     configKey: 'theme',
     dependencies: {
-      tailwindcss: '^6.9.4',
-      '@material/material-color-utilities': '^0.2.7'
+      tailwindcss: '^3.4.1',
+      '@material/material-color-utilities': '^0.2.7',
+      'chroma-js': '^2.4.2'
     }
   },
   defaults: {
-    sourceColor: '#0092fa',
+    sourceColor: '#ffd700',
     isDark: false,
     variant: 'content',
-    contrastLevel: 0.3,
+    contrastLevel: 0.35,
     staticColors: [
       {
         blend: true,
@@ -38,17 +36,17 @@ export default defineNuxtModule<ThemeModuleOptions>({
       pages.push({
         name: 'Theme',
         path: '/modules/theme',
-        file: resolve('./runtime/pages/index.vue')
+        file: resolve(`${runtimeDir}/pages/index.vue`)
       })
       pages.push({
         name: 'Colors',
         path: '/modules/theme/colors',
-        file: resolve('./runtime/pages/colors.vue')
+        file: resolve(`${runtimeDir}/pages/colors.vue`)
       })
       pages.push({
         name: 'Typography',
         path: '/modules/theme/typography',
-        file: resolve('./runtime/pages/typography.vue')
+        file: resolve(`${runtimeDir}/pages/typography.vue`)
       })
     }
   },
@@ -56,10 +54,13 @@ export default defineNuxtModule<ThemeModuleOptions>({
     /*
       nuxt.options.appConfig.theme = defu(nuxt.options.appConfig?.theme || {}, options)
     */
+    addPlugin({ src: resolve(`${runtimeDir}/plugin.ts`), mode: 'all' })
+    /*
+        addPlugin({ src: resolve(`${runtimeDir}/ripple.ts`) })
+    */
     await addComponentsDir({
       pathPrefix: false,
-      path: resolve('./runtime/components')
+      path: resolve(`${runtimeDir}/components`)
     })
-    addPlugin({ src: resolve('./runtime/plugin.ts') })
   }
 })

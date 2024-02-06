@@ -90,6 +90,8 @@ export default defineNuxtConfig({
     '~/modules/dialog/module.ts'
   ],
 
+  plugins: ['~/plugins/ripple.client.ts'],
+
   imports: {
     dirs: ['~/utils', '~/composables', '~/stores'],
     presets: [
