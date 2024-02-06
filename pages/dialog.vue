@@ -8,7 +8,6 @@ const { state, active } = useNavStore()
 
 <template>
   <div class="mx-auto w-full max-w-2xl p-4">
-    <Button @click="isVisible = true">Open dialog</Button>
     <DialogComponent :open="isVisible" @close="isVisible = false">
       <KeyColorModel v-model="sourceColor" />
     </DialogComponent>

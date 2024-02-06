@@ -43,9 +43,6 @@ onClickOutside(dialogRef, () => {
     <article class="scrollbar relative size-full overflow-y-auto overflow-x-clip">
       <slot></slot>
     </article>
-    <footer class="mt-4 flex justify-end">
-      <slot name="footer"></slot>
-    </footer>
   </dialog>
 </template>
 

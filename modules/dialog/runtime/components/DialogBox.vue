@@ -2,7 +2,7 @@
 import type { DialogProps } from '~/modules/dialog/types'
 
 const props = defineProps<{
-  intent?: Pick<DialogProps, 'intent'>['intent']
+  variant?: Pick<DialogProps, 'variant'>['variant']
 }>()
 
 const slots = defineSlots<{
@@ -13,7 +13,7 @@ const slots = defineSlots<{
 </script>
 
 <template>
-  <dialog :data-intent="intent">
+  <dialog :data-variant="variant">
     <header>
       <slot name="header" />
     </header>
@@ -67,12 +67,12 @@ dialog {
     padding-block: 16px 24px;
   }
 
-  &[data-intent='basic'] {
+  &[data-variant='basic'] {
     border-radius: 28px;
     min-inline-size: min(280px, calc(100% - 48px));
   }
 
-  &[data-intent='full-screen'] {
+  &[data-variant='full-screen'] {
     border-radius: 0;
     min-block-size: 100vh;
 

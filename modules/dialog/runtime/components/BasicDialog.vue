@@ -1,6 +1,6 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { DialogProps } from '~/modules/dialog/types'
-import { type DialogBackdrop, type DialogBox } from '#components'
+import { DialogBackdrop, DialogBox } from '#components'
 
 const { headline = 'Dialog', text = 'Just a simple dialog.' } = defineProps<DialogProps>()
 
@@ -19,7 +19,6 @@ onClickOutside(dialogBox, () => {
 const { escape } = useMagicKeys()
 
 whenever(escape, () => {
-  // emit('cancel', 'escape')
   isOpen.value = false
 })
 
@@ -35,13 +34,15 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <DialogBackdrop ref="backdrop" v-if="isOpen">
-    <DialogBox intent="basic" ref="dialogBox">
+  <DialogBackdrop ref="backdrop">
+    <DialogBox ref="dialogBox" variant="basic">
       <template #header>
         {{ headline }}
       </template>
       <template #body>
-        {{ text }}
+        <slot>
+          {{ text }}
+        </slot>
       </template>
       <template #footer>
         <Button intent="text" @click="emit('cancel')">Cancel</Button>

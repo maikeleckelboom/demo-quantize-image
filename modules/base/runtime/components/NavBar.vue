@@ -44,7 +44,7 @@ const itemsCount = computed(() => props.items.length)
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 40;
+  z-index: 30;
   height: 80px;
 }
 

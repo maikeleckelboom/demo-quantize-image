@@ -1,5 +1,13 @@
 import type { ComponentInternalInstance, EffectScope, Ref } from 'vue'
-import { computed, effectScope, getCurrentInstance, onScopeDispose, ref, toRaw, watch } from 'vue'
+import {
+  computed,
+  effectScope,
+  getCurrentInstance,
+  onScopeDispose,
+  ref,
+  toRaw,
+  watch
+} from 'vue'
 
 type VueComponentInternalInstance = Omit<
   ComponentInternalInstance,
@@ -10,6 +18,8 @@ const stack = ref<VueComponentInternalInstance[]>([])
 
 export function useStack(isActive: Ref<boolean> = ref(true)) {
   const vm = getCurrentInstance()
+  if (!vm) throw new Error('useStack must be called within a component')
+
   let scope: EffectScope | null = null
 
   watch(

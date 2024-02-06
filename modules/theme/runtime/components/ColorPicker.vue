@@ -1,28 +1,27 @@
 <script lang="ts" setup>
-import {
-  argbFromHex,
-  Hct,
-  hexFromArgb,
-  TonalPalette
-} from '@material/material-color-utilities'
+import { Hct, hexFromArgb, TonalPalette } from '@material/material-color-utilities'
 import type { HctModel } from '~/modules/theme/types'
 
-const modelValue = defineModel<string>('modelValue', { type: String, default: '' })
+const modelValue = defineModel<number>('modelValue', { type: Number, default: 0 })
 
 function getHue() {
-  return Hct.fromInt(argbFromHex(modelValue.value)).hue
+  return Hct.fromInt(modelValue.value).hue
 }
 
 function getChroma() {
-  return Hct.fromInt(argbFromHex(modelValue.value)).chroma
+  return Hct.fromInt(modelValue.value).chroma
 }
 
 function getTone() {
-  return Hct.fromInt(argbFromHex(modelValue.value)).tone
+  return Hct.fromInt(modelValue.value).tone
+}
+
+function argbFromHct({ hue, chroma, tone }: HctModel) {
+  return TonalPalette.fromHueAndChroma(hue, chroma).tone(tone)
 }
 
 function hexFromHct({ hue, chroma, tone }: HctModel) {
-  return hexFromArgb(TonalPalette.fromHueAndChroma(hue, chroma).tone(tone))
+  return hexFromArgb(argbFromHct({ hue, chroma, tone }))
 }
 
 const formModel = reactive<HctModel>({
@@ -43,7 +42,7 @@ const { pause, resume } = watchPausable(
 
 watch(formModel, (v: HctModel) => {
   pause()
-  modelValue.value = hexFromHct(v)
+  modelValue.value = argbFromHct(v)
   nextTick(() => {
     resume()
   })
@@ -87,7 +86,7 @@ const customHandle = ref<HTMLElement>()
         <input
           id="hue"
           :value="Math.round(formModel.hue)"
-          class="h-[38px] w-[52px] min-w-0 rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none"
+          class="h-[34px] w-[52px] min-w-0 rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none"
           inputmode="numeric"
           max="0"
           min="360"
@@ -123,7 +122,7 @@ const customHandle = ref<HTMLElement>()
         <input
           id="chroma"
           :value="Math.round(formModel.chroma)"
-          class="h-[38px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
+          class="h-[34px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"
@@ -158,7 +157,7 @@ const customHandle = ref<HTMLElement>()
         <input
           id="tone"
           :value="Math.round(formModel.tone)"
-          class="h-[38px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
+          class="h-[34px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"

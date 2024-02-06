@@ -1,32 +1,31 @@
 import type { ButtonProps } from '~/modules/button/types'
-
-type Title = {
-  title: string
-}
-
-type Text = {
-  text: string
-}
-
-type Icon = {
-  icon: string
-}
-
-type ContentProps = Title | Text | (Title & Text)
+import type { Component, PropType } from 'vue'
 
 type ActionBtn = Partial<ButtonProps> & {
-  onClick: (...args: any) => any
+  click: (...args: any) => any
 }
 
 type DialogProps = Partial<{
-  headline: string
+  title: string
   text: string
   icon: string
-  intent: 'basic' | 'full-screen'
+  variant: 'basic' | 'full-screen'
   divider: 'top' | 'bottom' | 'both'
   closeAffordance: boolean
   responsive: boolean
   actions: ActionBtn[]
 }>
 
-export type { DialogProps, ActionBtn }
+interface DialogState<P extends PropType<any>, R> {
+  id: string
+  ref: null | any
+  component: Component
+  props: P
+  resolve: (value: R) => void
+  reject: (reason?: string) => void
+  set: (ref: Object | null) => void
+}
+
+interface DialogModuleOptions {}
+
+export type { DialogModuleOptions, DialogProps, DialogState, ActionBtn }

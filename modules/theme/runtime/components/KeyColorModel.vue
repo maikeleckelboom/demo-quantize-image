@@ -1,22 +1,22 @@
 <script lang="ts" setup>
+import { hexFromArgb } from '@material/material-color-utilities'
+
 defineProps<{
   label?: string
 }>()
 
-const modelValue = defineModel<string>('modelValue', { type: String, default: '' })
+const modelValue = defineModel<number>('modelValue', { type: Number, default: 0 })
 
 const isToggled = ref<boolean>(false)
 </script>
 
 <template>
-  <div class="grid grid-cols-1 grid-rows-[auto,1fr]">
-    <div class="mb-4">
-      <InputColorField v-model="modelValue" v-model:toggled="isToggled" :label="label" />
-    </div>
+  <div class="grid grid-cols-1 grid-rows-[auto,1fr] gap-2">
+    <InputColorField v-model="modelValue" v-model:toggled="isToggled" :label="label" />
     <Collapsible v-model="isToggled">
-      <AdvancedColorData :color="modelValue" :labels="true" />
+      <AdvancedColorData :color="hexFromArgb(modelValue)" :labels="true" />
     </Collapsible>
-    <HctColorPicker v-model="modelValue" />
+    <ColorPicker v-model="modelValue" />
   </div>
 </template>
 

@@ -86,7 +86,8 @@ export default defineNuxtConfig({
     '~/modules/tree/module.ts',
     '~/modules/base/module.ts',
     '~/modules/chip/module.ts',
-    '~/modules/collapsible/module.ts'
+    '~/modules/collapsible/module.ts',
+    '~/modules/dialog/module.ts'
   ],
 
   imports: {

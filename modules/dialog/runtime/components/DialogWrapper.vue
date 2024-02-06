@@ -1,15 +1,15 @@
-<script setup lang="ts">
-import { dialogs } from '~/modules/dialog/runtime/plugin'
+<script lang="ts" setup>
+const { dialogs } = useDialogs()
 </script>
 
 <template>
   <Teleport to="body">
     <component
-      v-for="dialog in dialogs"
-      :key="dialog.id"
       :is="dialog.component"
+      v-for="dialog in dialogs"
       :id="dialog.id"
-      :ref="dialog.setRef"
+      :key="dialog.id"
+      :ref="dialog.set"
       v-bind="dialog.props"
     />
   </Teleport>

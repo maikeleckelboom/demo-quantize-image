@@ -1,7 +1,9 @@
 <script lang="ts" setup>
+import { argbFromHex, hexFromArgb } from '@material/material-color-utilities'
+
 defineProps<{ label?: string }>()
 
-const modelValue = defineModel<string>('modelValue', { type: String, default: '' })
+const modelValue = defineModel<number>('modelValue', { type: Number, default: 0 })
 const toggled = defineModel<boolean>('toggled', { type: Boolean, default: false })
 
 function toggle() {
@@ -9,6 +11,13 @@ function toggle() {
 }
 
 const id = useId()
+
+const proxyValue = computed({
+  get: () => hexFromArgb(modelValue.value),
+  set: (value: string) => {
+    modelValue.value = argbFromHex(value)
+  }
+})
 </script>
 
 <template>
@@ -26,13 +35,13 @@ const id = useId()
     <div class="relative flex flex-row">
       <InputText
         :id="id"
-        v-model="modelValue"
+        v-model="proxyValue"
         class="h-[34px] w-full pl-[54px] uppercase"
         inputmode="text"
         label="Source Color"
         type="text"
       />
-      <InputSRGBHex v-model="modelValue" />
+      <InputSRGBHex v-model="proxyValue" />
       <div class="absolute right-0 top-0 w-[48px]">
         <Button
           :title="`Show ${toggled ? 'less' : 'more'} details about the color`"
