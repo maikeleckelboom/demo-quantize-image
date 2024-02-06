@@ -7,11 +7,11 @@ const props = withDefaults(
     items?: T[]
     active?: T | null
     setActive?: (item: T) => void
-    labelled?: boolean
+    labeled?: boolean
   }>(),
   {
     active: null,
-    labelled: true,
+    labeled: true,
     items: () => [],
     setActive: () => {}
   }
@@ -29,8 +29,8 @@ const itemsCount = computed(() => props.items.length)
         v-for="item in items"
         :key="item.label"
         :active="isActive(item)"
-        :has-label="labelled"
         :item="item"
+        :labeled="labeled"
       />
     </div>
   </div>
@@ -51,7 +51,7 @@ const itemsCount = computed(() => props.items.length)
 .v-nav-bar-container {
   display: grid;
   grid-template-columns: repeat(var(--_items-count), 1fr);
-  background-color: rgb(var(--surface-rgb));
+  background-color: rgb(var(--surface-dim-rgb));
   column-gap: 8px;
   max-width: 600px;
   margin-inline: auto;

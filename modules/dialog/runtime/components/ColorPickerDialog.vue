@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ColorPickerOptions } from '~/modules/dialog/runtime/factory'
+import type { ColorPickerOptions } from '~/modules/dialog/runtime/dialogs'
 import type { DialogComponent } from '#components'
 
 const props = withDefaults(defineProps<ColorPickerOptions>(), {

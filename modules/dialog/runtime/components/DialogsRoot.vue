@@ -4,7 +4,7 @@ const { dialogs } = useDialogs()
 
 <template>
   <Teleport to="body">
-    <component
+    <Component
       :is="dialog.component"
       v-for="dialog in dialogs"
       :id="dialog.id"

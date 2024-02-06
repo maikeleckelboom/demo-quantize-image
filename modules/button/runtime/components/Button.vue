@@ -16,7 +16,7 @@ interface Props {
   intent?: Intent
   size?: Size
   stretch?: boolean
-  color?: Color
+  variant?: Color
   disabled?: boolean
 }
 
@@ -88,7 +88,7 @@ const variants = cva({
       md: ['text-base', 'py-5', 'px-5', 'icon:size-[20px]', 'h-[38px]'],
       lg: ['text-lg', 'p-5', 'icon:w-[24px]', 'icon:h-[24px]', 'h-[56px]']
     },
-    color: {
+    variant: {
       primary: '',
       secondary: '',
       tertiary: '',
@@ -98,22 +98,22 @@ const variants = cva({
   compoundVariants: [
     {
       intent: ['fab', 'extended-fab'],
-      color: 'primary',
+      variant: 'primary',
       class: 'bg-primary-container text-on-primary-container'
     },
     {
       intent: ['fab', 'extended-fab'],
-      color: 'secondary',
+      variant: 'secondary',
       class: 'bg-secondary-container text-on-secondary-container'
     },
     {
       intent: ['fab', 'extended-fab'],
-      color: 'tertiary',
+      variant: 'tertiary',
       class: 'bg-tertiary-container text-on-tertiary-container'
     },
     {
       intent: ['fab', 'extended-fab'],
-      color: 'surface',
+      variant: 'surface',
       class: 'bg-surface-level-2 text-on-surface-level-2'
     },
     {
@@ -148,7 +148,7 @@ const variants = cva({
     {
       intent: 'extended-fab',
       size: 'lg',
-      class: 'rounded-4xl h-[96px] icon:w-[40px] icon:h-[40px]'
+      class: 'rounded-4xl h-[96px] w-[96px] icon:w-[36px] icon:h-[36px]'
     }
   ]
 })

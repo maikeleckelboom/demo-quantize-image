@@ -5,20 +5,16 @@ import type { NuxtLink } from '#components'
 const props = defineProps<{
   item: NavBarItem
   active: boolean
-  hasLabel: boolean
+  labeled: boolean
 }>()
 
 const itemRef = ref<InstanceType<typeof NuxtLink>>()
-
-function getIcon(item: NavBarItem) {
-  if (!item.icon) return
-  return isArray(item.icon) ? item.icon[props.active ? 1 : 0] : item.icon
-}
 
 const baseIcon = computed(() => {
   if (!props.item?.icon) return
   return isArray(props.item.icon) ? props.item.icon[0] : props.item.icon
 })
+
 const activeIcon = computed(() => props.item?.icon?.[1])
 
 const isLarge = computed(() => props.item?.badge?.type === 'large')
@@ -27,15 +23,14 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
 <template>
   <NuxtLink ref="itemRef" :to="item.path" class="v-nav-item">
     <span class="v-state-indicator" />
-
     <Transition>
       <Icon v-if="active" :name="activeIcon" class="v-icon" />
       <Icon v-else :name="baseIcon" class="v-icon" />
     </Transition>
-    <span v-if="item.badge" :class="{ 'v-large': isLarge }" class="v-badge">
+    <span v-if="item.badge" :class="{ isLarge }" class="v-badge">
       {{ isLarge ? item.badge.label : '' }}
     </span>
-    <span v-if="hasLabel" class="v-label-text">{{ item.label }}</span>
+    <span v-if="labeled" class="v-label-text">{{ item.label }}</span>
   </NuxtLink>
 </template>
 
@@ -57,7 +52,7 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
   .v-state-indicator {
     transform: scaleX(0);
     transform-origin: center;
-    opacity: 0.5;
+    opacity: 0.3;
     transition: all 160ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -152,7 +147,7 @@ const isLarge = computed(() => props.item?.badge?.type === 'large')
   text-align: center;
   text-transform: lowercase;
 
-  &.v-large {
+  &.isLarge {
     --size: var(--large-size);
     --radius: var(--large-size-radius);
     width: calc(var(--size) * 1.75);

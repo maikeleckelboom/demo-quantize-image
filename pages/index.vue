@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { hexFromArgb, TonalPalette } from '@material/material-color-utilities'
-import { openColorPicker } from '~/modules/dialog/runtime/factory'
+import { openColorPicker } from '~/modules/dialog/runtime/dialogs'
 
 const { $dynamicScheme } = useNuxtApp()
 

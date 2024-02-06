@@ -72,8 +72,8 @@ export default defineNuxtPlugin((_nuxt) => {
   return {
     provide: {
       dialogs: shallowReadonly(dialogs),
-      openDialog: openDialog,
-      closeDialog: closeDialog
+      openDialog,
+      closeDialog
     }
   }
 })

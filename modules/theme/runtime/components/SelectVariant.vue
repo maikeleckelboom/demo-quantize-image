@@ -47,6 +47,7 @@ const setVariant = async (v: Variant) => {
   <div
     ref="root"
     class="scrollbar flex w-fit flex-row gap-3 overflow-x-auto px-4 pb-2 pt-3"
+    data-role="chip-set"
   >
     <Chip
       v-for="variant in variants"

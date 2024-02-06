@@ -11,7 +11,7 @@ const dialogVariant = cva({
     'inset-0',
     'z-50',
     'bg-surface-container',
-    'p-4',
+    'p-6',
     'text-on-surface',
     'rounded-xl',
     'w-[560px]',
@@ -48,7 +48,6 @@ onClickOutside(dialogRef, () => {
 
 <style scoped>
 dialog::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  visibility: hidden;
 }
 </style>
