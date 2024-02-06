@@ -47,13 +47,21 @@ const selectedColor = computed({
 </script>
 
 <template>
+  <section class="sticky inset-0 top-0 mb-2 bg-surface">
+    <div class="mx-auto flex w-full max-w-2xl justify-center">
+      <SelectVariant />
+    </div>
+  </section>
   <div class="mx-auto w-full max-w-2xl p-4">
     <section class="mb-2">
-      <div class="grid grid-cols-3 gap-4">
-        <div class="col-span-3 flex h-fit flex-col">
-          <h1 class="mb-2 capitalize">Source Color</h1>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2 grid h-fit grid-rows-[auto,1fr] flex-col">
+          <h1 class="mb-2 overflow-hidden overflow-ellipsis text-nowrap capitalize">
+            Source Color
+          </h1>
           <ColorPreview
             :color="$dynamicScheme.sourceColorArgb"
+            class="h-32"
             @click="setColor('sourceColor', hexFromArgb($dynamicScheme.sourceColorArgb))"
           />
         </div>
@@ -67,14 +75,10 @@ const selectedColor = computed({
           </h1>
           <ColorPreview
             :color="palette.keyColor.toInt()"
+            class="h-24"
             @click="setColor(key, hexFromArgb(palette.keyColor.toInt()))"
           />
         </div>
-      </div>
-    </section>
-    <section class="sticky inset-0 top-0 mb-2 bg-surface">
-      <div class="mx-auto flex w-full max-w-2xl justify-center">
-        <SelectVariant />
       </div>
     </section>
     <section class="mb-2">
@@ -83,12 +87,6 @@ const selectedColor = computed({
         v-model="selectedColor.value"
         :label="selectedColor.key"
       />
-    </section>
-    <section class="mb-2">
-      <ContrastSlider v-model="contrastLevel" />
-    </section>
-    <section class="mb-2">
-      <DarkToggleButton />
     </section>
   </div>
 </template>

@@ -5,54 +5,54 @@ import type { NuxtLink } from '#components'
 const props = defineProps<{
   item: NavBarItem
   active: boolean
+  hasLabel: boolean
 }>()
 
 const itemRef = ref<InstanceType<typeof NuxtLink>>()
-
-/*
-
-const { focused } = useFocus(itemRef, {
-  focusVisible: true
-})
-
-const hovered = useElementHover(unrefElement(itemRef))
-*/
 
 function getIcon(item: NavBarItem) {
   if (!item.icon) return
   return isArray(item.icon) ? item.icon[props.active ? 1 : 0] : item.icon
 }
 
-const stateClasses = computed(() => ({}))
+const isLarge = ref<boolean>(false)
 </script>
 
 <template>
   <NuxtLink ref="itemRef" :to="item.path" class="v-nav-item">
     <span class="v-state-indicator" />
     <Icon :name="getIcon(item)" class="v-icon" />
-    <span class="v-label-text">{{ item.label }}</span>
+    <span v-if="item.badge" :class="{ isLarge }" class="v-badge">
+      {{ isLarge ? item.badge : '' }}
+    </span>
+    <span v-if="hasLabel" class="v-label-text">{{ item.label }}</span>
   </NuxtLink>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
 .v-nav-item {
-  display: grid;
-  place-items: center;
   --_row-gap: 4px;
 
   @screen md {
     --_row-gap: 8px;
   }
 
+  display: grid;
+  place-items: center;
   grid-template-columns: [icon state-indicator label badge] auto;
   grid-template-rows:
     [margin-top] 12px [icon state-indicator badge] 32px [row-gap] var(--_row-gap)
-    [label] auto [margin-bottom] 12px;
+    [label] auto [margin-bottom] 16px;
+
+  .v-state-indicator {
+    transform: scaleX(0) scaleY(0.95);
+    transform-origin: center top;
+  }
 
   &.router-link-active,
   &.router-link-exact-active {
     .v-state-indicator {
-      transform: scale(1);
+      transform: scaleX(1) scaleY(1);
     }
 
     .v-icon {
@@ -66,30 +66,27 @@ const stateClasses = computed(() => ({}))
 
   &:hover:not(.router-link-active):not(.router-link-exact-active) {
     .v-state-indicator {
-      transform: scale(0.9);
+      transform: scaleX(1) scaleY(1);
     }
   }
 
   &:focus-visible {
     .v-state-indicator {
       background: rgb(var(--secondary-rgb) / 0.2);
-      transform: scale(0.95);
+      transform: scaleX(0.98) scaleY(0.98);
     }
   }
-}
 
-.v-icon {
-  grid-area: icon;
-  height: 24px;
-  width: 24px;
-  z-index: 2;
+  &:not(:has(.v-label-text)) {
+    grid-template-rows: [margin-top] 24px [icon state-indicator badge] 32px [margin-bottom] 24px;
+  }
 }
 
 .v-label-text {
   grid-area: label;
   position: relative;
   z-index: 2;
-  transition: font-weight 300ms ease-out;
+  transition: font-weight 240ms ease-out;
   @apply text-label-sm;
 
   @screen md {
@@ -105,7 +102,40 @@ const stateClasses = computed(() => ({}))
   inset: 0;
   background: rgb(var(--secondary-container-rgb) / 0.38);
   grid-area: state-indicator;
-  transform: scale(0);
-  transition: transform 240ms ease-out;
+  transition: transform 140ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.v-icon {
+  grid-area: icon;
+  height: 24px;
+  width: 24px;
+  z-index: 2;
+  transition: color 140ms ease-out;
+}
+
+.v-badge {
+  --large-size: 16px;
+  --large-size-radius: 8px;
+  --small-size: 6px;
+  --small-size-radius: 3px;
+  --size: var(--small-size);
+  --radius: var(--small-size-radius);
+
+  grid-area: badge;
+  z-index: 3;
+
+  block-size: var(--size);
+  inline-size: var(--size);
+
+  background: rgb(var(--error-rgb));
+  border-radius: var(--radius);
+  position: relative;
+  left: 14px;
+  bottom: 8px;
+
+  &.v-large {
+    --size: var(--large-size);
+    --radius: var(--large-size-radius);
+  }
 }
 </style>
