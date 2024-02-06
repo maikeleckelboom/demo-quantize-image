@@ -15,15 +15,15 @@ function getIcon(item: NavBarItem) {
   return isArray(item.icon) ? item.icon[props.active ? 1 : 0] : item.icon
 }
 
-const isLarge = ref<boolean>(false)
+const isLarge = computed(() => props.item?.badge?.type === 'large')
 </script>
 
 <template>
   <NuxtLink ref="itemRef" :to="item.path" class="v-nav-item">
     <span class="v-state-indicator" />
     <Icon :name="getIcon(item)" class="v-icon" />
-    <span v-if="item.badge" :class="{ isLarge }" class="v-badge">
-      {{ isLarge ? item.badge : '' }}
+    <span v-if="item.badge" :class="{ 'v-large': isLarge }" class="v-badge">
+      {{ isLarge ? item.badge.label : '' }}
     </span>
     <span v-if="hasLabel" class="v-label-text">{{ item.label }}</span>
   </NuxtLink>
@@ -129,13 +129,24 @@ const isLarge = ref<boolean>(false)
 
   background: rgb(var(--error-rgb));
   border-radius: var(--radius);
+  color: rgb(var(--on-error-rgb));
   position: relative;
   left: 14px;
   bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
   &.v-large {
     --size: var(--large-size);
     --radius: var(--large-size-radius);
+    width: calc(var(--size) * 1.75);
+    height: var(--size);
+    left: 10px;
+    bottom: 4px;
   }
+
+  @apply text-label-sm;
 }
 </style>

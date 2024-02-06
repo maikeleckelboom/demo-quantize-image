@@ -6,25 +6,37 @@ const useNavStore = defineStore('nav', () => {
       label: 'Home',
       path: '/',
       icon: ['ic:outline-home-max', 'ic:baseline-home-max'],
-      badge: '99+'
+      badge: {
+        label: '99+',
+        type: 'large'
+      }
     },
     {
       label: 'Favorites',
       path: '/favorites',
       icon: ['ic:baseline-favorite-border', 'ic:baseline-favorite'],
-      badge: 'new'
+      badge: {
+        label: 'new',
+        type: 'large'
+      }
     },
     {
       label: 'Dialog',
       path: '/dialog',
       icon: ['ic:outline-chat', 'ic:baseline-chat'],
-      badge: 5
+      badge: {
+        label: 3,
+        type: 'small'
+      }
     },
     {
       label: 'Settings',
       path: '/settings',
       icon: ['ic:outline-settings', 'ic:baseline-settings'],
-      badge: 3
+      badge: {
+        label: 1,
+        type: 'small'
+      }
     }
   ])
 
