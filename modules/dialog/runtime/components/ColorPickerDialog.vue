@@ -35,6 +35,10 @@ provide('initialColor', props.initialColor)
   <DialogBackdrop>
     <DialogComponent ref="root" open @close="exit">
       <KeyColorModel v-model="colorValue" :label="sentenceCase(keyColor)" />
+      <Buttons class="mb-4 ml-auto mt-6 w-fit">
+        <Button intent="text" @click="exit">Cancel</Button>
+        <Button intent="filled-tonal" @click="close(localColor)"> Apply</Button>
+      </Buttons>
     </DialogComponent>
   </DialogBackdrop>
 </template>

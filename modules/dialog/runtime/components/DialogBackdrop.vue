@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div class="fixed inset-0 z-40 h-svh w-svw bg-scrim/40">
+  <div class="fixed inset-0 z-40 h-svh w-svw bg-scrim/60">
     <slot />
   </div>
 </template>
