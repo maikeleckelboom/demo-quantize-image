@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const transitionDuration = ref<string>('400ms')
-const transitionDelay = ref<string>('150ms')
+const transitionDelay = ref<string>('200ms')
 const transitionTotalDuration = computed<number>(
   () => parseInt(unref(transitionDuration)) + parseInt(unref(transitionDelay))
 )
@@ -9,7 +9,7 @@ const id = useId()
 </script>
 
 <template>
-  <div :id="id" :aria-expanded="modelValue" class="v-collapsible flex flex-col space-y-1.5">
+  <div :id="id" :aria-expanded="modelValue" class="v-collapsible flex flex-col">
     <div class="v-collapsible-trigger">
       <slot name="trigger" />
     </div>
@@ -39,7 +39,9 @@ const id = useId()
 
   &[aria-expanded='true'] {
     grid-template-rows: auto 1fr;
-    transition-delay: 0ms;
+
+    .v-collapsible-content {
+    }
   }
 
   &[aria-expanded='false'] {
@@ -48,23 +50,20 @@ const id = useId()
 
   .v-collapsible-content {
     overflow: hidden;
+
     min-inline-size: 100%;
   }
 
-  .collapsible-enter-from .v-collapsible-content-inner,
-  .collapsible-leave-to .v-collapsible-content-inner {
+  .collapsible-enter-from,
+  .collapsible-leave-to {
     opacity: 0;
     transform: translateY(-2px);
   }
 
-  .collapsible-enter-active .v-collapsible-content-inner,
-  .collapsible-leave-active .v-collapsible-content-inner {
+  .collapsible-enter-active,
+  .collapsible-leave-active {
     transition-duration: var(--_duration);
     transition-property: opacity, transform;
-  }
-
-  .collapsible-enter-active .v-collapsible-content-inner {
-    transition-delay: var(--transition-delay);
   }
 }
 </style>

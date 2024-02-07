@@ -58,8 +58,8 @@ async function onOpenColorPicker(keyColor: string, initialColor: number) {
       </div>
     </section>-->
   <div class="mx-auto w-full max-w-xl p-4">
-    <div class="flex flex-col gap-4">
-      <div>
+    <div class="flex flex-wrap gap-4">
+      <div class="size-fit">
         <h1 class="mb-2 overflow-hidden overflow-ellipsis text-nowrap capitalize">Source Color</h1>
         <ColorPreview
           :color="$dynamicScheme.sourceColorArgb"
