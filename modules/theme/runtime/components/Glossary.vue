@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div class="scrollbar flex h-[calc(100svh-32px)] flex-col gap-y-12 overflow-auto [&>section>h2]:mb-4">
+  <div class="mt-8 flex flex-col gap-y-12 overflow-auto [&>section>h2]:mb-4">
     <section>
       <h2 class="mb-2 text-title-lg leading-none text-on-surface-variant">Source Color</h2>
       <p>

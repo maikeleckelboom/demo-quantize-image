@@ -79,5 +79,6 @@ async function onOpenColorPicker(keyColor: string, initialColor: number) {
       </div>
     </div>
     <section class="mb-2"></section>
+    <Glossary />
   </div>
 </template>

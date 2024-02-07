@@ -141,10 +141,7 @@ const customHandle = ref<HTMLElement>()
               <button class="ml-2">
                 <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
               </button>
-              <template #content>
-                The amount of white or black mixed with the color; tone is also known as brightness or
-                lightness.
-              </template>
+              <template #content> The amount of white or black mixed with the color. </template>
             </Tooltip>
           </label>
         </div>
