@@ -18,10 +18,10 @@ function getKeyColorName(keyColor: string) {
 </script>
 
 <template>
-  <div class="grid py-12">
-    <h1 class="text-headline-sm capitalize">{{ getKeyColorName(keyColor) }}</h1>
+  <div class="grid">
+    <h1 class="mb-6 text-headline-sm font-medium capitalize">{{ getKeyColorName(keyColor) }}</h1>
     <div class="mb-12 flex flex-col">
-      <h2 class="mb-6 text-title-lg leading-none">HCT</h2>
+      <h2 class="mb-4 text-title-lg leading-none">HCT</h2>
       <p class="text-on-surface-variant">
         HCT is an abbreviation of hue chroma tone . It’s the name of the color space that enables dynamic
         color. HCT is based on CAM16 hue and chroma; the L* construct for luminance from L*a*b* (CIELAB, 1976)
