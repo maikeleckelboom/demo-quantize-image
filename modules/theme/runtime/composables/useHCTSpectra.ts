@@ -1,6 +1,29 @@
 import chroma from 'chroma-js'
 import { Hct, hexFromArgb } from '@material/material-color-utilities'
 
+type Bounds = Record<
+  keyof FormModelHct,
+  {
+    min: number
+    max: number
+  }
+>
+
+const bounds: Readonly<Bounds> = readonly({
+  hue: {
+    min: 0,
+    max: 360
+  },
+  chroma: {
+    min: 0,
+    max: 150
+  },
+  tone: {
+    min: 0,
+    max: 100
+  }
+})
+
 type FormModelHct = {
   hue: number
   chroma: number
@@ -41,101 +64,27 @@ export function useHCTSpectra(gradientType: 'conic' | 'linear' = 'linear') {
   )
 
   const getHueColors = () => [
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.min,
-        formModel.chroma.default,
-        formModel.tone.default
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.max * 0.25,
-        formModel.chroma.default,
-        formModel.tone.default
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.max * 0.5,
-        formModel.chroma.default,
-        formModel.tone.default
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.max * 0.75,
-        formModel.chroma.default,
-        formModel.tone.default
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.max,
-        formModel.chroma.default,
-        formModel.tone.default
-      ).toInt()
-    )
+    hexFromArgb(Hct.from(formModel.hue.min, formModel.chroma.default, formModel.tone.default).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.max * 0.25, formModel.chroma.default, formModel.tone.default).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.max * 0.5, formModel.chroma.default, formModel.tone.default).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.max * 0.75, formModel.chroma.default, formModel.tone.default).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.max, formModel.chroma.default, formModel.tone.default).toInt())
   ]
 
   const getChromaColors = () => [
-    hexFromArgb(
-      Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.default).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.max * 0.25,
-        formModel.tone.default
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.max * 0.5,
-        formModel.tone.default
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.max * 0.75,
-        formModel.tone.default
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(formModel.hue.value, formModel.chroma.max, formModel.tone.default).toInt()
-    )
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.default).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.max * 0.25, formModel.tone.default).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.max * 0.5, formModel.tone.default).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.max * 0.75, formModel.tone.default).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.max, formModel.tone.default).toInt())
   ]
 
   const getToneColors = () => [
-    hexFromArgb(
-      Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.min).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.min,
-        formModel.tone.max * 0.25
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.min,
-        formModel.tone.max * 0.5
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(
-        formModel.hue.value,
-        formModel.chroma.min,
-        formModel.tone.max * 0.75
-      ).toInt()
-    ),
-    hexFromArgb(
-      Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.max).toInt()
-    )
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.min).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.max * 0.25).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.max * 0.5).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.max * 0.75).toInt()),
+    hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.max).toInt())
   ]
 
   const gradientMap = {
@@ -145,6 +94,7 @@ export function useHCTSpectra(gradientType: 'conic' | 'linear' = 'linear') {
   }
 
   return {
+    bounds,
     hue: computed(() => ({
       background: gradientMap[gradientType](
         chroma.scale(getHueColors()).mode('lab').colors(formModel.hue.max).join(', ')
@@ -152,11 +102,7 @@ export function useHCTSpectra(gradientType: 'conic' | 'linear' = 'linear') {
     })),
     chroma: computed(() => ({
       background: gradientMap[gradientType](
-        chroma
-          .scale(getChromaColors())
-          .mode('lab')
-          .colors(formModel.chroma.max)
-          .join(', ')
+        chroma.scale(getChromaColors()).mode('lab').colors(formModel.chroma.max).join(', ')
       )
     })),
     tone: computed(() => ({

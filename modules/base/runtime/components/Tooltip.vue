@@ -1,20 +1,37 @@
 <script lang="ts" setup>
-import { autoUpdate, flip, offset, type Placement, shift, useFloating } from '@floating-ui/vue'
+import { arrow, autoUpdate, flip, offset, type Placement, shift, useFloating } from '@floating-ui/vue'
+
+interface Props {
+  placement: Placement
+  delay: number | `${number}ms` | `${number}s`
+  arrow: boolean
+}
+
+const { placement: initialPlacement, delay } = withDefaults(defineProps<Props>(), {
+  placement: 'top',
+  delay: 0,
+  arrow: false
+})
+
+function getDelay(delay: Props['delay']) {
+  return typeof delay === 'number' ? `${delay}ms` : delay
+}
 
 const reference = ref<HTMLElement>()
 const floating = ref<HTMLElement>()
+const floatingArrow = ref<HTMLElement>()
 
-const placement = ref<Placement>('top')
+const placement = ref<Placement>(initialPlacement)
 const middleware = ref([
   offset(4),
   flip(),
   shift({
     padding: 8
-  })
+  }),
+  arrow({ element: floatingArrow, padding: 4 })
 ])
 
 const open = ref<boolean>(false)
-const manualOpen = ref<boolean>(false)
 
 const { floatingStyles, middlewareData, isPositioned, update } = useFloating(reference, floating, {
   placement,
@@ -28,47 +45,54 @@ watch(isPositioned, async (isPositioned) => {
   }
 })
 
-function toggleOpen() {
-  manualOpen.value = !manualOpen.value
-  nextTick(() => {
-    open.value = manualOpen.value
-  })
+function show() {
+  open.value = true
 }
 
-function onMouseenter() {
-  if (!manualOpen.value) {
-    open.value = true
-  }
-}
-
-function onMouseleave() {
-  if (!manualOpen.value) {
-    open.value = false
-  }
+function hide() {
+  open.value = false
 }
 
 onClickOutside(floating, () => {
-  open.value = false
+  hide()
 })
+
+const arrowPos = computed(() => ({
+  left: middlewareData.value.arrow?.x != null ? `${middlewareData.value.arrow.x}px` : undefined,
+  top: middlewareData.value.arrow?.y != null ? `${middlewareData.value.arrow.y}px` : undefined
+}))
 </script>
 
 <template>
-  <div
-    ref="reference"
-    @focusin="open = true"
-    @focusout="open = false"
-    @mouseenter="onMouseenter"
-    @mouseleave="onMouseleave"
-  >
+  <div ref="reference" class="w-fit" @focusin="show" @focusout="hide" @mouseenter="show" @mouseleave="hide">
     <slot />
   </div>
   <div v-if="open" ref="floating" :style="floatingStyles" class="tooltip-container">
     <slot name="content" />
+    <div
+      v-if="$props.arrow"
+      ref="floatingArrow"
+      :style="{
+        position: 'absolute',
+        left: arrowPos.left,
+        top: arrowPos.top
+      }"
+      class="floating-arrow"
+    />
   </div>
 </template>
 
 <style scoped>
+.floating-arrow {
+  @apply pointer-events-none absolute bg-inverse-surface;
+  --_size: 8px;
+  width: var(--_size);
+  height: var(--_size);
+  transform: translateY(calc(var(--_size) * 0.5));
+}
+
 .tooltip-container {
-  @apply z-50 max-w-64 text-balance rounded-2xl bg-inverse-surface p-2 text-center text-body-md font-medium leading-snug text-inverse-on-surface shadow-2xl;
+  @apply z-50 max-w-64 rounded-2xl bg-inverse-surface p-2 shadow-2xl;
+  @apply text-balance text-center text-body-md font-medium leading-snug text-inverse-on-surface;
 }
 </style>

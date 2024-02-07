@@ -9,7 +9,7 @@ const id = useId()
 </script>
 
 <template>
-  <div :id="id" :aria-expanded="modelValue" class="v-collapsible flex flex-col">
+  <div :id="id" :aria-expanded="modelValue" class="v-collapsible">
     <div class="v-collapsible-trigger">
       <slot name="trigger" />
     </div>
@@ -57,7 +57,6 @@ const id = useId()
   .collapsible-enter-from,
   .collapsible-leave-to {
     opacity: 0;
-    transform: translateY(-2px);
   }
 
   .collapsible-enter-active,

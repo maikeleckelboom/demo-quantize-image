@@ -4,8 +4,7 @@ import Button from '~/modules/button/runtime/components/Button.vue'
 interface Props {
   file?: File | null
   multiple?: boolean
-  accept?: string | 'false'
-  capture?: string
+  accept?: string
   reset?: boolean
   directory?: boolean
 }
@@ -27,7 +26,6 @@ const { files, open, reset, onChange } = useFileDialog({
   accept: props.accept,
   reset: props.reset,
   directory: props.directory,
-  capture: props.capture,
   multiple: props.multiple
 })
 

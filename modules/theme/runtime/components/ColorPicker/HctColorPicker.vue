@@ -49,13 +49,15 @@ watch(formModel, (v: HctModel) => {
   })
 })
 
-const { hue: hueSpectrum, chroma: chromaSpectrum, tone: toneSpectrum } = useHCTSpectra()
+const { hue: hueSpectrum, chroma: chromaSpectrum, tone: toneSpectrum, bounds } = useHCTSpectra()
 
 function onUpdate(event: Event, key: keyof HctModel) {
   formModel[key] = parseInt((event.target as HTMLInputElement).value, 10)
 }
 
 const customHandle = ref<HTMLElement>()
+
+function validate(value: number, key: keyof HctModel) {}
 </script>
 
 <template>
@@ -63,10 +65,10 @@ const customHandle = ref<HTMLElement>()
     <div class="grid items-center gap-y-2">
       <div class="flex items-center justify-between">
         <div class="flex flex-col">
-          <label class="flex flex-nowrap text-label-md" for="hue">
+          <label class="flex flex-nowrap gap-x-2 text-label-md" for="hue">
             Hue
             <Tooltip>
-              <button class="ml-2">
+              <button>
                 <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
               </button>
               <template #content> The type of color, such as red, blue, or green.</template>
@@ -85,7 +87,7 @@ const customHandle = ref<HTMLElement>()
           @input="onUpdate($event, 'hue')"
         />
       </div>
-      <InputRangeSlider v-model="formModel.hue" class="color-input-range" contained="true" max="360" min="0">
+      <InputRangeSlider v-model="formModel.hue" class="color-input-slider" contained="true" max="360" min="0">
         <template #handle>
           <div ref="customHandle" class="custom-handle" />
         </template>
@@ -97,10 +99,10 @@ const customHandle = ref<HTMLElement>()
     <div class="grid items-center gap-y-2">
       <div class="flex items-center justify-between">
         <div class="flex flex-col">
-          <label class="flex flex-nowrap text-label-md" for="chroma">
+          <label class="flex flex-nowrap gap-x-2 text-label-md" for="chroma">
             Chroma
             <Tooltip>
-              <button class="ml-2">
+              <button>
                 <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
               </button>
               <template #content> The intensity of a color, from gray to fully saturated.</template>
@@ -119,7 +121,7 @@ const customHandle = ref<HTMLElement>()
       </div>
       <InputRangeSlider
         v-model.number="formModel.chroma"
-        class="color-input-range"
+        class="color-input-slider"
         contained="true"
         max="150"
         min="0"
@@ -135,13 +137,13 @@ const customHandle = ref<HTMLElement>()
     <div class="grid items-center gap-y-2">
       <div class="flex items-center justify-between">
         <div class="flex flex-col">
-          <label class="flex flex-nowrap text-label-md" for="tone">
+          <label class="flex flex-nowrap gap-x-2 text-label-md" for="tone">
             Tone
             <Tooltip>
-              <button class="ml-2">
+              <button class=" ">
                 <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
               </button>
-              <template #content> The amount of white or black mixed with the color. </template>
+              <template #content> The amount of white or black mixed with the color.</template>
             </Tooltip>
           </label>
         </div>
@@ -157,7 +159,7 @@ const customHandle = ref<HTMLElement>()
       </div>
       <InputRangeSlider
         v-model.number="formModel.tone"
-        class="color-input-range"
+        class="color-input-slider"
         contained="true"
         max="100"
         min="0"
@@ -174,7 +176,7 @@ const customHandle = ref<HTMLElement>()
 </template>
 
 <style lang="postcss">
-.slider-root.color-input-range {
+.slider-root.color-input-slider {
   --slider-track-height: 16px;
   --slider-handle-width: 20px;
   --slider-handle-height: 20px;

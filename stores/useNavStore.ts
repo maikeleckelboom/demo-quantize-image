@@ -17,6 +17,11 @@ const useNavStore = defineStore('nav', () => {
       }
     },
     {
+      label: 'Image',
+      path: '/image',
+      icon: ['ic:baseline-image', 'ic:baseline-image']
+    },
+    {
       label: 'Settings',
       path: '/settings',
       icon: ['ic:outline-settings', 'ic:baseline-settings'],
