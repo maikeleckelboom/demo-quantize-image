@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const store = useFilesStore()
-const { files, selectedFile } = storeToRefs(store)
+const { files, selectedFile, fileObjectUrl } = storeToRefs(store)
 const { reset } = store
 
 function onDrop(droppedFiles: File[]) {
@@ -31,7 +31,7 @@ async function blobFromUrl(url: string) {
 }
 
 function fileFromBlob(blob: Blob, img: string) {
-  return new File([blob], 'example-image.jpg', {
+  return new File([blob], 'example.jpg', {
     type: img.slice(img.lastIndexOf('.'))
   })
 }
@@ -60,8 +60,8 @@ async function setExampleImage() {
       </p>
     </div>
     <div class="mb-4 h-64 overflow-hidden">
-      <FilePreview v-if="selectedFile" :file="selectedFile" />
-      <FileDropZone v-else @drop="onDrop" />
+      <FilePreview v-if="fileObjectUrl" id="vt-source-element" :url="fileObjectUrl" />
+      <FileDropZone v-if="!selectedFile" @drop="onDrop" />
     </div>
 
     <template v-if="selectedFile">
@@ -101,4 +101,16 @@ async function setExampleImage() {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#vt-source-element {
+  view-transition-name: source-img;
+}
+
+::view-transition-old(source-img),
+::view-transition-new(source-img) {
+}
+
+::view-transition-image-pair(source-img) {
+  transition: ease all 200ms;
+}
+</style>

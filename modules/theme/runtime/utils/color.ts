@@ -21,9 +21,7 @@ function getColorAsHct(color: Hct | string | number): Hct {
   return color
 }
 
-function groupByBaseColor(
-  colors: Record<string, number>
-): Record<string, Record<string, number>> {
+function groupByBaseColor(colors: Record<string, number>): Record<string, Record<string, number>> {
   return Object.entries(colors).reduce(
     (acc, [key, value]) => {
       const splitCamelCase = key
@@ -64,9 +62,7 @@ function makeDynamicScheme(
   return schemes
 }
 
-function colorsFromDynamicSchemeMap(
-  dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>
-) {
+function colorsFromDynamicSchemeMap(dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>) {
   return Array.from(dynamicSchemes.entries()).reduce(
     (acc, [key, value]) => ({
       ...acc,
@@ -139,5 +135,6 @@ export {
   textFromProperties,
   groupByBaseColor,
   repeatingLinearGradient,
+  repeatingRadialGradient,
   schemeVariants
 }

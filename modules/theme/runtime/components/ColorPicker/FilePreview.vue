@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 const props = defineProps<{
-  file: File | null
+  url: string
 }>()
-
-const url = useObjectUrl(props.file)
 </script>
 
 <template>

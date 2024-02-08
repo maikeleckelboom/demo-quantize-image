@@ -1,7 +1,5 @@
 <template>
-  <Transition :duration="100" appear name="fade">
-    <Icon key="clock" class="size-6" name="svg-spinners:clock" />
-  </Transition>
+  <Icon key="clock" name="svg-spinners:clock" />
 </template>
 
 <style>

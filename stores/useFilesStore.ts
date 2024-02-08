@@ -7,13 +7,16 @@ const useFilesStore = defineStore('files', () => {
     clearSelection()
   }
 
+  const fileObjectUrl = useObjectUrl(selectedFile)
+
   return {
     files,
     reset,
     selectedFile,
     clearSelection,
     selectFile,
-    isSelected
+    isSelected,
+    fileObjectUrl
   }
 })
 
