@@ -84,37 +84,9 @@ function setClickOffset(evt: PointerEvent) {
   }
 }
 
-function getPrecision(step: number) {
-  if (!isNumber(step)) return 0
-  const stepString = step.toString()
-  if (stepString.indexOf('.') >= 0) {
-    return stepString.length - stepString.indexOf('.') - 1
-  }
-  return 0
-}
-
-function getDecimals(step: number) {
-  return Number(props.decimals ?? Math.max(0, getPrecision(step)))
-}
-
 function getValueAtStep(value: number, step: number) {
-  return Math.round(value / step) * step
-}
-
-function roundFormat(value: number) {
-  const decimals = getDecimals(Number(props.step))
-  if (Number(props.step)) {
-    const valueAtStep = getValueAtStep(value, Number(props.step))
-    return roundNumber(valueAtStep, decimals)
-  }
-  return roundNumber(value, decimals)
-}
-
-function format(value: number) {
-  if (props.labelFormat && typeof props.labelFormat === 'function') {
-    return props.labelFormat(value)
-  }
-  return roundFormat(value)
+  const closestStep = Math.round(value / step) * step
+  return getClosestSnapValue(closestStep)
 }
 
 function convertRange(min: number, max: number, a: number, b: number, x: number) {
@@ -146,11 +118,29 @@ function getProgressFromEvent(event: PointerEvent) {
   })
 }
 
+function calculateStepsArray(min: number, max: number, step: number) {
+  const steps = []
+  for (let i = min; i <= max; i += step) {
+    steps.push(i)
+  }
+  return steps
+}
+
+function getSteps(): number[] {
+  const min = Number(props.min)
+  const max = Number(props.max)
+  const step = Number(props.step)
+  return calculateStepsArray(min, max, step)
+}
+
 function getClosestSnapValue(value: number) {
-  if (!isArray(props.snapValues)) return value
-  const decimals = getDecimals(Number(props.step))
-  const valueAtStep = snap(props.snapValues)(value)
-  return roundNumber(valueAtStep, decimals)
+  if (props.step === 'any') {
+    return value
+  }
+  const step = Number(props.step)
+  const interval = getSteps()
+  const closest = snap(interval)(value)
+  return Math.round(closest / step) * step
 }
 
 const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
@@ -160,17 +150,11 @@ const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
     event.preventDefault()
     currentPointer.value = getClosestPointer(event)
     setClickOffset(event)
-    if (!isSnapping.value) {
-      handleSwipe(event)
-    }
+    handleSwipe(event)
   },
   onSwipe: handleSwipe,
   onSwipeEnd: (event, direction) => {
     const removePointer = () => (currentPointer.value = null)
-    if (isSnapping.value && isNumber(modelValue.value)) {
-      modelValue.value = getClosestSnapValue(modelValue.value)
-      return
-    }
     removePointer()
   }
 })
@@ -243,12 +227,8 @@ function handleSwipe(_event: PointerEvent) {
 
   if (isNumber(modelValue.value)) {
     if (isDefined(props.step) && props.step !== 'any') {
-      const valAtStep = getValueAtStep(pointerValue, Number(props.step))
-      if (valAtStep === pointerValue) {
-        return
-      }
+      modelValue.value = getValueAtStep(pointerValue, Number(props.step))
 
-      modelValue.value = valAtStep
       return
     }
 
@@ -368,7 +348,7 @@ const styleBinding = computed(() => {
         <div class="slider-label-container">
           <span class="slider-label-text">
             <slot name="labelText">
-              {{ format(getValue(pointerValue)) }}
+              {{ getValue(pointerValue) }}
             </slot>
           </span>
         </div>

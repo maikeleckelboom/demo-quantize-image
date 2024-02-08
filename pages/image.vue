@@ -31,7 +31,7 @@ function loadExampleImage() {
       <FileDropZone v-else @drop="onDrop" />
     </div>
     <div class="mb-12">
-      <Button intent="outlined" @click="loadExampleImage"> Load Example Image</Button>
+      <!-- Space -->
     </div>
     <div>
       <fieldset>
@@ -52,6 +52,7 @@ function loadExampleImage() {
     <div class="flex flex-col">
       <Buttons class="justify-end">
         <Button v-if="selectedFile" intent="text" @click="resetFiles">Reset</Button>
+        <Button v-else intent="outlined" @click="loadExampleImage"> Load Example Image</Button>
         <Button :disabled="!selectedFile"> Extract Colors</Button>
       </Buttons>
     </div>
