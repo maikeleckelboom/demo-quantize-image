@@ -6,7 +6,6 @@ import { snap } from 'popmotion'
 const props = withDefaults(defineProps<SliderProps>(), {
   min: 0,
   max: 100,
-  step: 'any',
   dir: 'ltr',
   btt: false,
   orientation: 'horizontal',
@@ -29,9 +28,7 @@ defineSlots<{
 const getRect = (el: HTMLElement) => el.getBoundingClientRect()
 
 const isSnapping = computed(
-  () =>
-    props.step !== 'any' &&
-    ['directional', 'true', true, ''].includes(String(props.snapping))
+  () => props.step !== 'any' && ['directional', 'true', true, ''].includes(String(props.snapping))
 )
 const isVertical = computed(() => props.orientation === 'vertical')
 
@@ -150,7 +147,7 @@ function getProgressFromEvent(event: PointerEvent) {
 }
 
 function getClosestSnapValue(value: number) {
-  if (!isSnapping.value || !isArray(props.snapValues)) return value
+  if (!isArray(props.snapValues)) return value
   const decimals = getDecimals(Number(props.step))
   const valueAtStep = snap(props.snapValues)(value)
   return roundNumber(valueAtStep, decimals)
@@ -193,9 +190,7 @@ function getClickedPointer(evt: PointerEvent) {
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
-  const center = isVertical.value
-    ? rect.top + rect.height / 2
-    : rect.left + rect.width / 2
+  const center = isVertical.value ? rect.top + rect.height / 2 : rect.left + rect.width / 2
   return isVertical.value ? y - center : x - center
 }
 
@@ -205,11 +200,7 @@ function getToReversed() {
   return isHorizontalAndRtl || isVerticalAndBtt
 }
 
-function calculateProgress(
-  parentRect: DOMRect,
-  endPos: Position,
-  offsetPos: Position = { x: 0, y: 0 }
-) {
+function calculateProgress(parentRect: DOMRect, endPos: Position, offsetPos: Position = { x: 0, y: 0 }) {
   const isV = unref(isVertical)
   const horizontal = isV ? 'top' : 'left'
   const vertical = isV ? 'bottom' : 'right'
@@ -246,15 +237,22 @@ function getContainedRect(rect: DOMRect) {
 function handleSwipe(_event: PointerEvent) {
   const sliderEl = <HTMLElement>unrefElement(sliderRef)
   const sliderRect = getRect(sliderEl)
-  const maybeContainedRect = unref(isContained)
-    ? getContainedRect(sliderRect)
-    : sliderRect
+  const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
   const pointerValue = getValue(progress)
 
   if (isNumber(modelValue.value)) {
+    if (isDefined(props.step) && props.step !== 'any') {
+      const valAtStep = getValueAtStep(pointerValue, Number(props.step))
+      if (valAtStep === pointerValue) {
+        return
+      }
+
+      modelValue.value = valAtStep
+      return
+    }
+
     modelValue.value = pointerValue
-    return
   }
 
   if (!isArray(modelValue.value) || !currentPointer.value) {
@@ -283,15 +281,9 @@ function handleSwipe(_event: PointerEvent) {
   modelValue.value.splice(pointerIndex, 1, pointerValue)
 }
 
-function reachedBounds(
-  pointer: number | undefined,
-  pointerValue: number,
-  minDistance: number
-): boolean {
+function reachedBounds(pointer: number | undefined, pointerValue: number, minDistance: number): boolean {
   return (
-    pointer !== undefined &&
-    pointer >= pointerValue - minDistance &&
-    pointer <= pointerValue + minDistance
+    pointer !== undefined && pointer >= pointerValue - minDistance && pointer <= pointerValue + minDistance
   )
 }
 

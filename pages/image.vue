@@ -11,6 +11,10 @@ function resetFiles() {
 }
 
 const maxColors = ref<number>(128)
+
+function loadExampleImage() {
+  if (import.meta.server) return
+}
 </script>
 
 <template>
@@ -26,31 +30,31 @@ const maxColors = ref<number>(128)
       <FilePreview v-if="selectedFile" :file="selectedFile" />
       <FileDropZone v-else @drop="onDrop" />
     </div>
-    <template v-if="selectedFile">
-      <div class="flex flex-col">
-        <fieldset>
-          <div class="flex flex-col justify-between">
-            <label class="mb-2 flex flex-nowrap gap-x-2 text-label-md" for="maxColors">
-              Max Colors
-              <Tooltip class="justify-self-end">
-                <button>
-                  <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
-                </button>
-                <template #content>
-                  The maximum number of colors to generate from the image. The more colors, the more
-                  comprehensive the palette.
-                </template>
-              </Tooltip>
-            </label>
-            <InputRangeSlider v-model="maxColors" max="128" min="1" step="1" />
-          </div>
-        </fieldset>
-        <Buttons class="mt-8">
-          <Button intent="text" @click="resetFiles">Reset</Button>
-          <Button> Extract Colors</Button>
-        </Buttons>
-      </div>
-    </template>
+    <div class="mb-12">
+      <Button intent="outlined" @click="loadExampleImage"> Load Example Image</Button>
+    </div>
+    <div>
+      <fieldset>
+        <div class="flex flex-col justify-between">
+          <label class="mb-2 flex flex-nowrap gap-x-2 text-label-md" for="maxColors">
+            Max Colors
+            <Tooltip class="justify-self-end">
+              <button>
+                <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
+              </button>
+              <template #content> The maximum number of colors to generate from the image.</template>
+            </Tooltip>
+          </label>
+          <LabeledInputSlider v-model="maxColors" max="128" min="1" step="1" />
+        </div>
+      </fieldset>
+    </div>
+    <div class="flex flex-col">
+      <Buttons class="justify-end">
+        <Button v-if="selectedFile" intent="text" @click="resetFiles">Reset</Button>
+        <Button :disabled="!selectedFile"> Extract Colors</Button>
+      </Buttons>
+    </div>
   </div>
 </template>
 
