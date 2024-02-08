@@ -1,5 +1,17 @@
 <script lang="ts" setup>
 const { dialogs } = useDialogs()
+
+watch(
+  dialogs,
+  (newDialogs) => {
+    if (newDialogs.length) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

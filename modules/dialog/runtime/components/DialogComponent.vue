@@ -5,7 +5,16 @@ const dialogVariant = cva({
   base: ['fixed', 'z-50', 'p-6', 'text-on-surface'],
   variants: {
     type: {
-      fullScreen: ['rounded-none', 'w-full', 'h-full', 'm-0', 'inset-0', 'bg-surface', 'p-4'],
+      fullScreen: [
+        'rounded-none',
+        'w-full',
+        'h-full',
+        'm-0',
+        'inset-0',
+        'bg-surface',
+        'p-4',
+        'overscroll-none'
+      ],
       basic: [
         'rounded-xl',
         'w-[560px]',
@@ -38,7 +47,7 @@ const type = computed(() => (fullscreen.value ? 'fullScreen' : 'basic'))
 
 <template>
   <dialog ref="dialogRef" :class="dialogVariant({ type })" open>
-    <article class="scrollbar relative size-full">
+    <article class="relative size-full overscroll-none">
       <slot></slot>
     </article>
   </dialog>

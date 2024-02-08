@@ -56,11 +56,6 @@ function onFabClick() {
   <div class="mx-auto w-full max-w-xl p-4">
     <section class="mb-2"></section>
   </div>
-  <!--  <section class="sticky inset-0 top-0 z-10 mb-2 bg-surface">
-      <div class="mx-auto flex w-full max-w-xl justify-center">
-        <SelectVariant />
-      </div>
-    </section>-->
   <div class="mx-auto w-full max-w-xl p-4">
     <div class="flex flex-wrap gap-4">
       <div class="size-fit">

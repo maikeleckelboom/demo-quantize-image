@@ -2,10 +2,6 @@
 const { state, active, isLabelled } = storeToRefs(useNavStore())
 
 const { isMobileOrTablet, isMobile, isTablet, isDesktop, isApple, isAndroid } = useDevice()
-
-function onFabClick() {
-  console.log('FAB clicked')
-}
 </script>
 
 <template>

@@ -30,9 +30,9 @@ function loadExampleImage() {
       <FilePreview v-if="selectedFile" :file="selectedFile" />
       <FileDropZone v-else @drop="onDrop" />
     </div>
-    <div class="mb-12">
-      <!-- Space -->
-    </div>
+    <!--    <div class="mb-12">
+          &lt;!&ndash; Space &ndash;&gt;
+        </div>-->
     <div>
       <fieldset>
         <div class="flex flex-col justify-between">

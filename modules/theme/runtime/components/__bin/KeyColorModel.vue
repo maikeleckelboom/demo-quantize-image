@@ -16,7 +16,6 @@ const isToggled = ref<boolean>(false)
     <Collapsible v-model="isToggled">
       <ColorDataFetcher :color="hexFromArgb(modelValue)" :labels="false" />
     </Collapsible>
-    <ColorPicker v-model="modelValue" />
   </div>
 </template>
 

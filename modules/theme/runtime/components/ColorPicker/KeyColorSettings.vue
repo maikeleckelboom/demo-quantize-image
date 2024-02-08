@@ -97,12 +97,14 @@ const rgbaB = computed({
         </div>
       </div>
       <div class="mb-4">
-        <h3 class="mb-1 text-label-lg">HCT</h3>
-        <p class="text-on-surface-variant">
-          HCT is an abbreviation of hue chroma tone. It’s the name of the color space that enables dynamic
-          color. HCT is based on CAM16 hue and chroma; the L* construct for luminance from L*a*b* (CIELAB,
-          1976) is denoted as T for tone.
-        </p>
+        <details>
+          <summary class="mb-1 flex items-center gap-x-2 text-label-lg">HCT</summary>
+          <p class="text-on-surface-variant">
+            HCT is an abbreviation of hue chroma tone. It’s the name of the color space that enables dynamic
+            color. HCT is based on CAM16 hue and chroma; the L* construct for luminance from L*a*b* (CIELAB,
+            1976) is denoted as T for tone.
+          </p>
+        </details>
       </div>
     </div>
     <HctColorPicker v-model="modelValue" />
