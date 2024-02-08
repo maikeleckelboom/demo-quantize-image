@@ -17,16 +17,6 @@ const dialogVariant = cva({
   }
 })
 
-const headerVariant = cva({
-  base: ['flex', 'justify-between', 'items-center', 'p-4'],
-  variants: {
-    type: {
-      fullScreen: [],
-      basic: []
-    }
-  }
-})
-
 const footerVariant = cva({
   base: ['flex', 'justify-end', 'p-4'],
   variants: {
@@ -67,9 +57,13 @@ const type = computed(() => (fullscreen.value ? 'fullScreen' : 'basic'))
 <template>
   <dialog ref="dialogRef" :class="dialogVariant({ type })" open>
     <header>
-      <div class="mx-auto grid w-full max-w-xl grid-cols-[1fr,auto] gap-x-2 pt-4">
-        <slot name="header" />
-        <slot name="header-actions" />
+      <div class="mx-auto grid w-full max-w-xl grid-cols-[1fr,auto] gap-x-2 px-4 pt-4 md:px-0">
+        <div class="flex flex-nowrap">
+          <slot name="header" />
+        </div>
+        <div class="flex flex-nowrap gap-x-1">
+          <slot name="header-actions" />
+        </div>
       </div>
     </header>
     <article :class="articleVariant({ type })">

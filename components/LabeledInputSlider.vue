@@ -12,12 +12,4 @@ const props = defineProps<SliderProps>()
   </div>
 </template>
 
-<style scoped>
-.label-el {
-  position: absolute;
-
-  &:not(:first-child, :last-child) {
-    transform: translateX(-50%);
-  }
-}
-</style>
+<style scoped></style>

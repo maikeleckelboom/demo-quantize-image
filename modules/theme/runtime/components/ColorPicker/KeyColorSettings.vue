@@ -37,12 +37,14 @@ const rgbaB = computed({
 })
 
 const initialColor = inject('initialColor', 0)
+
+const selected = ref<boolean>(false)
 </script>
 
 <template>
   <div class="grid">
-    <div class="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-[1fr,auto]">
-      <div class="mb-2">
+    <div class="mb-8 grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-[1fr,auto]">
+      <div>
         <ColorPreview :color="modelValue" class="size-full min-h-40" />
       </div>
       <div class="grid grid-cols-[auto,1fr] gap-x-4 gap-y-3 md:grid-cols-1">
@@ -51,7 +53,7 @@ const initialColor = inject('initialColor', 0)
           <fieldset class="relative">
             <input
               v-model="hex"
-              class="w-40 min-w-24 rounded-md border border-outline-variant bg-surface p-2 text-body-lg uppercase tabular-nums outline-transparent"
+              class="min-w-24 max-w-[164px] rounded-md border border-outline-variant bg-surface p-2 pr-10 text-body-lg uppercase tabular-nums outline-transparent"
             />
             <SaveToClipboard :source="hex" class="absolute right-0 top-1/2 -translate-y-1/2 p-3" />
           </fieldset>
@@ -62,7 +64,7 @@ const initialColor = inject('initialColor', 0)
             <input
               v-model="rgbaR"
               v-mask="{ min: 0, max: 255 }"
-              class="w-12 min-w-0 rounded-md border border-outline-variant bg-surface p-2 text-center text-body-lg tabular-nums outline-transparent"
+              class="w-14 min-w-0 rounded-md border border-outline-variant bg-surface p-2 text-center text-body-lg tabular-nums outline-transparent"
               inputmode="numeric"
               max="255"
               min="0"
@@ -71,7 +73,7 @@ const initialColor = inject('initialColor', 0)
             <input
               v-model="rgbaG"
               v-mask="{ min: 0, max: 255 }"
-              class="w-12 min-w-0 rounded-md border border-outline-variant bg-surface p-2 text-center text-body-lg tabular-nums outline-transparent"
+              class="w-14 min-w-0 rounded-md border border-outline-variant bg-surface p-2 text-center text-body-lg tabular-nums outline-transparent"
               inputmode="numeric"
               max="255"
               min="0"
@@ -80,7 +82,7 @@ const initialColor = inject('initialColor', 0)
             <input
               v-model="rgbaB"
               v-mask="{ min: 0, max: 255 }"
-              class="w-12 min-w-0 rounded-md border border-outline-variant bg-surface p-2 text-center text-body-lg tabular-nums outline-transparent"
+              class="w-14 min-w-0 rounded-md border border-outline-variant bg-surface p-2 text-center text-body-lg tabular-nums outline-transparent"
               inputmode="numeric"
               max="255"
               min="0"
@@ -89,7 +91,7 @@ const initialColor = inject('initialColor', 0)
           </fieldset>
         </div>
       </div>
-      <div class="mb-4 mt-2">
+      <div class="sr-only mt-2">
         <details>
           <summary class="mb-1 flex cursor-pointer items-center gap-x-2 text-label-lg">
             HCT

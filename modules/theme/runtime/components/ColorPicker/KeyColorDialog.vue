@@ -40,18 +40,27 @@ function getKeyColorName(keyColor: string) {
 }
 
 const selected = ref<boolean>(false)
+const bookmarked = ref<boolean>(false)
 </script>
 
 <template>
   <DialogBackdrop>
     <DialogComponent ref="root" @close="exit">
       <template #header>
-        <h1 class="text-headline-sm font-medium capitalize">{{ getKeyColorName(keyColor) }}</h1>
+        <h1 class="text-headline-sm font-medium capitalize md:text-headline-md">
+          {{ getKeyColorName(keyColor) }}
+        </h1>
       </template>
       <template #header-actions>
-        <IconButton :selected="selected" @click="selected = !selected">
-          <Icon v-if="selected" name="ic:round-star" />
-          <Icon v-else name="ic:round-star-border" />
+        <IconButton
+          :aria-label="bookmarked ? 'Remove bookmark' : 'Bookmark'"
+          :selected="bookmarked"
+          :title="bookmarked ? 'Remove bookmark' : 'Bookmark'"
+          size="sm"
+          @click="bookmarked = !bookmarked"
+        >
+          <Icon v-if="bookmarked" class="text-secondary" name="ic:round-bookmark" />
+          <Icon v-else name="ic:round-bookmark-border" />
         </IconButton>
       </template>
       <div class="relative mx-auto max-w-xl">

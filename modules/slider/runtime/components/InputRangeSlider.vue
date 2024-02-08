@@ -232,7 +232,9 @@ function handleSwipe(_event: PointerEvent) {
     if (isDefined(props.step) && props.step !== 'any') {
       // Has step
       const valueAtStep = getValueAtStep(pointerValue, Number(props.step))
-      console.log('value at step', valueAtStep)
+      /*
+            console.log('value at step', valueAtStep)
+      */
       modelValue.value = valueAtStep
 
       return

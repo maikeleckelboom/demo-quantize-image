@@ -4,14 +4,13 @@ import tailwindContainerQueries from '@tailwindcss/container-queries'
 
 export const materialThemePreset = {
   content: [],
-  plugins: [
-    tailwindMaterialColorTheme(),
-    tailwindCustomVariants(),
-    tailwindContainerQueries
-  ],
+  plugins: [tailwindMaterialColorTheme(), tailwindCustomVariants(), tailwindContainerQueries],
   darkMode: 'class',
   theme: {
     extend: {
+      screens: {
+        xs: '320px'
+      },
       transitionDuration: {
         '50': '50ms',
         '250': '250ms',
@@ -46,8 +45,7 @@ export const materialThemePreset = {
         },
         'neutral-variant-palette-key-color': {
           DEFAULT: 'rgb(var(--neutral-variant-palette-key-color-rgb) / <alpha-value>)',
-          light:
-            'rgb(var(--neutral-variant-palette-key-color-light-rgb) / <alpha-value>)',
+          light: 'rgb(var(--neutral-variant-palette-key-color-light-rgb) / <alpha-value>)',
           dark: 'rgb(var(--neutral-variant-palette-key-color-dark-rgb) / <alpha-value>)'
         },
         primary: {
@@ -243,18 +241,15 @@ export const materialThemePreset = {
         'primary-fixed': 'rgb(var(--primary-fixed-rgb) / <alpha-value>)',
         'primary-fixed-dim': 'rgb(var(--primary-fixed-dim-rgb) / <alpha-value>)',
         'on-primary-fixed': 'rgb(var(--on-primary-fixed-rgb) / <alpha-value>)',
-        'on-primary-fixed-variant':
-          'rgb(var(--on-primary-fixed-variant-rgb) / <alpha-value>)',
+        'on-primary-fixed-variant': 'rgb(var(--on-primary-fixed-variant-rgb) / <alpha-value>)',
         'secondary-fixed': 'rgb(var(--secondary-fixed-rgb) / <alpha-value>)',
         'secondary-fixed-dim': 'rgb(var(--secondary-fixed-dim-rgb) / <alpha-value>)',
         'on-secondary-fixed': 'rgb(var(--on-secondary-fixed-rgb) / <alpha-value>)',
-        'on-secondary-fixed-variant':
-          'rgb(var(--on-secondary-fixed-variant-rgb) / <alpha-value>)',
+        'on-secondary-fixed-variant': 'rgb(var(--on-secondary-fixed-variant-rgb) / <alpha-value>)',
         'tertiary-fixed': 'rgb(var(--tertiary-fixed-rgb) / <alpha-value>)',
         'tertiary-fixed-dim': 'rgb(var(--tertiary-fixed-dim-rgb) / <alpha-value>)',
         'on-tertiary-fixed': 'rgb(var(--on-tertiary-fixed-rgb) / <alpha-value>)',
-        'on-tertiary-fixed-variant':
-          'rgb(var(--on-tertiary-fixed-variant-rgb) / <alpha-value>)',
+        'on-tertiary-fixed-variant': 'rgb(var(--on-tertiary-fixed-variant-rgb) / <alpha-value>)',
         'surface-level-1': 'rgb(var(--primary-rgb) / 0.04)',
         'surface-level-2': 'rgb(var(--primary-rgb) / 0.08)',
         'surface-level-3': 'rgb(var(--primary-rgb) / 0.12)'

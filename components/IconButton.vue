@@ -3,10 +3,12 @@ const props = withDefaults(
   defineProps<{
     selected?: boolean
     disabled?: boolean
+    readonly?: boolean
     size?: 'sm' | 'md' | 'lg'
   }>(),
   {
     disabled: false,
+    readonly: false,
     selected: false,
     size: 'sm'
   }
@@ -24,23 +26,23 @@ const button = cva({
     'after:inset-0',
     'after:absolute',
     'after:size-full',
-    'after:bg-surface-tint/30',
+    'after:bg-secondary-container',
     'after:rounded-4xl',
     'after:opacity-0',
     'after:ease-in-out',
-    'icon:text-secondary',
+    'after:-z-10',
     'icon:pointer-events-none'
   ],
   variants: {
     selected: {
-      true: ['after:opacity-100'],
+      true: [],
       false: []
     },
     disabled: {
-      true: ['cursor-not-allowed', 'pointer-events-none']
+      true: ['cursor-not-allowed', 'pointer-events-none', 'after:opacity-20']
     },
     size: {
-      sm: ['', 'icon:size-[24px]', 'h-[36px]', 'w-[36px]'],
+      sm: ['', 'icon:size-[20px]', 'h-[36px]', 'w-[36px]'],
       md: ['', 'icon:size-[24px]', 'h-[42px]', 'w-[42px]'],
       lg: ['', 'icon:size-[24px]', 'h-[50px]', 'w-[50px]']
     }
@@ -49,15 +51,20 @@ const button = cva({
 </script>
 
 <template>
-  <button :class="button({ selected, size, disabled })" :disabled="$props.disabled">
-    <span class="touch-target">
-      <slot></slot>
+  <button
+    :aria-disabled="$props.disabled"
+    :aria-pressed="selected"
+    :aria-selected="selected"
+    :class="button({ selected, size, disabled, class: $attrs?.class ?? '' })"
+    :disabled="$props.disabled"
+    :readonly="$props.readonly"
+    role="button"
+    type="button"
+  >
+    <span
+      class="absolute left-1/2 top-1/2 flex size-[48px] -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+    >
+      <slot />
     </span>
   </button>
 </template>
-
-<style scoped>
-.touch-target {
-  @apply absolute left-1/2 top-1/2 flex size-[48px] -translate-x-1/2 -translate-y-1/2 items-center justify-center;
-}
-</style>

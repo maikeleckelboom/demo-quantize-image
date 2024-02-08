@@ -80,7 +80,7 @@ function validate(value: number, key: keyof HctModel) {}
           id="hue"
           v-mask="{ min: 0, max: 360 }"
           :value="Math.round(formModel.hue)"
-          class="h-[34px] w-[52px] min-w-0 rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none"
+          class="h-[34px] w-[52px] min-w-0 rounded-lg bg-transparent px-3 py-2 text-center outline-none"
           inputmode="numeric"
           max="0"
           min="360"
@@ -115,7 +115,7 @@ function validate(value: number, key: keyof HctModel) {}
           id="chroma"
           v-mask="{ min: 0, max: 150 }"
           :value="Math.round(formModel.chroma)"
-          class="h-[34px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
+          class="h-[34px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center outline-none"
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"
@@ -143,7 +143,7 @@ function validate(value: number, key: keyof HctModel) {}
           <label class="flex flex-nowrap gap-x-2 text-label-md" for="tone">
             Tone
             <Tooltip>
-              <button class=" ">
+              <button>
                 <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
               </button>
               <template #content> The amount of white or black mixed with the color.</template>
@@ -154,7 +154,7 @@ function validate(value: number, key: keyof HctModel) {}
           id="tone"
           v-mask="{ min: 0, max: 100 }"
           :value="Math.round(formModel.tone)"
-          class="h-[34px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
+          class="h-[34px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center outline-none"
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"
