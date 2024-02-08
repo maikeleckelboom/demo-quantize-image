@@ -53,7 +53,7 @@ const selected = ref<boolean>(false)
           <fieldset class="relative">
             <input
               v-model="hex"
-              class="min-w-24 max-w-[164px] rounded-md border border-outline-variant bg-surface p-2 pr-10 text-body-lg uppercase tabular-nums outline-transparent"
+              class="min-w-24 max-w-32 rounded-md border border-outline-variant bg-surface p-2 pr-10 text-body-lg uppercase tabular-nums outline-transparent md:max-w-[164px]"
             />
             <SaveToClipboard :source="hex" class="absolute right-0 top-1/2 -translate-y-1/2 p-3" />
           </fieldset>
