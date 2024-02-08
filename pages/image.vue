@@ -65,25 +65,27 @@ function reset() {
 </script>
 
 <template>
-  <div class="mx-auto flex w-full max-w-xl flex-col gap-8 p-4">
-    <div class="">
-      <h1 class="mb-2 text-headline-sm leading-snug">Upload an image to generate color palettes</h1>
+  <div class="mx-auto flex w-full max-w-xl flex-col p-4">
+    <div class="mb-8">
+      <h1 class="mb-2 text-headline-sm md:mb-4 md:text-headline-lg md:leading-snug">
+        Upload an image to generate color palettes
+      </h1>
       <p class="text-body-sm text-on-surface-variant">
         The image is digitally analyzed, a single color is selected as the source color, and tones are chosen
         and assigned to each color role.
       </p>
     </div>
-    <div class="h-64 overflow-hidden">
+    <div class="mb-4 h-64 overflow-hidden">
       <FilePreview v-if="selectedFile" :file="selectedFile" />
       <FileDropZone v-else @drop="onDrop" />
     </div>
-    <div class="flex justify-end">
+    <div v-if="!selectedFile" class="mb-4 flex justify-end">
       <Button intent="outlined" size="sm" @click="loadExampleImage"> Load Example Image</Button>
     </div>
-    <div>
+    <div class="mb-4">
       <fieldset>
         <div class="flex flex-col justify-between">
-          <label class="mb-2 flex flex-nowrap gap-x-2 text-label-md" for="maxColors">
+          <label class="mb-4 flex flex-nowrap gap-x-2 text-label-md" for="maxColors">
             Max Colors
             <Tooltip class="justify-self-end">
               <button>
