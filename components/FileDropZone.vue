@@ -1,41 +1,62 @@
 <script lang="ts" setup>
 import { useDropZone } from '@vueuse/core'
 
+const props = withDefaults(
+  defineProps<{
+    dataTypes?: string[]
+  }>(),
+  { dataTypes: () => ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'] }
+)
+
+const emit = defineEmits<{
+  drop: [files: File[] | null]
+  enter: [files: File[] | null, event: DragEvent]
+  leave: [files: File[] | null, event: DragEvent]
+  over: [files: File[] | null, event: DragEvent]
+}>()
+
 const dropZoneRef = ref<HTMLDivElement>()
 
 function onDrop(files: File[] | null) {
-  // called when files are dropped on zone
-  console.log(files)
+  console.log('drop', files)
+  emit('drop', files)
 }
 
 function onEnter(files: File[] | null, event: DragEvent) {
-  // called when files are dragged over zone
   console.log('enter', files, event)
+  emit('enter', files, event)
 }
 
 function onLeave(files: File[] | null, event: DragEvent) {
-  // called when files are dragged out of zone
-  console.log('leave', files, event)
+  emit('leave', files, event)
 }
 
 function onOver(files: File[] | null, event: DragEvent) {
-  // called when files are dragged over zone
-  console.log('over', files, event)
+  emit('over', files, event)
 }
 
-const { isOverDropZone } = useDropZone(dropZoneRef, {
-  dataTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'],
+const { isOverDropZone, files } = useDropZone(dropZoneRef, {
+  dataTypes: props.dataTypes,
   onDrop,
   onEnter,
   onLeave,
   onOver
 })
+
+function onChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  const files = input.files
+  if (files) {
+    onDrop(Array.from(files))
+  }
+}
 </script>
 
 <template>
-  <div ref="dropZoneRef" class="flex w-full items-center justify-center">
+  <div ref="dropZoneRef" :class="{ isOverDropZone }" class="flex w-full items-center justify-center">
     <label
-      class="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-outline-variant bg-surface-container-low transition-colors duration-300 ease-in-out hover:bg-surface-container-high"
+      :class="{ 'bg-surface-container-high': isOverDropZone }"
+      class="flex size-full h-64 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-outline-variant bg-surface-container-low transition-colors duration-300 ease-in-out hover:bg-surface-container-high"
       for="dropzone-file"
     >
       <span class="flex flex-col items-center justify-center pb-6 pt-5">
@@ -51,19 +72,19 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-          ></path>
+          />
         </svg>
-        <p class="mb-2 text-sm text-on-surface-variant">
+        <span class="mb-2 inline text-sm text-on-surface-variant">
           <span class="font-semibold">Click to upload</span> or drag and drop
-        </p>
-        <p class="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+        </span>
+        <span class="text-xs">PNG, JPG, SVG or WEBP</span>
       </span>
-      <input id="dropzone-file" class="hidden" type="file" />
+      <input id="dropzone-file" class="hidden" type="file" @change="onChange" />
     </label>
   </div>
 </template>
 
-<style>
-.v-dropzone {
+<style scoped>
+.isOverDropZone {
 }
 </style>

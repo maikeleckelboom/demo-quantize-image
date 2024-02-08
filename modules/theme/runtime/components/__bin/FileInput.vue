@@ -53,14 +53,6 @@ function commit() {
   emit('commit', file.value)
 }
 
-defineExpose({
-  open,
-  reset,
-  commit,
-  file,
-  files
-})
-
 function onReset() {
   emit('reset')
   file.value = null
