@@ -3,7 +3,7 @@ import type { ColorPickerOptions } from '~/modules/dialog/runtime/factory'
 import type { DialogComponent } from '#components'
 
 const props = withDefaults(defineProps<ColorPickerOptions>(), {
-  keyColor: 'Fallback Color',
+  keyColor: 'unknown',
   initialColor: 0
 })
 
@@ -33,20 +33,20 @@ provide('initialColor', props.initialColor)
 
 <template>
   <DialogBackdrop>
-    <DialogComponent ref="root" open @close="exit">
+    <DialogComponent ref="root" @close="exit">
+      <div class="text-display-lg">
+        {{ colorValue }}
+      </div>
       <KeyColorModel v-model="colorValue" :label="keyColor" />
-      <Buttons class="mb-4 ml-auto mt-6 w-fit">
-        <Button intent="text" @click="exit">Cancel</Button>
-        <Button intent="outlined" @click="close(localColor)">
-          Apply
-          <Icon class="ml-2" name="ic:baseline-join-right" />
-        </Button>
-      </Buttons>
+      <div class="mt-16">
+        <Buttons class="mb-4 ml-auto w-fit">
+          <Button intent="text" @click="exit">Cancel</Button>
+          <Button intent="outlined" @click="close(localColor)">
+            Apply
+            <Icon class="ml-2" name="ic:baseline-join-right" />
+          </Button>
+        </Buttons>
+      </div>
     </DialogComponent>
   </DialogBackdrop>
 </template>
-
-<style scoped>
-.v-dialog-container {
-}
-</style>

@@ -2,6 +2,7 @@
 import { Hct, hexFromArgb, TonalPalette } from '@material/material-color-utilities'
 import type { HctModel } from '~/modules/theme/types'
 import Tooltip from '~/modules/base/runtime/components/Tooltip.vue'
+import { vMask } from '~/modules/theme/runtime/utils/directives/vMask'
 
 const modelValue = defineModel<number>('modelValue', { type: Number, default: 0 })
 
@@ -77,6 +78,7 @@ function validate(value: number, key: keyof HctModel) {}
         </div>
         <input
           id="hue"
+          v-mask="{ min: 0, max: 360 }"
           :value="Math.round(formModel.hue)"
           class="h-[34px] w-[52px] min-w-0 rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none"
           inputmode="numeric"
@@ -111,6 +113,7 @@ function validate(value: number, key: keyof HctModel) {}
         </div>
         <input
           id="chroma"
+          v-mask="{ min: 0, max: 150 }"
           :value="Math.round(formModel.chroma)"
           class="h-[34px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
           inputmode="numeric"
@@ -149,6 +152,7 @@ function validate(value: number, key: keyof HctModel) {}
         </div>
         <input
           id="tone"
+          v-mask="{ min: 0, max: 100 }"
           :value="Math.round(formModel.tone)"
           class="h-[34px] w-[52px] rounded-lg bg-transparent px-3 py-2 text-center text-on-surface-variant focus:outline-none focus-visible:outline-none"
           inputmode="numeric"

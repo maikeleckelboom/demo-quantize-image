@@ -5,6 +5,9 @@ interface Props {
   placement?: Placement
   delay?: number | `${number}ms` | `${number}s`
   arrow?: boolean
+  classes?: {
+    reference?: string
+  }
 }
 
 const { placement: initialPlacement, delay } = withDefaults(defineProps<Props>(), {
@@ -12,10 +15,6 @@ const { placement: initialPlacement, delay } = withDefaults(defineProps<Props>()
   delay: 0,
   arrow: false
 })
-
-function getDelay(delay: Props['delay']) {
-  return typeof delay === 'number' ? `${delay}ms` : delay
-}
 
 const reference = ref<HTMLElement>()
 const floating = ref<HTMLElement>()
@@ -61,10 +60,23 @@ const arrowPos = computed(() => ({
   left: middlewareData.value.arrow?.x != null ? `${middlewareData.value.arrow.x}px` : undefined,
   top: middlewareData.value.arrow?.y != null ? `${middlewareData.value.arrow.y}px` : undefined
 }))
+
+function getDelay(delay: Props['delay']) {
+  return typeof delay === 'number' ? `${delay}ms` : delay
+}
 </script>
 
 <template>
-  <div ref="reference" class="w-fit" @focusin="show" @focusout="hide" @mouseenter="show" @mouseleave="hide">
+  <div
+    ref="reference"
+    :class="$props.classes?.reference"
+    class="w-fit"
+    v-bind="$attrs"
+    @focusin="show"
+    @focusout="hide"
+    @mouseenter="show"
+    @mouseleave="hide"
+  >
     <slot />
   </div>
   <div v-if="open" ref="floating" :style="floatingStyles" class="tooltip-container">

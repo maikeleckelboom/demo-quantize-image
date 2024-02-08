@@ -17,7 +17,7 @@ const emit = defineEmits<{
 
 const dropZoneRef = ref<HTMLDivElement>()
 
-function onDrop(files: File[]) {
+function onDrop(files: File[] | null) {
   if (!files) return
   emit('drop', files)
 }

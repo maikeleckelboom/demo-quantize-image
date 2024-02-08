@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const files = ref<File[]>([])
+const { selectedFile } = useFileSelection(files)
 
 function onDrop(droppedFiles: File[]) {
   files.value = droppedFiles
@@ -9,46 +10,47 @@ function resetFiles() {
   files.value = []
 }
 
-const { selectedFile, selectFile, isSelected } = useFileSelection(files)
-
-watch(selectedFile, (v) => {
-  console.log(v)
-})
-
-watch(files, (v) => {
-  console.log(v)
-})
+const maxColors = ref<number>(128)
 </script>
 
 <template>
   <div class="mx-auto flex w-full max-w-xl flex-col gap-8 p-4">
-    <div>
-      <h1 class="mb-1 text-headline-sm">Upload an image to generate color palettes</h1>
+    <div class="mb-2">
+      <h1 class="mb-2 text-headline-sm leading-snug">Upload an image to generate color palettes</h1>
       <p class="text-body-sm text-on-surface-variant">
         The image is digitally analyzed, a single color is selected as the source color, and tones are chosen
         and assigned to each color role.
       </p>
     </div>
-
-    <div class="h-64">
-      <FileDropZone @drop="onDrop" />
+    <div class="h-64 overflow-hidden">
+      <FilePreview v-if="selectedFile" :file="selectedFile" />
+      <FileDropZone v-else @drop="onDrop" />
     </div>
-    <div class="grid grid-cols-2 gap-4">
-      <div
-        v-for="(file, index) in files"
-        :key="file.name"
-        :class="isSelected(index) ? 'border-primary' : 'border-transparent'"
-        :data-selected="isSelected(index)"
-        class="relative overflow-clip rounded-md border-2 [&:not([data-selected=true])]:hover:border-primary/50"
-        @click="selectFile(index)"
-      >
-        <FilePreview :file="file" />
+    <template v-if="selectedFile">
+      <div class="flex flex-col">
+        <fieldset>
+          <div class="flex flex-col justify-between">
+            <label class="mb-2 flex flex-nowrap gap-x-2 text-label-md" for="maxColors">
+              Max Colors
+              <Tooltip class="justify-self-end">
+                <button>
+                  <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
+                </button>
+                <template #content>
+                  The maximum number of colors to generate from the image. The more colors, the more
+                  comprehensive the palette.
+                </template>
+              </Tooltip>
+            </label>
+            <InputRangeSlider v-model="maxColors" max="128" min="1" step="1" />
+          </div>
+        </fieldset>
+        <Buttons class="mt-8">
+          <Button intent="text" @click="resetFiles">Reset</Button>
+          <Button> Extract Colors</Button>
+        </Buttons>
       </div>
-    </div>
-    <Buttons v-if="selectedFile">
-      <Button intent="text" @click="resetFiles">Cancel</Button>
-      <Button>Commit</Button>
-    </Buttons>
+    </template>
   </div>
 </template>
 

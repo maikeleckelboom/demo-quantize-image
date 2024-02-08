@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <div :style="{ background: hexFromArgb(color) }" class="relative aspect-video max-h-28 rounded-md">
+  <div :style="{ background: hexFromArgb(color) }" class="relative size-full rounded-md">
     <slot />
   </div>
 </template>
