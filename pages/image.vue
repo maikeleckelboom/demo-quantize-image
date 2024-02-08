@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 const files = ref<File[]>([])
 
-function onDrop(droppedFiles: File[] | null) {
-  if (!droppedFiles) return
+function onDrop(droppedFiles: File[]) {
   files.value = droppedFiles
 }
 
@@ -10,9 +9,13 @@ function resetFiles() {
   files.value = []
 }
 
-const { selectedFile, selectFile, clearSelection, isSelected } = useFileSelection(files)
+const { selectedFile, selectFile, isSelected } = useFileSelection(files)
 
 watch(selectedFile, (v) => {
+  console.log(v)
+})
+
+watch(files, (v) => {
   console.log(v)
 })
 </script>
@@ -31,11 +34,18 @@ watch(selectedFile, (v) => {
       <FileDropZone @drop="onDrop" />
     </div>
     <div class="grid grid-cols-2 gap-4">
-      <div v-for="file in files" :key="file.name">
+      <div
+        v-for="(file, index) in files"
+        :key="file.name"
+        :class="isSelected(index) ? 'border-primary' : 'border-transparent'"
+        :data-selected="isSelected(index)"
+        class="relative overflow-clip rounded-md border-2 [&:not([data-selected=true])]:hover:border-primary/50"
+        @click="selectFile(index)"
+      >
         <FilePreview :file="file" />
       </div>
     </div>
-    <Buttons v-if="files.length">
+    <Buttons v-if="selectedFile">
       <Button intent="text" @click="resetFiles">Cancel</Button>
       <Button>Commit</Button>
     </Buttons>

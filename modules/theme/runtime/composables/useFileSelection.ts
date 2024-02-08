@@ -1,20 +1,25 @@
 import type { MaybeRefOrGetter } from 'vue'
 
-function useFileSelection(files: MaybeRefOrGetter<File[]>) {
+function useFileSelection(
+  files: MaybeRefOrGetter<File[]>,
+  atLeastOneSelected: MaybeRefOrGetter<boolean> = true
+) {
   const filesArr = ref<File[]>([])
   const selectedFileIndex = ref<number>()
 
   watch(
     () => toValue(files),
-    (v) => {
-      console.log('Files changed', v)
+    (files) => {
+      filesArr.value = files
+      if (toValue(atLeastOneSelected) && files.length > 0) {
+        selectedFileIndex.value = 0
+      }
     }
   )
 
   const selectedFile = computed(() => {
-    if (selectedFileIndex.value !== undefined) {
-      return filesArr.value[selectedFileIndex.value]
-    }
+    if (isUndefined(selectedFileIndex.value)) return
+    return filesArr.value[selectedFileIndex.value]
   })
 
   function selectFile(index: number) {

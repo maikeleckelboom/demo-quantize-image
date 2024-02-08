@@ -2,9 +2,9 @@
 import { arrow, autoUpdate, flip, offset, type Placement, shift, useFloating } from '@floating-ui/vue'
 
 interface Props {
-  placement: Placement
-  delay: number | `${number}ms` | `${number}s`
-  arrow: boolean
+  placement?: Placement
+  delay?: number | `${number}ms` | `${number}s`
+  arrow?: boolean
 }
 
 const { placement: initialPlacement, delay } = withDefaults(defineProps<Props>(), {

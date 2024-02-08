@@ -9,7 +9,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  drop: [files: File[] | null]
+  drop: [files: File[]]
   enter: [files: File[] | null, event: DragEvent]
   leave: [files: File[] | null, event: DragEvent]
   over: [files: File[] | null, event: DragEvent]
@@ -17,13 +17,12 @@ const emit = defineEmits<{
 
 const dropZoneRef = ref<HTMLDivElement>()
 
-function onDrop(files: File[] | null) {
-  console.log('drop', files)
+function onDrop(files: File[]) {
+  if (!files) return
   emit('drop', files)
 }
 
 function onEnter(files: File[] | null, event: DragEvent) {
-  console.log('enter', files, event)
   emit('enter', files, event)
 }
 
@@ -46,9 +45,8 @@ const { isOverDropZone, files } = useDropZone(dropZoneRef, {
 function onChange(event: Event) {
   const input = event.target as HTMLInputElement
   const files = input.files
-  if (files) {
-    onDrop(Array.from(files))
-  }
+  if (!files) return
+  onDrop(Array.from(files))
 }
 </script>
 
