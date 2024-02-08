@@ -92,7 +92,9 @@ function reset() {
               <template #content> The maximum number of colors to generate from the image.</template>
             </Tooltip>
           </label>
-          <LabeledInputSlider v-model="maxColors" max="128" min="1" step="1" />
+          <div class="">
+            <LabeledInputSlider v-model="maxColors" contained="true" max="128" min="1" step="1" />
+          </div>
         </div>
       </fieldset>
     </div>
