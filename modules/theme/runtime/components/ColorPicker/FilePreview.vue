@@ -1,11 +1,15 @@
 <script lang="ts" setup>
-const props = defineProps<{
+defineProps<{
   url: string
 }>()
 </script>
 
 <template>
-  <img :src="url" alt="" class="size-full min-h-32 rounded-md" />
+  <img :src="url" alt="" class="vt-source-element size-full min-h-32 rounded-md" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.vt-source-element {
+  view-transition-name: source;
+}
+</style>

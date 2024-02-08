@@ -16,7 +16,7 @@ const useFilesStore = defineStore('files', () => {
     clearSelection,
     selectFile,
     isSelected,
-    fileObjectUrl
+    fileObjectUrl: computed(() => fileObjectUrl.value)
   }
 })
 

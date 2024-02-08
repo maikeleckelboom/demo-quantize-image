@@ -1,9 +1,17 @@
 <script lang="ts" setup>
+import { isDoneData, isProgressData, type QuantizeWorker, type WorkerData } from '~/workers/quantizeWorker'
 import { hexFromArgb } from '@material/material-color-utilities'
-import { isDoneData, isProgressData, type QuantizeWorker, type WorkerData } from '~/workers/quantize.worker'
+
+const { Escape } = useMagicKeys()
+const router = useRouter()
+whenever(Escape, () => router.back())
+
+onUnmounted(() => {
+  store.reset()
+})
 
 const store = useFilesStore()
-const { selectedFile, fileObjectUrl } = storeToRefs(store)
+const { selectedFile } = storeToRefs(store)
 
 if (!selectedFile.value) {
   navigateTo('/image')
@@ -19,10 +27,6 @@ const processesList = [
   'Score prominent colors to obtain seed colors'
 ]
 
-function scaleProgress(step: number) {
-  return Math.round((step / processesList.length) * 100)
-}
-
 const processes = ref(
   processesList.map((task, index) => ({
     index,
@@ -31,50 +35,9 @@ const processes = ref(
   }))
 )
 
-const prominentColors = ref<Map<number, number>>()
-const seedColors = ref<number[]>([])
-const isLoading = ref<boolean>(true)
-const currentProgress = ref<number>(0)
-
-onMounted(() => {
-  const worker: QuantizeWorker = new Worker(new URL('~/workers/quantize.worker.ts', import.meta.url), {
-    type: 'module'
-  })
-
-  worker.postMessage({
-    type: 'init',
-    maxColors: maxColors.value,
-    file: selectedFile.value!
-  })
-
-  worker.addEventListener('message', (evt: MessageEvent<WorkerData>) => {
-    if (isProgressData(evt.data)) {
-      processes.value[evt.data.step - 1].done = true
-      currentProgress.value = evt.data.progress
-    }
-    if (isDoneData(evt.data)) {
-      prominentColors.value = evt.data.colors.prominent
-      seedColors.value = evt.data.colors.seed
-      isLoading.value = false
-      worker.terminate()
-    }
-  })
-})
-
-const maxColors = ref<number>(128)
-
 function setDone(index: number) {
   processes.value[index].done = true
 }
-
-const { Escape } = useMagicKeys()
-
-const router = useRouter()
-whenever(Escape, () => router.back())
-
-onUnmounted(() => {
-  store.reset()
-})
 
 function isCurrentProcess(index: number) {
   return index === processes.value.findIndex((process) => !process.done)
@@ -83,16 +46,45 @@ function isCurrentProcess(index: number) {
 function isPastProcess(index: number) {
   return index < processes.value.findIndex((process) => !process.done)
 }
+
+const prominentColors = ref<Map<number, number>>()
+const seedColors = ref<number[]>([])
+const isLoading = ref<boolean>(true)
+const progress = ref<number>(0)
+
+onMounted(() => {
+  if (!selectedFile.value) {
+    return
+  }
+
+  const worker: QuantizeWorker = new Worker(new URL('~/workers/quantizeWorker.ts', import.meta.url), {
+    type: 'module'
+  })
+
+  worker.postMessage({
+    type: 'init',
+    maxColors: 128,
+    file: selectedFile.value
+  })
+
+  worker.addEventListener('message', (evt: MessageEvent<WorkerData>) => {
+    if (isProgressData(evt.data)) {
+      processes.value[evt.data.step - 1].done = true
+      progress.value = evt.data.progress
+    }
+    if (isDoneData(evt.data)) {
+      prominentColors.value = evt.data.prominentColors
+      seedColors.value = evt.data.seedColors
+      worker.terminate()
+      isLoading.value = false
+    }
+  })
+})
 </script>
 <template>
   <div class="mx-auto w-full max-w-xl p-4">
     <DialogComponent>
-      <img
-        id="vt-source-element"
-        :src="fileObjectUrl"
-        alt="Quantized Image"
-        class="h-fit w-auto rounded-md object-cover"
-      />
+      <img :src="store.fileObjectUrl" alt="" class="vt-source-element h-fit w-auto rounded-md object-cover" />
       <div class="my-8">
         <div
           v-for="process in processes"
@@ -148,16 +140,9 @@ function isPastProcess(index: number) {
 </template>
 
 <style scoped>
-#vt-source-element {
+.vt-source-element {
   view-transition-name: source-img;
-}
-
-::view-transition-old(source-img),
-::view-transition-new(source-img) {
-}
-
-::view-transition-image-pair(source-img) {
-  transition: ease all 200ms;
+  contain: layout;
 }
 
 /*

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const store = useFilesStore()
-const { files, selectedFile, fileObjectUrl } = storeToRefs(store)
+const { files, selectedFile } = storeToRefs(store)
 const { reset } = store
 
 function onDrop(droppedFiles: File[]) {
@@ -60,8 +60,8 @@ async function setExampleImage() {
       </p>
     </div>
     <div class="mb-4 h-64 overflow-hidden">
-      <FilePreview v-if="fileObjectUrl" id="vt-source-element" :url="fileObjectUrl" />
-      <FileDropZone v-if="!selectedFile" @drop="onDrop" />
+      <FilePreview v-if="selectedFile" id="vt-source-element" :url="store.fileObjectUrl" />
+      <FileDropZone v-else @drop="onDrop" />
     </div>
 
     <template v-if="selectedFile">
