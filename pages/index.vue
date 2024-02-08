@@ -30,8 +30,8 @@ function removePaletteFromKey(key: string) {
 
 async function onOpenColorPicker(keyColor: string, initialColor: number) {
   const { data, isCanceled } = await openColorPicker({
-    keyColor,
-    initialColor,
+    keyColor, // name
+    initialColor, // color
     onColorChange: (color) => {
       //
     }
@@ -45,6 +45,10 @@ async function onOpenColorPicker(keyColor: string, initialColor: number) {
   if (data) {
     console.log('Color picker returned', data)
   }
+}
+
+function onFabClick() {
+  console.log('FAB clicked')
 }
 </script>
 
@@ -80,5 +84,18 @@ async function onOpenColorPicker(keyColor: string, initialColor: number) {
     </div>
     <section class="mb-2"></section>
     <Glossary />
+  </div>
+  <div class="pointer-events-none fixed inset-x-0 bottom-[92px]">
+    <div class="mx-auto flex size-full max-w-xl justify-end px-4">
+      <Button
+        class="pointer-events-auto"
+        intent="extended-fab"
+        size="lg"
+        variant="primary"
+        @click="onFabClick"
+      >
+        <Icon name="ic:round-add" />
+      </Button>
+    </div>
   </div>
 </template>

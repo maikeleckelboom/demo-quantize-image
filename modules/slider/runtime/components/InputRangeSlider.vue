@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<SliderProps>(), {
   disabled: false,
   preventOverlap: true,
   minDistance: 0,
+  step: 1,
   labelVisibility: 'auto'
 })
 
@@ -99,7 +100,8 @@ function getValue(progress: number) {
   const min = Number(props.min)
   const max = Number(props.max)
   const value = convertRange(0, 100, min, max, progress)
-  return clamp(value, min, max)
+  const stepValue = getClosestSnapValue(value)
+  return clamp(stepValue, min, max)
 }
 
 function getProgress(value: number) {
@@ -226,13 +228,18 @@ function handleSwipe(_event: PointerEvent) {
   const pointerValue = getValue(progress)
 
   if (isNumber(modelValue.value)) {
+    // Single value
     if (isDefined(props.step) && props.step !== 'any') {
-      modelValue.value = getValueAtStep(pointerValue, Number(props.step))
+      // Has step
+      const valueAtStep = getValueAtStep(pointerValue, Number(props.step))
+      console.log('value at step', valueAtStep)
+      modelValue.value = valueAtStep
 
       return
     }
 
     modelValue.value = pointerValue
+    return
   }
 
   if (!isArray(modelValue.value) || !currentPointer.value) {
