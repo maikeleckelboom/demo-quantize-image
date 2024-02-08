@@ -2,19 +2,10 @@
 import Dialog from '~/pages/dialog.vue'
 
 const dialogVariant = cva({
-  base: ['fixed', 'z-50', 'p-6', 'text-on-surface'],
+  base: ['fixed', 'z-50', 'text-on-surface'],
   variants: {
     type: {
-      fullScreen: [
-        'rounded-none',
-        'w-full',
-        'h-full',
-        'm-0',
-        'inset-0',
-        'bg-surface',
-        'p-4',
-        'overscroll-none'
-      ],
+      fullScreen: ['rounded-none', 'w-full', 'h-full', 'm-0', 'inset-0', 'bg-surface', 'overflow-hidden'],
       basic: [
         'rounded-xl',
         'w-[560px]',
@@ -47,7 +38,7 @@ const type = computed(() => (fullscreen.value ? 'fullScreen' : 'basic'))
 
 <template>
   <dialog ref="dialogRef" :class="dialogVariant({ type })" open>
-    <article class="relative size-full overscroll-none">
+    <article class="relative size-full overflow-y-auto overscroll-none p-4">
       <slot></slot>
     </article>
   </dialog>
