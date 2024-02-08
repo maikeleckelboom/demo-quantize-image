@@ -33,6 +33,7 @@ provide('initialColor', props.initialColor)
 
 function save() {
   console.log('save')
+  close(localColor.value)
 }
 </script>
 
@@ -43,7 +44,7 @@ function save() {
         <KeyColorSettings v-model="colorValue" :key-color="keyColor" />
         <Buttons class="mb-4 ml-auto mt-6 w-fit">
           <Button intent="text" @click="exit">Cancel</Button>
-          <Button intent="outlined" @click="close(localColor)">Save</Button>
+          <Button intent="outlined" @click="save">Save</Button>
         </Buttons>
       </div>
     </DialogComponent>

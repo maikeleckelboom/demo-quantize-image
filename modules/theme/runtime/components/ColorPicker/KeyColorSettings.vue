@@ -96,7 +96,7 @@ const rgbaB = computed({
           </fieldset>
         </div>
       </div>
-      <div class="mb-4">
+      <div class="mb-4 mt-2">
         <details>
           <summary class="mb-1 flex items-center gap-x-2 text-label-lg">HCT</summary>
           <p class="text-on-surface-variant">
