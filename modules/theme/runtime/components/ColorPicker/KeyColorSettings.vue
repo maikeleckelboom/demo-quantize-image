@@ -2,14 +2,7 @@
 import { argbFromHex, argbFromRgba, hexFromArgb, rgbaFromArgb } from '@material/material-color-utilities'
 import { vMask } from '~/modules/theme/runtime/utils/directives/vMask'
 
-withDefaults(
-  defineProps<{
-    keyColor?: string
-  }>(),
-  {
-    keyColor: ''
-  }
-)
+defineProps<{ keyColor?: string }>()
 
 const modelValue = defineModel<number>('modelValue', { type: Number, default: 0 })
 
@@ -21,10 +14,6 @@ const hex = computed({
     modelValue.value = argbFromHex(v)
   }
 })
-
-function getKeyColorName(keyColor: string) {
-  return sentenceCase(`sourceColor` === keyColor ? keyColor : `${keyColor} Key Color`)
-}
 
 const rgbaR = computed({
   get: () => rgba.value.r,
@@ -46,11 +35,12 @@ const rgbaB = computed({
     modelValue.value = argbFromRgba({ ...rgba.value, b: v })
   }
 })
+
+const initialColor = inject('initialColor', 0)
 </script>
 
 <template>
-  <div class="mb-10 grid">
-    <h1 class="mb-4 text-headline-sm font-medium capitalize">{{ getKeyColorName(keyColor) }}</h1>
+  <div class="grid">
     <div class="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-[1fr,auto]">
       <div class="mb-2">
         <ColorPreview :color="modelValue" class="size-full min-h-40" />
@@ -58,10 +48,13 @@ const rgbaB = computed({
       <div class="grid grid-cols-[auto,1fr] gap-x-4 gap-y-3 md:grid-cols-1">
         <div>
           <label class="mb-1.5 flex text-label-md">Hex</label>
-          <input
-            v-model="hex"
-            class="w-24 min-w-0 rounded-md border border-outline-variant bg-surface p-2 text-body-lg uppercase tabular-nums outline-transparent"
-          />
+          <fieldset class="relative">
+            <input
+              v-model="hex"
+              class="w-40 min-w-24 rounded-md border border-outline-variant bg-surface p-2 text-body-lg uppercase tabular-nums outline-transparent"
+            />
+            <SaveToClipboard :source="hex" class="absolute right-0 top-1/2 -translate-y-1/2 p-3" />
+          </fieldset>
         </div>
         <div>
           <label class="mb-1.5 flex text-label-md">RGB</label>
@@ -98,7 +91,10 @@ const rgbaB = computed({
       </div>
       <div class="mb-4 mt-2">
         <details>
-          <summary class="mb-1 flex items-center gap-x-2 text-label-lg">HCT</summary>
+          <summary class="mb-1 flex cursor-pointer items-center gap-x-2 text-label-lg">
+            HCT
+            <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-unfold-more" />
+          </summary>
           <p class="text-on-surface-variant">
             HCT is an abbreviation of hue chroma tone. It’s the name of the color space that enables dynamic
             color. HCT is based on CAM16 hue and chroma; the L* construct for luminance from L*a*b* (CIELAB,

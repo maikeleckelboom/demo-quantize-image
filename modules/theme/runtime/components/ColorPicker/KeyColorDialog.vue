@@ -32,21 +32,37 @@ const colorValue = computed({
 provide('initialColor', props.initialColor)
 
 function save() {
-  console.log('save')
   close(localColor.value)
 }
+
+function getKeyColorName(keyColor: string) {
+  return sentenceCase(`sourceColor` === keyColor ? keyColor : `${keyColor} Key Color`)
+}
+
+const selected = ref<boolean>(false)
 </script>
 
 <template>
   <DialogBackdrop>
-    <DialogComponent ref="root" open @close="exit">
+    <DialogComponent ref="root" @close="exit">
+      <template #header>
+        <h1 class="text-headline-sm font-medium capitalize">{{ getKeyColorName(keyColor) }}</h1>
+      </template>
+      <template #header-actions>
+        <IconButton :selected="selected" @click="selected = !selected">
+          <Icon v-if="selected" name="ic:round-star" />
+          <Icon v-else name="ic:round-star-border" />
+        </IconButton>
+      </template>
       <div class="relative mx-auto max-w-xl">
-        <KeyColorSettings v-model="colorValue" :key-color="keyColor" />
-        <Buttons class="mb-4 ml-auto mt-6 w-fit">
+        <KeyColorSettings v-model="colorValue" />
+      </div>
+      <template #footer>
+        <Buttons class="mb-4 ml-auto w-fit">
           <Button intent="text" @click="exit">Cancel</Button>
           <Button intent="outlined" @click="save">Save</Button>
         </Buttons>
-      </div>
+      </template>
     </DialogComponent>
   </DialogBackdrop>
 </template>

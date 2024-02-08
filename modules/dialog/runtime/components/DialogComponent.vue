@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-import Dialog from '~/pages/dialog.vue'
-
 const dialogVariant = cva({
-  base: ['fixed', 'z-50', 'text-on-surface'],
+  base: ['fixed', 'z-50', 'text-on-surface', 'grid grid-rows-[auto,1fr,auto]', 'overflow-hidden'],
   variants: {
     type: {
-      fullScreen: ['rounded-none', 'w-full', 'h-full', 'm-0', 'inset-0', 'bg-surface', 'overflow-hidden'],
+      fullScreen: ['rounded-none', 'size-full', 'm-0', 'inset-0', 'bg-surface'],
       basic: [
         'rounded-xl',
         'w-[560px]',
@@ -15,6 +13,36 @@ const dialogVariant = cva({
         'bg-surface-container',
         'my-12'
       ]
+    }
+  }
+})
+
+const headerVariant = cva({
+  base: ['flex', 'justify-between', 'items-center', 'p-4'],
+  variants: {
+    type: {
+      fullScreen: [],
+      basic: []
+    }
+  }
+})
+
+const footerVariant = cva({
+  base: ['flex', 'justify-end', 'p-4'],
+  variants: {
+    type: {
+      fullScreen: [],
+      basic: []
+    }
+  }
+})
+
+const articleVariant = cva({
+  base: ['relative', 'size-full', 'overflow-y-auto', 'overscroll-none', 'p-4'],
+  variants: {
+    type: {
+      fullScreen: [],
+      basic: []
     }
   }
 })
@@ -38,9 +66,20 @@ const type = computed(() => (fullscreen.value ? 'fullScreen' : 'basic'))
 
 <template>
   <dialog ref="dialogRef" :class="dialogVariant({ type })" open>
-    <article class="relative size-full overflow-y-auto overscroll-none p-4">
+    <header>
+      <div class="mx-auto grid w-full max-w-xl grid-cols-[1fr,auto] gap-x-2 pt-4">
+        <slot name="header" />
+        <slot name="header-actions" />
+      </div>
+    </header>
+    <article :class="articleVariant({ type })">
       <slot></slot>
     </article>
+    <footer :class="footerVariant({ type })">
+      <div class="mx-auto w-full max-w-xl">
+        <slot name="footer" />
+      </div>
+    </footer>
   </dialog>
 </template>
 

@@ -82,25 +82,29 @@ function reset() {
     <div v-if="!selectedFile" class="mb-4 flex justify-end">
       <Button intent="outlined" size="sm" @click="loadExampleImage"> Load Example Image</Button>
     </div>
-    <div class="mb-4">
-      <fieldset>
-        <div class="flex flex-col justify-between">
-          <label class="mb-4 flex flex-nowrap gap-x-2 text-label-md" for="maxColors">
-            Max Colors
-            <Tooltip class="justify-self-end">
-              <button>
-                <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
-              </button>
-              <template #content> The maximum number of colors to generate from the image.</template>
-            </Tooltip>
-          </label>
-          <div class="">
-            <LabeledInputSlider v-model="maxColors" contained="true" max="128" min="1" step="1" />
-          </div>
-        </div>
-      </fieldset>
-    </div>
 
+    <template v-if="selectedFile">
+      <div class="mb-4">
+        <fieldset>
+          <div class="flex flex-col justify-between">
+            <label class="mb-4 flex flex-nowrap gap-x-2 text-label-md" for="maxColors">
+              Max Colors
+              <Tooltip class="justify-self-end">
+                <button>
+                  <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
+                </button>
+                <template #content> The maximum number of colors to generate from the image.</template>
+              </Tooltip>
+            </label>
+            <div class="">
+              <LabeledInputSlider v-model="maxColors" contained="true" max="128" min="1" step="1" />
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </template>
+
+    <!-- the rest of the template -->
     <div class="flex flex-col">
       <Buttons class="justify-end">
         <Button v-if="selectedFile" intent="text" @click="reset">Reset</Button>
