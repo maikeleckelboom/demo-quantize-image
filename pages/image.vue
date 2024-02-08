@@ -12,10 +12,6 @@ function resetFiles() {
   files.value = []
 }
 
-function loadExampleImage() {
-  if (import.meta.server) return
-}
-
 const sourceElement = ref<HTMLImageElement | null>(null)
 
 const seedColors = ref<number[] | null>(null)
@@ -23,9 +19,7 @@ const prominentColors = ref<Map<number, number> | null>(null)
 
 const isLoading = ref<boolean>(false)
 
-const currentFile = ref<File | null>(null)
-
-function readSourceElement(file: File, onLoad: (img: HTMLImageElement) => void) {
+function readAndLoadSourceImage(file: File, onLoad: (img: HTMLImageElement) => void) {
   const reader = new FileReader()
   const img = new Image()
   reader.onload = (e) => {
@@ -51,16 +45,49 @@ function resetColors() {
   prominentColors.value = null
 }
 
-function extractColors() {
-  if (!selectedFile.value) return
+function beginColorExtract() {
   isLoading.value = true
-  const onLoad = (img: HTMLImageElement) => (sourceElement.value = img)
-  readSourceElement(selectedFile.value, onLoad)
+  setTimeout(() => {
+    if (!selectedFile.value) return
+    readAndLoadSourceImage(selectedFile.value, (img: HTMLImageElement) => {
+      sourceElement.value = img
+    })
+  }, 100)
+}
+
+async function onExtractColors() {
+  if (!selectedFile.value) return
+  beginColorExtract()
+  // await openFileProcessDialog({
+  //   file: selectedFile.value
+  // })
 }
 
 function reset() {
   resetFiles()
   resetColors()
+}
+
+/* Example Images */
+const images = [
+  '/img/purplish-landscape.jpg',
+  '/img/firewatch-fox.jpg',
+  '/img/islands.jpg'
+  // '/img/supernova.jpg'
+] as const
+
+const blobFromUrl = async (url: string) => {
+  const response = await fetch(url)
+  return await response.blob()
+}
+
+async function setExampleImage() {
+  const exampleImage = images[Math.floor(Math.random() * images.length)]
+  const blob = await blobFromUrl(exampleImage)
+  const file = new File([blob], 'example-image.jpg', {
+    type: exampleImage.slice(exampleImage.lastIndexOf('.'))
+  })
+  files.value = [file]
 }
 </script>
 
@@ -79,21 +106,19 @@ function reset() {
       <FilePreview v-if="selectedFile" :file="selectedFile" />
       <FileDropZone v-else @drop="onDrop" />
     </div>
-    <div v-if="!selectedFile" class="mb-4 flex justify-end">
-      <Button intent="outlined" size="sm" @click="loadExampleImage"> Load Example Image</Button>
-    </div>
 
     <template v-if="selectedFile">
-      <div class="mb-4">
+      <div class="my-4">
         <fieldset>
           <div class="flex flex-col justify-between">
-            <label class="mb-4 flex flex-nowrap gap-x-2 text-label-md" for="maxColors">
-              Max Colors
+            <label class="mb-4 flex flex-nowrap items-center gap-x-2 text-label-md" for="maxColors"
+              >Max Colors
+              <span class="text-xs tabular-nums text-on-surface-variant">(1-128)</span>
               <Tooltip class="justify-self-end">
-                <button>
-                  <Icon class="h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
+                <button class="flex items-center justify-center">
+                  <Icon class="ml-0.5 h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
                 </button>
-                <template #content> The maximum number of colors to generate from the image.</template>
+                <template #content>The maximum number of colors to generate from the image.</template>
               </Tooltip>
             </label>
             <div class="">
@@ -105,43 +130,47 @@ function reset() {
     </template>
 
     <!-- the rest of the template -->
-    <div class="flex flex-col">
+    <div class="my-4 flex flex-col">
       <Buttons class="justify-end">
         <Button v-if="selectedFile" intent="text" @click="reset">Reset</Button>
-        <Button :disabled="!selectedFile || isLoading" @click="extractColors">
+        <div v-else class="flex justify-end">
+          <Button intent="outlined" size="sm" @click="setExampleImage"> Load Example Image</Button>
+        </div>
+        <Button :disabled="!selectedFile || isLoading" @click="onExtractColors">
           {{ isLoading ? 'Extracting colors ...' : 'Extract colors' }}
         </Button>
       </Buttons>
     </div>
-
-    <section v-if="prominentColors">
-      <h1 class="text-title-lg">
-        Prominent Colors
-        <span class="tabular-nums text-on-surface-variant"> ({{ prominentColors.size }}) </span>
-      </h1>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <template v-for="([color, count], index) in prominentColors" :key="index">
-          <div
-            :style="{ backgroundColor: hexFromArgb(color) }"
-            class="relative grid size-8 place-items-center rounded-md"
-          />
-        </template>
-      </div>
-    </section>
-    <section v-if="seedColors">
-      <h1 class="text-title-lg">
-        Suitable Colors
-        <span class="tabular-nums text-on-surface-variant"> ({{ seedColors.length }}) </span>
-      </h1>
-      <div class="mt-4 flex flex-nowrap gap-4">
-        <template v-for="seedColor in seedColors">
-          <div
-            :style="{ backgroundColor: hexFromArgb(seedColor) }"
-            class="flex size-20 rounded-md md:size-24"
-          />
-        </template>
-      </div>
-    </section>
+    <div class="flex flex-col gap-8">
+      <section v-if="prominentColors">
+        <h1 class="text-title-lg">
+          Prominent Colors
+          <span class="tabular-nums text-on-surface-variant"> ({{ prominentColors.size }}) </span>
+        </h1>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <template v-for="([color, count], index) in prominentColors" :key="index">
+            <div
+              :style="{ backgroundColor: hexFromArgb(color) }"
+              class="relative grid size-8 place-items-center rounded-md"
+            />
+          </template>
+        </div>
+      </section>
+      <section v-if="seedColors">
+        <h1 class="text-title-lg">
+          Suitable Colors
+          <span class="tabular-nums text-on-surface-variant"> ({{ seedColors.length }}) </span>
+        </h1>
+        <div class="mt-4 flex flex-nowrap gap-4">
+          <template v-for="seedColor in seedColors">
+            <div
+              :style="{ backgroundColor: hexFromArgb(seedColor) }"
+              class="flex size-20 rounded-md md:size-24"
+            />
+          </template>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 

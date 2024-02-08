@@ -1,5 +1,7 @@
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: {
+    enabled: false
+  },
 
   experimental: {
     viewTransition: true
@@ -43,12 +45,13 @@ export default defineNuxtConfig({
       ]
     },
     nuxtIcon: {
-      size: '1.5em'
+      size: '24px'
     }
   },
 
   viewport: {
     breakpoints: {
+      xs: 320,
       sm: 640,
       md: 768,
       lg: 1024,

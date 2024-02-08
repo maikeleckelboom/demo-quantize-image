@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { argbFromHex, argbFromRgba, hexFromArgb, rgbaFromArgb } from '@material/material-color-utilities'
-import { vMask } from '~/modules/theme/runtime/utils/directives/vMask'
+import { vMask } from '~/utils/directives/vMask'
 
 defineProps<{ keyColor?: string }>()
 
@@ -35,10 +35,6 @@ const rgbaB = computed({
     modelValue.value = argbFromRgba({ ...rgba.value, b: v })
   }
 })
-
-const initialColor = inject('initialColor', 0)
-
-const selected = ref<boolean>(false)
 </script>
 
 <template>

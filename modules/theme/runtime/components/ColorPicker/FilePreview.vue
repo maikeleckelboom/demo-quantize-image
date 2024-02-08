@@ -7,7 +7,7 @@ const url = useObjectUrl(props.file)
 </script>
 
 <template>
-  <img :src="url" alt="" class="size-full min-h-32 object-cover" />
+  <img :src="url" alt="" class="size-full min-h-32 rounded-md object-cover" />
 </template>
 
 <style scoped></style>

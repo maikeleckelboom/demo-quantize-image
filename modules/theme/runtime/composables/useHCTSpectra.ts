@@ -39,7 +39,12 @@ type FormModelBounds = {
   }
 }
 
-export function useHCTSpectra(gradientType: 'conic' | 'linear' = 'linear') {
+const gradientMap = {
+  conic: (colors: string) => `conic-gradient(from 0deg, ${colors})`,
+  linear: (colors: string) => `linear-gradient(to right, ${colors})`
+} as const
+
+export function useHCTSpectra(type: keyof typeof gradientMap = 'linear') {
   const { $dynamicScheme } = useNuxtApp()
 
   const hctColor = computed(() => {
@@ -87,26 +92,20 @@ export function useHCTSpectra(gradientType: 'conic' | 'linear' = 'linear') {
     hexFromArgb(Hct.from(formModel.hue.value, formModel.chroma.min, formModel.tone.max).toInt())
   ]
 
-  const gradientMap = {
-    conic: (colors: string) => `conic-gradient(from 0deg, ${colors})`,
-    linear: (colors: string) => `linear-gradient(to right, ${colors})`,
-    square: (colors: string) => `linear-gradient(to right top, ${colors})`
-  }
-
   return {
     bounds,
     hue: computed(() => ({
-      background: gradientMap[gradientType](
+      background: gradientMap[type](
         chroma.scale(getHueColors()).mode('lab').colors(formModel.hue.max).join(', ')
       )
     })),
     chroma: computed(() => ({
-      background: gradientMap[gradientType](
+      background: gradientMap[type](
         chroma.scale(getChromaColors()).mode('lab').colors(formModel.chroma.max).join(', ')
       )
     })),
     tone: computed(() => ({
-      background: gradientMap[gradientType](
+      background: gradientMap[type](
         chroma.scale(getToneColors()).mode('lab').colors(formModel.tone.max).join(', ')
       )
     }))

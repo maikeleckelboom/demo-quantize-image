@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { Hct, hexFromArgb, TonalPalette } from '@material/material-color-utilities'
 import type { HctModel } from '~/modules/theme/types'
-import Tooltip from '~/modules/base/runtime/components/Tooltip.vue'
-import { vMask } from '~/modules/theme/runtime/utils/directives/vMask'
+import { vMask } from '~/utils/directives/vMask'
 
 const modelValue = defineModel<number>('modelValue', { type: Number, default: 0 })
 
@@ -34,7 +33,7 @@ const formModel = reactive<HctModel>({
 
 const { pause, resume } = watchPausable(
   modelValue,
-  (v) => {
+  () => {
     formModel.hue = getHue()
     formModel.chroma = getChroma()
     formModel.tone = getTone()
@@ -52,13 +51,11 @@ watch(formModel, (v: HctModel) => {
 
 const { hue: hueSpectrum, chroma: chromaSpectrum, tone: toneSpectrum, bounds } = useHCTSpectra()
 
-function onUpdate(event: Event, key: keyof HctModel) {
+function onTextUpdate(event: Event, key: keyof HctModel) {
   formModel[key] = parseInt((event.target as HTMLInputElement).value, 10)
 }
 
 const customHandle = ref<HTMLElement>()
-
-function validate(value: number, key: keyof HctModel) {}
 </script>
 
 <template>
@@ -86,7 +83,7 @@ function validate(value: number, key: keyof HctModel) {}
           min="360"
           pattern="[0-9\s]{13,19}"
           type="text"
-          @input="onUpdate($event, 'hue')"
+          @input="onTextUpdate($event, 'hue')"
         />
       </div>
       <InputRangeSlider v-model="formModel.hue" class="color-input-slider" contained="true" max="360" min="0">
@@ -119,7 +116,7 @@ function validate(value: number, key: keyof HctModel) {}
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"
-          @input="onUpdate($event, 'chroma')"
+          @input="onTextUpdate($event, 'chroma')"
         />
       </div>
       <InputRangeSlider
@@ -158,7 +155,7 @@ function validate(value: number, key: keyof HctModel) {}
           inputmode="numeric"
           pattern="[0-9\s]{13,19}"
           type="text"
-          @input="onUpdate($event, 'tone')"
+          @input="onTextUpdate($event, 'tone')"
         />
       </div>
       <InputRangeSlider
