@@ -1,5 +1,5 @@
-import KeyColorDialog from '~/modules/theme/runtime/components/ColorPicker/KeyColorDialog.vue'
-import ColorSelectDialog from '~/components/FileProcessDialog.vue'
+import { FileProcessDialog, KeyColorDialog } from '#components'
+import type { MaybeRefOrGetter } from 'vue'
 
 interface ColorPickerOptions {
   keyColor: string
@@ -16,14 +16,13 @@ export { openColorPicker }
 export type { ColorPickerOptions }
 
 interface FileProcessOptions {
-  /*  prominentColors: Map<number, number> | null
-    seedColors: number[] | null*/
   file: File
+  maxColors?: MaybeRefOrGetter<number>
 }
 
 async function openFileProcessDialog(props: FileProcessOptions) {
   const { open } = useDialogs()
-  return await open(ColorSelectDialog, props)
+  return await open(FileProcessDialog, props)
 }
 
 export { openFileProcessDialog }

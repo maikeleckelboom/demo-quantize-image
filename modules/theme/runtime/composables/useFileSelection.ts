@@ -17,7 +17,7 @@ function useFileSelection(
     }
   )
 
-  const selectedFile = computed(() => {
+  const selectedFile = computed<File | undefined>(() => {
     if (isUndefined(selectedFileIndex.value)) return
     return filesArr.value[selectedFileIndex.value]
   })

@@ -54,23 +54,28 @@ function prominentColorsFromPixels(pixels: number[], maxColors: number = 128) {
 }
 
 async function seedColorsFromImage(image: HTMLImageElement) {
-  // Step 1 — Image to Pixels
+  // Step 1 — Image to Pixels (bytes, pixels)
   const pixels = await pixelsFromImage(image)
-  // Step 2 — Pixels to Prominent Colors
+  // Step 2 — Pixels to Prominent Colors (quantization,quantize)
   const prominentColors = prominentColorsFromPixels(pixels)
-  // Step 3 — Prominent Colors to Suitable Seed Colors
+  // Step 3 — Prominent Colors to Suitable Seed Colors (score)
   return Score.score(prominentColors)
 }
 
-async function sourceColorFromImage(image: HTMLImageElement) {
-  const [sourceColor] = await seedColorsFromImage(image)
-  return sourceColor
+function bytesFromImageData({ data }: ImageData) {
+  return new Uint8ClampedArray(data)
+}
+
+function scoreColors(colors: Map<number, number>) {
+  return Score.score(colors)
 }
 
 export {
+  scoreColors,
   bytesFromImage,
   pixelsFromImage,
+  pixelsFromImageBytes,
   prominentColorsFromPixels,
   seedColorsFromImage,
-  sourceColorFromImage
+  bytesFromImageData
 }

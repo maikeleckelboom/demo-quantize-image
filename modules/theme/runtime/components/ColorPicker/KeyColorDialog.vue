@@ -29,8 +29,6 @@ const colorValue = computed({
   }
 })
 
-provide('initialColor', props.initialColor)
-
 function save() {
   close(localColor.value)
 }
@@ -39,7 +37,6 @@ function getKeyColorName(keyColor: string) {
   return sentenceCase(`sourceColor` === keyColor ? keyColor : `${keyColor} Key Color`)
 }
 
-const selected = ref<boolean>(false)
 const bookmarked = ref<boolean>(false)
 </script>
 

@@ -56,7 +56,7 @@ const type = computed(() => (fullscreen.value ? 'fullScreen' : 'basic'))
 
 <template>
   <dialog ref="dialogRef" :class="dialogVariant({ type })" open>
-    <header>
+    <header v-if="$slots['header'] || $slots['header-actions']">
       <div class="mx-auto grid w-full max-w-xl grid-cols-[1fr,auto] gap-x-2 px-4 pt-4 md:px-0">
         <div class="flex flex-nowrap">
           <slot name="header" />
@@ -67,9 +67,11 @@ const type = computed(() => (fullscreen.value ? 'fullScreen' : 'basic'))
       </div>
     </header>
     <article :class="articleVariant({ type })">
-      <slot></slot>
+      <div class="mx-auto w-full max-w-xl">
+        <slot></slot>
+      </div>
     </article>
-    <footer :class="footerVariant({ type })">
+    <footer v-if="$slots['footer']" :class="footerVariant({ type })">
       <div class="mx-auto w-full max-w-xl">
         <slot name="footer" />
       </div>
@@ -77,8 +79,4 @@ const type = computed(() => (fullscreen.value ? 'fullScreen' : 'basic'))
   </dialog>
 </template>
 
-<style scoped>
-dialog::backdrop {
-  visibility: hidden;
-}
-</style>
+<style scoped></style>
