@@ -55,7 +55,11 @@ onmessage = async (event: MessageEvent) => {
   const pixels = pixelsFromImageBytes(bytes)
   // 6. Quantize pixels to find prominent colors
   const prominentColors = QuantizerCelebi.quantize(pixels, data.maxColors)
+  postMessage({
+    type: 'prominentColors',
+    colors: prominentColors
+  })
   // 7. Score prominent colors to obtain seed colors
   const seedColors = Score.score(prominentColors)
-  postMessage({ type: 'done', seedColors })
+  postMessage({ type: 'done', colors: seedColors })
 }

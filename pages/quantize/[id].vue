@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { hexFromArgb } from '@material/material-color-utilities'
+
 const store = useFilesStore()
 const { selectedFile } = storeToRefs(store)
 if (!selectedFile.value) {
@@ -22,13 +24,24 @@ const processes = ref(
     done: false
   }))
 )
+
+const prominentColors = ref<Map<number, number>>([])
+const seedColors = ref<number[]>([])
 onMounted(() => {
   const worker = new Worker(new URL('~/workers/quantize.worker.ts', import.meta.url), {
     type: 'module'
   })
   worker.postMessage({ maxColors: maxColors.value, file: selectedFile.value })
   worker.onmessage = (event) => {
-    console.log('Message received from worker', event.data)
+    if (event.data.type === 'prominentColors') {
+      prominentColors.value = event.data.colors
+      setDone(5)
+    }
+
+    if (event.data.type === 'done') {
+      seedColors.value = event.data.colors
+      setDone(6)
+    }
   }
 })
 
@@ -67,6 +80,28 @@ const fileObjectUrl = computed(() => {
           <div>
             <p>{{ process.task }}</p>
           </div>
+        </div>
+      </div>
+      <div class="my-8">
+        <h2 class="text-headline-md">Prominent Colors</h2>
+        <div class="flex flex-wrap gap-4">
+          <div
+            v-for="[color, count] in prominentColors"
+            :key="color"
+            :style="{ backgroundColor: hexFromArgb(color) }"
+            class="size-12 rounded-md"
+          />
+        </div>
+      </div>
+      <div class="my-8">
+        <h2 class="text-headline-md">Seed Colors</h2>
+        <div class="grid grid-cols-4 gap-4">
+          <div
+            v-for="color in seedColors"
+            :key="color"
+            :style="{ backgroundColor: hexFromArgb(color) }"
+            class="h-16 w-16 rounded-md"
+          ></div>
         </div>
       </div>
       <template #footer>
