@@ -104,7 +104,10 @@ onMounted(() => {
           </div>
           <div class="relative flex w-fit flex-col">
             <p
-              :class="isPastProcess(process.index) ? 'text-on-surface-variant' : 'text-on-surface'"
+              :class="[
+                isPastProcess(process.index) ? 'text-on-surface-variant' : 'text-on-surface',
+                { 'animate-pulse': isCurrentProcess(process.index) }
+              ]"
               class="relative w-fit text-body-md"
             >
               {{ process.task }}
