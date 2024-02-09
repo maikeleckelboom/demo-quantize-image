@@ -25,9 +25,15 @@ async function onExtractColors() {
 
 const images = [
   '/img/purplish-landscape.jpg',
-  '/img/firewatch-fox.jpg',
   '/img/islands.jpg',
-  '/img/supernova.jpg'
+  '/img/supernova.jpg',
+  '/img/mushrooms.jpg',
+  '/img/squirrel.jpg',
+  '/img/kitten.jpg',
+  '/img/forest-nightfall.jpg',
+  '/img/winter.jpg',
+  '/img/bird.jpg',
+  '/img/wp-landscape.webp'
 ] as const
 
 async function blobFromUrl(url: string) {
