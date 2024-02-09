@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   devtools: {
-    enabled: false
+    enabled: true
   },
 
   experimental: {
@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     }
   },
 
-  css: ['~/assets/css/input.css', '~/assets/css/images.css'],
+  css: ['~/assets/css/images.css'],
 
   tailwindcss: {
     viewer: false,

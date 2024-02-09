@@ -13,9 +13,19 @@ onUnmounted(() => {
 const store = useFilesStore()
 const { selectedFile } = storeToRefs(store)
 
-if (!selectedFile.value) {
-  navigateTo('/image')
+if (!store.fileObjectUrl || !selectedFile) {
+  navigateTo('/')
 }
+
+definePageMeta({
+  title: 'Quantize',
+  description: 'Quantize an image to find prominent colors and seed colors',
+  middleware: (ctx) => {
+    if (!ctx.params.id || !ctx.query.maxColors) {
+      navigateTo('/')
+    }
+  }
+})
 
 const processesList = [
   'Create an image from the file',
@@ -34,10 +44,6 @@ const processes = ref(
     done: false
   }))
 )
-
-function setDone(index: number) {
-  processes.value[index].done = true
-}
 
 function isCurrentProcess(index: number) {
   return index === processes.value.findIndex((process) => !process.done)
@@ -84,13 +90,12 @@ onMounted(() => {
 <template>
   <div class="mx-auto w-full max-w-xl p-4">
     <DialogComponent>
-      <img :src="store.fileObjectUrl" alt="" class="vt-source-element h-fit w-auto rounded-md object-cover" />
+      <NuxtImg :src="store.fileObjectUrl" alt="" class="selected h-fit w-auto rounded-md object-cover" />
       <div class="my-8">
         <div
           v-for="process in processes"
           :key="process.index"
           class="grid h-[30px] grid-cols-[28px,1fr] items-center"
-          @click="setDone(process.index)"
         >
           <div class="grid items-center">
             <Spinner v-if="isCurrentProcess(process.index)" class="size-5" />
@@ -110,7 +115,7 @@ onMounted(() => {
       <div class="my-8">
         <div class="flex flex-wrap gap-4">
           <div
-            v-for="[color, count] in prominentColors"
+            v-for="[color] in prominentColors"
             :key="color"
             :style="{ backgroundColor: hexFromArgb(color) }"
             class="size-12 rounded-md"
@@ -127,6 +132,7 @@ onMounted(() => {
           ></div>
         </div>
       </div>
+
       <template #footer>
         <div class="flex justify-end">
           <Button v-if="isLoading" class="bg-error-container text-on-error-container" @click="router.back()">
@@ -139,10 +145,9 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-.vt-source-element {
-  view-transition-name: source-img;
-  contain: layout;
+<style>
+.box-target {
+  view-transition-name: target;
 }
 
 /*

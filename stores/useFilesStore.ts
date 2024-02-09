@@ -1,13 +1,12 @@
 const useFilesStore = defineStore('files', () => {
   const files = ref<File[]>([])
   const { selectedFile, clearSelection, selectFile, isSelected } = useFileSelection(files)
+  const fileObjectUrl = useObjectUrl(selectedFile)
 
   function reset() {
     files.value = []
     clearSelection()
   }
-
-  const fileObjectUrl = useObjectUrl(selectedFile)
 
   return {
     files,

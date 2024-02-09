@@ -5,11 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <img :src="url" alt="" class="vt-source-element size-full min-h-32 rounded-md" />
+  <NuxtImg :src="url" alt="" class="selected size-full min-h-32 rounded-md" />
 </template>
 
-<style scoped>
-.vt-source-element {
-  view-transition-name: source;
-}
-</style>
+<style></style>

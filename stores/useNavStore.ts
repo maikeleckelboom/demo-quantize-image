@@ -12,13 +12,13 @@ const useNavStore = defineStore('nav', () => {
       path: '/favorites',
       icon: ['ic:baseline-favorite-border', 'ic:baseline-favorite'],
       badge: {
-        label: '999',
+        label: '99+',
         type: 'large'
       }
     },
     {
-      label: 'Image',
-      path: '/image',
+      label: 'Quantize',
+      path: '/quantize',
       icon: ['ic:baseline-image', 'ic:baseline-image']
     },
     {

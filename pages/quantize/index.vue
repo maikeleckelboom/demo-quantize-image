@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const store = useFilesStore()
-const { files, selectedFile } = storeToRefs(store)
+const { files, selectedFile, fileObjectUrl } = storeToRefs(store)
 const { reset } = store
 
 function onDrop(droppedFiles: File[]) {
@@ -10,14 +10,18 @@ function onDrop(droppedFiles: File[]) {
 const maxColors = ref<number>(128)
 
 async function onExtractColors() {
-  if (!selectedFile.value) return
-  navigateTo({
-    path: `/quantize/${selectedFile.value.name}`,
-    query: { maxColors: maxColors.value }
+  if (!document.startViewTransition) return
+  const transition = document.startViewTransition(async () => {
+    if (!selectedFile.value) return
+    navigateTo({
+      path: `/quantize/${decodeURIComponent(selectedFile.value.name)}`,
+      query: { maxColors: maxColors.value }
+    })
   })
+
+  await transition.finished
 }
 
-/* Example Images */
 const images = [
   '/img/purplish-landscape.jpg',
   '/img/firewatch-fox.jpg',
@@ -59,8 +63,9 @@ async function setExampleImage() {
         and assigned to each color role.
       </p>
     </div>
+
     <div class="mb-4 h-64 overflow-hidden">
-      <FilePreview v-if="selectedFile" id="vt-source-element" :url="store.fileObjectUrl" />
+      <FilePreview v-if="fileObjectUrl" :url="fileObjectUrl" />
       <FileDropZone v-else @drop="onDrop" />
     </div>
 
@@ -101,16 +106,31 @@ async function setExampleImage() {
   </div>
 </template>
 
-<style scoped>
-#vt-source-element {
-  view-transition-name: source-img;
+<style>
+.box-target {
+  view-transition-name: target;
 }
 
-::view-transition-old(source-img),
-::view-transition-new(source-img) {
+html:not(.prevent-transition) {
+  img.selected {
+    view-transition-name: selected;
+    z-index: 20;
+  }
 }
 
-::view-transition-image-pair(source-img) {
-  transition: ease all 200ms;
+::view-transition-old(selected) {
+  object-fit: contain;
+}
+
+::view-transition-new(selected) {
+  object-fit: cover;
+}
+
+::view-transition-old(selected),
+::view-transition-new(selected) {
+  animation: none;
+  mix-blend-mode: normal;
+  height: 100%;
+  overflow: clip;
 }
 </style>
