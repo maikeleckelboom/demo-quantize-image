@@ -17,6 +17,7 @@ async function onExtractColors() {
       path: `/quantize/${decodeURIComponent(selectedFile.value.name)}`,
       query: { maxColors: maxColors.value }
     })
+    await nextTick()
   })
 
   await transition.finished
@@ -64,7 +65,7 @@ async function setExampleImage() {
       </p>
     </div>
 
-    <div class="mb-4 overflow-hidden">
+    <div class="mb-4 h-64 overflow-hidden">
       <FilePreview v-if="fileObjectUrl" :url="fileObjectUrl" />
       <FileDropZone v-else @drop="onDrop" />
     </div>
@@ -107,6 +108,10 @@ async function setExampleImage() {
 </template>
 
 <style>
+.box-target {
+  view-transition-name: target;
+}
+
 html:not(.prevent-transition) {
   img.selected {
     view-transition-name: selected;

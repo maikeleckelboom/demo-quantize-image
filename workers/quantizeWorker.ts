@@ -60,8 +60,11 @@ const processes = [
   'Convert image data to bytes',
   'Decode bytes into pixels',
   'Quantize pixels to find prominent colors',
-  'Score prominent colors to obtain seed colors'
-]
+  'Score colors to find suitable colors'
+] as const
+
+export type Process = (typeof processes)[number]
+export { processes }
 
 function* stepsGenerator() {
   for (let i = 0; i < processes.length; i++) {

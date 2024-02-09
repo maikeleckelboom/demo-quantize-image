@@ -1,20 +1,26 @@
 <script lang="ts" setup>
-import { isDoneData, isProgressData, type QuantizeWorker, type WorkerData } from '~/workers/quantizeWorker'
+import {
+  isDoneData,
+  isProgressData,
+  processes as processesList,
+  type QuantizeWorker,
+  type WorkerData
+} from '~/workers/quantizeWorker'
 import { hexFromArgb } from '@material/material-color-utilities'
 
 const { Escape } = useMagicKeys()
 const router = useRouter()
 whenever(Escape, () => router.back())
 
+const store = useFilesStore()
+const { selectedFile } = storeToRefs(store)
+
 onUnmounted(() => {
   store.reset()
 })
 
-const store = useFilesStore()
-const { selectedFile } = storeToRefs(store)
-
 if (!store.fileObjectUrl || !selectedFile) {
-  navigateTo('/')
+  navigateTo('/quantize')
 }
 
 definePageMeta({
@@ -22,20 +28,10 @@ definePageMeta({
   description: 'Quantize an image to find prominent colors and seed colors',
   middleware: (ctx) => {
     if (!ctx.params.id || !ctx.query.maxColors) {
-      navigateTo('/')
+      navigateTo('/quantize')
     }
   }
 })
-
-const processesList = [
-  'Create an image from the file',
-  'Draw the image onto a canvas',
-  'Get image data from the canvas',
-  'Convert image data to bytes',
-  'Decode bytes into pixels',
-  'Quantize pixels to find prominent colors',
-  'Score prominent colors to obtain seed colors'
-]
 
 const processes = ref(
   processesList.map((task, index) => ({
@@ -78,6 +74,7 @@ onMounted(() => {
       processes.value[evt.data.step - 1].done = true
       progress.value = evt.data.progress
     }
+
     if (isDoneData(evt.data)) {
       prominentColors.value = evt.data.prominentColors
       seedColors.value = evt.data.seedColors
@@ -90,7 +87,7 @@ onMounted(() => {
 <template>
   <div class="mx-auto w-full max-w-xl p-4">
     <DialogComponent>
-      <NuxtImg :src="store.fileObjectUrl" alt="" class="selected h-fit w-auto rounded-md object-cover" />
+      <NuxtImg :src="store.fileObjectUrl" alt="" class="selected w-auto rounded-md object-cover" />
       <div class="my-8">
         <div
           v-for="process in processes"
@@ -105,8 +102,10 @@ onMounted(() => {
           <div class="relative flex w-fit flex-col">
             <p
               :class="[
-                isPastProcess(process.index) ? 'text-on-surface-variant' : 'text-on-surface',
-                { 'animate-pulse': isCurrentProcess(process.index) }
+                isPastProcess(process.index) ? 'text-on-surface-variant/50' : 'text-on-surface',
+                {
+                  'animate-pulse': isCurrentProcess(process.index)
+                }
               ]"
               class="relative w-fit text-body-md"
             >
@@ -138,26 +137,10 @@ onMounted(() => {
 
       <template #footer>
         <div class="flex justify-end">
-          <Button v-if="isLoading" class="bg-error-container text-on-error-container" @click="router.back()">
-            Abort Process
-          </Button>
+          <Button v-if="isLoading" variant="error" @click="router.back()"> Abort Process</Button>
           <Button v-else @click="router.back()">Close</Button>
         </div>
       </template>
     </DialogComponent>
   </div>
 </template>
-
-<style>
-.box-target {
-  view-transition-name: target;
-}
-
-/*
-::view-transition-old(root) {
-
-}
-
-::view-transition-new(root) {
-}*/
-</style>

@@ -1,15 +1,11 @@
 <script lang="ts" setup>
-type Intent = 'elevated' | 'filled' | 'filled-tonal' | 'outlined' | 'text' | 'fab' | 'extended-fab'
-type Size = 'sm' | 'md' | 'lg'
-type Color = 'primary' | 'secondary' | 'tertiary' | 'surface'
-
 interface Props {
   dir?: 'ltr' | 'rtl'
   icon?: string
-  intent?: Intent
-  size?: Size
+  intent?: 'elevated' | 'filled' | 'filled-tonal' | 'outlined' | 'text' | 'fab' | 'extended-fab'
+  size?: 'sm' | 'md' | 'lg'
   stretch?: boolean
-  variant?: Color
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'surface' | 'error'
   disabled?: boolean
 }
 
@@ -86,7 +82,8 @@ const variants = cva({
       primary: '',
       secondary: '',
       tertiary: '',
-      surface: ''
+      surface: '',
+      error: 'bg-error-container text-on-error-container'
     }
   },
   compoundVariants: [
