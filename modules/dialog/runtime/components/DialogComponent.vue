@@ -65,13 +65,6 @@ function close() {
 }
 
 onClickOutside(dialogRef, () => close())
-
-console.log(
-  'DialogComponent',
-  { type: props.type, isTop: isTop.value },
-  dialogVariant({ type: props.type }),
-  backdropVariant({ isTop: isTop.value })
-)
 </script>
 
 <template>
@@ -91,12 +84,12 @@ console.log(
         <div class="relative mx-auto w-full max-w-xl">
           <slot name="breakout" />
         </div>
-        <div class="mx-auto w-full max-w-xl p-4">
+        <div class="mx-auto w-full max-w-xl">
           <slot></slot>
         </div>
       </article>
       <footer v-if="$slots['footer']" :class="footerVariant({ type })">
-        <div class="mx-auto w-full max-w-xl">
+        <div class="mx-auto flex w-full max-w-xl items-end justify-end">
           <slot name="footer" />
         </div>
       </footer>

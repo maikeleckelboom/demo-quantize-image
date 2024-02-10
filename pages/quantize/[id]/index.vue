@@ -110,7 +110,7 @@ function onCustomize() {
           />
         </div>
       </template>
-      <div class="">
+      <div class="p-4">
         <div
           v-for="process in processes"
           :key="process.index"
@@ -136,7 +136,7 @@ function onCustomize() {
           </div>
         </div>
       </div>
-      <div v-if="seedColors?.length" class="my-8">
+      <div v-if="seedColors?.length" class="px-4">
         <h2 class="mb-4 text-xl">Suitable Colors (1-5)</h2>
         <div class="flex flex-row flex-nowrap gap-x-3">
           <div
