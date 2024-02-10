@@ -85,10 +85,10 @@ const id = useId()
       :for="`dropzone-file-${id}`"
     >
       <span class="flex flex-col items-center justify-center pb-6 pt-5">
-        <Icon name="ic:round-cloud-upload" />
-        <span class="mb-2 inline text-sm text-on-surface-variant">
-          <span class="font-semibold">
-            {{ device.isDesktopOrTablet ? 'Click hereto upload' : 'Tap here  to upload' }}
+        <Icon class="mb-1" name="ic:round-cloud-upload" />
+        <span class="inline text-sm leading-loose text-on-surface-variant">
+          <span class="mb-1 font-semibold">
+            {{ device.isDesktopOrTablet ? 'Click here to upload' : 'Tap here to upload' }}
           </span>
           {{ device.isDesktopOrTablet ? ' or drag and drop' : '' }}
         </span>

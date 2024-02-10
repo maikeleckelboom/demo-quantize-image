@@ -127,7 +127,7 @@ function onCustomFIleChange(event: Event) {
               </Tooltip>
             </label>
             <div class="">
-              <LabeledInputSlider v-model="maxColors" contained="true" max="128" min="1" step="1" />
+              <Slider v-model="maxColors" contained="true" max="128" min="1" step="1" />
             </div>
           </div>
         </fieldset>
