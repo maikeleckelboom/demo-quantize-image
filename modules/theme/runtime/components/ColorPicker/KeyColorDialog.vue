@@ -59,7 +59,7 @@ const bookmarked = ref<boolean>(false)
         <Icon v-else name="ic:round-bookmark-border" />
       </IconButton>
     </template>
-    <div class="relative mx-auto max-w-xl">
+    <div class="relative mx-auto max-w-xl p-4">
       <KeyColorSettings v-model="colorValue" />
     </div>
     <template #footer>

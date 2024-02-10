@@ -24,8 +24,7 @@ if (!store.fileObjectUrl || !selectedFile) {
 }
 
 const processes = ref(
-  steps.map((step, index) => ({
-    index,
+  steps.map((step) => ({
     step,
     done: false
   }))
@@ -112,21 +111,21 @@ function onCustomize() {
       </template>
       <div class="p-4">
         <div
-          v-for="process in processes"
-          :key="process.index"
+          v-for="(process, index) in processes"
+          :key="process.step"
           class="grid h-[30px] grid-cols-[28px,1fr] items-center"
         >
           <div class="grid items-center">
-            <Spinner v-if="isCurrentProcess(process.index)" class="size-5" />
+            <Spinner v-if="isCurrentProcess(index)" class="size-5" />
             <Icon v-else-if="process.done" class="size-5 text-primary" name="ic:check" />
             <Icon v-else class="size-5" name="ic:outline-circle" />
           </div>
           <div class="relative flex w-fit flex-col">
             <p
               :class="[
-                isPastProcess(process.index) ? 'text-on-surface-variant/50' : 'text-on-surface',
+                isPastProcess(index) ? 'text-on-surface-variant/50' : 'text-on-surface',
                 {
-                  'animate-pulse': isCurrentProcess(process.index)
+                  'animate-pulse': isCurrentProcess(index)
                 }
               ]"
               class="relative w-fit text-body-md"
@@ -137,7 +136,12 @@ function onCustomize() {
         </div>
       </div>
       <div v-if="seedColors?.length" class="px-4">
-        <h2 class="mb-4 text-xl">Suitable Colors (1-5)</h2>
+        <h2 class="mb-4 text-xl">
+          Suitable Colors
+          <span class="relative -top-[1px] font-mono text-body-md tabular-nums">
+            ({{ seedColors?.length }})
+          </span>
+        </h2>
         <div class="flex flex-row flex-nowrap gap-x-3">
           <div
             v-for="color in seedColors"
