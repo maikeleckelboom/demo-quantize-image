@@ -44,11 +44,18 @@ const router = useRouter()
 const route = useRoute()
 
 const colorStore = useColorsStore()
+
 const { prominentColors, seedColors } = storeToRefs(colorStore)
 
 const errors = ref<unknown>(null)
 
 const quantizeWorker = ref<QuantizeWorker | null>(null)
+
+onMounted(() => {
+  quantizeWorker.value = new Worker(new URL('~/workers/quantize/worker.ts', import.meta.url), {
+    type: 'module'
+  })
+})
 
 whenever(quantizeWorker, (worker) => {
   if (!selectedFile.value) return
@@ -79,12 +86,6 @@ whenever(quantizeWorker, (worker) => {
       isLoading.value = false
     }
   }
-})
-
-onMounted(() => {
-  quantizeWorker.value = new Worker(new URL('~/workers/quantize/worker.ts', import.meta.url), {
-    type: 'module'
-  })
 })
 
 onUnmounted(() => {

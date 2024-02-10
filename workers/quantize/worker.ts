@@ -74,8 +74,8 @@ async function* quantizeProcessGenerator({ data }: MessageEvent<StartEventData>)
 
 if (typeof self !== 'undefined') {
   self.onmessage = async (event: MessageEvent<StartEventData>) => {
-    const generator = quantizeProcessGenerator(event)
-    for await (const message of generator) {
+    const processGenerator = quantizeProcessGenerator(event)
+    for await (const message of processGenerator) {
       postMessage(message)
     }
   }

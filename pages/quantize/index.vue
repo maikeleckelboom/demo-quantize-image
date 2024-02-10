@@ -12,12 +12,12 @@ const images = [
   '/img/islands.jpg',
   '/img/supernova.jpg',
   '/img/mushrooms.jpg',
-  '/img/squirrel.jpg',
-  '/img/kitten.jpg',
+  // '/img/squirrel.jpg',
+  // '/img/kitten.jpg',
   '/img/forest-nightfall.jpg',
-  '/img/winter.jpg',
-  '/img/bird.jpg',
-  '/img/wp-landscape.webp'
+  // '/img/winter.jpg',
+  '/img/bird.jpg'
+  // '/img/wp-landscape.webp'
 ] as const
 
 async function blobFromUrl(url: string) {
@@ -76,30 +76,10 @@ async function onExtractColors() {
   state.isLoadingNextPage = false
 }
 
-type StartInOpts = 'pictures' | 'documents' | 'desktop' | 'downloads' | 'music' | 'videos'
-
-async function openFilePicker(startIn: StartInOpts = 'pictures') {
-  const filePickerOptions = {
-    startIn,
-    types: [
-      {
-        description: 'Images',
-        accept: {
-          'image/*': ['.jpg', '.jpeg', '.png', '.webp']
-        }
-      }
-    ]
-  }
-  if ('showOpenFilePicker' in window && isFunction(window.showOpenFilePicker)) {
-    try {
-      const [fileHandle] = await window.showOpenFilePicker(filePickerOptions)
-      if (fileHandle instanceof FileSystemFileHandle) {
-        const file = await fileHandle.getFile()
-        files.value = [file]
-      }
-    } catch (error) {
-      console.error(error)
-    }
+function onCustomFIleChange(event: Event) {
+  const target = event.target as HTMLInputElement
+  if (target.files) {
+    files.value = Array.from(target.files)
   }
 }
 </script>
@@ -117,11 +97,7 @@ async function openFilePicker(startIn: StartInOpts = 'pictures') {
     </div>
 
     <div class="mb-4">
-      <Button @click="openFilePicker">Upload from pictures</Button>
-      <Button @click="openFilePicker('desktop')">Upload from desktop</Button>
-      <Button @click="openFilePicker('downloads')">Upload from downloads</Button>
-      <Button @click="openFilePicker('music')">Upload from music</Button>
-      <Button @click="openFilePicker('videos')">Upload from videos</Button>
+      <input accept="image/*" type="file" @change="onCustomFIleChange" />
     </div>
 
     <div class="mb-4">
