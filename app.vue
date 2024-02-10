@@ -8,6 +8,7 @@ function onError(error: unknown) {
     <NuxtLayout>
       <NuxtLoadingIndicator :color="repeatingLinearGradient" />
       <NuxtPage />
+      <DialogsRoot />
     </NuxtLayout>
   </NuxtErrorBoundary>
 </template>

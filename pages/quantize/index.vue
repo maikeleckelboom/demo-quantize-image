@@ -145,7 +145,7 @@ async function onExtractColors() {
 </template>
 
 <style>
-html:not(.prevent-transition) {
+:not(.prevent-transition) {
   img.selected {
     view-transition-name: selected;
     z-index: 20;

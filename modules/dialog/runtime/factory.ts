@@ -1,5 +1,4 @@
-import { FileProcessDialog, KeyColorDialog } from '#components'
-import type { MaybeRefOrGetter } from 'vue'
+import { KeyColorDialog, SelectColorsDialog } from '#components'
 
 interface ColorPickerOptions {
   keyColor: string
@@ -15,15 +14,15 @@ async function openColorPicker({ keyColor, initialColor, onColorChange }: ColorP
 export { openColorPicker }
 export type { ColorPickerOptions }
 
-interface FileProcessOptions {
-  file: File
-  maxColors?: MaybeRefOrGetter<number>
+interface SelectColorsProps {
+  prominent: Map<number, number>
+  seed: number[]
 }
 
-async function openFileProcessDialog(props: FileProcessOptions) {
+async function openSelectColorsDialog(props: SelectColorsProps) {
   const { open } = useDialogs()
-  return await open(FileProcessDialog, props)
+  return await open(SelectColorsDialog, props)
 }
 
-export { openFileProcessDialog }
-export type { FileProcessOptions }
+export { openSelectColorsDialog }
+export type { SelectColorsProps }

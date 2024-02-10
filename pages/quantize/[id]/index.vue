@@ -30,11 +30,6 @@ onUnmounted(() => {
   store.reset()
 })
 
-const { Escape } = useMagicKeys()
-
-const router = useRouter()
-whenever(Escape, () => router.back())
-
 const processes = ref(
   processesList.map((task, index) => ({
     index,
@@ -51,13 +46,16 @@ function isPastProcess(index: number) {
   return index < processes.value.findIndex((process) => !process.done)
 }
 
-const prominentColors = ref<Map<number, number>>()
-const seedColors = ref<number[]>([])
 const isLoading = ref<boolean>(false)
 
+const router = useRouter()
 const route = useRoute()
 
-onMounted(() => {
+const colorStore = useColorsStore()
+
+const { prominentColors, seedColors } = storeToRefs(colorStore)
+
+await callOnce(async () => {
   if (!selectedFile.value) {
     return
   }
@@ -91,12 +89,24 @@ onMounted(() => {
     }
   })
 })
+
+async function navigateToNext() {
+  await navigateTo({ path: `/quantize/${selectedFile.value!.name}/colors` })
+}
 </script>
 <template>
   <div class="mx-auto w-full max-w-xl p-4">
     <DialogComponent>
-      <NuxtImg :src="store.fileObjectUrl" alt="" class="selected w-auto rounded-md object-cover" />
-      <div class="my-8">
+      <template #breakout>
+        <div class="relative flex size-full rounded-md md:pt-4">
+          <NuxtImg
+            :src="store.fileObjectUrl"
+            alt=""
+            class="selected size-full max-h-[320px] rounded-b-lg object-cover"
+          />
+        </div>
+      </template>
+      <div class="">
         <div
           v-for="process in processes"
           :key="process.index"
@@ -105,7 +115,7 @@ onMounted(() => {
           <div class="grid items-center">
             <Spinner v-if="isCurrentProcess(process.index)" class="size-5" />
             <Icon v-else-if="process.done" class="size-5 text-primary" name="ic:check" />
-            <Icon v-else class="size-6" name="ic:outline-circle" />
+            <Icon v-else class="size-5" name="ic:outline-circle" />
           </div>
           <div class="relative flex w-fit flex-col">
             <p
@@ -122,39 +132,44 @@ onMounted(() => {
           </div>
         </div>
       </div>
+      <!--
+            <div class="my-8 hidden">
+              <div class="flex flex-wrap gap-4">
+                <template v-for="[color, count] in prominentColors" :key="color">
+                  <Tooltip>
+                    <div
+                      :style="{ backgroundColor: hexFromArgb(color) }"
+                      class="size-12 rounded-md"
+                    ></div>
+                    <template #content>
+                      <div class="flex flex-col">
+                        <p class="uppercase">{{ hexFromArgb(color) }}</p>
+                        <p class="tabular-nums">count: {{ count }}</p>
+                      </div>
+                    </template>
+                  </Tooltip>
+                </template>
+              </div>
+            </div>
+      -->
       <div class="my-8">
-        <div class="flex flex-wrap gap-4">
-          <template v-for="[color, count] in prominentColors" :key="color">
-            <Tooltip>
-              <div
-                :style="{ backgroundColor: hexFromArgb(color) }"
-                class="size-12 rounded-md"
-              ></div>
-              <template #content>
-                <div class="flex flex-col">
-                  <p class="uppercase">{{ hexFromArgb(color) }}</p>
-                  <p class="tabular-nums">count: {{ count }}</p>
-                </div>
-              </template>
-            </Tooltip>
-          </template>
-        </div>
-      </div>
-      <div class="my-8">
-        <div class="grid grid-cols-4 gap-4">
+        <div class="flex flex-row flex-nowrap gap-x-3">
           <div
             v-for="color in seedColors"
             :key="color"
             :style="{ backgroundColor: hexFromArgb(color) }"
-            class="h-16 w-16 rounded-md"
+            class="min-h-16 min-w-16 rounded-md"
           ></div>
         </div>
       </div>
 
       <template #footer>
-        <div class="flex justify-end">
-          <Button v-if="isLoading" variant="error" @click="router.back()"> Abort Process</Button>
-          <Button v-else @click="router.back()">Close</Button>
+        <div v-if="isLoading" class="flex justify-end">
+          <Button variant="error" @click="router.back()">Abort Process</Button>
+        </div>
+        <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">
+          <Button :stretch="true" intent="text" @click="router.back()">Reset</Button>
+          <Button :stretch="true" @click="navigateToNext"> Customize</Button>
         </div>
       </template>
     </DialogComponent>

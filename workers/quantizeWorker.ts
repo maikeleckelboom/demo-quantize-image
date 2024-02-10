@@ -73,17 +73,45 @@ function* stepsGenerator() {
 
 async function* postMessageGenerator() {}
 
+function createNewOffscreenCanvas(img: ImageBitmap) {
+  return new OffscreenCanvas(img.width, img.height)
+}
+
+function drawImageOntoCanvas(img: ImageBitmap, canvas: OffscreenCanvas) {
+  const ctx = canvas.getContext('2d')!
+  ctx.drawImage(img, 0, 0)
+}
+
+function getImageDataFromCanvas(canvas: OffscreenCanvas) {
+  return canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height)
+}
+
+function getBytesFromImageData(imageData: ImageData) {
+  return new Uint8ClampedArray(imageData.data.buffer)
+}
+
 async function* quantizeProcessGenerator(event: MessageEvent<WorkerStartData>) {
   const { file, maxColors } = event.data
   const img = await createImageBitmap(file)
   const canvas = new OffscreenCanvas(img.width, img.height)
+  yield img
+
   const ctx = canvas.getContext('2d')!
   ctx.drawImage(img, 0, 0)
   const imageData = ctx.getImageData(0, 0, img.width, img.height)
+  yield imageData
+
   const bytes = new Uint8ClampedArray(imageData.data.buffer)
+  yield bytes
+
   const pixels = pixelsFromImageBytes(bytes)
+  yield pixels
+
   const prominentColors = QuantizerCelebi.quantize(pixels, maxColors)
+  yield prominentColors
+
   const seedColors = Score.score(prominentColors)
+  yield seedColors
 
   yield {
     type: 'done',
@@ -107,14 +135,14 @@ const seedColors = Score.score(prominentColors)
 
 if (typeof self !== 'undefined') {
   self.addEventListener('message', async (event: MessageEvent<WorkerStartData>) => {
-    const steps = stepsGenerator()
     const { file, maxColors } = event.data
 
     if (!file) {
-      console.error('No file provided, cannot quantize image.')
+      // console.error('No file provided, cannot quantize image.')
       return
     }
 
+    const steps = stepsGenerator()
     const img = await createImageBitmap(file)
     postMessage({
       type: 'progress',

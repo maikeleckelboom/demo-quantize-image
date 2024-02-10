@@ -5,11 +5,13 @@ const { isMobileOrTablet, isMobile, isTablet, isDesktop, isApple, isAndroid } = 
 </script>
 
 <template>
-  <div :class="{ isMobileOrTablet, isMobile, isTablet, isDesktop, isApple, isAndroid }" class="pb-[80px]">
+  <div
+    :class="{ isMobileOrTablet, isMobile, isTablet, isDesktop, isApple, isAndroid }"
+    class="pb-[80px]"
+  >
     <slot />
     <NavBar :active="active" :items="state" :labeled="isLabelled" />
   </div>
-  <DialogsRoot />
 </template>
 
 <style scoped></style>

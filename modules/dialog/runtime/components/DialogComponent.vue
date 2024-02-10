@@ -1,7 +1,15 @@
 <script lang="ts" setup>
+withDefaults(defineProps<{ type?: 'fullScreen' | 'basic' }>(), {
+  type: 'fullScreen'
+})
+
 const dialogVariant = cva({
-  base: ['fixed', 'z-50', 'text-on-surface', 'grid grid-rows-[auto,1fr,auto]', 'overflow-hidden'],
+  base: ['fixed', 'text-on-surface', 'grid grid-rows-[auto,1fr,auto]', 'overflow-hidden'],
   variants: {
+    isTop: {
+      true: ['z-[100]'],
+      false: ['z-40']
+    },
     type: {
       fullScreen: ['rounded-none', 'size-full', 'm-0', 'inset-0', 'bg-surface'],
       basic: [
@@ -28,7 +36,7 @@ const footerVariant = cva({
 })
 
 const articleVariant = cva({
-  base: ['relative', 'size-full', 'overflow-y-auto', 'overscroll-none', 'p-4'],
+  base: ['relative', 'size-full', 'overflow-y-auto', 'overscroll-none'],
   variants: {
     type: {
       fullScreen: [],
@@ -43,19 +51,20 @@ const emit = defineEmits<{
 
 const dialogRef = ref<HTMLDialogElement>()
 
+const { isTop } = useStack()
+
 function close() {
+  if (!isTop.value) return
   emit('close')
 }
 
 const { Escape } = useMagicKeys()
 whenever(Escape, () => close())
 onClickOutside(dialogRef, () => close())
-const fullscreen = ref<boolean>(true)
-const type = computed(() => (fullscreen.value ? 'fullScreen' : 'basic'))
 </script>
 
 <template>
-  <dialog ref="dialogRef" :class="dialogVariant({ type })" open>
+  <dialog ref="dialogRef" :class="dialogVariant({ type, isTop })" open>
     <header v-if="$slots['header'] || $slots['header-actions']">
       <div class="mx-auto grid w-full max-w-xl grid-cols-[1fr,auto] gap-x-2 px-4 pt-4 md:px-0">
         <div class="flex flex-nowrap">
@@ -67,7 +76,10 @@ const type = computed(() => (fullscreen.value ? 'fullScreen' : 'basic'))
       </div>
     </header>
     <article :class="articleVariant({ type })">
-      <div class="mx-auto w-full max-w-xl">
+      <div class="relative mx-auto w-full max-w-xl">
+        <slot name="breakout" />
+      </div>
+      <div class="mx-auto w-full max-w-xl p-4">
         <slot></slot>
       </div>
     </article>
