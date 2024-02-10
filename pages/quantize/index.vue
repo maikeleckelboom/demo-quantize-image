@@ -10,14 +10,19 @@ function onDrop(droppedFiles: File[]) {
 const maxColors = ref<number>(128)
 
 async function onExtractColors() {
-  if (!document.startViewTransition) return
-  const transition = document.startViewTransition(async () => {
-    if (!selectedFile.value) return
+  if (!document.startViewTransition) {
     navigateTo({
-      path: `/quantize/${decodeURIComponent(selectedFile.value.name)}`,
+      path: `/quantize/example`,
       query: { maxColors: maxColors.value }
     })
-    await nextTick()
+    return
+  }
+
+  const transition = document.startViewTransition(() => {
+    navigateTo({
+      path: `/quantize/example`,
+      query: { maxColors: maxColors.value }
+    })
   })
 
   await transition.finished
@@ -71,7 +76,7 @@ async function setExampleImage() {
       </p>
     </div>
 
-    <div class="mb-4 h-64 overflow-hidden">
+    <div class="mb-4">
       <FilePreview v-if="fileObjectUrl" :url="fileObjectUrl" />
       <FileDropZone v-else @drop="onDrop" />
     </div>
@@ -114,10 +119,6 @@ async function setExampleImage() {
 </template>
 
 <style>
-.box-target {
-  view-transition-name: target;
-}
-
 html:not(.prevent-transition) {
   img.selected {
     view-transition-name: selected;

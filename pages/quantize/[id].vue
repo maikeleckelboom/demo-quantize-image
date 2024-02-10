@@ -51,20 +51,21 @@ function isPastProcess(index: number) {
 
 const prominentColors = ref<Map<number, number>>()
 const seedColors = ref<number[]>([])
-const isLoading = ref<boolean>(true)
-const progress = ref<number>(0)
+const isLoading = ref<boolean>(false)
 
 onMounted(() => {
   if (!selectedFile.value) {
     return
   }
 
+  isLoading.value = true
+
   const worker: QuantizeWorker = new Worker(new URL('~/workers/quantizeWorker.ts', import.meta.url), {
     type: 'module'
   })
 
   worker.postMessage({
-    type: 'init',
+    type: 'start',
     maxColors: 128,
     file: selectedFile.value
   })
@@ -72,12 +73,12 @@ onMounted(() => {
   worker.addEventListener('message', (evt: MessageEvent<WorkerData>) => {
     if (isProgressData(evt.data)) {
       processes.value[evt.data.step - 1].done = true
-      progress.value = evt.data.progress
     }
 
     if (isDoneData(evt.data)) {
       prominentColors.value = evt.data.prominentColors
       seedColors.value = evt.data.seedColors
+
       worker.terminate()
       isLoading.value = false
     }
@@ -116,12 +117,17 @@ onMounted(() => {
       </div>
       <div class="my-8">
         <div class="flex flex-wrap gap-4">
-          <div
-            v-for="[color] in prominentColors"
-            :key="color"
-            :style="{ backgroundColor: hexFromArgb(color) }"
-            class="size-12 rounded-md"
-          />
+          <template v-for="[color, count] in prominentColors" :key="color">
+            <Tooltip>
+              <div :style="{ backgroundColor: hexFromArgb(color) }" class="size-12 rounded-md"></div>
+              <template #content>
+                <div class="flex flex-col">
+                  <p class="uppercase">{{ hexFromArgb(color) }}</p>
+                  <p class="tabular-nums">count: {{ count }}</p>
+                </div>
+              </template>
+            </Tooltip>
+          </template>
         </div>
       </div>
       <div class="my-8">

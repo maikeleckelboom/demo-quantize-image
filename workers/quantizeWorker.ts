@@ -16,11 +16,16 @@ function pixelsFromImageBytes(imageBytes: Uint8ClampedArray) {
   return pixels
 }
 
+type WorkerStartData = {
+  type: 'start'
+  maxColors: number
+  file: File
+}
+
 type ProgressData = {
   type: 'progress'
-  task: string
-  progress: number
   step: number
+  description: string
 }
 
 type DoneData = {
@@ -29,19 +34,13 @@ type DoneData = {
   seedColors: number[]
 }
 
-type WorkerInitData = {
-  type: 'init'
-  maxColors: number
-  file: File
-}
-
-type WorkerData = ProgressData | DoneData | WorkerInitData
+type WorkerData = ProgressData | DoneData | WorkerStartData
 
 interface QuantizeWorker extends Omit<Worker, 'postMessage'> {
-  postMessage(data: WorkerInitData): void
+  postMessage(data: WorkerStartData): void
 }
 
-export type { QuantizeWorker, WorkerData, WorkerInitData, ProgressData, DoneData }
+export type { QuantizeWorker, WorkerData, WorkerStartData, ProgressData, DoneData }
 
 function isProgressData(data: WorkerData): data is ProgressData {
   return data.type === 'progress'
@@ -72,14 +71,55 @@ function* stepsGenerator() {
   }
 }
 
-if (typeof self !== 'undefined') {
-  addEventListener('message', async (event: MessageEvent<WorkerInitData>) => {
-    const steps = stepsGenerator()
-    const data = event.data
+async function* postMessageGenerator() {}
 
-    const file = data.file
+async function* quantizeProcessGenerator(event: MessageEvent<WorkerStartData>) {
+  const { file, maxColors } = event.data
+
+  const img = await createImageBitmap(file)
+
+  const canvas = new OffscreenCanvas(img.width, img.height)
+  const ctx = canvas.getContext('2d')!
+
+  ctx.drawImage(img, 0, 0)
+
+  const imageData = ctx.getImageData(0, 0, img.width, img.height)
+
+  const bytes = new Uint8ClampedArray(imageData.data.buffer)
+
+  const pixels = pixelsFromImageBytes(bytes)
+
+  const prominentColors = QuantizerCelebi.quantize(pixels, maxColors)
+
+  const seedColors = Score.score(prominentColors)
+
+  yield {
+    type: 'done',
+    prominentColors,
+    seedColors
+  }
+}
+
+/*
+const { file, maxColors } = event.data
+const img = await createImageBitmap(file)
+const canvas = new OffscreenCanvas(img.width, img.height)
+const ctx = canvas.getContext('2d')!
+ctx.drawImage(img, 0, 0)
+const imageData = ctx.getImageData(0, 0, img.width, img.height)
+const bytes = new Uint8ClampedArray(imageData.data.buffer)
+const pixels = pixelsFromImageBytes(bytes)
+const prominentColors = QuantizerCelebi.quantize(pixels, maxColors)
+const seedColors = Score.score(prominentColors)
+*/
+
+if (typeof self !== 'undefined') {
+  self.addEventListener('message', async (event: MessageEvent<WorkerStartData>) => {
+    const steps = stepsGenerator()
+    const { file, maxColors } = event.data
 
     if (!file) {
+      console.error('No file provided, cannot quantize image.')
       return
     }
 
@@ -120,7 +160,7 @@ if (typeof self !== 'undefined') {
       step: 5
     })
 
-    const prominentColors = QuantizerCelebi.quantize(pixels, data.maxColors)
+    const prominentColors = QuantizerCelebi.quantize(pixels, maxColors)
     postMessage({
       type: 'progress',
       message: steps.next().value,
@@ -134,6 +174,7 @@ if (typeof self !== 'undefined') {
     })
 
     const seedColors = Score.score(prominentColors)
+
     postMessage({
       type: 'done',
       prominentColors,
