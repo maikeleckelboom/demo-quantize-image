@@ -57,7 +57,17 @@ async function fileFromImagePath(img: string): Promise<File> {
   return fileFromBlob(blob, img)
 }
 
-async function setExampleImage() {
+const isLoading = ref<boolean>(false)
+
+function withLoading(fn: () => Promise<void>) {
+  return async () => {
+    isLoading.value = true
+    await fn()
+    isLoading.value = false
+  }
+}
+
+async function loadExampleImage() {
   const exampleImage = images[Math.floor(Math.random() * images.length)]
   const file = await fileFromImagePath(exampleImage)
   files.value = [file]
@@ -108,7 +118,9 @@ async function setExampleImage() {
       <Buttons class="justify-end">
         <Button v-if="selectedFile" intent="text" @click="reset">Reset</Button>
         <div v-else class="flex justify-end">
-          <Button intent="outlined" size="sm" @click="setExampleImage"> Load Example Image</Button>
+          <Button :disabled="isLoading" intent="outlined" size="sm" @click="withLoading(loadExampleImage)()">
+            {{ isLoading ? 'Loading...' : 'Load example image' }}
+          </Button>
         </div>
         <Button :disabled="!selectedFile" @click="onExtractColors">
           {{ 'Extract colors' }}

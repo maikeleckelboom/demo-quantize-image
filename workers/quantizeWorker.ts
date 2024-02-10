@@ -75,22 +75,14 @@ async function* postMessageGenerator() {}
 
 async function* quantizeProcessGenerator(event: MessageEvent<WorkerStartData>) {
   const { file, maxColors } = event.data
-
   const img = await createImageBitmap(file)
-
   const canvas = new OffscreenCanvas(img.width, img.height)
   const ctx = canvas.getContext('2d')!
-
   ctx.drawImage(img, 0, 0)
-
   const imageData = ctx.getImageData(0, 0, img.width, img.height)
-
   const bytes = new Uint8ClampedArray(imageData.data.buffer)
-
   const pixels = pixelsFromImageBytes(bytes)
-
   const prominentColors = QuantizerCelebi.quantize(pixels, maxColors)
-
   const seedColors = Score.score(prominentColors)
 
   yield {
@@ -160,7 +152,6 @@ if (typeof self !== 'undefined') {
       step: 5
     })
 
-    console.log('maxColors', maxColors)
     const prominentColors = QuantizerCelebi.quantize(pixels, maxColors)
     postMessage({
       type: 'progress',
