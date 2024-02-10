@@ -7,27 +7,6 @@ function onDrop(droppedFiles: File[]) {
   files.value = droppedFiles
 }
 
-const maxColors = ref<number>(128)
-
-async function onExtractColors() {
-  if (!document.startViewTransition) {
-    navigateTo({
-      path: `/quantize/example`,
-      query: { maxColors: maxColors.value }
-    })
-    return
-  }
-
-  const transition = document.startViewTransition(() => {
-    navigateTo({
-      path: `/quantize/example`,
-      query: { maxColors: maxColors.value }
-    })
-  })
-
-  await transition.finished
-}
-
 const images = [
   '/img/purplish-landscape.jpg',
   '/img/islands.jpg',
@@ -57,20 +36,44 @@ async function fileFromImagePath(img: string): Promise<File> {
   return fileFromBlob(blob, img)
 }
 
-const isLoading = ref<boolean>(false)
-
-function withLoading(fn: () => Promise<void>) {
-  return async () => {
-    isLoading.value = true
-    await fn()
-    isLoading.value = false
-  }
-}
+const state = reactive({
+  isLoadingExample: false,
+  isLoadingNextPage: false
+})
 
 async function loadExampleImage() {
+  state.isLoadingExample = true
   const exampleImage = images[Math.floor(Math.random() * images.length)]
   const file = await fileFromImagePath(exampleImage)
   files.value = [file]
+  state.isLoadingExample = false
+}
+
+const maxColors = ref<number>(128)
+
+async function onExtractColors() {
+  state.isLoadingNextPage = true
+
+  const execute = async () => {
+    if (!selectedFile.value) return
+    await navigateTo({
+      path: `/quantize/${selectedFile.value.name}`,
+      query: { maxColors: maxColors.value }
+    })
+  }
+
+  if (!document.startViewTransition) {
+    await execute()
+    return
+  }
+
+  const transition = document.startViewTransition(async () => {
+    await execute()
+  })
+
+  await transition.finished
+
+  state.isLoadingNextPage = false
 }
 </script>
 
@@ -81,13 +84,18 @@ async function loadExampleImage() {
         Upload an image to generate color palettes
       </h1>
       <p class="text-body-sm text-on-surface-variant">
-        The image is digitally analyzed, a single color is selected as the source color, and tones are chosen
-        and assigned to each color role.
+        The image is digitally analyzed, a single color is selected as the source color, and tones
+        are chosen and assigned to each color role.
       </p>
     </div>
 
     <div class="mb-4">
-      <FilePreview v-if="fileObjectUrl" :url="fileObjectUrl" />
+      <NuxtImg
+        v-if="selectedFile"
+        :src="fileObjectUrl"
+        alt=""
+        class="selected aspect-video rounded-md"
+      />
       <FileDropZone v-else @drop="onDrop" />
     </div>
 
@@ -95,14 +103,16 @@ async function loadExampleImage() {
       <div class="my-4">
         <fieldset>
           <div class="flex flex-col justify-between">
-            <label class="mb-4 flex flex-nowrap items-center gap-x-2 text-label-md" for="maxColors"
-              >Max Colors
+            <label class="mb-4 flex flex-nowrap items-center gap-x-2 text-label-md" for="maxColors">
+              Max Colors
               <span class="text-xs tabular-nums text-on-surface-variant">(1-128)</span>
               <Tooltip class="justify-self-end">
                 <button class="flex items-center justify-center">
                   <Icon class="ml-0.5 h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
                 </button>
-                <template #content>The maximum number of colors to generate from the image.</template>
+                <template #content>
+                  The maximum number of colors to generate from the image.
+                </template>
               </Tooltip>
             </label>
             <div class="">
@@ -113,17 +123,21 @@ async function loadExampleImage() {
       </div>
     </template>
 
-    <!-- the rest of the template -->
     <div class="my-4 flex flex-col">
       <Buttons class="justify-end">
         <Button v-if="selectedFile" intent="text" @click="reset">Reset</Button>
         <div v-else class="flex justify-end">
-          <Button :disabled="isLoading" intent="outlined" size="sm" @click="withLoading(loadExampleImage)()">
-            {{ isLoading ? 'Loading...' : 'Load example image' }}
+          <Button
+            :disabled="state.isLoadingExample"
+            intent="outlined"
+            size="sm"
+            @click="loadExampleImage"
+          >
+            {{ state.isLoadingExample ? 'Loading...' : 'Load example image' }}
           </Button>
         </div>
-        <Button :disabled="!selectedFile" @click="onExtractColors">
-          {{ 'Extract colors' }}
+        <Button :disabled="!selectedFile || state.isLoadingNextPage" @click="onExtractColors">
+          {{ state.isLoadingNextPage ? 'Loading...,' : 'Extract colors' }}
         </Button>
       </Buttons>
     </div>

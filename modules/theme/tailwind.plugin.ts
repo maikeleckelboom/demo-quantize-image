@@ -11,13 +11,15 @@ function tailwindMaterialColorTheme() {
 }
 
 function tailwindCustomVariants() {
-  return plugin(({ addVariant: add }) => {
-    add('link-active', '&.router-link-active')
-    add('link-exact-active', '&.router-link-exact-active')
-    add('button', '& button')
-    add('icon', '& .icon')
-    add('label-text', '& .label-text')
-  })
+  const execute = () =>
+    plugin(({ addVariant }) => {
+      addVariant('link-active', '&.router-link-active')
+      addVariant('link-exact-active', '&.router-link-exact-active')
+      addVariant('button', '& button')
+      addVariant('icon', '& .icon')
+      addVariant('label-text', '& .label-text')
+    })
+  return execute()
 }
 
 export { tailwindMaterialColorTheme, tailwindCustomVariants }

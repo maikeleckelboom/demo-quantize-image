@@ -1,13 +1,36 @@
 import { type Config } from 'tailwindcss'
 import { tailwindCustomVariants, tailwindMaterialColorTheme } from './tailwind.plugin'
 import tailwindContainerQueries from '@tailwindcss/container-queries'
+import tailwindAspectRatio from '@tailwindcss/aspect-ratio'
 
 export const materialThemePreset = {
   content: [],
-  plugins: [tailwindMaterialColorTheme(), tailwindCustomVariants(), tailwindContainerQueries],
   darkMode: 'class',
+  corePlugins: {
+    aspectRatio: false
+  },
+
+  plugins: [
+    tailwindMaterialColorTheme(),
+    tailwindCustomVariants(),
+    tailwindContainerQueries,
+    tailwindAspectRatio
+  ],
+
   theme: {
     extend: {
+      aspectRatio: {
+        auto: 'auto',
+        square: '1 / 1',
+        video: '16 / 9'
+      },
+      keyframes: {
+        shimmer: {
+          '100%': {
+            transform: 'translateX(100%)'
+          }
+        }
+      },
       screens: {
         xs: '320px'
       },

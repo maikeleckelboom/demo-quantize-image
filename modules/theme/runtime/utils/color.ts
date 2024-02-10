@@ -62,7 +62,9 @@ function makeDynamicScheme(
   return schemes
 }
 
-function colorsFromDynamicSchemeMap(dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>) {
+function colorsFromDynamicSchemeMap(
+  dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>
+) {
   return Array.from(dynamicSchemes.entries()).reduce(
     (acc, [key, value]) => ({
       ...acc,
@@ -121,8 +123,8 @@ function textFromProperties(
 const repeatingLinearGradient = (() => {
   const { primary, secondary, tertiary } = {
     primary: 'rgb(var(--primary-rgb))',
-    secondary: 'rgb(var(--secondary-rgb))',
-    tertiary: 'rgb(var(--tertiary-rgb))'
+    secondary: 'rgb(var(--tertiary-rgb))',
+    tertiary: 'rgb(var(--secondary-rgb))'
   }
   return `repeating-linear-gradient(to right,${primary} 0%,${secondary} 50%,${tertiary} 100%)`
 })()

@@ -8,30 +8,32 @@ import {
 } from '~/workers/quantizeWorker'
 import { hexFromArgb } from '@material/material-color-utilities'
 
-const { Escape } = useMagicKeys()
-const router = useRouter()
-whenever(Escape, () => router.back())
+definePageMeta({
+  title: 'Quantize',
+  description: 'Quantize an image to find prominent colors and seed colors',
+  middleware: (ctx) => {
+    if (!ctx.query.maxColors) {
+      navigateTo('/quantize')
+    }
+  }
+})
 
 const store = useFilesStore()
-const { selectedFile } = storeToRefs(store)
 
-onUnmounted(() => {
-  store.reset()
-})
+const { selectedFile } = storeToRefs(store)
 
 if (!store.fileObjectUrl || !selectedFile) {
   navigateTo('/quantize')
 }
 
-definePageMeta({
-  title: 'Quantize',
-  description: 'Quantize an image to find prominent colors and seed colors',
-  middleware: (ctx) => {
-    if (!ctx.params.id || !ctx.query.maxColors) {
-      navigateTo('/quantize')
-    }
-  }
+onUnmounted(() => {
+  store.reset()
 })
+
+const { Escape } = useMagicKeys()
+
+const router = useRouter()
+whenever(Escape, () => router.back())
 
 const processes = ref(
   processesList.map((task, index) => ({
@@ -62,9 +64,12 @@ onMounted(() => {
 
   isLoading.value = true
 
-  const worker: QuantizeWorker = new Worker(new URL('~/workers/quantizeWorker.ts', import.meta.url), {
-    type: 'module'
-  })
+  const worker: QuantizeWorker = new Worker(
+    new URL('~/workers/quantizeWorker.ts', import.meta.url),
+    {
+      type: 'module'
+    }
+  )
 
   worker.postMessage({
     type: 'start',
@@ -121,7 +126,10 @@ onMounted(() => {
         <div class="flex flex-wrap gap-4">
           <template v-for="[color, count] in prominentColors" :key="color">
             <Tooltip>
-              <div :style="{ backgroundColor: hexFromArgb(color) }" class="size-12 rounded-md"></div>
+              <div
+                :style="{ backgroundColor: hexFromArgb(color) }"
+                class="size-12 rounded-md"
+              ></div>
               <template #content>
                 <div class="flex flex-col">
                   <p class="uppercase">{{ hexFromArgb(color) }}</p>

@@ -48,32 +48,45 @@ function onChange(event: Event) {
   if (!files) return
   onDrop(Array.from(files))
 }
+
+const device = useDevice()
 </script>
 
 <template>
-  <div ref="dropZoneRef" :class="{ isOverDropZone }" class="flex w-full items-center justify-center">
+  <div ref="dropZoneRef" :class="{ isOverDropZone }" class="relative size-full">
+    <template v-if="files?.length">
+      <div class="absolute inset-0 size-full">
+        <slot :files="files" name="dropped" />
+      </div>
+    </template>
     <label
-      :class="{ 'bg-surface-container-high': isOverDropZone }"
-      class="flex size-full h-64 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-outline-variant bg-surface-container-low transition-colors duration-300 ease-in-out hover:bg-surface-container-high"
+      :class="[
+        { 'bg-surface-container-high': isOverDropZone },
+        'flex',
+        'size-full',
+        'h-64',
+        'cursor-pointer',
+        'flex-col',
+        'items-center',
+        'justify-center',
+        'overflow-hidden',
+        'rounded-lg',
+        'border-2',
+        'border-dashed',
+        'border-outline-variant',
+        'bg-surface-container-low',
+        'transition-colors',
+        'duration-300',
+        'ease-in-out',
+        'hover:bg-surface-container-high'
+      ]"
       for="dropzone-file"
     >
       <span class="flex flex-col items-center justify-center pb-6 pt-5">
-        <svg
-          class="mb-3 h-10 w-10 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-          />
-        </svg>
+        <Icon name="ic:round-cloud-upload" />
         <span class="mb-2 inline text-sm text-on-surface-variant">
-          <span class="font-semibold">Click to upload</span> or drag and drop
+          <span class="font-semibold">Click to upload</span>
+          {{ device.isMobileOrTablet ? 'or tap' : 'or drag and drop' }}
         </span>
         <span class="text-xs">PNG, JPG, SVG or WEBP</span>
       </span>

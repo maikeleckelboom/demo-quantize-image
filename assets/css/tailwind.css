@@ -9,15 +9,18 @@
         @apply scrollbar ;
     }
 
-    .v-enter-active,
-    .v-leave-active {
-        transition: opacity 0.3s ease;
+    h1 {
+        @apply text-2xl;
     }
 
-    .v-enter-from,
-    .v-leave-to {
-        opacity: 0;
+    h2 {
+        @apply text-xl;
     }
+
+    h3 {
+        @apply text-lg;
+    }
+
 }
 
 @layer utilities {
@@ -81,7 +84,6 @@
         --input-background-color: rgb(var(--surface-rgb));
         --input-text-color: rgb(var(--on-surface-rgb));
         --input-placeholder-color: rgb(var(--on-surface-rgb) / 0.5);
-
         --input-text-align: center;
 
         padding-inline: var(--input-padding-x);
@@ -158,5 +160,16 @@
         @apply relative overflow-clip border-none bg-transparent text-end text-body-lg tabular-nums outline-none;
         @apply after:absolute after:inset-0 after:z-0 after:bg-transparent;
         @apply hover:after:bg-surface-level-1 focus-visible:after:bg-surface-level-2 active:after:bg-surface-level-3;
+    }
+
+
+    .v-enter-active,
+    .v-leave-active {
+        transition: opacity 0.3s ease;
+    }
+
+    .v-enter-from,
+    .v-leave-to {
+        opacity: 0;
     }
 }
