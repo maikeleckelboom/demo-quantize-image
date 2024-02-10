@@ -49,13 +49,16 @@ function arrayFromMap(map: Map<number, number>) {
 const seed = computed(() => props.seed)
 const prominent = computed(() => arrayFromMap(props.prominent))
 
-function onClose() {
+function exit() {
   close()
 }
+
+const { Escape } = useMagicKeys()
+whenever(Escape, () => exit())
 </script>
 
 <template>
-  <DialogComponent ref="root" type="basic" @close="onClose">
+  <DialogComponent ref="root" type="basic" @close="exit">
     <div class="grid grid-cols-[1fr,auto] gap-x-4">
       <div class="flex flex-wrap gap-1">
         <div v-for="color in prominent" :key="color" class="flex">

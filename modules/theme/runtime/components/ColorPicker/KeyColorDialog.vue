@@ -16,6 +16,9 @@ function exit() {
   close(null)
 }
 
+const { Escape } = useMagicKeys()
+whenever(Escape, () => exit())
+
 const localColor = ref<number>(props.initialColor)
 
 const colorValue = computed({

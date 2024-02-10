@@ -64,8 +64,6 @@ function close() {
   emit('close')
 }
 
-const { Escape } = useMagicKeys()
-whenever(Escape, () => close())
 onClickOutside(dialogRef, () => close())
 
 console.log(
