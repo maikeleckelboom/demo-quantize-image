@@ -83,7 +83,7 @@ whenever(quantizeWorker, (worker) => {
 })
 
 onMounted(() => {
-  quantizeWorker.value = new Worker(new URL('~/workers/worker.ts', import.meta.url), {
+  quantizeWorker.value = new Worker(new URL('~/workers/quantize/worker.ts', import.meta.url), {
     type: 'module'
   })
 })
