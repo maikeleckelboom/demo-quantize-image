@@ -5,7 +5,7 @@ const props = withDefaults(
   defineProps<{
     dataTypes?: string[]
   }>(),
-  { dataTypes: () => ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'] }
+  { dataTypes: () => ['image/*'] }
 )
 
 const emit = defineEmits<{
@@ -85,8 +85,10 @@ const device = useDevice()
       <span class="flex flex-col items-center justify-center pb-6 pt-5">
         <Icon name="ic:round-cloud-upload" />
         <span class="mb-2 inline text-sm text-on-surface-variant">
-          <span class="font-semibold">Click to upload</span>
-          {{ device.isMobileOrTablet ? 'or tap' : 'or drag and drop' }}
+          <span class="font-semibold">
+            {{ device.isDesktopOrTablet ? 'Click hereto upload' : 'Tap here  to upload' }}
+          </span>
+          {{ device.isDesktopOrTablet ? ' or drag and drop' : '' }}
         </span>
         <span class="text-xs">PNG, JPG, SVG or WEBP</span>
       </span>
