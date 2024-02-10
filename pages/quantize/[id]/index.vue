@@ -1,21 +1,17 @@
 <script lang="ts" setup>
 import {
   isDoneData,
+  isErrorData,
   isProgressData,
-  processes as processesList,
   type QuantizeWorker,
-  type WorkerData
+  steps,
+  type WorkerEventData
 } from '~/workers/quantizeWorker'
 import { hexFromArgb } from '@material/material-color-utilities'
 
 definePageMeta({
   title: 'Quantize',
-  description: 'Quantize an image to find prominent colors and seed colors',
-  middleware: (ctx) => {
-    if (!ctx.query.maxColors) {
-      navigateTo('/quantize')
-    }
-  }
+  description: 'Quantize an image to find prominent colors and seed colors'
 })
 
 const store = useFilesStore()
@@ -26,14 +22,10 @@ if (!store.fileObjectUrl || !selectedFile) {
   navigateTo('/quantize')
 }
 
-onUnmounted(() => {
-  store.reset()
-})
-
 const processes = ref(
-  processesList.map((task, index) => ({
+  steps.map((step, index) => ({
     index,
-    task,
+    step,
     done: false
   }))
 )
@@ -52,22 +44,17 @@ const router = useRouter()
 const route = useRoute()
 
 const colorStore = useColorsStore()
-
 const { prominentColors, seedColors } = storeToRefs(colorStore)
 
-await callOnce(async () => {
-  if (!selectedFile.value) {
-    return
-  }
+const errors = ref<unknown>(null)
+watch(errors, console.error)
+
+const quantizeWorker = ref<QuantizeWorker | null>(null)
+
+whenever(quantizeWorker, (worker) => {
+  if (!selectedFile.value) return
 
   isLoading.value = true
-
-  const worker: QuantizeWorker = new Worker(
-    new URL('~/workers/quantizeWorker.ts', import.meta.url),
-    {
-      type: 'module'
-    }
-  )
 
   worker.postMessage({
     type: 'start',
@@ -75,23 +62,39 @@ await callOnce(async () => {
     file: selectedFile.value
   })
 
-  worker.addEventListener('message', (evt: MessageEvent<WorkerData>) => {
-    if (isProgressData(evt.data)) {
-      processes.value[evt.data.step - 1].done = true
+  worker.addEventListener('message', ({ data }: MessageEvent<WorkerEventData>) => {
+    if (isProgressData(data)) {
+      processes.value[data.step - 1].done = true
     }
 
-    if (isDoneData(evt.data)) {
-      prominentColors.value = evt.data.prominentColors
-      seedColors.value = evt.data.seedColors
+    if (isErrorData(data)) {
+      isLoading.value = false
+      errors.value = data.error
+      return
+    }
 
-      worker.terminate()
+    if (isDoneData(data)) {
+      prominentColors.value = data.prominentColors
+      seedColors.value = data.suitableColors
       isLoading.value = false
     }
   })
 })
 
-async function navigateToNext() {
-  await navigateTo({ path: `/quantize/${selectedFile.value!.name}/colors` })
+onMounted(() => {
+  quantizeWorker.value = new Worker(new URL('~/workers/quantizeWorker.ts', import.meta.url), {
+    type: 'module'
+  })
+})
+
+onUnmounted(() => {
+  store.reset()
+  colorStore.reset()
+  quantizeWorker.value?.terminate()
+})
+
+function onCustomize() {
+  console.log('Customize')
 }
 </script>
 <template>
@@ -127,7 +130,7 @@ async function navigateToNext() {
               ]"
               class="relative w-fit text-body-md"
             >
-              {{ process.task }}
+              {{ process.step }}
             </p>
           </div>
         </div>
@@ -169,7 +172,7 @@ async function navigateToNext() {
         </div>
         <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">
           <Button :stretch="true" intent="text" @click="router.back()">Reset</Button>
-          <Button :stretch="true" @click="navigateToNext"> Customize</Button>
+          <Button :stretch="true" @click="onCustomize"> Customize</Button>
         </div>
       </template>
     </DialogComponent>

@@ -1,12 +1,7 @@
 const useColorsStore = defineStore('colors', () => {
-  const prominentColors = ref<Map<number, number>>(new Map())
-  /*  const prominentColors = computed({
-      get: () => Array.from(prominentColorsMap.value.entries()).sort((a, b) => b[1] - a[1]),
-      set: (colors: [number, number][]) => {
-        prominentColorsMap.value = new Map(colors)
-      }
-    })*/
-  const seedColors = ref<number[]>([])
+  const prominentColors = ref<Map<number, number>>()
+
+  const seedColors = ref<number[]>()
 
   function setProminentColors(colors: Map<number, number>) {
     prominentColors.value = colors
@@ -16,7 +11,12 @@ const useColorsStore = defineStore('colors', () => {
     seedColors.value = colors
   }
 
-  return { prominentColors, seedColors, setProminentColors, setSeedColors }
+  function reset() {
+    prominentColors.value = undefined
+    seedColors.value = undefined
+  }
+
+  return { prominentColors, seedColors, setProminentColors, setSeedColors, reset }
 })
 
 export { useColorsStore }
