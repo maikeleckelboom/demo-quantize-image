@@ -96,9 +96,9 @@ function onCustomFIleChange(event: Event) {
       </p>
     </div>
 
-    <div class="mb-4">
-      <input accept="image/*" type="file" @change="onCustomFIleChange" />
-    </div>
+    <!--    <div class="mb-4">
+          <input accept="image/*" type="file" @change="onCustomFIleChange" />
+        </div>-->
 
     <div class="mb-4">
       <NuxtImg
