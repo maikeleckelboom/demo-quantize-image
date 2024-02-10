@@ -4,7 +4,7 @@ interface Props {
   icon?: string
   intent?: 'elevated' | 'filled' | 'filled-tonal' | 'outlined' | 'text' | 'fab' | 'extended-fab'
   size?: 'sm' | 'md' | 'lg'
-  stretch?: boolean
+  stretch?: boolean | 'true' | 'false'
   variant?: 'primary' | 'secondary' | 'tertiary' | 'surface' | 'error'
   disabled?: boolean
 }
@@ -151,7 +151,17 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false
 })
 
-const buttonClasses = computed(() => twMerge(variants(props)))
+const buttonClasses = computed(() =>
+  twMerge(
+    variants({
+      intent: props.intent,
+      size: props.size,
+      dir: props.dir,
+      stretch: [true, 'true'].includes(props.stretch!),
+      disabled: props.disabled
+    })
+  )
+)
 </script>
 
 <template>

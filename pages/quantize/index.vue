@@ -75,6 +75,33 @@ async function onExtractColors() {
 
   state.isLoadingNextPage = false
 }
+
+async function openFilePicker() {
+  const filePickerOptions = {
+    startIn: 'pictures',
+    types: [
+      {
+        description: 'Images',
+        accept: {
+          'image/*': ['.jpg', '.jpeg', '.png', '.webp']
+        }
+      }
+    ]
+  }
+  if ('showOpenFilePicker' in window && typeof window.showOpenFilePicker === 'function') {
+    try {
+      let [fileHandle] = await window.showOpenFilePicker(filePickerOptions)
+
+      if (fileHandle) {
+        const file = await fileHandle.getFile()
+        files.value = [file]
+        return
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
 </script>
 
 <template>
@@ -87,6 +114,10 @@ async function onExtractColors() {
         The image is digitally analyzed, a single color is selected as the source color, and tones
         are chosen and assigned to each color role.
       </p>
+    </div>
+
+    <div class="mb-4">
+      <Button @click="openFilePicker">Upload from pictures</Button>
     </div>
 
     <div class="mb-4">

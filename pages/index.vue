@@ -85,7 +85,7 @@ function onFabClick() {
       <Button
         class="pointer-events-auto"
         intent="extended-fab"
-        size="lg"
+        size="md"
         variant="primary"
         @click="onFabClick"
       >

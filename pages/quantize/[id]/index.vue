@@ -136,19 +136,14 @@ function onCustomize() {
         </div>
       </div>
       <div v-if="seedColors?.length" class="px-4">
-        <h2 class="mb-4 text-xl">
-          Suitable Colors
-          <span class="relative -top-[1px] font-mono text-body-md tabular-nums">
-            ({{ seedColors?.length }})
-          </span>
-        </h2>
+        <h2 class="mb-4 text-xl">Suitable Colors</h2>
         <div class="flex flex-row flex-nowrap gap-x-3">
           <div
             v-for="color in seedColors"
             :key="color"
             :style="{ backgroundColor: hexFromArgb(color) }"
             class="min-h-16 min-w-16 rounded-md"
-          ></div>
+          />
         </div>
       </div>
 
@@ -157,8 +152,8 @@ function onCustomize() {
           <Button variant="error" @click="router.back()">Abort</Button>
         </div>
         <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">
-          <Button :stretch="true" intent="text" @click="router.back()">Reset</Button>
-          <Button :stretch="true" @click="onCustomize"> Continue</Button>
+          <Button intent="text" stretch="true" @click="router.back()">Reset</Button>
+          <Button stretch="true" @click="onCustomize"> Continue</Button>
         </div>
       </template>
     </DialogComponent>
