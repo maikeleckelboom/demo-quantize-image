@@ -160,6 +160,7 @@ if (typeof self !== 'undefined') {
       step: 5
     })
 
+    console.log('maxColors', maxColors)
     const prominentColors = QuantizerCelebi.quantize(pixels, maxColors)
     postMessage({
       type: 'progress',

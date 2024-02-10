@@ -53,6 +53,8 @@ const prominentColors = ref<Map<number, number>>()
 const seedColors = ref<number[]>([])
 const isLoading = ref<boolean>(false)
 
+const route = useRoute()
+
 onMounted(() => {
   if (!selectedFile.value) {
     return
@@ -66,7 +68,7 @@ onMounted(() => {
 
   worker.postMessage({
     type: 'start',
-    maxColors: 128,
+    maxColors: Number(route.query.maxColors),
     file: selectedFile.value
   })
 
