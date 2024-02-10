@@ -55,30 +55,28 @@ function onClose() {
 </script>
 
 <template>
-  <DialogBackdrop>
-    <DialogComponent ref="root" type="basic" @close="onClose">
-      <div class="grid grid-cols-[1fr,auto] gap-x-4">
-        <div class="flex flex-wrap gap-1">
-          <div v-for="color in prominent" :key="color" class="flex">
-            <div
-              :style="{ backgroundColor: hexFromArgb(color) }"
-              class="size-6 rounded-full"
-              @click="selectProminent(color)"
-            ></div>
-          </div>
-        </div>
-        <div class="flex flex-col items-start gap-y-2">
+  <DialogComponent ref="root" type="basic" @close="onClose">
+    <div class="grid grid-cols-[1fr,auto] gap-x-4">
+      <div class="flex flex-wrap gap-1">
+        <div v-for="color in prominent" :key="color" class="flex">
           <div
-            v-for="color in seed"
-            :key="color"
             :style="{ backgroundColor: hexFromArgb(color) }"
-            class="size-24 rounded-full"
-            @click="selectSeed(color)"
+            class="size-6 rounded-full"
+            @click="selectProminent(color)"
           ></div>
         </div>
       </div>
-    </DialogComponent>
-  </DialogBackdrop>
+      <div class="flex flex-col items-start gap-y-2">
+        <div
+          v-for="color in seed"
+          :key="color"
+          :style="{ backgroundColor: hexFromArgb(color) }"
+          class="size-24 rounded-full"
+          @click="selectSeed(color)"
+        ></div>
+      </div>
+    </div>
+  </DialogComponent>
 </template>
 
 <style scoped></style>

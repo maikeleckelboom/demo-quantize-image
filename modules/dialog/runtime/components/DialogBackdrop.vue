@@ -1,14 +1,4 @@
-<script lang="ts" setup>
-const { isTop } = useStack()
-
-watch(isTop, (top) => {
-  if (top) {
-    console.log(`
-      DialogBackdrop isTop: ${top}
-    `)
-  }
-})
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="fixed h-svh w-svw overflow-hidden bg-scrim/60">

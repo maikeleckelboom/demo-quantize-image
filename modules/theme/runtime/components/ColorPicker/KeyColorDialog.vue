@@ -10,12 +10,9 @@ const props = withDefaults(defineProps<ColorPickerOptions>(), {
 
 const root = ref<InstanceType<typeof DialogComponent>>()
 
-const { isTop } = useStack()
-
 const { close } = useDialogs()
 
 function exit() {
-  if (!isTop.value) return
   close(null)
 }
 
@@ -41,36 +38,34 @@ const bookmarked = ref<boolean>(false)
 </script>
 
 <template>
-  <DialogBackdrop>
-    <DialogComponent ref="root" @close="exit">
-      <template #header>
-        <h1 class="text-headline-sm font-medium capitalize md:text-headline-md">
-          {{ getKeyColorName(keyColor) }}
-        </h1>
-      </template>
-      <template #header-actions>
-        <IconButton
-          :aria-label="bookmarked ? 'Remove bookmark' : 'Bookmark'"
-          :selected="bookmarked"
-          :title="bookmarked ? 'Remove bookmark' : 'Bookmark'"
-          size="sm"
-          @click="bookmarked = !bookmarked"
-        >
-          <Icon v-if="bookmarked" class="text-secondary" name="ic:round-bookmark" />
-          <Icon v-else name="ic:round-bookmark-border" />
-        </IconButton>
-      </template>
-      <div class="relative mx-auto max-w-xl">
-        <KeyColorSettings v-model="colorValue" />
-      </div>
-      <template #footer>
-        <Buttons class="mb-4 ml-auto w-fit">
-          <Button intent="text" @click="exit">Cancel</Button>
-          <Button intent="outlined" @click="save">Save</Button>
-        </Buttons>
-      </template>
-    </DialogComponent>
-  </DialogBackdrop>
+  <DialogComponent ref="root" @close="exit">
+    <template #header>
+      <h1 class="text-headline-sm font-medium capitalize md:text-headline-md">
+        {{ getKeyColorName(keyColor) }}
+      </h1>
+    </template>
+    <template #header-actions>
+      <IconButton
+        :aria-label="bookmarked ? 'Remove bookmark' : 'Bookmark'"
+        :selected="bookmarked"
+        :title="bookmarked ? 'Remove bookmark' : 'Bookmark'"
+        size="sm"
+        @click="bookmarked = !bookmarked"
+      >
+        <Icon v-if="bookmarked" class="text-secondary" name="ic:round-bookmark" />
+        <Icon v-else name="ic:round-bookmark-border" />
+      </IconButton>
+    </template>
+    <div class="relative mx-auto max-w-xl">
+      <KeyColorSettings v-model="colorValue" />
+    </div>
+    <template #footer>
+      <Buttons class="mb-4 ml-auto w-fit">
+        <Button intent="text" @click="exit">Cancel</Button>
+        <Button intent="outlined" @click="save">Save</Button>
+      </Buttons>
+    </template>
+  </DialogComponent>
 </template>
 
 <style scoped></style>

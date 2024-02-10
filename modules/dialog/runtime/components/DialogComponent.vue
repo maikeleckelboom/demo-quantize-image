@@ -6,10 +6,6 @@ const props = withDefaults(defineProps<{ type?: 'fullScreen' | 'basic' }>(), {
 const dialogVariant = cva({
   base: ['fixed', 'text-on-surface', 'grid grid-rows-[auto,1fr,auto]', 'overflow-hidden'],
   variants: {
-    isTop: {
-      true: ['z-[100]'],
-      false: ['z-40']
-    },
     type: {
       fullScreen: ['rounded-none', 'size-full', 'm-0', 'inset-0', 'bg-surface'],
       basic: [
@@ -21,6 +17,16 @@ const dialogVariant = cva({
         'bg-surface-container',
         'my-12'
       ]
+    }
+  }
+})
+
+const backdropVariant = cva({
+  base: ['fixed', 'h-svh', 'w-svw', 'overflow-hidden', 'bg-scrim/60'],
+  variants: {
+    isTop: {
+      true: ['z-[100]'],
+      false: ['z-40']
     }
   }
 })
@@ -64,37 +70,40 @@ onClickOutside(dialogRef, () => close())
 
 console.log(
   'DialogComponent',
-  { type: props.type, isTop },
-  dialogVariant({ type: props.type, isTop: isTop.value })
+  { type: props.type, isTop: isTop.value },
+  dialogVariant({ type: props.type }),
+  backdropVariant({ isTop: isTop.value })
 )
 </script>
 
 <template>
-  <dialog ref="dialogRef" :class="dialogVariant({ type, isTop })" open>
-    <header v-if="$slots['header'] || $slots['header-actions']">
-      <div class="mx-auto grid w-full max-w-xl grid-cols-[1fr,auto] gap-x-2 px-4 pt-4 md:px-0">
-        <div class="flex flex-nowrap">
-          <slot name="header" />
+  <div :class="backdropVariant({ isTop })">
+    <dialog ref="dialogRef" :class="dialogVariant({ type })" open>
+      <header v-if="$slots['header'] || $slots['header-actions']">
+        <div class="mx-auto grid w-full max-w-xl grid-cols-[1fr,auto] gap-x-2 px-4 pt-4 md:px-0">
+          <div class="flex flex-nowrap">
+            <slot name="header" />
+          </div>
+          <div class="flex flex-nowrap gap-x-1">
+            <slot name="header-actions" />
+          </div>
         </div>
-        <div class="flex flex-nowrap gap-x-1">
-          <slot name="header-actions" />
+      </header>
+      <article :class="articleVariant({ type })">
+        <div class="relative mx-auto w-full max-w-xl">
+          <slot name="breakout" />
         </div>
-      </div>
-    </header>
-    <article :class="articleVariant({ type })">
-      <div class="relative mx-auto w-full max-w-xl">
-        <slot name="breakout" />
-      </div>
-      <div class="mx-auto w-full max-w-xl p-4">
-        <slot></slot>
-      </div>
-    </article>
-    <footer v-if="$slots['footer']" :class="footerVariant({ type })">
-      <div class="mx-auto w-full max-w-xl">
-        <slot name="footer" />
-      </div>
-    </footer>
-  </dialog>
+        <div class="mx-auto w-full max-w-xl p-4">
+          <slot></slot>
+        </div>
+      </article>
+      <footer v-if="$slots['footer']" :class="footerVariant({ type })">
+        <div class="mx-auto w-full max-w-xl">
+          <slot name="footer" />
+        </div>
+      </footer>
+    </dialog>
+  </div>
 </template>
 
 <style scoped></style>
