@@ -76,9 +76,11 @@ async function onExtractColors() {
   state.isLoadingNextPage = false
 }
 
-async function openFilePicker() {
+type StartInOpts = 'pictures' | 'documents' | 'desktop' | 'downloads' | 'music' | 'videos'
+
+async function openFilePicker(startIn: StartInOpts = 'pictures') {
   const filePickerOptions = {
-    startIn: 'pictures',
+    startIn,
     types: [
       {
         description: 'Images',
@@ -88,14 +90,12 @@ async function openFilePicker() {
       }
     ]
   }
-  if ('showOpenFilePicker' in window && typeof window.showOpenFilePicker === 'function') {
+  if ('showOpenFilePicker' in window && isFunction(window.showOpenFilePicker)) {
     try {
-      let [fileHandle] = await window.showOpenFilePicker(filePickerOptions)
-
-      if (fileHandle) {
+      const [fileHandle] = await window.showOpenFilePicker(filePickerOptions)
+      if (fileHandle instanceof FileSystemFileHandle) {
         const file = await fileHandle.getFile()
         files.value = [file]
-        return
       }
     } catch (error) {
       console.error(error)
@@ -118,6 +118,10 @@ async function openFilePicker() {
 
     <div class="mb-4">
       <Button @click="openFilePicker">Upload from pictures</Button>
+      <Button @click="openFilePicker('desktop')">Upload from desktop</Button>
+      <Button @click="openFilePicker('downloads')">Upload from downloads</Button>
+      <Button @click="openFilePicker('music')">Upload from music</Button>
+      <Button @click="openFilePicker('videos')">Upload from videos</Button>
     </div>
 
     <div class="mb-4">
