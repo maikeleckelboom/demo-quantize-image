@@ -1,13 +1,13 @@
 <script lang="ts" setup>
+import { steps } from '~/workers/quantizeWorker'
+import { hexFromArgb } from '@material/material-color-utilities'
 import {
   isDoneData,
   isErrorData,
   isProgressData,
   type QuantizeWorker,
-  steps,
   type WorkerEventData
-} from '~/workers/quantizeWorker'
-import { hexFromArgb } from '@material/material-color-utilities'
+} from '~/workers/types'
 
 definePageMeta({
   title: 'Quantize',
@@ -67,16 +67,16 @@ whenever(quantizeWorker, (worker) => {
       processes.value[data.step - 1].done = true
     }
 
-    if (isErrorData(data)) {
-      isLoading.value = false
-      errors.value = data.error
-      return
-    }
-
     if (isDoneData(data)) {
       prominentColors.value = data.prominentColors
       seedColors.value = data.suitableColors
       isLoading.value = false
+    }
+
+    if (isErrorData(data)) {
+      isLoading.value = false
+      errors.value = data.error
+      return
     }
   })
 })
@@ -135,27 +135,8 @@ function onCustomize() {
           </div>
         </div>
       </div>
-      <!--
-            <div class="my-8 hidden">
-              <div class="flex flex-wrap gap-4">
-                <template v-for="[color, count] in prominentColors" :key="color">
-                  <Tooltip>
-                    <div
-                      :style="{ backgroundColor: hexFromArgb(color) }"
-                      class="size-12 rounded-md"
-                    ></div>
-                    <template #content>
-                      <div class="flex flex-col">
-                        <p class="uppercase">{{ hexFromArgb(color) }}</p>
-                        <p class="tabular-nums">count: {{ count }}</p>
-                      </div>
-                    </template>
-                  </Tooltip>
-                </template>
-              </div>
-            </div>
-      -->
-      <div class="my-8">
+      <div v-if="seedColors?.length" class="my-8">
+        <h2 class="mb-4 text-xl">Suitable Colors (1-5)</h2>
         <div class="flex flex-row flex-nowrap gap-x-3">
           <div
             v-for="color in seedColors"
@@ -168,11 +149,11 @@ function onCustomize() {
 
       <template #footer>
         <div v-if="isLoading" class="flex justify-end">
-          <Button variant="error" @click="router.back()">Abort Process</Button>
+          <Button variant="error" @click="router.back()">Abort</Button>
         </div>
         <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">
           <Button :stretch="true" intent="text" @click="router.back()">Reset</Button>
-          <Button :stretch="true" @click="onCustomize"> Customize</Button>
+          <Button :stretch="true" @click="onCustomize"> Continue</Button>
         </div>
       </template>
     </DialogComponent>

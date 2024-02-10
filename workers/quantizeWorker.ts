@@ -1,56 +1,5 @@
 import { argbFromRgb, QuantizerCelebi, Score } from '@material/material-color-utilities'
-
-type StartEventData = {
-  type: 'start'
-  file: File
-  maxColors: number
-}
-
-type ProgressEventData = {
-  type: 'progress'
-  step: number
-  description: string
-}
-
-type ErrorEventData = {
-  type: 'error'
-  error: Error
-}
-
-type DoneEventData = {
-  type: 'done'
-  prominentColors: Map<number, number>
-  suitableColors: number[]
-}
-
-type WorkerEventData = StartEventData | ProgressEventData | DoneEventData | ErrorEventData
-
-interface QuantizeWorker extends Omit<Worker, 'postMessage'> {
-  postMessage(data: StartEventData): void
-}
-
-export type {
-  QuantizeWorker,
-  WorkerEventData,
-  StartEventData,
-  ProgressEventData,
-  DoneEventData,
-  ErrorEventData
-}
-
-function isProgressData(data: WorkerEventData): data is ProgressEventData {
-  return data.type === 'progress'
-}
-
-function isDoneData(data: WorkerEventData): data is DoneEventData {
-  return data.type === 'done'
-}
-
-function isErrorData(data: WorkerEventData): data is ErrorEventData {
-  return data.type === 'error'
-}
-
-export { isProgressData, isDoneData, isErrorData }
+import type { StartEventData } from '~/workers/types'
 
 function pixelsFromImageBytes(imageBytes: Uint8ClampedArray) {
   const pixels: number[] = []
@@ -101,7 +50,6 @@ export const steps: string[] = [
 ] as const
 
 async function* quantizeProcessGenerator({ data }: MessageEvent<StartEventData>) {
-  if (!data?.file || !data?.maxColors) return
   let step: number = 0
   try {
     const img = await createImageBitmap(data.file)
@@ -126,6 +74,9 @@ async function* quantizeProcessGenerator({ data }: MessageEvent<StartEventData>)
 
 if (typeof self !== 'undefined') {
   self.addEventListener('message', async (event: MessageEvent<StartEventData>) => {
+    if (!event.data?.file || !event.data?.maxColors) {
+      throw new Error('Invalid data')
+    }
     const generator = quantizeProcessGenerator(event)
     for await (const message of generator) {
       postMessage(message)
