@@ -1,5 +1,5 @@
 import { argbFromRgb, QuantizerCelebi, Score } from '@material/material-color-utilities'
-import type { StartEventData } from '~/workers/types'
+import type { StartEventData } from './types'
 
 function pixelsFromImageBytes(imageBytes: Uint8ClampedArray) {
   const pixels: number[] = []
@@ -39,7 +39,7 @@ function getSuitableColors(prominentColors: Map<number, number>) {
   return Score.score(prominentColors)
 }
 
-export const steps: string[] = [
+const steps: string[] = [
   'Create Offscreen Canvas',
   'Draw Image onto Canvas',
   'Get Image Data from Canvas',
@@ -73,13 +73,20 @@ async function* quantizeProcessGenerator({ data }: MessageEvent<StartEventData>)
 }
 
 if (typeof self !== 'undefined') {
-  self.addEventListener('message', async (event: MessageEvent<StartEventData>) => {
-    if (!event.data?.file || !event.data?.maxColors) {
-      throw new Error('Invalid data')
-    }
+  self.onmessage = async (event: MessageEvent<StartEventData>) => {
     const generator = quantizeProcessGenerator(event)
     for await (const message of generator) {
       postMessage(message)
     }
-  })
+  }
+}
+
+export {
+  steps,
+  pixelsFromImageBytes,
+  createNewOffscreenCanvas,
+  imageDataFromCanvas,
+  bytesFromImageData,
+  quantizePixels,
+  getSuitableColors
 }

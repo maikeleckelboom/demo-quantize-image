@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import { steps } from '~/workers/quantizeWorker'
+import { steps } from '~/workers/quantize/worker'
 import { hexFromArgb } from '@material/material-color-utilities'
 import {
-  isDoneData,
-  isErrorData,
-  isProgressData,
+  isDoneEvent,
+  isErrorEvent,
+  isProgressEvent,
   type QuantizeWorker,
+  type StartEventData,
   type WorkerEventData
-} from '~/workers/types'
+} from '~/workers/quantize/types'
 
 definePageMeta({
   title: 'Quantize',
@@ -47,7 +48,6 @@ const colorStore = useColorsStore()
 const { prominentColors, seedColors } = storeToRefs(colorStore)
 
 const errors = ref<unknown>(null)
-watch(errors, console.error)
 
 const quantizeWorker = ref<QuantizeWorker | null>(null)
 
@@ -56,33 +56,34 @@ whenever(quantizeWorker, (worker) => {
 
   isLoading.value = true
 
-  worker.postMessage({
+  const startMessage: StartEventData = {
     type: 'start',
     maxColors: Number(route.query.maxColors),
     file: selectedFile.value
-  })
+  }
 
-  worker.addEventListener('message', ({ data }: MessageEvent<WorkerEventData>) => {
-    if (isProgressData(data)) {
-      processes.value[data.step - 1].done = true
+  worker.postMessage(startMessage)
+
+  worker.onmessage = (event: MessageEvent<WorkerEventData>) => {
+    if (isProgressEvent(event)) {
+      processes.value[event.data.step - 1].done = true
     }
 
-    if (isDoneData(data)) {
-      prominentColors.value = data.prominentColors
-      seedColors.value = data.suitableColors
+    if (isDoneEvent(event)) {
+      prominentColors.value = event.data.prominentColors
+      seedColors.value = event.data.suitableColors
       isLoading.value = false
     }
 
-    if (isErrorData(data)) {
+    if (isErrorEvent(event)) {
+      errors.value = event.data.error
       isLoading.value = false
-      errors.value = data.error
-      return
     }
-  })
+  }
 })
 
 onMounted(() => {
-  quantizeWorker.value = new Worker(new URL('~/workers/quantizeWorker.ts', import.meta.url), {
+  quantizeWorker.value = new Worker(new URL('~/workers/worker.ts', import.meta.url), {
     type: 'module'
   })
 })

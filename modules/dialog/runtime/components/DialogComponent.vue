@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-withDefaults(defineProps<{ type?: 'fullScreen' | 'basic' }>(), {
+const props = withDefaults(defineProps<{ type?: 'fullScreen' | 'basic' }>(), {
   type: 'fullScreen'
 })
 
@@ -61,6 +61,12 @@ function close() {
 const { Escape } = useMagicKeys()
 whenever(Escape, () => close())
 onClickOutside(dialogRef, () => close())
+
+console.log(
+  'DialogComponent',
+  { type: props.type, isTop },
+  dialogVariant({ type: props.type, isTop: isTop.value })
+)
 </script>
 
 <template>

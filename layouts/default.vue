@@ -11,6 +11,7 @@ const { isMobileOrTablet, isMobile, isTablet, isDesktop, isApple, isAndroid } = 
   >
     <slot />
     <NavBar :active="active" :items="state" :labeled="isLabelled" />
+    <DialogsRoot />
   </div>
 </template>
 
