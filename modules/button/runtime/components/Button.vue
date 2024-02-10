@@ -19,6 +19,8 @@ const variants = cva({
     'items-center',
     'justify-center',
     'shrink-0',
+    'font-medium',
+    'leading-none',
     'relative',
     'overflow-hidden',
     'before:z-0',
@@ -85,6 +87,9 @@ const variants = cva({
       surface: '',
       error: 'bg-error-container text-on-error-container'
     }
+  },
+  defaultVariants: {
+    variant: 'primary'
   },
   compoundVariants: [
     {

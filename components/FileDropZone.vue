@@ -56,26 +56,20 @@ const id = useId()
 
 <template>
   <div ref="dropZoneRef" :class="{ isOverDropZone }" class="relative size-full">
-    <template v-if="files?.length">
-      <div class="absolute inset-0 size-full">
-        <slot :files="files" name="dropped" />
-      </div>
-    </template>
     <label
       :class="[
         { 'bg-surface-container-high': isOverDropZone },
         'flex',
         'size-full',
-        'h-64',
+        'min-h-32',
         'cursor-pointer',
         'flex-col',
         'items-center',
         'justify-center',
         'overflow-hidden',
         'rounded-lg',
-        'border-2',
-        'border-dashed',
-        'border-outline-variant',
+        // 'border-2',
+        // 'border-transparent',
         'bg-surface-container-low',
         'transition-colors',
         'duration-300',
@@ -83,6 +77,7 @@ const id = useId()
         'hover:bg-surface-container-high'
       ]"
       :for="`dropzone-file-${id}`"
+      v-bind="$attrs"
     >
       <span class="flex flex-col items-center justify-center pb-6 pt-5">
         <Icon class="mb-1" name="ic:round-cloud-upload" />

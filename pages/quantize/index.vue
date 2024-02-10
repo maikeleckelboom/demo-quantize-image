@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import NumericTextField from '~/components/InputNumberText.vue'
+
 const store = useFilesStore()
 const { files, selectedFile, fileObjectUrl } = storeToRefs(store)
 const { reset } = store
@@ -95,17 +97,18 @@ function onCustomFIleChange(event: Event) {
         are chosen and assigned to each color role.
       </p>
     </div>
-
-    <!--    <div class="mb-4">
-          <input accept="image/*" type="file" @change="onCustomFIleChange" />
-        </div>-->
-
-    <div class="mb-4">
+    <div
+      :class="[
+        selectedFile ? 'border-outline-variant' : 'border-dashed border-outline-variant',
+        state.isLoadingExample ? 'animate-pulse duration-150' : ''
+      ]"
+      class="border-1 relative mb-4 h-64 overflow-hidden rounded-lg transition duration-200 ease-in-out"
+    >
       <NuxtImg
         v-if="selectedFile"
         :src="fileObjectUrl"
         alt=""
-        class="selected aspect-video rounded-md"
+        class="selected size-full rounded-md"
       />
       <FileDropZone v-else @drop="onDrop" />
     </div>
@@ -114,7 +117,7 @@ function onCustomFIleChange(event: Event) {
       <div class="my-4">
         <fieldset>
           <div class="flex flex-col justify-between">
-            <label class="mb-4 flex flex-nowrap items-center gap-x-2 text-label-md" for="maxColors">
+            <label class="mb-2 flex flex-nowrap items-center gap-x-2 text-label-lg" for="maxColors">
               Max Colors
               <span class="text-xs tabular-nums text-on-surface-variant">(1-128)</span>
               <Tooltip class="justify-self-end">
@@ -126,8 +129,17 @@ function onCustomFIleChange(event: Event) {
                 </template>
               </Tooltip>
             </label>
-            <div class="">
-              <Slider v-model="maxColors" contained="true" max="128" min="1" step="1" />
+            <!--            <p class="text-body-sm text-on-surface-variant">
+                          The maximum number of colors to generate from the image.
+                        </p>-->
+
+            <div class="grid grid-cols-[1fr,50px]">
+              <div class="px-2">
+                <Slider v-model.number="maxColors" contained="true" max="128" min="1" step="1" />
+              </div>
+              <div class="px-2">
+                <NumericTextField id="maxColors" v-model.number="maxColors" max="128" min="1" />
+              </div>
             </div>
           </div>
         </fieldset>

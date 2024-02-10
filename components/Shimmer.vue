@@ -1,21 +1,18 @@
 <script lang="ts" setup></script>
 
 <template>
-  <span
+  <div
     :class="[
-      'relative',
-      'size-full',
-      'overflow-hidden',
-      'before:absolute',
-      'before:inset-0',
-      'before:-translate-x-full',
-      'before:animate-[shimmer_2s_infinite]',
-      'before:bg-gradient-to-r',
-      'before:from-transparent',
-      'before:via-primary',
-      'before:to-transparent',
-      'before:z-50',
-      'before:size-full'
+      'absolute',
+      'inset-0',
+      '-translate-x-full',
+      'animate-[shimmer_1.5s_infinite]',
+      'bg-gradient-to-r',
+      'from-transparent',
+      'via-primary',
+      'to-transparent',
+      'z-50',
+      'size-full'
     ]"
   />
 </template>

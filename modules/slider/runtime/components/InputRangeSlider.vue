@@ -186,7 +186,11 @@ function getToReversed() {
   return isHorizontalAndRtl || isVerticalAndBtt
 }
 
-function calculateProgress(parentRect: DOMRect, endPos: Position, offsetPos: Position = { x: 0, y: 0 }) {
+function calculateProgress(
+  parentRect: DOMRect,
+  endPos: Position,
+  offsetPos: Position = { x: 0, y: 0 }
+) {
   const isV = unref(isVertical)
   const horizontal = isV ? 'top' : 'left'
   const vertical = isV ? 'bottom' : 'right'
@@ -270,9 +274,15 @@ function handleSwipe(_event: PointerEvent) {
   modelValue.value.splice(pointerIndex, 1, pointerValue)
 }
 
-function reachedBounds(pointer: number | undefined, pointerValue: number, minDistance: number): boolean {
+function reachedBounds(
+  pointer: number | undefined,
+  pointerValue: number,
+  minDistance: number
+): boolean {
   return (
-    pointer !== undefined && pointer >= pointerValue - minDistance && pointer <= pointerValue + minDistance
+    pointer !== undefined &&
+    pointer >= pointerValue - minDistance &&
+    pointer <= pointerValue + minDistance
   )
 }
 
@@ -336,12 +346,14 @@ const styleBinding = computed(() => {
     class="slider-root"
   >
     <div ref="sliderRef" class="slider-wrapper">
+      <slot name="before" />
       <slot name="default" />
       <slot name="track">
         <div :style="trackStyle" class="slider-track">
           <div class="slider-track-fill" />
         </div>
       </slot>
+      <slot name="after" />
       <div
         v-for="(pointerValue, index) in valueProgressProxy"
         :key="index"

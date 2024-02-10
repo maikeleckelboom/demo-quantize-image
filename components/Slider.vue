@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import type { SliderProps } from '~/modules/slider/types'
 
-const props = defineProps<SliderProps>()
+const props = withDefaults(defineProps<SliderProps & { numberOfLabels?: number }>(), {
+  numberOfLabels: 2
+})
+
+const { numberOfLabels, interval } = toRefs(props)
 
 const { min, max, step } = useSteps(props)
 
@@ -16,65 +20,120 @@ const currentValue = computed(() => {
   }
   return modelValue.value
 })
+
 type Label = {
   at: number
   value: number
   label: string
 }
 
-function generateSliderLabels(
-  customMin: number,
-  customMax: number,
-  desiredNumberOfLabels: number,
+function generateLabelsFromNumber(
+  min: number,
+  max: number,
+  numberOfLabels: number,
   decimalPlaces: number
 ): Label[] {
-  const valueRange = customMax - customMin
-
-  // Calculate spacing between labels
-  let spacing = valueRange / desiredNumberOfLabels
-
-  // Adjust spacing to fit within the slider width if necessary
-  spacing = Math.max(spacing, 1) // Adjust this value as needed
-
-  // Calculate the number of labels
-  const actualNumberOfLabels = Math.ceil(valueRange / spacing)
-
-  // Generate labels
+  const valueRange = max - min
+  let spacing = valueRange / numberOfLabels
+  let actualNumberOfLabels = Math.ceil(valueRange / spacing)
   const labels: Label[] = []
   for (let i = 0; i <= actualNumberOfLabels; i++) {
-    let labelValue = customMin + i * spacing
-    labelValue = parseFloat(labelValue.toFixed(decimalPlaces)) // Round to specified decimal places
+    let labelValue = min + i * spacing
+    labelValue = parseFloat(labelValue.toFixed(decimalPlaces))
     labels.push({
-      at: (labelValue - customMin) / valueRange,
+      at: (labelValue - min) / valueRange,
       value: labelValue,
       label: labelValue.toString()
     })
   }
-
   return labels
 }
 
-const marks = computed(() => {
-  const customMin = min.value
-  const customMax = max.value
-  const desiredNumberOfLabels = 10
-  return generateSliderLabels(customMin, customMax, desiredNumberOfLabels, 0)
-})
+const marks = computed(() =>
+  numberOfLabels.value > 0
+    ? generateLabelsFromNumber(min.value, max.value, numberOfLabels.value, 0)
+    : []
+)
+
+function isNotFirstOrLast(index: number) {
+  return index !== 0 && index !== marks.value.length - 1
+}
+
+function isFirst(index: number) {
+  return index === 0
+}
+
+function isLast(index: number) {
+  return index === marks.value.length - 1
+}
+
+function isCurrent(index: number) {
+  return marks.value[index].value === currentValue.value
+}
+
+function isPast(index: number) {
+  return marks.value[index].value < currentValue.value
+}
+
+function isFuture(index: number) {
+  return marks.value[index].value > currentValue.value
+}
+
+function onMarkClick(mark: Label) {
+  modelValue.value = mark.value
+}
+
+function getTickTranslateX(index: number) {
+  if (isFirst(index)) {
+    return 'translateX(2px)'
+  }
+  if (isLast(index)) {
+    return 'translateX(-8px)'
+  }
+  return 'translateX(-50%)'
+}
+
+const labelMarkRefs = useTemplateRefsList<HTMLDivElement>()
+
+function getTickTranslateXLabel(mark: Label, index: number) {
+  console.log(labelMarkRefs.value)
+}
 </script>
 
 <template>
-  <InputRangeSlider id="vm-slider" v-model="modelValue" v-bind="$props" />
-  <div class="relative flex flex-nowrap">
+  <InputRangeSlider id="vm-slider" v-model="modelValue" v-bind="$props">
+    <template #after>
+      <div
+        v-for="(mark, i) in marks"
+        :key="i"
+        :class="[
+          'absolute top-1/2 size-[4px] rounded-full transition-transform duration-150',
+          {
+            'bg-primary-container': isCurrent(i) || isPast(i),
+            'bg-primary': isFuture(i)
+          }
+        ]"
+        :style="{
+          left: `${mark.at * 100}%`,
+          transform: `${getTickTranslateX(i)} translateY(-50%)`
+        }"
+      >
+        <span class="sr-only">{{ mark.label }}</span>
+      </div>
+    </template>
+  </InputRangeSlider>
+  <div class="relative flex hidden flex-nowrap">
     <div
-      v-for="(mark, idx) in marks"
-      :key="idx"
+      v-for="(mark, i) in marks"
+      :key="`label-${i}`"
       :aria-hidden="true"
       :data-value="mark.value"
       :style="{
         left: `${mark.at * 100}%`,
-        transform: 'translateX(-50%)'
+        transform: `${getTickTranslateXLabel(mark, i)}`
       }"
       class="text-body-xs absolute text-on-surface-variant"
+      @click="onMarkClick(mark)"
     >
       {{ mark.label }}
     </div>

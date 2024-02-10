@@ -150,7 +150,12 @@ function onCustomize() {
 
       <template #footer>
         <div v-if="isLoading" class="flex justify-end">
-          <Button variant="error" @click="router.back()">Abort</Button>
+          <Button
+            class="bg-error font-semibold text-on-error"
+            variant="error"
+            @click="router.back()"
+            >Abort
+          </Button>
         </div>
         <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">
           <Button intent="text" stretch="true" @click="router.back()">Reset</Button>
