@@ -50,6 +50,8 @@ function onChange(event: Event) {
 }
 
 const device = useDevice()
+
+const id = useId()
 </script>
 
 <template>
@@ -80,7 +82,7 @@ const device = useDevice()
         'ease-in-out',
         'hover:bg-surface-container-high'
       ]"
-      for="dropzone-file"
+      :for="`dropzone-file-${id}`"
     >
       <span class="flex flex-col items-center justify-center pb-6 pt-5">
         <Icon name="ic:round-cloud-upload" />
@@ -92,7 +94,13 @@ const device = useDevice()
         </span>
         <span class="text-xs">PNG, JPG, SVG or WEBP</span>
       </span>
-      <input id="dropzone-file" class="hidden" type="file" @change="onChange" />
+      <input
+        :id="`dropzone-file-${id}`"
+        accept="image/*"
+        class="hidden"
+        type="file"
+        @change="onChange"
+      />
     </label>
   </div>
 </template>
