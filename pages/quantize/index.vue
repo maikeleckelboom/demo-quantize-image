@@ -136,19 +136,13 @@ const device = useDevice()
       </Transition>
     </div>
 
-    <div class="mb-2 flex justify-end gap-2">
+    <div class="mb-4 flex gap-2 md:mb-8">
       <div v-if="device.isMobileOrTablet" class="flex gap-2">
         <IconButton :disabled="state.isLoadingExample" @click="onTakeCapture">
           <Icon class="size-5" name="ic:round-photo-camera" />
         </IconButton>
       </div>
-      <Button
-        :disabled="state.isLoadingExample"
-        class="min-w-[152px]"
-        intent="text"
-        size="sm"
-        @click="loadExampleImage"
-      >
+      <Button :disabled="state.isLoadingExample" intent="text" size="sm" @click="loadExampleImage">
         <template v-if="state.isLoadingExample">
           Loading
           <Spinner class="size-4" />
@@ -159,18 +153,12 @@ const device = useDevice()
       </Button>
     </div>
     <div class="h-20">
-      <Transition name="basic-out-in">
-        <MaxColorsInputSlider v-if="selectedFile" v-model="maxColors" />
-      </Transition>
+      <MaxColorsInputSlider v-model="maxColors" />
     </div>
     <div class="mt-12 flex w-fit flex-col self-end">
       <div class="flex gap-3">
-        <Button v-if="selectedFile" intent="text" size="md" @click="reset"> Cancel </Button>
-        <Button
-          :disabled="!selectedFile || state.isLoadingNextPage"
-          class="whitespace-nowrap"
-          @click="onExtractColors"
-        >
+        <Button v-if="selectedFile" intent="text" size="md" @click="reset"> Cancel</Button>
+        <Button :disabled="!selectedFile || state.isLoadingNextPage" @click="onExtractColors">
           <div class="flex items-center justify-center gap-2 leading-none">
             {{ state.isLoadingNextPage ? 'Loading' : 'Extract Colors' }}
           </div>
