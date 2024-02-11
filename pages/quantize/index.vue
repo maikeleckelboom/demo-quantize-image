@@ -86,11 +86,15 @@ function onCustomFIleChange(event: Event) {
 }
 
 const textContent = reactive({
-  title: 'Extract colors from image',
-  description: 'The image is digitally analyzed to extract the colors from it.'
+  title: 'Quantize Image',
+  description: 'Utilize digital analysis to extract vibrant colors from your images.'
 })
 
-const { open: openCamera, reset: resetCamera } = useFileDialog({
+const {
+  files: cameraFiles,
+  open: openCamera,
+  reset: resetCamera
+} = useFileDialog({
   accept: 'image/*',
   multiple: false,
   capture: 'environment'
@@ -101,16 +105,20 @@ function onTakeCapture() {
   openCamera()
 }
 
+whenever(cameraFiles, (capturedFiles) => {
+  files.value = Array.from(capturedFiles)
+})
+
 const device = useDevice()
 </script>
 
 <template>
   <div class="mx-auto flex w-full max-w-xl flex-col p-4">
-    <div class="mb-8">
+    <div class="mb-4 md:mb-8">
       <h1 class="mb-2 text-4xl font-medium tracking-normal">
         {{ textContent.title }}
       </h1>
-      <p class="text-body-sm text-on-surface-variant">
+      <p class="hidden text-body-sm text-on-surface-variant md:inline-flex">
         {{ textContent.description }}
       </p>
     </div>
@@ -120,7 +128,7 @@ const device = useDevice()
         selectedFile ? 'border-outline-variant' : 'border-dashed border-outline-variant',
         state.isLoadingExample ? 'animate-pulse duration-150' : ''
       ]"
-      class="relative mb-4 h-64 overflow-hidden rounded-md border-2"
+      class="relative mb-2 h-64 overflow-hidden rounded-md border-2 md:mb-2.5"
     >
       <Transition mode="out-in" name="basic-out-in">
         <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected size-full" />
@@ -130,10 +138,9 @@ const device = useDevice()
 
     <div class="mb-2 flex justify-end gap-2">
       <div v-if="device.isMobileOrTablet" class="flex gap-2">
-        <Button intent="filled-tonal" size="sm" @click="onTakeCapture">
-          Take a photo
+        <IconButton :disabled="state.isLoadingExample" @click="onTakeCapture">
           <Icon class="size-5" name="ic:round-photo-camera" />
-        </Button>
+        </IconButton>
       </div>
       <Button
         :disabled="state.isLoadingExample"

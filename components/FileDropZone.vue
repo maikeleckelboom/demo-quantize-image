@@ -52,11 +52,42 @@ function onChange(event: Event) {
 const device = useDevice()
 
 const id = useId()
+
+const { elementX, elementY, isOutside } = useMouseInElement(dropZoneRef)
+
+const cursorRef = ref<HTMLDivElement>()
+
+const xy = computed(() => {
+  if (!cursorRef.value) return { x: 0, y: 0 }
+  return {
+    x: elementX.value - cursorRef.value.clientWidth / 2,
+    y: elementY.value - cursorRef.value.clientHeight / 2
+  }
+})
 </script>
 
 <template>
-  <div ref="dropZoneRef" :class="{ isOverDropZone }" class="relative size-full overflow-hidden">
-    <div class="grain"></div>
+  <div
+    ref="dropZoneRef"
+    :class="{ isOverDropZone }"
+    class="group relative size-full overflow-hidden"
+  >
+    <div :class="['before:opacity-0', 'group-hover:before:opacity-10']" class="grain" />
+
+    <div
+      ref="cursorRef"
+      :class="{
+        'opacity-0': isOutside,
+        'opacity-[0.03]': isOverDropZone || !isOutside
+      }"
+      :style="{
+        transform: `translate(${xy.x}px,${xy.y}px)`,
+        background:
+          'radial-gradient(circle, rgb(var(--on-surface-rgb)), rgb(var(--inverse-surface-rgb)))'
+      }"
+      class="pointer-events-none absolute left-0 top-0 size-10 overflow-hidden rounded-full opacity-0 mix-blend-color-dodge"
+    />
+
     <label
       :class="[
         { 'bg-surface-container-high': isOverDropZone },
@@ -70,11 +101,9 @@ const id = useId()
         'overflow-hidden',
         'bg-surface-container-low',
         'transition-colors',
-        'duration-300',
-        'ease-in-out',
+        'duration-200',
         'hover:bg-surface-container-high',
-        'focus:bg-surface-container-high',
-        'active:bg-surface-container-highest'
+        'focus:bg-surface-container-high'
       ]"
       :for="`dropzone-file-${id}`"
       v-bind="$attrs"
@@ -102,20 +131,19 @@ const id = useId()
 
 <style scoped>
 .grain {
-  @apply pointer-events-none absolute inset-0 size-full;
+  @apply pointer-events-none absolute inset-0 size-full mix-blend-color-dodge;
 
-  --_opacity: 0.15;
+  --_size: 200px;
 
   &:before {
     content: '';
     position: absolute;
-    top: -10rem;
-    left: -10rem;
-    width: calc(100% + 20rem);
-    height: calc(100% + 20rem);
-    background-image: url(https://upload.wikimedia.org/wikipedia/commons/5/5c/Image_gaussian_noise_example.png);
+    top: calc(-1 * var(--_size));
+    left: calc(-1 * var(--_size));
+    width: calc(100% + var(--_size) * 2);
+    height: calc(100% + var(--_size) * 2);
+    background-image: url('/img/gaussian_noise.png');
     pointer-events: none;
-    opacity: var(--_opacity);
     animation: noise 1s steps(2) infinite;
   }
 }
