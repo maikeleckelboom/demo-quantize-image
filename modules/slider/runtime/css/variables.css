@@ -10,6 +10,7 @@
     /* Handle */
     --slider-handle-shadow-size: 0px;
     --slider-handle-border-radius: 50%;
+    --slider-handle-cursor: default;
 
     /* Track */
     --slider-track-border-radius: 16px;

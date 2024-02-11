@@ -2,11 +2,11 @@
 import type { SliderProps } from '~/modules/slider/types'
 import { InputSlider } from '#components'
 
-const props = withDefaults(defineProps<SliderProps & { numberOfLabels?: number }>(), {
-  numberOfLabels: 2
+const props = withDefaults(defineProps<SliderProps & { numberOfTicks?: number }>(), {
+  numberOfTicks: 2
 })
 
-const { numberOfLabels, contained } = toRefs(props)
+const { numberOfTicks, contained } = toRefs(props)
 
 const isContained = computed(() => isTruthy(contained.value))
 const { min, max, step } = useSteps(props)
@@ -34,14 +34,14 @@ type Label = {
 function generateLabelsFromNumber(
   min: number,
   max: number,
-  numberOfLabels: number,
+  numberOfTicks: number,
   decimalPlaces: number
 ): Label[] {
   const valueRange = max - min
-  let spacing = valueRange / numberOfLabels
-  let actualNumberOfLabels = Math.ceil(valueRange / spacing)
+  let spacing = valueRange / numberOfTicks
+  let actualnumberOfTicks = Math.ceil(valueRange / spacing)
   const labels: Label[] = []
-  for (let i = 0; i <= actualNumberOfLabels; i++) {
+  for (let i = 0; i <= actualnumberOfTicks; i++) {
     let labelValue = min + i * spacing
     labelValue = parseFloat(labelValue.toFixed(decimalPlaces))
     labels.push({
@@ -54,8 +54,8 @@ function generateLabelsFromNumber(
 }
 
 const ticks = computed(() => {
-  if (numberOfLabels.value < 1) return []
-  return generateLabelsFromNumber(min.value, max.value, numberOfLabels.value, 0)
+  if (numberOfTicks.value < 1) return []
+  return generateLabelsFromNumber(min.value, max.value, numberOfTicks.value, 0)
 })
 
 function isFirst(index: number) {
@@ -115,25 +115,28 @@ function getTickTranslateX(index: number, width: number = 4) {
     </template>
   </InputRangeSlider>
 
-  <!--  <div class="relative flex flex-nowrap">-->
-  <!--    <div-->
-  <!--      v-for="(mark, i) in ticks"-->
-  <!--      :key="`label-${i}`"-->
-  <!--      :aria-hidden="true"-->
-  <!--      :data-value="mark.value"-->
-  <!--      :style="{-->
-  <!--        left: `${mark.at * 100}%`,-->
-  <!--        transform: `${getTickTranslateX(i, 8)} translateY(-50%)`-->
-  <!--      }"-->
-  <!--      class="text-body-xs absolute text-on-surface-variant"-->
-  <!--      @click="onMarkClick(mark)"-->
-  <!--    >-->
-  <!--      {{ mark.label }}-->
-  <!--    </div>-->
-  <!--  </div>-->
+  <div class="relative flex flex-nowrap">
+    <div
+      v-for="(mark, i) in ticks"
+      :key="`label-${i}`"
+      :aria-hidden="true"
+      :data-value="mark.value"
+      :style="{
+        left: `${mark.at * 100}%`,
+        transform: `${getTickTranslateX(i, 20)} translateY(-50%)`
+      }"
+      class="text-body-xs absolute text-on-surface-variant"
+    >
+      {{ mark.label }}
+    </div>
+  </div>
 </template>
 
 <style>
+:root {
+  --slider-handle-cursor: ew-resize;
+}
+
 #vm-slider {
   --slider-track-color: rgb(var(--primary-container-rgb));
   --slider-track-border-color: transparent;
@@ -160,7 +163,6 @@ function getTickTranslateX(index: number, width: number = 4) {
     transition:
       clip-path var(--_duration) var(--easing-standard-accelerate),
       background-color var(--_duration) var(--easing-standard-accelerate);
-    cursor: ew-resize;
 
     &::before {
       content: '';

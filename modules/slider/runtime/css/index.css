@@ -17,12 +17,16 @@
 
 
     &.v-disabled {
-        .slider-input {
-            pointer-events: none;
+        opacity: 0.8;
+        pointer-events: none;
 
-            .slider-handle {
-                cursor: not-allowed;
-            }
+        * {
+            filter: grayscale(0.25);
+        }
+
+        .slider-handle {
+            pointer-events: all;
+            cursor: default;
         }
     }
 
@@ -218,11 +222,11 @@
     position: absolute;
     max-inline-size: 48px;
     max-block-size: 48px;
-
     left: calc(var(--slider-handle-width) / -2);
     top: calc(var(--slider-handle-height) / -2);
     width: calc(var(--slider-handle-width) * 2);
     height: calc(var(--slider-handle-height) * 2);
+    transform: translate(0%, 25%);
 
     .v-vertical & {
         background-color: transparent;
@@ -235,9 +239,9 @@
 
     block-size: var(--slider-handle-height);
     inline-size: var(--slider-handle-width);
+    cursor: var(--slider-handle-cursor);
 
     &:has(.slider-handle-touch-target) {
-        /* Slot not used */
         border-radius: var(--slider-handle-border-radius);
         cursor: pointer;
         box-shadow: 0 0 0 var(--slider-handle-shadow-size) rgb(var(--primary-rgb) / 0.2);

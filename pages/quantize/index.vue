@@ -194,16 +194,6 @@ const device = useDevice()
 </template>
 
 <style>
-.basic-out-in-enter-active,
-.basic-out-in-leave-active {
-  transition: opacity 150ms ease-out;
-}
-
-.basic-out-in-enter-from,
-.basic-out-in-leave-to {
-  opacity: 0;
-}
-
 :not(.prevent-transition) {
   img.selected {
     view-transition-name: selected;
