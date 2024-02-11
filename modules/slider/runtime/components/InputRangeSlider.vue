@@ -354,6 +354,7 @@ const styleBinding = computed(() => {
         </div>
       </slot>
       <slot name="after" />
+
       <div
         v-for="(pointerValue, index) in valueProgressProxy"
         :key="index"

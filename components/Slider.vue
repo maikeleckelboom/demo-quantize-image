@@ -50,7 +50,7 @@ function generateLabelsFromNumber(
 }
 
 const marks = computed(() => {
-  if (numberOfLabels.value > 0) return
+  if (numberOfLabels.value < 1) return []
   return generateLabelsFromNumber(min.value, max.value, numberOfLabels.value, 0)
 })
 
@@ -59,22 +59,18 @@ function isFirst(index: number) {
 }
 
 function isLast(index: number) {
-  if (!isArray(marks.value)) return
   return index === marks.value.length - 1
 }
 
 function isCurrent(index: number) {
-  if (!isArray(marks.value)) return
   return marks.value[index].value === currentValue.value
 }
 
 function isPast(index: number) {
-  if (!isArray(marks.value)) return
   return marks.value[index].value < currentValue.value
 }
 
 function isFuture(index: number) {
-  if (!isArray(marks.value)) return
   return marks.value[index].value > currentValue.value
 }
 
@@ -83,12 +79,6 @@ function onMarkClick(mark: Label) {
 }
 
 function getTickTranslateX(index: number, width: number = 4) {
-  // if (isFirst(index)) {
-  //   return 'translateX(2px)'
-  // }
-  // if (isLast(index)) {
-  //   return 'translateX(-8px)'
-  // }
   if (isFirst(index)) {
     return `translateX(${width * 0.5}px)`
   }
@@ -123,22 +113,23 @@ const labelMarkRefs = useTemplateRefsList<HTMLDivElement>()
       </div>
     </template>
   </InputRangeSlider>
-  <div class="relative flex hidden flex-nowrap">
-    <div
-      v-for="(mark, i) in marks"
-      :key="`label-${i}`"
-      :aria-hidden="true"
-      :data-value="mark.value"
-      :style="{
-        left: `${mark.at * 100}%`,
-        transform: `${getTickTranslateXLabel(mark, i)}`
-      }"
-      class="text-body-xs absolute text-on-surface-variant"
-      @click="onMarkClick(mark)"
-    >
-      {{ mark.label }}
-    </div>
-  </div>
+
+  <!--  <div class="relative flex flex-nowrap">-->
+  <!--    <div-->
+  <!--      v-for="(mark, i) in marks"-->
+  <!--      :key="`label-${i}`"-->
+  <!--      :aria-hidden="true"-->
+  <!--      :data-value="mark.value"-->
+  <!--      :style="{-->
+  <!--        left: `${mark.at * 100}%`,-->
+  <!--        transform: `${getTickTranslateX(i, 8)} translateY(-50%)`-->
+  <!--      }"-->
+  <!--      class="text-body-xs absolute text-on-surface-variant"-->
+  <!--      @click="onMarkClick(mark)"-->
+  <!--    >-->
+  <!--      {{ mark.label }}-->
+  <!--    </div>-->
+  <!--  </div>-->
 </template>
 
 <style>

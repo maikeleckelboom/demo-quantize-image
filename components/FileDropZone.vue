@@ -52,18 +52,6 @@ function onChange(event: Event) {
 const device = useDevice()
 
 const id = useId()
-
-const { elementX, elementY, isOutside } = useMouseInElement(dropZoneRef)
-
-const cursorRef = ref<HTMLDivElement>()
-
-const xy = computed(() => {
-  if (!cursorRef.value) return { x: 0, y: 0 }
-  return {
-    x: elementX.value - cursorRef.value.clientWidth / 2,
-    y: elementY.value - cursorRef.value.clientHeight / 2
-  }
-})
 </script>
 
 <template>
@@ -72,22 +60,6 @@ const xy = computed(() => {
     :class="{ isOverDropZone }"
     class="group relative size-full overflow-hidden"
   >
-    <div :class="['before:opacity-0', 'group-hover:before:opacity-10']" class="grain" />
-
-    <div
-      ref="cursorRef"
-      :class="{
-        'opacity-0': isOutside,
-        'opacity-[0.03]': isOverDropZone || !isOutside
-      }"
-      :style="{
-        transform: `translate(${xy.x}px,${xy.y}px)`,
-        background:
-          'radial-gradient(circle, rgb(var(--on-surface-rgb)), rgb(var(--inverse-surface-rgb)))'
-      }"
-      class="pointer-events-none absolute left-0 top-0 size-10 overflow-hidden rounded-full opacity-0 mix-blend-color-dodge"
-    />
-
     <label
       :class="[
         { 'bg-surface-container-high': isOverDropZone },
@@ -128,62 +100,3 @@ const xy = computed(() => {
     </label>
   </div>
 </template>
-
-<style scoped>
-.grain {
-  @apply pointer-events-none absolute inset-0 size-full mix-blend-color-dodge;
-
-  --_size: 200px;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: calc(-1 * var(--_size));
-    left: calc(-1 * var(--_size));
-    width: calc(100% + var(--_size) * 2);
-    height: calc(100% + var(--_size) * 2);
-    background-image: url('/img/gaussian_noise.png');
-    pointer-events: none;
-    animation: noise 1s steps(2) infinite;
-  }
-}
-
-@keyframes noise {
-  0% {
-    transform: translate3d(0, 9rem, 0);
-  }
-  10% {
-    transform: translate3d(-1rem, -4rem, 0);
-  }
-  20% {
-    transform: translate3d(-8rem, 2rem, 0);
-  }
-  30% {
-    transform: translate3d(9rem, -9rem, 0);
-  }
-  40% {
-    transform: translate3d(-2rem, 7rem, 0);
-  }
-  50% {
-    transform: translate3d(-9rem, -4rem, 0);
-  }
-  60% {
-    transform: translate3d(2rem, 6rem, 0);
-  }
-  70% {
-    transform: translate3d(7rem, -8rem, 0);
-  }
-  80% {
-    transform: translate3d(-9rem, 1rem, 0);
-  }
-  90% {
-    transform: translate3d(6rem, -5rem, 0);
-  }
-  to {
-    transform: translate3d(-7rem, 0, 0);
-  }
-}
-
-.isOverDropZone {
-}
-</style>
