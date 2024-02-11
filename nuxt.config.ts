@@ -94,7 +94,7 @@ export default defineNuxtConfig({
   ],
 
   imports: {
-    dirs: ['~/utils', '~/utils/directives/*', '~/composables', '~/stores'],
+    dirs: ['~/utils', '~/utils/directives/*', '~/composables', '~/stores', '~/components/**/*.vue'],
     presets: [
       {
         from: 'tailwind-merge',

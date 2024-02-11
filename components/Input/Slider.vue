@@ -74,10 +74,6 @@ function isFuture(index: number) {
   return marks.value[index].value > currentValue.value
 }
 
-function onMarkClick(mark: Label) {
-  modelValue.value = mark.value
-}
-
 function getTickTranslateX(index: number, width: number = 4) {
   if (isFirst(index)) {
     return `translateX(${width * 0.5}px)`

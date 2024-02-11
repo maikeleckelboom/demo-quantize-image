@@ -242,7 +242,7 @@ function getHandleIndex(handle: HTMLElement) {
 
 <template>
   <div ref="rootRef" :class="classBindings" :style="rootStyleBinding" class="slider-root">
-    <div ref="sliderRef" class="slider-wrapper">
+    <div ref="sliderRef" class="slider-input">
       <slot name="track">
         <SliderTrack>
           <slot name="trackFill">

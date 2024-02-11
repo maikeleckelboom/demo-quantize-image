@@ -265,18 +265,6 @@ function handleSwipe(_event: PointerEvent) {
   modelValue.value.splice(handleIndex, 1, currentValue)
 }
 
-function reachedBounds(
-  pointer: number | undefined,
-  pointerValue: number,
-  minDistance: number
-): boolean {
-  return (
-    pointer !== undefined &&
-    pointer >= pointerValue - minDistance &&
-    pointer <= pointerValue + minDistance
-  )
-}
-
 const VARIANT_CLASSES = {
   contained: 'v-contained',
   horizontal: 'v-horizontal',
@@ -336,7 +324,7 @@ const styleBinding = computed(() => {
     :style="styleBinding"
     class="slider-root"
   >
-    <div ref="sliderRef" class="slider-wrapper">
+    <div ref="sliderRef" class="slider-input">
       <slot name="before" />
       <slot name="track">
         <div :style="trackStyle" class="slider-track">
@@ -344,12 +332,11 @@ const styleBinding = computed(() => {
         </div>
       </slot>
       <slot name="after" />
-
       <div
-        v-for="(pointerValue, index) in valueProgressProxy"
+        v-for="(progress, index) in valueProgressProxy"
         :key="index"
         :ref="handlesRef.set"
-        :style="{ '--_offset': `${pointerValue}%` }"
+        :style="{ '--_offset': `${progress}%` }"
         class="slider-handle"
         role="slider"
         tabindex="0"
@@ -360,7 +347,7 @@ const styleBinding = computed(() => {
         <div class="slider-label-container">
           <span class="slider-label-text">
             <slot name="labelText">
-              {{ getValue(pointerValue) }}
+              {{ getValue(progress) }}
             </slot>
           </span>
         </div>

@@ -40,7 +40,8 @@ async function fileFromImagePath(img: string): Promise<File> {
 
 const state = reactive({
   isLoadingExample: false,
-  isLoadingNextPage: false
+  isLoadingNextPage: false,
+  isReadyForTransition: false
 })
 
 async function loadExampleImage() {
@@ -56,33 +57,33 @@ const maxColors = ref<number>(128)
 async function onExtractColors() {
   state.isLoadingNextPage = true
 
-  const execute = async () => {
+  const triggerTransition = async () => {
     if (!selectedFile.value) return
-    await navigateTo({
+    return navigateTo({
       path: `/quantize/${selectedFile.value.name}`,
       query: { maxColors: maxColors.value }
     })
   }
 
   if (!document.startViewTransition) {
-    await execute()
+    await triggerTransition()
     return
   }
 
   const transition = document.startViewTransition(async () => {
-    await execute()
+    await triggerTransition()
+    await nextTick()
   })
 
-  await transition.finished
+  await transition.ready.then(() => {
+    console.log('Transition ready')
+    state.isReadyForTransition = true
+  })
 
-  state.isLoadingNextPage = false
-}
-
-function onCustomFIleChange(event: Event) {
-  const target = event.target as HTMLInputElement
-  if (target.files) {
-    files.value = Array.from(target.files)
-  }
+  await transition.finished.then(() => {
+    console.log('Transition finished')
+    state.isLoadingNextPage = false
+  })
 }
 
 const textContent = reactive({
@@ -125,24 +126,37 @@ const device = useDevice()
 
     <div
       :class="[
-        selectedFile ? 'border-outline-variant' : 'border-dashed border-outline-variant',
+        selectedFile
+          ? 'border-secondary-container/40'
+          : 'border-dashed border-surface-variant',
         state.isLoadingExample ? 'animate-pulse duration-150' : ''
       ]"
       class="relative mb-3 h-52 overflow-hidden rounded-md border-2 md:mb-2.5 md:h-64"
     >
       <Transition mode="out-in" name="basic-out-in">
-        <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected object-contain" />
+        <NuxtImg
+          v-if="selectedFile"
+          :src="fileObjectUrl"
+          alt=""
+          class="selected object-contain"
+        />
         <FileDropZone v-else class="rounded-md" @drop="onDrop" />
       </Transition>
     </div>
 
-    <div class="mb-4 flex gap-2 md:mb-8">
+    <div class="mb-4 flex justify-between gap-2 md:mb-8">
       <div v-if="device.isMobileOrTablet" class="flex gap-2">
-        <IconButton :disabled="state.isLoadingExample" @click="onTakeCapture">
-          <Icon class="size-5" name="ic:round-photo-camera" />
+        <IconButton class="rounded-md" @click="onTakeCapture">
+          <Icon class="size-4" name="ic:round-photo-camera" />
         </IconButton>
       </div>
-      <Button :disabled="state.isLoadingExample" intent="text" size="sm" @click="loadExampleImage">
+      <Button
+        :disabled="state.isLoadingExample"
+        class="rounded-md"
+        intent="outlined"
+        size="sm"
+        @click="loadExampleImage"
+      >
         <template v-if="state.isLoadingExample">
           Loading
           <Spinner class="size-4" />
@@ -157,8 +171,13 @@ const device = useDevice()
     </div>
     <div class="mt-12 flex w-fit flex-col self-end">
       <div class="flex gap-3">
-        <Button v-if="selectedFile" intent="text" size="md" @click="reset"> Cancel</Button>
-        <Button :disabled="!selectedFile || state.isLoadingNextPage" @click="onExtractColors">
+        <Button v-if="selectedFile" intent="text" size="md" @click="reset">
+          Cancel
+        </Button>
+        <Button
+          :disabled="!selectedFile || state.isLoadingNextPage"
+          @click="onExtractColors"
+        >
           <div class="flex items-center justify-center gap-2 leading-none">
             {{ state.isLoadingNextPage ? 'Loading' : 'Extract Colors' }}
           </div>
