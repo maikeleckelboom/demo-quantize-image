@@ -39,13 +39,14 @@ const target = ref<HTMLElement>()
 <style lang="postcss" scoped>
 .v-nav-item {
   --_row-gap: 8px;
-
+  --_margin-top: 12px;
+  --_margin-bottom: 16px;
   display: grid;
   place-items: center;
   grid-template-columns: [icon state-indicator label badge] auto;
   grid-template-rows:
-    [margin-top] 12px [icon state-indicator badge] 32px [row-gap] var(--_row-gap)
-    [label] auto [margin-bottom] 16px;
+    [margin-top] var(--_margin-top) [icon state-indicator badge] 32px [row-gap] var(--_row-gap)
+    [label] auto [margin-bottom] var(--_margin-bottom);
 
   position: relative;
   overflow: hidden;

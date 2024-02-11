@@ -115,7 +115,7 @@ const device = useDevice()
 <template>
   <div class="mx-auto flex w-full max-w-xl flex-col p-4">
     <div class="mb-4 md:mb-8">
-      <h1 class="mb-2 text-4xl font-medium tracking-normal">
+      <h1 class="mb-2 text-3xl font-medium tracking-normal md:text-4xl">
         {{ textContent.title }}
       </h1>
       <p class="hidden text-body-sm text-on-surface-variant md:inline-flex">
@@ -128,7 +128,7 @@ const device = useDevice()
         selectedFile ? 'border-outline-variant' : 'border-dashed border-outline-variant',
         state.isLoadingExample ? 'animate-pulse duration-150' : ''
       ]"
-      class="relative mb-2 h-64 overflow-hidden rounded-md border-2 md:mb-2.5"
+      class="relative mb-3 h-52 overflow-hidden rounded-md border-2 md:mb-2.5 md:h-64"
     >
       <Transition mode="out-in" name="basic-out-in">
         <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected size-full" />
@@ -144,12 +144,15 @@ const device = useDevice()
       </div>
       <Button
         :disabled="state.isLoadingExample"
-        class="w-[152px]"
+        class="min-w-[152px]"
         intent="text"
         size="sm"
         @click="loadExampleImage"
       >
-        <Spinner v-if="state.isLoadingExample" class="size-5" />
+        <template v-if="state.isLoadingExample">
+          Loading
+          <Spinner class="size-4" />
+        </template>
         <template v-else>
           {{ selectedFile ? 'Change image' : 'Load example' }}
         </template>
@@ -193,9 +196,8 @@ const device = useDevice()
           class="whitespace-nowrap"
           @click="onExtractColors"
         >
-          <Spinner v-if="state.isLoadingNextPage" class="size-5" />
           <div class="flex items-center justify-center gap-2 leading-none">
-            Extract Colors
+            {{ state.isLoadingNextPage ? 'Loading' : 'Continue' }}
             <Icon class="size-12" name="ic:round-arrow-right-alt" />
           </div>
         </Button>
