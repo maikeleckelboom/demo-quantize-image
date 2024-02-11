@@ -89,6 +89,19 @@ const textContent = reactive({
   title: 'Extract colors from image',
   description: 'The image is digitally analyzed to extract the colors from it.'
 })
+
+const { open: openCamera, reset: resetCamera } = useFileDialog({
+  accept: 'image/*',
+  multiple: false,
+  capture: 'environment'
+})
+
+function onTakeCapture() {
+  resetCamera()
+  openCamera()
+}
+
+const device = useDevice()
 </script>
 
 <template>
@@ -116,8 +129,8 @@ const textContent = reactive({
     </div>
 
     <div class="mb-8 flex justify-between gap-2">
-      <div class="flex gap-2">
-        <Button intent="filled-tonal" size="sm">
+      <div v-if="device.isMobileOrTablet" class="flex gap-2">
+        <Button intent="filled-tonal" size="sm" @click="onTakeCapture">
           Take a photo
           <Icon class="size-5" name="ic:round-photo-camera" />
         </Button>
@@ -160,22 +173,25 @@ const textContent = reactive({
         </div>
       </div>
     </template>
-    <div class="mt-12 flex flex-col">
-      <div class="flex justify-end gap-2">
-        <div class="flex gap-2">
-          <Button
-            :disabled="!selectedFile || state.isLoadingNextPage"
-            class="min-w-[160px] whitespace-nowrap"
-            stretch="true"
-            @click="onExtractColors"
-          >
-            <Spinner v-if="state.isLoadingNextPage" class="size-5" />
-            <div v-else class="flex items-center justify-center gap-2 leading-none">
-              Extract Colors
-              <Icon class="size-12" name="ic:round-arrow-right-alt" />
-            </div>
+    <div class="mt-12 flex w-fit flex-col self-end">
+      <div class="flex gap-2">
+        <template v-if="selectedFile">
+          <!-- reset -->
+          <Button :disabled="state.isLoadingExample" intent="text" size="md" @click="reset">
+            Cancel
           </Button>
-        </div>
+        </template>
+        <Button
+          :disabled="!selectedFile || state.isLoadingNextPage"
+          class="whitespace-nowrap"
+          @click="onExtractColors"
+        >
+          <Spinner v-if="state.isLoadingNextPage" class="size-5" />
+          <div class="flex items-center justify-center gap-2 leading-none">
+            Extract Colors
+            <Icon class="size-12" name="ic:round-arrow-right-alt" />
+          </div>
+        </Button>
       </div>
     </div>
   </div>

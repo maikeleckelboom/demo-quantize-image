@@ -155,7 +155,9 @@ function onCustomize() {
             intent="none"
             @click="router.back()"
             >Abort
-            <Icon class="size-5" name="ic:outline-close" />
+            <!--
+                        <Icon class="size-5" name="ic:outline-close" />
+            -->
           </Button>
         </div>
         <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">
