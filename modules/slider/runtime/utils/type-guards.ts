@@ -15,7 +15,7 @@ export function isFuzzyNumber(v: unknown): v is number {
 }
 
 export function isFuzzyBoolean(v: unknown): v is boolean {
-  return isBoolean(v) || v === 'true' || v === 'false' || v === 'never'
+  return isBoolean(v) || v === 'true' || v === 'false' || v === 'never' || v === 'always'
 }
 
 export function isObject(v: unknown): v is object {
@@ -40,14 +40,6 @@ export function isNull(v: unknown): v is null {
 
 export function isNil(v: unknown): v is null | undefined {
   return isUndefined(v) || isNull(v)
-}
-
-export function isDate(v: unknown): v is Date {
-  return v instanceof Date
-}
-
-export function isRegExp(v: unknown): v is RegExp {
-  return v instanceof RegExp
 }
 
 export function isTruthy(v: unknown): boolean {

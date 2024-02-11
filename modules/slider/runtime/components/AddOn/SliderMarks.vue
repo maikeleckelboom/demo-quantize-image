@@ -1,19 +1,15 @@
 <script generic="T extends Marks" lang="ts" setup>
-import {
-  isMarkArray,
-  isMarkObjectArray,
-  type Marks
-} from '~/modules/slider/types'
+import { isMarkArray, isMarkObjectArray, type Marks } from '~/modules/slider/types'
 
 interface Props {
-  marks: T
+  ticks: T
   vertical?: boolean
   reverse?: boolean
 }
 
 const props = defineProps<Props>()
 
-const marks = computed(() => {
+const ticks = computed(() => {
   const { marks, vertical, reverse } = props
 
   if (isMarkArray(marks)) {

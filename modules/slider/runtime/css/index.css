@@ -16,6 +16,12 @@
     inline-size: var(--slider-track-width, var(--slider-horizontal-width));
 
 
+    &.v-disabled {
+        pointer-events: none;
+        opacity: 0.5;
+        
+    }
+
     &.v-label-visible {
         .slider-label-container {
             opacity: 1;

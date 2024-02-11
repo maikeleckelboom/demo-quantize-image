@@ -10,9 +10,6 @@ const props = withDefaults(defineProps<SliderProps>(), {
   btt: false,
   orientation: 'horizontal',
   contained: true,
-  // disabled: false,
-  // preventOverlap: true,
-  // minDistance: 0,
   step: 1,
   labelVisibility: 'auto'
 })
@@ -28,8 +25,6 @@ defineSlots<{
 
 const getRect = (el: HTMLElement) => el.getBoundingClientRect()
 
-const isVertical = computed(() => props.orientation === 'vertical')
-
 const isRtl = computed(() => {
   return ['rtl', 'ltr'].includes(props.dir)
     ? props.dir === 'rtl'
@@ -43,7 +38,9 @@ const isBtt = computed(() => {
   return isTruthy(props.btt)
 })
 
+const isVertical = computed(() => props.orientation === 'vertical')
 const isContained = computed(() => isTruthy(props.contained))
+console.log(isContained.value)
 const isDisabled = computed(() => isTruthy(props.disabled))
 
 const modelValue = defineModel<number | number[]>()
@@ -144,13 +141,18 @@ const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
   threshold: 0,
   disableTextSelect: true,
   onSwipeStart: (event) => {
+    if (isDisabled.value) return
     event.preventDefault()
     currentHandle.value = getClosestHandle(event)
     setClickOffset(event)
     handleSwipe(event)
   },
-  onSwipe: handleSwipe,
+  onSwipe: (event) => {
+    if (isDisabled.value) return
+    handleSwipe(event)
+  },
   onSwipeEnd: (event, direction) => {
+    if (isDisabled.value) return
     const removePointer = () => (currentHandle.value = null)
     removePointer()
   }
@@ -171,7 +173,9 @@ function getClickedHandle(evt: PointerEvent) {
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
-  const center = isVertical.value ? rect.top + rect.height / 2 : rect.left + rect.width / 2
+  const center = isVertical.value
+    ? rect.top + rect.height / 2
+    : rect.left + rect.width / 2
   return isVertical.value ? y - center : x - center
 }
 
@@ -223,18 +227,17 @@ function getContainedRect(rect: DOMRect) {
 function handleSwipe(_event: PointerEvent) {
   const sliderEl = <HTMLElement>unrefElement(sliderRef)
   const sliderRect = getRect(sliderEl)
-  const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
+  const maybeContainedRect = unref(isContained)
+    ? getContainedRect(sliderRect)
+    : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
   const currentValue = getValue(progress)
 
   if (isNumber(modelValue.value)) {
-    // Single value
     if (isDefined(props.step) && props.step !== 'any') {
       modelValue.value = getValueAtStep(currentValue, Number(props.step))
-
       return
     }
-
     modelValue.value = currentValue
     return
   }
@@ -278,12 +281,12 @@ const VARIANT_CLASSES = {
 } as const
 
 const STATE_CLASSES = {
-  enabled: 'v-is-enabled',
-  disabled: 'v-is-disabled',
-  focused: 'v-is-focused',
-  hovered: 'v-is-hovered',
-  pressed: 'v-is-pressed',
-  swiping: 'v-is-swiping'
+  enabled: 'v-enabled',
+  disabled: 'v-disabled',
+  focused: 'v-focused',
+  hovered: 'v-hovered',
+  pressed: 'v-pressed',
+  swiping: 'v-swiping'
 } as const
 
 const stateClasses = computed(() => {

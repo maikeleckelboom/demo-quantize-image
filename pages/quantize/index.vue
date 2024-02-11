@@ -128,7 +128,7 @@ const device = useDevice()
       :class="[
         selectedFile
           ? 'border-secondary-container/40'
-          : 'border-dashed border-surface-variant',
+          : 'border-dashed border-secondary-container',
         state.isLoadingExample ? 'animate-pulse duration-150' : ''
       ]"
       class="relative mb-3 h-52 overflow-hidden rounded-md border-2 md:mb-2.5 md:h-64"
@@ -144,11 +144,11 @@ const device = useDevice()
       </Transition>
     </div>
 
-    <div class="mb-4 flex justify-between gap-2 md:mb-8">
+    <div class="mb-6 flex gap-2 md:mb-8">
       <div v-if="device.isMobileOrTablet" class="flex gap-2">
-        <IconButton class="rounded-md" @click="onTakeCapture">
+        <Button class="rounded-md" intent="outlined" size="sm" @click="onTakeCapture">
           <Icon class="size-4" name="ic:round-photo-camera" />
-        </IconButton>
+        </Button>
       </div>
       <Button
         :disabled="state.isLoadingExample"
@@ -167,7 +167,13 @@ const device = useDevice()
       </Button>
     </div>
     <div class="h-20">
-      <MaxColorsInputSlider v-model="maxColors" />
+      <MaxColorsInputSlider
+        v-model="maxColors"
+        :disabled="!selectedFile"
+        max="128"
+        min="1"
+        step="1"
+      />
     </div>
     <div class="mt-12 flex w-fit flex-col self-end">
       <div class="flex gap-3">

@@ -62,7 +62,7 @@ const id = useId()
   >
     <label
       :class="[
-        { 'bg-surface-container-high': isOverDropZone },
+        { 'bg-secondary-container/50': isOverDropZone },
         'flex',
         'size-full',
         'min-h-32',
@@ -71,11 +71,13 @@ const id = useId()
         'items-center',
         'justify-center',
         'overflow-hidden',
-        'bg-surface-container-low',
+        'bg-secondary-container/10',
+        'hover:bg-secondary-container/20',
+        'active:bg-secondary-container/30',
         'transition-colors',
-        'duration-200',
-        'hover:bg-surface-container-high',
-        'focus:bg-surface-container-high'
+        'duration-200'
+        // 'hover:bg-surface-container-high',
+        // 'focus:bg-surface-container-high'
       ]"
       :for="`dropzone-file-${id}`"
       v-bind="$attrs"

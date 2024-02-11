@@ -14,12 +14,9 @@ function toggle(event: MouseEvent) {
 
   const x = event.clientX
   const y = event.clientY
-  const endRadius = Math.hypot(
-    Math.max(x, innerWidth - x),
-    Math.max(y, innerHeight - y)
-  )
+  const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
 
-  document.documentElement.classList.add('is-transitioning')
+  document.documentElement.classList.add('prevent-transition')
 
   const transition = document.startViewTransition(async () => {
     isDark.value = !isDark.value
@@ -30,14 +27,6 @@ function toggle(event: MouseEvent) {
     const circleClipPath = [
       `circle(0px at ${x}px ${y}px)`,
       `circle(${endRadius}px at ${x}px ${y}px)`
-    ]
-
-    const element = event.target as HTMLElement
-    const { top, left, width, height } = element.getBoundingClientRect()
-
-    const insetClipPath = [
-      `inset(${top}px ${innerWidth - left - width}px ${innerHeight - top - height}px ${left}px)`,
-      `inset(0px 0px 0px 0px)`
     ]
 
     document.documentElement.animate(
@@ -55,7 +44,7 @@ function toggle(event: MouseEvent) {
   })
 
   transition.finished.then(() => {
-    document.documentElement.classList.remove('is-transitioning')
+    document.documentElement.classList.remove('prevent-transition')
   })
 }
 
@@ -68,11 +57,8 @@ const context = { isDark, toggle }
   </div>
 </template>
 
-<!--suppress CssInvalidPseudoSelector -->
 <style>
-html.is-transitioning {
-  cursor: pointer;
-
+html.prevent-transition {
   &::view-transition-old(root),
   &::view-transition-new(root) {
     animation: none;
@@ -88,7 +74,7 @@ html.is-transitioning {
   }
 }
 
-html.dark.is-transitioning {
+html.dark.prevent-transition {
   &::view-transition-old(root) {
     z-index: 999;
   }

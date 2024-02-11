@@ -5,8 +5,9 @@ const props = withDefaults(defineProps<SliderProps & { numberOfLabels?: number }
   numberOfLabels: 2
 })
 
-const { numberOfLabels, interval } = toRefs(props)
+const { numberOfLabels, contained } = toRefs(props)
 
+const isContained = computed(() => isTruthy(contained.value))
 const { min, max, step } = useSteps(props)
 
 const modelValue = defineModel<number | number[]>({
@@ -49,7 +50,7 @@ function generateLabelsFromNumber(
   return labels
 }
 
-const marks = computed(() => {
+const ticks = computed(() => {
   if (numberOfLabels.value < 1) return []
   return generateLabelsFromNumber(min.value, max.value, numberOfLabels.value, 0)
 })
@@ -59,22 +60,26 @@ function isFirst(index: number) {
 }
 
 function isLast(index: number) {
-  return index === marks.value.length - 1
+  return index === ticks.value.length - 1
 }
 
 function isCurrent(index: number) {
-  return marks.value[index].value === currentValue.value
+  return ticks.value[index].value === currentValue.value
 }
 
 function isPast(index: number) {
-  return marks.value[index].value < currentValue.value
+  return ticks.value[index].value < currentValue.value
 }
 
 function isFuture(index: number) {
-  return marks.value[index].value > currentValue.value
+  return ticks.value[index].value > currentValue.value
 }
 
 function getTickTranslateX(index: number, width: number = 4) {
+  console.log('is contained', isContained.value)
+  if (!isContained.value) {
+    width = width / 2
+  }
   if (isFirst(index)) {
     return `translateX(${width * 0.5}px)`
   }
@@ -86,10 +91,10 @@ function getTickTranslateX(index: number, width: number = 4) {
 </script>
 
 <template>
-  <InputRangeSlider id="vm-slider" v-model="modelValue" disabled="true" v-bind="$props">
+  <InputRangeSlider id="vm-slider" v-model="modelValue" v-bind="$props">
     <template #after>
       <div
-        v-for="(mark, i) in marks"
+        v-for="(mark, i) in ticks"
         :key="i"
         :class="[
           'absolute top-1/2 size-[4px] rounded-full transition-transform duration-150',
@@ -110,7 +115,7 @@ function getTickTranslateX(index: number, width: number = 4) {
 
   <!--  <div class="relative flex flex-nowrap">-->
   <!--    <div-->
-  <!--      v-for="(mark, i) in marks"-->
+  <!--      v-for="(mark, i) in ticks"-->
   <!--      :key="`label-${i}`"-->
   <!--      :aria-hidden="true"-->
   <!--      :data-value="mark.value"-->
@@ -157,7 +162,7 @@ function getTickTranslateX(index: number, width: number = 4) {
 
     &::before {
       content: '';
-      clip-path: inset(0.2em round 4px);
+      clip-path: inset(0.2em round 3px);
       background-color: rgb(var(--primary-rgb));
       position: absolute;
       inset: 0;
@@ -172,7 +177,7 @@ function getTickTranslateX(index: number, width: number = 4) {
       --slider-handle-shadow-size: 0px;
 
       &::before {
-        clip-path: inset(0.225em round 4px);
+        clip-path: inset(0.225em round 3px);
       }
     }
 
@@ -180,7 +185,7 @@ function getTickTranslateX(index: number, width: number = 4) {
       --slider-handle-shadow-size: 0px;
 
       &::before {
-        clip-path: inset(0.25em round 4px);
+        clip-path: inset(0.25em round 3px);
       }
     }
   }

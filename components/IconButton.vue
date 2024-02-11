@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 const props = withDefaults(
   defineProps<{
+    variant?: 'surface' | 'outlined' | 'text'
     selected?: boolean
     disabled?: boolean
     readonly?: boolean
     size?: 'sm' | 'md' | 'lg'
   }>(),
   {
+    variant: 'surface',
     disabled: false,
     readonly: false,
     selected: false,
@@ -42,12 +44,17 @@ const button = cva({
       true: [],
       false: []
     },
+    variant: {
+      outlined: ['border', 'border-outline-variant'],
+      surface: ['border', 'border-transparent'],
+      text: ['border-none']
+    },
     disabled: {
       true: ['cursor-not-allowed', 'pointer-events-none', 'after:opacity-20']
     },
     size: {
-      sm: ['', 'icon:size-[20px]', 'h-[36px]', 'w-[36px]'],
-      md: ['', 'icon:size-[24px]', 'h-[42px]', 'w-[42px]'],
+      sm: ['', 'icon:size-[20px]', 'h-[38px]', 'w-[38px]'],
+      md: ['', 'icon:size-[24px]', 'h-[40px]', 'w-[40px]'],
       lg: ['', 'icon:size-[24px]', 'h-[50px]', 'w-[50px]']
     }
   }
@@ -59,7 +66,7 @@ const button = cva({
     :aria-disabled="$props.disabled"
     :aria-pressed="selected"
     :aria-selected="selected"
-    :class="button({ selected, size, disabled, class: $attrs?.class ?? '' })"
+    :class="button({ selected, size, disabled, variant, class: $attrs?.class ?? '' })"
     :disabled="$props.disabled"
     :readonly="$props.readonly"
     role="button"
