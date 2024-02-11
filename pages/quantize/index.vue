@@ -128,7 +128,7 @@ const device = useDevice()
       </Transition>
     </div>
 
-    <div class="mb-8 flex justify-between gap-2">
+    <div class="mb-8 flex justify-end gap-2">
       <div v-if="device.isMobileOrTablet" class="flex gap-2">
         <Button intent="filled-tonal" size="sm" @click="onTakeCapture">
           Take a photo
