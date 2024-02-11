@@ -5,24 +5,19 @@ import type { Ref } from 'vue'
 import type { SliderHandle } from '#components'
 import { isArray } from '@vue/shared'
 
-const {
-  min = 0,
-  max = 100,
-  step = 1,
-  orientation = 'horizontal',
-  dir = 'ltr',
-  preventOverlap = false,
-  minDistance = 0,
-  btt = false,
-  contained = true,
-  lazy = false,
-  disabled = false,
-  round = 2,
-  ...restProps
-} = defineProps<SliderProps>()
+const props = withDefaults(defineProps<SliderProps>(), {
+  min: 0,
+  max: 100,
+  dir: 'ltr',
+  btt: false,
+  orientation: 'horizontal',
+  contained: true,
+  step: 1,
+  labelVisibility: 'auto'
+})
 
-const isVertical = computed(() => orientation === 'vertical')
-const isRtl = computed(() => dir === 'rtl')
+const isVertical = computed(() => props.orientation === 'vertical')
+const isRtl = computed(() => props.dir === 'rtl')
 
 const rootRef = ref<HTMLElement>()
 const sliderRef = ref<HTMLElement>()
@@ -60,18 +55,18 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function getValue(progress: number) {
-  const value = convertRange(0, 100, Number(min), Number(max), progress)
-  return clamp(value, Number(min), Number(max))
+  const value = convertRange(0, 100, Number(props.min), Number(props.max), progress)
+  return clamp(value, Number(props.min), Number(props.max))
 }
 
 function getProgress(value: number) {
-  const range = convertRange(Number(min), Number(min), 0, 100, value)
+  const range = convertRange(Number(props.min), Number(props.min), 0, 100, value)
   return clamp(range, 0, 100)
 }
 
 function getToReversed() {
   const isHorizontalAndRtl = !unref(isVertical) && isRtl.value
-  const isVerticalAndBtt = unref(isVertical) && btt
+  const isVerticalAndBtt = unref(isVertical) && props.btt
   return isHorizontalAndRtl || isVerticalAndBtt
 }
 
@@ -115,7 +110,9 @@ function getClickedPointer(evt: PointerEvent) {
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
-  const center = unref(isVertical) ? rect.top + rect.height / 2 : rect.left + rect.width / 2
+  const center = unref(isVertical)
+    ? rect.top + rect.height / 2
+    : rect.left + rect.width / 2
   return unref(isVertical) ? y - center : x - center
 }
 
@@ -139,7 +136,7 @@ const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
   disableTextSelect: true,
   onSwipeStart: (event) => {
     event.preventDefault()
-    currentHandle.value = getClosestPointer(event)
+    currentHandle.value = getClosestHandle(event)
     setClickOffset(event)
     handleSwipe(event)
   },
@@ -168,8 +165,12 @@ function getContainedRect(rect: DOMRect) {
   }
 }
 
+const contained = computed(() => isTruthy(props.contained))
+const btt = computed(() => isTruthy(props.btt))
+const disabled = computed(() => isTruthy(props.disabled))
+
 function getSwipeProgress(sliderRect: DOMRect) {
-  const maybeContainedRect = contained ? getContainedRect(sliderRect) : sliderRect
+  const maybeContainedRect = contained.value ? getContainedRect(sliderRect) : sliderRect
   return calculateProgress(maybeContainedRect, posEnd, clickOffset)
 }
 
@@ -188,7 +189,8 @@ function handleSwipe(event: PointerEvent) {
 
   const pointerIndex = handlesRef.value.findIndex((h) => h.$el === unref(currentHandle))
 
-  if (preventOverlap) {
+  if (props.preventOverlap) {
+    const minDistance = Number(props.minDistance || 0)
     const pointerBefore = modelValue.value[pointerIndex - 1]
     const pointerAfter = modelValue.value[pointerIndex + 1]
     if (pointerBefore && pointerBefore >= updatedValue - minDistance) {
@@ -216,19 +218,10 @@ const classBindings = computed(() => ({
   'v-horizontal': !unref(isVertical),
   'v-ltr': !unref(isRtl),
   'v-rtl': unref(isRtl),
-  'v-btt': btt,
+  'v-btt': unref(btt),
   'v-disabled': disabled,
-  'v-contained': contained,
-  'v-lazy': lazy
+  'v-contained': contained
 }))
-
-function getClosestHandle(value: number) {
-  const values = unref(modelValueProxy)
-  const distances = values.map((v) => Math.abs(v - value))
-  const minDistance = Math.min(...distances)
-  const index = distances.indexOf(minDistance)
-  return handlesRef.value[index]
-}
 
 function getHandleValue(handle: HTMLElement) {
   const index = handlesRef.value.findIndex((h) => h.$el === handle)

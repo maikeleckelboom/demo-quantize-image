@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { SliderProps } from '~/modules/slider/types'
+import { InputSlider } from '#components'
 
 const props = withDefaults(defineProps<SliderProps & { numberOfLabels?: number }>(), {
   numberOfLabels: 2
@@ -9,6 +10,8 @@ const { numberOfLabels, contained } = toRefs(props)
 
 const isContained = computed(() => isTruthy(contained.value))
 const { min, max, step } = useSteps(props)
+
+const slider = ref<InstanceType<typeof InputSlider>>()
 
 const modelValue = defineModel<number | number[]>({
   type: [Number, Array],
@@ -76,9 +79,8 @@ function isFuture(index: number) {
 }
 
 function getTickTranslateX(index: number, width: number = 4) {
-  console.log('is contained', isContained.value)
   if (!isContained.value) {
-    width = width / 2
+    width = width / 2 + 0.5
   }
   if (isFirst(index)) {
     return `translateX(${width * 0.5}px)`
@@ -91,7 +93,7 @@ function getTickTranslateX(index: number, width: number = 4) {
 </script>
 
 <template>
-  <InputRangeSlider id="vm-slider" v-model="modelValue" v-bind="$props">
+  <InputRangeSlider id="vm-slider" ref="slider" v-model="modelValue" v-bind="$props">
     <template #after>
       <div
         v-for="(mark, i) in ticks"

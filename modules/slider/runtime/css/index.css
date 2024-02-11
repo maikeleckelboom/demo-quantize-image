@@ -17,9 +17,13 @@
 
 
     &.v-disabled {
-        pointer-events: none;
-        opacity: 0.5;
-        
+        .slider-input {
+            pointer-events: none;
+
+            .slider-handle {
+                cursor: not-allowed;
+            }
+        }
     }
 
     &.v-label-visible {

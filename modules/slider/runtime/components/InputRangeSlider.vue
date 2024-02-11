@@ -40,12 +40,11 @@ const isBtt = computed(() => {
 
 const isVertical = computed(() => props.orientation === 'vertical')
 const isContained = computed(() => isTruthy(props.contained))
-console.log(isContained.value)
 const isDisabled = computed(() => isTruthy(props.disabled))
 
 const modelValue = defineModel<number | number[]>()
 
-const valueProgressProxy = computed(() => {
+const modelValueProgress = computed(() => {
   let returnValue = [0]
   if (isNumber(modelValue.value)) {
     returnValue = [getProgress(modelValue.value)]
@@ -162,7 +161,7 @@ function getClosestHandle(event: PointerEvent): HTMLElement {
   const progress = getProgressFromEvent(event)
   const removeNaN = (v: number) => !isNaN(v)
   const getDistance = (v: number) => Math.abs(v - progress)
-  const distances = unref(valueProgressProxy).filter(removeNaN).map(getDistance)
+  const distances = unref(modelValueProgress).filter(removeNaN).map(getDistance)
   const minDistance = Math.min(...distances)
   const index = distances.indexOf(minDistance)
   return handlesRef.value[index]
@@ -310,10 +309,10 @@ const variantClasses = computed(() => {
 })
 
 const styleBinding = computed(() => {
-  const lowerValue = Math.min(...valueProgressProxy.value)
-  const upperValue = Math.max(...valueProgressProxy.value)
+  const lowerValue = Math.min(...modelValueProgress.value)
+  const upperValue = Math.max(...modelValueProgress.value)
   return {
-    '--progress': `${valueProgressProxy.value?.length > 1 ? upperValue - lowerValue : lowerValue}%`,
+    '--progress': `${modelValueProgress.value?.length > 1 ? upperValue - lowerValue : lowerValue}%`,
     '--lower-bound-value': `${lowerValue}%`
   }
 })
@@ -336,7 +335,7 @@ const styleBinding = computed(() => {
       </slot>
       <slot name="after" />
       <div
-        v-for="(progress, index) in valueProgressProxy"
+        v-for="(progress, index) in modelValueProgress"
         :key="index"
         :ref="handlesRef.set"
         :style="{ '--_offset': `${progress}%` }"
