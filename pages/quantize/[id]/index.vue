@@ -151,10 +151,11 @@ function onCustomize() {
       <template #footer>
         <div v-if="isLoading" class="flex justify-end">
           <Button
-            class="bg-error font-semibold text-on-error"
-            variant="error"
+            class="rounded-full bg-error font-semibold text-on-error"
+            intent="none"
             @click="router.back()"
             >Abort
+            <Icon class="size-5" name="ic:outline-close" />
           </Button>
         </div>
         <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">

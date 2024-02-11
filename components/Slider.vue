@@ -49,33 +49,32 @@ function generateLabelsFromNumber(
   return labels
 }
 
-const marks = computed(() =>
-  numberOfLabels.value > 0
-    ? generateLabelsFromNumber(min.value, max.value, numberOfLabels.value, 0)
-    : []
-)
-
-function isNotFirstOrLast(index: number) {
-  return index !== 0 && index !== marks.value.length - 1
-}
+const marks = computed(() => {
+  if (numberOfLabels.value > 0) return
+  return generateLabelsFromNumber(min.value, max.value, numberOfLabels.value, 0)
+})
 
 function isFirst(index: number) {
   return index === 0
 }
 
 function isLast(index: number) {
+  if (!isArray(marks.value)) return
   return index === marks.value.length - 1
 }
 
 function isCurrent(index: number) {
+  if (!isArray(marks.value)) return
   return marks.value[index].value === currentValue.value
 }
 
 function isPast(index: number) {
+  if (!isArray(marks.value)) return
   return marks.value[index].value < currentValue.value
 }
 
 function isFuture(index: number) {
+  if (!isArray(marks.value)) return
   return marks.value[index].value > currentValue.value
 }
 
@@ -83,21 +82,23 @@ function onMarkClick(mark: Label) {
   modelValue.value = mark.value
 }
 
-function getTickTranslateX(index: number) {
+function getTickTranslateX(index: number, width: number = 4) {
+  // if (isFirst(index)) {
+  //   return 'translateX(2px)'
+  // }
+  // if (isLast(index)) {
+  //   return 'translateX(-8px)'
+  // }
   if (isFirst(index)) {
-    return 'translateX(2px)'
+    return `translateX(${width * 0.5}px)`
   }
   if (isLast(index)) {
-    return 'translateX(-8px)'
+    return `translateX(${width * -2}px)`
   }
   return 'translateX(-50%)'
 }
 
 const labelMarkRefs = useTemplateRefsList<HTMLDivElement>()
-
-function getTickTranslateXLabel(mark: Label, index: number) {
-  console.log(labelMarkRefs.value)
-}
 </script>
 
 <template>

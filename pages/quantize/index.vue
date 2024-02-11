@@ -84,42 +84,63 @@ function onCustomFIleChange(event: Event) {
     files.value = Array.from(target.files)
   }
 }
+
+const textContent = reactive({
+  title: 'Extract colors from image',
+  description: 'The image is digitally analyzed to extract the colors from it.'
+})
 </script>
 
 <template>
   <div class="mx-auto flex w-full max-w-xl flex-col p-4">
     <div class="mb-8">
-      <h1 class="mb-2 text-headline-sm md:mb-4 md:text-headline-lg md:leading-snug">
-        Upload an image to generate color palettes
+      <h1 class="mb-2 text-4xl font-medium tracking-normal">
+        {{ textContent.title }}
       </h1>
       <p class="text-body-sm text-on-surface-variant">
-        The image is digitally analyzed, a single color is selected as the source color, and tones
-        are chosen and assigned to each color role.
+        {{ textContent.description }}
       </p>
     </div>
+
     <div
       :class="[
         selectedFile ? 'border-outline-variant' : 'border-dashed border-outline-variant',
         state.isLoadingExample ? 'animate-pulse duration-150' : ''
       ]"
-      class="border-1 relative mb-4 h-64 overflow-hidden rounded-lg transition duration-200 ease-in-out"
+      class="relative mb-4 h-64 overflow-hidden rounded-md border-2"
     >
-      <NuxtImg
-        v-if="selectedFile"
-        :src="fileObjectUrl"
-        alt=""
-        class="selected size-full rounded-md"
-      />
-      <FileDropZone v-else @drop="onDrop" />
+      <Transition mode="out-in" name="basic-out-in">
+        <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected size-full" />
+        <FileDropZone v-else class="rounded-md" @drop="onDrop" />
+      </Transition>
     </div>
-    <div v-if="!selectedFile" class="flex justify-end">
-      <Button :disabled="state.isLoadingExample" intent="text" size="sm" @click="loadExampleImage">
-        {{ state.isLoadingExample ? 'Loading...' : 'Load example image' }}
+
+    <div class="mb-8 flex justify-between gap-2">
+      <div class="flex gap-2">
+        <Button intent="filled-tonal" size="sm">
+          Take a photo
+          <Icon class="size-5" name="ic:round-photo-camera" />
+        </Button>
+      </div>
+      <Button
+        :disabled="state.isLoadingExample"
+        class="w-[152px]"
+        intent="text"
+        size="sm"
+        @click="loadExampleImage"
+      >
+        <Spinner v-if="state.isLoadingExample" class="size-5" />
+        <template v-else>
+          {{ selectedFile ? 'Change image' : 'Load example' }}
+        </template>
       </Button>
     </div>
-    <div class="my-2 grid grid-cols-[1fr,0.25fr]">
+    <template v-if="selectedFile">
       <div class="flex flex-col justify-between">
-        <label class="mb-2 flex flex-nowrap items-center gap-x-2 text-label-lg" for="maxColors">
+        <label
+          class="mb-2 flex flex-nowrap items-center gap-x-2 px-2 text-label-lg"
+          for="maxColors"
+        >
           Max Colors
           <span class="text-xs tabular-nums text-on-surface-variant">(1-128)</span>
           <Tooltip class="justify-self-end">
@@ -138,19 +159,39 @@ function onCustomFIleChange(event: Event) {
           </div>
         </div>
       </div>
-    </div>
-    <div class="mt-6 flex flex-col">
-      <Buttons class="justify-end">
-        <Button v-if="selectedFile" intent="text" @click="reset">Reset</Button>
-        <Button :disabled="!selectedFile || state.isLoadingNextPage" @click="onExtractColors">
-          {{ state.isLoadingNextPage ? 'Loading...,' : 'Extract colors' }}
-        </Button>
-      </Buttons>
+    </template>
+    <div class="mt-12 flex flex-col">
+      <div class="flex justify-end gap-2">
+        <div class="flex gap-2">
+          <Button
+            :disabled="!selectedFile || state.isLoadingNextPage"
+            class="min-w-[160px] whitespace-nowrap"
+            stretch="true"
+            @click="onExtractColors"
+          >
+            <Spinner v-if="state.isLoadingNextPage" class="size-5" />
+            <div v-else class="flex items-center justify-center gap-2 leading-none">
+              Extract Colors
+              <Icon class="size-12" name="ic:round-arrow-right-alt" />
+            </div>
+          </Button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style>
+.basic-out-in-enter-active,
+.basic-out-in-leave-active {
+  transition: opacity 200ms ease-out;
+}
+
+.basic-out-in-enter-from,
+.basic-out-in-leave-to {
+  opacity: 0;
+}
+
 :not(.prevent-transition) {
   img.selected {
     view-transition-name: selected;

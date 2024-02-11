@@ -31,7 +31,11 @@ const button = cva({
     'after:opacity-0',
     'after:ease-in-out',
     'after:-z-10',
-    'icon:pointer-events-none'
+    'icon:pointer-events-none',
+    'hover:after:opacity-20',
+    'active:after:opacity-40',
+    'focus-visible:after:opacity-20',
+    'focus-visible:after:ring-2'
   ],
   variants: {
     selected: {

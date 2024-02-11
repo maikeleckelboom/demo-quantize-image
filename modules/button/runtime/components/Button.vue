@@ -2,7 +2,15 @@
 interface Props {
   dir?: 'ltr' | 'rtl'
   icon?: string
-  intent?: 'elevated' | 'filled' | 'filled-tonal' | 'outlined' | 'text' | 'fab' | 'extended-fab'
+  intent?:
+    | 'elevated'
+    | 'filled'
+    | 'filled-tonal'
+    | 'outlined'
+    | 'text'
+    | 'fab'
+    | 'extended-fab'
+    | 'none'
   size?: 'sm' | 'md' | 'lg'
   stretch?: boolean | 'true' | 'false'
   variant?: 'primary' | 'secondary' | 'tertiary' | 'surface' | 'error'
@@ -46,16 +54,11 @@ const variants = cva({
       false: 'w-fit'
     },
     disabled: {
-      true: [
-        'bg-surface-level/20',
-        'opacity-50',
-        'text-on-surface-level-2',
-        'cursor-not-allowed',
-        'pointer-events-none'
-      ],
+      true: ['opacity-50', 'text-on-surface-level-2', 'cursor-not-allowed', 'pointer-events-none'],
       false: []
     },
     intent: {
+      none: [''],
       elevated: [
         'bg-surface-level-2',
         'text-primary',
