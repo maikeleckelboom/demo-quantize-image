@@ -10,9 +10,9 @@ const props = withDefaults(defineProps<SliderProps>(), {
   btt: false,
   orientation: 'horizontal',
   contained: true,
-  disabled: false,
-  preventOverlap: true,
-  minDistance: 0,
+  // disabled: false,
+  // preventOverlap: true,
+  // minDistance: 0,
   step: 1,
   labelVisibility: 'auto'
 })
@@ -28,9 +28,6 @@ defineSlots<{
 
 const getRect = (el: HTMLElement) => el.getBoundingClientRect()
 
-const isSnapping = computed(
-  () => props.step !== 'any' && ['directional', 'true', true, ''].includes(String(props.snapping))
-)
 const isVertical = computed(() => props.orientation === 'vertical')
 
 const isRtl = computed(() => {
@@ -43,13 +40,11 @@ const isBtt = computed(() => {
   if (!isVertical.value) {
     return false
   }
-  return ['true', true, ''].includes(String(props.btt))
+  return isTruthy(props.btt)
 })
 
-const isContained = computed(() => {
-  return ['true', true, ''].includes(String(props.contained))
-})
-const isDisabled = computed(() => props.disabled)
+const isContained = computed(() => isTruthy(props.contained))
+const isDisabled = computed(() => isTruthy(props.disabled))
 
 const modelValue = defineModel<number | number[]>()
 
@@ -65,18 +60,18 @@ const valueProgressProxy = computed(() => {
 
 const rootRef = ref<HTMLElement>()
 const sliderRef = ref<HTMLElement>()
-const pointersRef = useTemplateRefsList<HTMLElement>()
+const handlesRef = useTemplateRefsList<HTMLElement>()
 
-const currentPointer = ref<HTMLElement | null>(null)
-watch(currentPointer, (pointer) => pointer?.focus())
+const currentHandle = ref<HTMLElement | null>(null)
+watch(currentHandle, (pointer) => pointer?.focus())
 
 let clickOffset: Position = { x: 0, y: 0 }
 
 function setClickOffset(evt: PointerEvent) {
   clickOffset = { x: 0, y: 0 }
-  const clickedPointer = getClickedPointer(evt)
-  if (clickedPointer) {
-    const pointerRect = getRect(clickedPointer)
+  const clickedHandle = getClickedHandle(evt)
+  if (clickedHandle) {
+    const pointerRect = getRect(clickedHandle)
     const distanceFromPointerCenter = getDistanceToCenter(pointerRect, posEnd)
     clickOffset = {
       x: isVertical.value ? 0 : distanceFromPointerCenter,
@@ -91,9 +86,9 @@ function getValueAtStep(value: number, step: number) {
 }
 
 function convertRange(min: number, max: number, a: number, b: number, x: number) {
-  const temp = max - min
-  if (temp === 0) return a
-  return ((b - a) * (x - min)) / temp + a
+  const range = max - min
+  if (range === 0) return a
+  return ((b - a) * (x - min)) / range + a
 }
 
 function getValue(progress: number) {
@@ -150,29 +145,29 @@ const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
   disableTextSelect: true,
   onSwipeStart: (event) => {
     event.preventDefault()
-    currentPointer.value = getClosestPointer(event)
+    currentHandle.value = getClosestHandle(event)
     setClickOffset(event)
     handleSwipe(event)
   },
   onSwipe: handleSwipe,
   onSwipeEnd: (event, direction) => {
-    const removePointer = () => (currentPointer.value = null)
+    const removePointer = () => (currentHandle.value = null)
     removePointer()
   }
 })
 
-function getClosestPointer(event: PointerEvent): HTMLElement {
+function getClosestHandle(event: PointerEvent): HTMLElement {
   const progress = getProgressFromEvent(event)
   const removeNaN = (v: number) => !isNaN(v)
   const getDistance = (v: number) => Math.abs(v - progress)
   const distances = unref(valueProgressProxy).filter(removeNaN).map(getDistance)
   const minDistance = Math.min(...distances)
   const index = distances.indexOf(minDistance)
-  return pointersRef.value[index]
+  return handlesRef.value[index]
 }
 
-function getClickedPointer(evt: PointerEvent) {
-  return pointersRef.value.find((pointerRef) => pointerRef.contains(<Node>evt.target))
+function getClickedHandle(evt: PointerEvent) {
+  return handlesRef.value.find((el) => el.contains(<Node>evt.target))
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
@@ -205,6 +200,7 @@ function calculateProgress(
 const handleWidthVar = useCssVar('--slider-handle-width', rootRef, {
   observe: true
 })
+
 const handleHeightVar = useCssVar('--slider-handle-height', rootRef, {
   observe: true
 })
@@ -229,49 +225,44 @@ function handleSwipe(_event: PointerEvent) {
   const sliderRect = getRect(sliderEl)
   const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
-  const pointerValue = getValue(progress)
+  const currentValue = getValue(progress)
 
   if (isNumber(modelValue.value)) {
     // Single value
     if (isDefined(props.step) && props.step !== 'any') {
-      // Has step
-      const valueAtStep = getValueAtStep(pointerValue, Number(props.step))
-      /*
-            console.log('value at step', valueAtStep)
-      */
-      modelValue.value = valueAtStep
+      modelValue.value = getValueAtStep(currentValue, Number(props.step))
 
       return
     }
 
-    modelValue.value = pointerValue
+    modelValue.value = currentValue
     return
   }
 
-  if (!isArray(modelValue.value) || !currentPointer.value) {
+  if (!isArray(modelValue.value) || !currentHandle.value) {
     return
   }
 
-  const pointerIndex = pointersRef.value.indexOf(currentPointer.value)
+  const handleIndex = handlesRef.value.indexOf(currentHandle.value)
 
   if (props.preventOverlap) {
-    const minDistance = Number(props.minDistance)
+    const minDistance = Number(props.minDistance || 0)
 
-    const pointerBefore = modelValue.value[pointerIndex - 1]
-    const pointerAfter = modelValue.value[pointerIndex + 1]
+    const prevValue = modelValue.value[handleIndex - 1]
+    const nextValue = modelValue.value[handleIndex + 1]
 
-    if (pointerBefore && pointerBefore >= pointerValue - minDistance) {
-      modelValue.value.splice(pointerIndex, 1, pointerBefore + minDistance)
+    if (prevValue && prevValue >= currentValue - minDistance) {
+      modelValue.value.splice(handleIndex, 1, prevValue + minDistance)
       return
     }
 
-    if (pointerAfter && pointerAfter <= pointerValue + minDistance) {
-      modelValue.value.splice(pointerIndex, 1, pointerAfter - minDistance)
+    if (nextValue && nextValue <= currentValue + minDistance) {
+      modelValue.value.splice(handleIndex, 1, nextValue - minDistance)
       return
     }
   }
 
-  modelValue.value.splice(pointerIndex, 1, pointerValue)
+  modelValue.value.splice(handleIndex, 1, currentValue)
 }
 
 function reachedBounds(
@@ -347,7 +338,6 @@ const styleBinding = computed(() => {
   >
     <div ref="sliderRef" class="slider-wrapper">
       <slot name="before" />
-      <slot name="default" />
       <slot name="track">
         <div :style="trackStyle" class="slider-track">
           <div class="slider-track-fill" />
@@ -358,7 +348,7 @@ const styleBinding = computed(() => {
       <div
         v-for="(pointerValue, index) in valueProgressProxy"
         :key="index"
-        :ref="pointersRef.set"
+        :ref="handlesRef.set"
         :style="{ '--_offset': `${pointerValue}%` }"
         class="slider-handle"
         role="slider"

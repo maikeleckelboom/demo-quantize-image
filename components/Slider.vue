@@ -87,12 +87,10 @@ function getTickTranslateX(index: number, width: number = 4) {
   }
   return 'translateX(-50%)'
 }
-
-const labelMarkRefs = useTemplateRefsList<HTMLDivElement>()
 </script>
 
 <template>
-  <InputRangeSlider id="vm-slider" v-model="modelValue" v-bind="$props">
+  <InputRangeSlider id="vm-slider" v-model="modelValue" disabled="true" v-bind="$props">
     <template #after>
       <div
         v-for="(mark, i) in marks"
@@ -154,8 +152,11 @@ const labelMarkRefs = useTemplateRefsList<HTMLDivElement>()
   }
 
   .slider-handle {
+    --_duration: 100ms;
     background-color: rgb(var(--surface-rgb));
-    transition: clip-path 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      clip-path var(--_duration) var(--easing-standard-accelerate),
+      background-color var(--_duration) var(--easing-standard-accelerate);
     cursor: ew-resize;
 
     &::before {

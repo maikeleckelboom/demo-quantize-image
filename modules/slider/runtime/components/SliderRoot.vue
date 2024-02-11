@@ -45,13 +45,7 @@ const currentHandle = ref<HTMLElement | null>(null)
 
 watch(currentHandle, (pointer) => pointer?.focus())
 
-const convertRange = (
-  min: number,
-  max: number,
-  a: number,
-  b: number,
-  x: number
-) => {
+const convertRange = (min: number, max: number, a: number, b: number, x: number) => {
   const temp = max - min
   if (temp === 0) return a
   return ((b - a) * (x - min)) / temp + a
@@ -106,12 +100,10 @@ function getProgressFromEvent(event: PointerEvent) {
   })
 }
 
-function getClosestPointer(event: PointerEvent): HTMLElement {
+function getClosestHandle(event: PointerEvent): HTMLElement {
   const progress = getProgressFromEvent(event)
   const getDistance = (percentage: number) => Math.abs(percentage - progress)
-  const distances = unref(modelValueProxy).map((value) =>
-    getDistance(getProgress(value))
-  )
+  const distances = unref(modelValueProxy).map((value) => getDistance(getProgress(value)))
   const minDistance = Math.min(...distances)
   const index = distances.indexOf(minDistance)
   return unrefElement(handlesRef.value[index]) as HTMLElement
@@ -123,9 +115,7 @@ function getClickedPointer(evt: PointerEvent) {
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
-  const center = unref(isVertical)
-    ? rect.top + rect.height / 2
-    : rect.left + rect.width / 2
+  const center = unref(isVertical) ? rect.top + rect.height / 2 : rect.left + rect.width / 2
   return unref(isVertical) ? y - center : x - center
 }
 
@@ -164,9 +154,7 @@ const handleWidthVar = useCssVar('--slider-handle-width', rootRef)
 const handleHeightVar = useCssVar('--slider-handle-height', rootRef)
 
 function getHandleSize() {
-  return parseInt(
-    unref(isVertical) ? unref(handleHeightVar) : unref(handleWidthVar)
-  )
+  return parseInt(unref(isVertical) ? unref(handleHeightVar) : unref(handleWidthVar))
 }
 
 function getContainedRect(rect: DOMRect) {
@@ -181,9 +169,7 @@ function getContainedRect(rect: DOMRect) {
 }
 
 function getSwipeProgress(sliderRect: DOMRect) {
-  const maybeContainedRect = contained
-    ? getContainedRect(sliderRect)
-    : sliderRect
+  const maybeContainedRect = contained ? getContainedRect(sliderRect) : sliderRect
   return calculateProgress(maybeContainedRect, posEnd, clickOffset)
 }
 
@@ -200,9 +186,7 @@ function handleSwipe(event: PointerEvent) {
     return
   }
 
-  const pointerIndex = handlesRef.value.findIndex(
-    (h) => h.$el === unref(currentHandle)
-  )
+  const pointerIndex = handlesRef.value.findIndex((h) => h.$el === unref(currentHandle))
 
   if (preventOverlap) {
     const pointerBefore = modelValue.value[pointerIndex - 1]
@@ -257,12 +241,7 @@ function getHandleIndex(handle: HTMLElement) {
 </script>
 
 <template>
-  <div
-    ref="rootRef"
-    :class="classBindings"
-    :style="rootStyleBinding"
-    class="slider-root"
-  >
+  <div ref="rootRef" :class="classBindings" :style="rootStyleBinding" class="slider-root">
     <div ref="sliderRef" class="slider-wrapper">
       <slot name="track">
         <SliderTrack>
@@ -273,10 +252,7 @@ function getHandleIndex(handle: HTMLElement) {
       </slot>
       <template v-for="(value, index) in modelValueProxy" :key="index">
         <slot :index="index" :value="value" name="handle">
-          <SliderHandle
-            :ref="handlesRef.set"
-            :style="{ '--_offset': `${value}%` }"
-          >
+          <SliderHandle :ref="handlesRef.set" :style="{ '--_offset': `${value}%` }">
             <slot name="handle" />
             <SliderLabelContainer>
               <slot name="handleLabel">

@@ -10,20 +10,16 @@ interface SliderProps {
 
   orientation?: 'horizontal' | 'vertical'
   dir?: 'ltr' | 'rtl'
-  btt?: boolean
-  disabled?: boolean
-  preventOverlap?: boolean
-  minDistance?: number
+  btt?: boolean | `${boolean}`
+  disabled?: boolean | `${boolean}`
+  preventOverlap?: boolean | `${boolean}`
+  minDistance?: number | `${number}`
   labelVisibility?: 'auto' | 'hover' | 'focus' | 'always' | 'never'
-  glide?: boolean
-  interval?: number
-  labelFormat?: (value: number, rounded?: number) => number | string
-  lazy?: false
-  contained?: boolean | 'true' | 'false'
+  interval?: number | `${number}`
+  labelFormat?: (value: string | number) => string | number
+  lazy?: false | `${boolean}`
+  contained?: boolean | `${boolean}`
   trackStyle?: Record<string, any>
-
-  snapping?: boolean | 'true' | 'false'
-  snapValues?: number[]
 }
 
 export type { SliderProps }
@@ -34,12 +30,7 @@ type MarkNumberArray = number[]
 type MarkStringArray = string[]
 type MarkFunction = (value: number) => MarksObject | number | string
 
-type Marks =
-  | MarksObject
-  | MarkObjectArray
-  | MarkNumberArray
-  | MarkStringArray
-  | MarkFunction
+type Marks = MarksObject | MarkObjectArray | MarkNumberArray | MarkStringArray | MarkFunction
 
 function isMarkObject(marks: Marks | undefined): marks is MarksObject {
   return typeof marks === 'object' && !Array.isArray(marks)
@@ -61,20 +52,11 @@ function isMarkFunction(marks: Marks): marks is MarkFunction {
   return typeof marks === 'function'
 }
 
-function isMarkArray(
-  marks: Marks
-): marks is MarkObjectArray | MarkNumberArray | MarkStringArray {
+function isMarkArray(marks: Marks): marks is MarkObjectArray | MarkNumberArray | MarkStringArray {
   return isMarkObjectArray(marks) || isMarkNumberArray(marks) || isMarkStringArray(marks)
 }
 
-export type {
-  Marks,
-  MarksObject,
-  MarkObjectArray,
-  MarkNumberArray,
-  MarkStringArray,
-  MarkFunction
-}
+export type { Marks, MarksObject, MarkObjectArray, MarkNumberArray, MarkStringArray, MarkFunction }
 export {
   isMarkObject,
   isMarkObjectArray,

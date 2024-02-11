@@ -53,3 +53,7 @@ export function isRegExp(v: unknown): v is RegExp {
 export function isTruthy(v: unknown): boolean {
   return [true, 'true', 1, '1', 'yes', 'y', 'always'].includes(v as any)
 }
+
+export function isFalsy(v: unknown): boolean {
+  return [false, 'false', 0, '0', 'no', 'n', 'never'].includes(v as any)
+}
