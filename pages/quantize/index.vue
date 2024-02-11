@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import NumericTextField from '~/components/InputNumberText.vue'
+import MaxColorsInputSlider from '~/components/MaxColorsInputSlider.vue'
 
 const store = useFilesStore()
 const { files, selectedFile, fileObjectUrl } = storeToRefs(store)
@@ -131,7 +131,7 @@ const device = useDevice()
       class="relative mb-3 h-52 overflow-hidden rounded-md border-2 md:mb-2.5 md:h-64"
     >
       <Transition mode="out-in" name="basic-out-in">
-        <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected size-full" />
+        <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected object-contain" />
         <FileDropZone v-else class="rounded-md" @drop="onDrop" />
       </Transition>
     </div>
@@ -158,47 +158,31 @@ const device = useDevice()
         </template>
       </Button>
     </div>
-    <template v-if="selectedFile">
-      <div class="flex flex-col justify-between">
-        <label
-          class="mb-2 flex flex-nowrap items-center gap-x-2 px-2 text-label-lg"
-          for="maxColors"
-        >
-          Max Colors
-          <span class="text-xs tabular-nums text-on-surface-variant">(1-128)</span>
-          <Tooltip class="justify-self-end">
-            <button class="flex items-center justify-center">
-              <Icon class="ml-0.5 h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
-            </button>
-            <template #content> The maximum number of colors to generate from the image.</template>
-          </Tooltip>
-        </label>
-        <div class="grid grid-cols-[1fr,52px]">
-          <div class="px-2">
-            <Slider v-model.number="maxColors" contained="true" max="128" min="1" step="1" />
-          </div>
-          <div class="px-2">
-            <NumericTextField id="maxColors" v-model.number="maxColors" max="128" min="1" />
-          </div>
-        </div>
-      </div>
-    </template>
+    <div class="h-20">
+      <Transition name="basic-out-in">
+        <MaxColorsInputSlider v-if="selectedFile" v-model="maxColors" />
+      </Transition>
+    </div>
     <div class="mt-12 flex w-fit flex-col self-end">
-      <div class="flex gap-2">
-        <template v-if="selectedFile">
-          <!-- reset -->
-          <Button :disabled="state.isLoadingExample" intent="text" size="md" @click="reset">
+      <div class="flex gap-3">
+        <Transition name="basic-out-in">
+          <Button
+            v-if="selectedFile"
+            :disabled="state.isLoadingExample"
+            intent="text"
+            size="md"
+            @click="reset"
+          >
             Cancel
           </Button>
-        </template>
+        </Transition>
         <Button
           :disabled="!selectedFile || state.isLoadingNextPage"
           class="whitespace-nowrap"
           @click="onExtractColors"
         >
           <div class="flex items-center justify-center gap-2 leading-none">
-            {{ state.isLoadingNextPage ? 'Loading' : 'Continue' }}
-            <Icon class="size-12" name="ic:round-arrow-right-alt" />
+            {{ state.isLoadingNextPage ? 'Loading' : 'Extract Colors' }}
           </div>
         </Button>
       </div>
@@ -209,7 +193,7 @@ const device = useDevice()
 <style>
 .basic-out-in-enter-active,
 .basic-out-in-leave-active {
-  transition: opacity 200ms ease-out;
+  transition: opacity 150ms ease-out;
 }
 
 .basic-out-in-enter-from,
