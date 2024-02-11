@@ -165,17 +165,7 @@ const device = useDevice()
     </div>
     <div class="mt-12 flex w-fit flex-col self-end">
       <div class="flex gap-3">
-        <Transition name="basic-out-in">
-          <Button
-            v-if="selectedFile"
-            :disabled="state.isLoadingExample"
-            intent="text"
-            size="md"
-            @click="reset"
-          >
-            Cancel
-          </Button>
-        </Transition>
+        <Button v-if="selectedFile" intent="text" size="md" @click="reset"> Cancel </Button>
         <Button
           :disabled="!selectedFile || state.isLoadingNextPage"
           class="whitespace-nowrap"

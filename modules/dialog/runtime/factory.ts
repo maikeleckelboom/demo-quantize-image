@@ -6,9 +6,18 @@ interface ColorPickerOptions {
   onColorChange: (color: number) => void
 }
 
-async function openColorPicker({ keyColor, initialColor, onColorChange }: ColorPickerOptions) {
+type DialogOptions = {
+  type?: 'basic' | 'fullScreen'
+}
+
+async function openColorPicker({
+  keyColor,
+  initialColor,
+  onColorChange,
+  type
+}: ColorPickerOptions & DialogOptions) {
   const { open } = useDialogs()
-  return await open(KeyColorDialog, { keyColor, initialColor, onColorChange })
+  return await open(KeyColorDialog, { keyColor, initialColor, onColorChange, type })
 }
 
 export { openColorPicker }

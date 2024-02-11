@@ -32,6 +32,7 @@ async function onOpenColorPicker(keyColor: string, initialColor: number) {
   const { data, isCanceled } = await openColorPicker({
     keyColor, // name
     initialColor, // color
+    type: 'basic',
     onColorChange: (color) => {
       //
     }
