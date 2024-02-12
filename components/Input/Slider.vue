@@ -100,20 +100,17 @@ const ticks = computed(() => {
 
   --slider-vertical-width: 10px;
   --slider-vertical-height: 200px;
-  --slider-handle-cursor: ns-resize;
 
   &.v-horizontal {
     --slider-handle-width: 10px;
     --slider-handle-height: 38px;
+    --slider-handle-cursor: ew-resize;
   }
 
   &.v-vertical {
     --slider-handle-width: 38px;
     --slider-handle-height: 10px;
-
-    /** todo: **/
-    /*
-     */
+    --slider-handle-cursor: ns-resize;
   }
 
   .slider-handle {
@@ -130,14 +127,13 @@ const ticks = computed(() => {
 
     &:hover {
       &::before {
-        clip-path: inset(0.23em round 3px);
+        clip-path: inset(0.24em round 3px);
       }
     }
 
-    &:active,
-    &:focus {
+    &:is(:active, :focus-visible) {
       &::before {
-        clip-path: inset(0.27em round 3px);
+        clip-path: inset(0.28em round 3px);
       }
     }
   }
@@ -146,10 +142,8 @@ const ticks = computed(() => {
     transition: none;
 
     .slider-handle {
-      transition: none;
-
       &::before {
-        clip-path: inset(0.27em round 3px);
+        clip-path: inset(0.28em round 3px);
       }
     }
   }

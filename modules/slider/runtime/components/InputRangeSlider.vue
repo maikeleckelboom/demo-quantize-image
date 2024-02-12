@@ -380,6 +380,7 @@ const styleBinding = computed(() => {
   --slider-handle-shadow-size: 0px;
   --slider-handle-border-radius: 50%;
   --slider-handle-cursor: default;
+  --slider-handle-border: solid 1px inherit;
 
   /* Track */
   --slider-track-border-radius: 16px;
@@ -622,19 +623,12 @@ const styleBinding = computed(() => {
 
 .slider-handle {
   position: absolute;
-  /*
-    block-size: var(--slider-handle-height);
-    inline-size: var(--slider-handle-width);
-    */
   width: var(--slider-handle-width);
   height: var(--slider-handle-height);
   cursor: var(--slider-handle-cursor);
+  border: var(--slider-handle-border);
 
   &:has(.touch-target) {
-    border-radius: var(--slider-handle-border-radius);
-    cursor: pointer;
-    box-shadow: 0 0 0 var(--slider-handle-shadow-size) rgb(var(--primary-rgb) / 0.2);
-    background: rgb(var(--primary-rgb));
   }
 
   z-index: 10;

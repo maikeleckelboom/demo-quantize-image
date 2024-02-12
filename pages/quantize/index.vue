@@ -14,12 +14,8 @@ const images = [
   '/img/islands.jpg',
   '/img/supernova.jpg',
   '/img/mushrooms.jpg',
-  // '/img/squirrel.jpg',
-  // '/img/kitten.jpg',
   '/img/forest-nightfall.jpg',
-  // '/img/winter.jpg',
   '/img/bird.jpg'
-  // '/img/wp-landscape.webp'
 ] as const
 
 async function blobFromUrl(url: string) {
@@ -126,20 +122,13 @@ const device = useDevice()
 
     <div
       :class="[
-        selectedFile
-          ? 'border-secondary-container/40'
-          : 'border-dashed border-secondary-container',
+        selectedFile ? 'border-secondary-container/40' : 'border-dashed border-secondary-container',
         state.isLoadingExample ? 'animate-pulse duration-150' : ''
       ]"
       class="relative mb-3 h-52 overflow-hidden rounded-md border-2 md:mb-2.5 md:h-64"
     >
       <Transition mode="out-in" name="basic-out-in">
-        <NuxtImg
-          v-if="selectedFile"
-          :src="fileObjectUrl"
-          alt=""
-          class="selected object-contain"
-        />
+        <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected object-contain" />
         <FileDropZone v-else class="rounded-md" @drop="onDrop" />
       </Transition>
     </div>
@@ -167,23 +156,12 @@ const device = useDevice()
       </Button>
     </div>
     <div class="h-20">
-      <MaxColorsInputSlider
-        v-model="maxColors"
-        :disabled="!selectedFile"
-        max="128"
-        min="1"
-        step="1"
-      />
+      <MaxColorsInputSlider v-model="maxColors" :disabled="!selectedFile" max="128" min="1" step="1" />
     </div>
     <div class="mt-12 flex w-fit flex-col self-end">
       <div class="flex gap-3">
-        <Button v-if="selectedFile" intent="text" size="md" @click="reset">
-          Cancel
-        </Button>
-        <Button
-          :disabled="!selectedFile || state.isLoadingNextPage"
-          @click="onExtractColors"
-        >
+        <Button v-if="selectedFile" intent="text" size="md" @click="reset"> Cancel </Button>
+        <Button :disabled="!selectedFile || state.isLoadingNextPage" @click="onExtractColors">
           <div class="flex items-center justify-center gap-2 leading-none">
             {{ state.isLoadingNextPage ? 'Loading' : 'Extract Colors' }}
           </div>

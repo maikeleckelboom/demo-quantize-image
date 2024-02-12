@@ -90,18 +90,8 @@ const getTickStyle = (mark: SliderMark, index: number) => {
 }
 
 /*
- // Horizontal - first
-  // Horizontal - last
-  // Horizontal - contained - first
-  // Horizontal - contained - last
-  // Horizontal - rtl - first
-  // Horizontal - rtl - last
-  // Horizontal - rtl - contained - first
-  // Horizontal - rtl - contained - last
-
-
- */
-
+  Horizontal - ltr/rtl/contained
+*/
 .v-horizontal {
   .input-tick-mark {
     top: 50%;
@@ -154,16 +144,8 @@ const getTickStyle = (mark: SliderMark, index: number) => {
 }
 
 /*
- Vertical - first
- Vertical - last
- Vertical - contained - first
- Vertical - contained - last
- Vertical - btt - first
- Vertical - btt - last
- Vertical - btt - middle
- Vertical - btt - contained - first
- Vertical - btt - contained - last
- */
+  Vertical - ttb/btt/contained
+*/
 .v-vertical {
   .input-tick-mark {
     left: 50%;

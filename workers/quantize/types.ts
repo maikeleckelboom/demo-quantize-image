@@ -6,7 +6,8 @@ type StartEventData = {
 
 type ProgressEventData = {
   type: 'progress'
-  step: number
+  index: number
+  name: string
   description: string
 }
 
