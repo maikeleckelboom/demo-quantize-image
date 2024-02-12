@@ -4,7 +4,9 @@ import { InputSlider } from '#components'
 import InputSliderTicks from '~/components/Input/InputSliderTicks.vue'
 
 const props = withDefaults(defineProps<SliderProps & { numberOfTicks?: number }>(), {
-  numberOfTicks: 2
+  numberOfTicks: 2,
+  min: 0,
+  max: 100
 })
 
 const { numberOfTicks, contained } = toRefs(props)
@@ -19,16 +21,16 @@ const modelValue = defineModel<number | number[]>({
 function generateLabelsFromNumber({
   min,
   max,
-  numberOfTicks,
+  count,
   decimalPlaces
 }: {
   min: number
   max: number
-  numberOfTicks: number
+  count: number
   decimalPlaces: number
 }): SliderMark[] {
   const valueRange = max - min
-  let spacing = valueRange / numberOfTicks
+  let spacing = valueRange / count
   let actualNumberOfLabels = Math.ceil(valueRange / spacing)
   const labels: SliderMark[] = []
   for (let i = 0; i <= actualNumberOfLabels; i++) {
@@ -45,25 +47,17 @@ function generateLabelsFromNumber({
 
 const ticks = computed(() => {
   if (numberOfTicks.value < 1) return []
-  return generateLabelsFromNumber({
-    min: !Number.isNaN(props.min) ? Number(props.min) : 0,
-    max: !Number.isNaN(props.max) ? Number(props.max) : 100,
-    numberOfTicks: numberOfTicks.value,
-    decimalPlaces: 0
-  })
+  const min = Number.isNaN(props.min) ? 0 : Number(props.min)
+  const max = Number.isNaN(props.max) ? 100 : Number(props.max)
+  const count = Math.max(1, numberOfTicks.value)
+  return generateLabelsFromNumber({ min, max, count, decimalPlaces: 0 })
 })
 </script>
 
 <template>
   <InputRangeSlider id="vm-slider" ref="slider" v-model="modelValue" v-bind="$props">
     <template #ticks>
-      <InputSliderTicks
-        v-model="modelValue"
-        :btt="$props.btt"
-        :contained="$props.contained"
-        :orientation="$props.orientation"
-        :ticks="ticks"
-      />
+      <InputSliderTicks v-model="modelValue" :ticks="ticks" />
     </template>
   </InputRangeSlider>
 
