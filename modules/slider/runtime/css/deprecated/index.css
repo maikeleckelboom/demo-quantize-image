@@ -218,7 +218,7 @@
     border: none;
 }
 
-.slider-handle-touch-target {
+.touch-target {
     position: absolute;
     max-inline-size: 48px;
     max-block-size: 48px;
@@ -241,7 +241,7 @@
     inline-size: var(--slider-handle-width);
     cursor: var(--slider-handle-cursor);
 
-    &:has(.slider-handle-touch-target) {
+    &:has(.touch-target) {
         border-radius: var(--slider-handle-border-radius);
         cursor: pointer;
         box-shadow: 0 0 0 var(--slider-handle-shadow-size) rgb(var(--primary-rgb) / 0.2);

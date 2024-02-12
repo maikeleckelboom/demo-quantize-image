@@ -22,25 +22,37 @@ const reverb = ref(0)
         {{ disabled ? 'Enable' : 'Disable' }}
       </Button>
       <div class="grid grid-cols-2 gap-x-8">
-        <fieldset class="flex flex-col gap-4">
-          <legend>Default</legend>
+        <fieldset class="relative flex flex-col gap-4">
+          <legend>Horizontal - ltr</legend>
           <InputSlider v-model="maxColors" :disabled="disabled" />
         </fieldset>
-        <fieldset class="flex flex-col gap-4">
-          <legend>Contained</legend>
+        <fieldset class="relative flex flex-col gap-4">
+          <legend>Horizontal - ltr - contained</legend>
           <InputSlider v-model="maxColors" :disabled="disabled" contained="true" />
         </fieldset>
       </div>
-      <div class="grid grid-cols-2 gap-8 *:items-center *:justify-center">
-        <fieldset class="flex flex-col gap-4">
-          <legend>Vertical Default</legend>
-          <InputSlider v-model="balance" :disabled="disabled" orientation="vertical" />
+
+      <div class="grid grid-cols-2 gap-x-8">
+        <fieldset class="relative flex flex-col gap-4">
+          <legend>Horizontal - rtl</legend>
+          <InputSlider v-model="maxColors" :disabled="disabled" dir="rtl" />
         </fieldset>
-        <fieldset class="flex flex-col gap-4">
-          <legend>Vertical Contained</legend>
-          <InputSlider v-model="volume" :disabled="disabled" contained="true" orientation="vertical" />
+        <fieldset class="relative flex flex-col gap-4">
+          <legend>Horizontal - rtl - contained</legend>
+          <InputSlider v-model="maxColors" :disabled="disabled" contained="true" dir="rtl" />
         </fieldset>
       </div>
+
+      <!--      <div class="grid grid-cols-2 gap-8 *:items-center *:justify-center">
+              <fieldset class="relative flex flex-col gap-4">
+                <legend>Vertical - ltr</legend>
+                <InputSlider v-model="balance" :disabled="disabled" orientation="vertical" />
+              </fieldset>
+              <fieldset class="relative flex flex-col gap-4">
+                <legend>Vertical - ltr - contained</legend>
+                <InputSlider v-model="balance" :disabled="disabled" contained="true" orientation="vertical" />
+              </fieldset>
+            </div>-->
     </div>
   </div>
 </template>
