@@ -50,25 +50,25 @@ function isFuture(index: number) {
 
 function getTickTranslate(index: number, size: number = 4) {
   if (!contained.value) {
-    size = size / 2 + 0.25
+    size = size * 0.5
   }
-
-  const c = unref(contained)
 
   if (isFirst(index)) {
     return vertical.value
       ? `translateX(-50%) translateY(${size * 0.5}px)`
       : `translateX(${size * 0.5}px) translateY(-50%)`
   }
+
   if (isLast(index)) {
     return vertical.value
-      ? `translateX(-50%) translateY(${size * -2.5}px)`
-      : `translateX(${size * -2.25}px) translateY(-50%)`
+      ? `translateX(-50%) translateY(${size * (contained.value ? -2 : -2.5)}px)`
+      : `translateX(${size * (contained.value ? -2 : -2.5)}px) translateY(-50%)`
   }
+
   return 'translateX(-50%) translateY(-50%)'
 }
 
-const getTickStyle = (mark: SliderMark, index: number) => {
+function getTickStyle(mark: SliderMark, index: number) {
   const isVertical = unref(vertical)
   if (isVertical) {
     return {
@@ -76,12 +76,11 @@ const getTickStyle = (mark: SliderMark, index: number) => {
       top: `${mark.at * 100}%`,
       transform: getTickTranslate(index)
     }
-  } else {
-    return {
-      top: '50%',
-      left: `${mark.at * 100}%`,
-      transform: getTickTranslate(index)
-    }
+  }
+  return {
+    top: '50%',
+    left: `${mark.at * 100}%`,
+    transform: getTickTranslate(index)
   }
 }
 </script>
