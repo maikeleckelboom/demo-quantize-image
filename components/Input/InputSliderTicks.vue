@@ -49,30 +49,23 @@ function isFuture(index: number) {
 }
 
 function getTickTranslate(index: number, size: number = 4) {
-  if (!isFirst(index) && !isLast(index)) {
-    return 'translateX(-50%) translateY(-50%)'
+  if (!contained.value) {
+    size = size / 2 + 0.25
   }
 
-  if (contained.value) {
-    if (isFirst(index)) {
-      return vertical.value
-        ? `translateX(-50%) translateY(${size * 0.5}px)`
-        : `translateX(${size * 0.5}px) translateY(-50%)`
-    }
+  const c = unref(contained)
+
+  if (isFirst(index)) {
     return vertical.value
-      ? `translateX(-50%) translateY(${size * -2}px)`
-      : `translateX(${size * -2}px) translateY(-50%)`
-  }
-
-  if (props.orientation === 'vertical') {
-    return isFirst(index)
       ? `translateX(-50%) translateY(${size * 0.5}px)`
-      : `translateX(-50%) translateY(${size * -2}px)`
-  } else {
-    return isFirst(index)
-      ? `translateX(${size * 0.5}px) translateY(-50%)`
-      : `translateX(${size * -2}px) translateY(-50%)`
+      : `translateX(${size * 0.5}px) translateY(-50%)`
   }
+  if (isLast(index)) {
+    return vertical.value
+      ? `translateX(-50%) translateY(${size * -2.5}px)`
+      : `translateX(${size * -2.25}px) translateY(-50%)`
+  }
+  return 'translateX(-50%) translateY(-50%)'
 }
 
 const getTickStyle = (mark: SliderMark, index: number) => {
@@ -85,8 +78,8 @@ const getTickStyle = (mark: SliderMark, index: number) => {
     }
   } else {
     return {
-      left: `${mark.at * 100}%`,
       top: '50%',
+      left: `${mark.at * 100}%`,
       transform: getTickTranslate(index)
     }
   }
@@ -98,7 +91,7 @@ const getTickStyle = (mark: SliderMark, index: number) => {
       v-for="(mark, index) in ticks"
       :key="index"
       :class="[
-        'absolute top-1/2 size-[4px] rounded-full transition-transform duration-150',
+        'absolute size-[4px] rounded-full transition-transform duration-150',
         {
           'bg-primary-container': isCurrent(index) || isPast(index),
           'bg-primary': isFuture(index)

@@ -62,6 +62,7 @@ const ticks = computed(() => {
       <InputSliderTicks
         v-model="modelValue"
         :btt="btt"
+        :contained="contained"
         :dir="dir"
         :orientation="orientation"
         :ticks="ticks"
