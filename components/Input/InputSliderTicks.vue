@@ -100,16 +100,6 @@ const getTickStyle = (mark: SliderMark, index: number) => {
   // Horizontal - rtl - contained - last
 
 
-  // Vertical - first
-  // Vertical - last
-  // Vertical - contained - first
-  // Vertical - contained - last
-  // Vertical - btt - first
-  // Vertical - btt - last
-  // Vertical - btt - middle
-  // Vertical - btt - contained - first
-  // Vertical - btt - contained - last
-
  */
 
 .v-horizontal {
@@ -163,6 +153,65 @@ const getTickStyle = (mark: SliderMark, index: number) => {
   }
 }
 
-.input-tick-mark {
+/*
+ Vertical - first
+ Vertical - last
+ Vertical - contained - first
+ Vertical - contained - last
+ Vertical - btt - first
+ Vertical - btt - last
+ Vertical - btt - middle
+ Vertical - btt - contained - first
+ Vertical - btt - contained - last
+ */
+.v-vertical {
+  .input-tick-mark {
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+
+    &:first-child {
+      transform: translateY(calc(-50% + 3px)) translateX(-50%);
+    }
+
+    &:last-child {
+      transform: translateY(calc(-50% - 3px)) translateX(-50%);
+    }
+  }
+
+  &.v-contained {
+    .input-tick-mark {
+      &:first-child {
+        transform: translateY(calc(50% - 1px)) translateX(-50%);
+      }
+
+      &:last-child {
+        transform: translateY(calc(-150% - 1px)) translateX(-50%);
+      }
+    }
+  }
+
+  &.v-btt {
+    .input-tick-mark {
+      &:first-child {
+        transform: translateY(calc(-50% - 3px)) translateX(-50%);
+      }
+
+      &:last-child {
+        transform: translateY(calc(50% - 1px)) translateX(-50%);
+      }
+    }
+
+    &.v-contained {
+      .input-tick-mark {
+        &:first-child {
+          transform: translateY(calc(-150% - 1px)) translateX(-50%);
+        }
+
+        &:last-child {
+          transform: translateY(calc(50% + 1px)) translateX(-50%);
+        }
+      }
+    }
+  }
 }
 </style>

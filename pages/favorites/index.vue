@@ -17,48 +17,72 @@ const reverb = ref(0)
 
 <template>
   <div class="mx-auto w-full max-w-xl p-4">
-    <div class="mb-12 flex flex-col gap-8">
+    <div class="mb-12 flex flex-col gap-12">
       <Button class="rounded-md" intent="outlined" size="sm" @click="disabled = !disabled">
         {{ disabled ? 'Enable' : 'Disable' }}
       </Button>
-      <div class="grid grid-cols-2 gap-x-8">
-        <fieldset class="relative flex flex-col gap-4">
-          <legend>Horizontal - ltr</legend>
-          <InputSlider v-model="maxColors" :disabled="disabled" />
-        </fieldset>
-        <fieldset class="relative flex flex-col gap-4">
-          <legend>Horizontal - ltr - contained</legend>
-          <InputSlider v-model="maxColors" :disabled="disabled" contained="true" />
-        </fieldset>
-      </div>
+      <section class="mb-12 flex flex-col gap-8">
+        <div class="grid grid-cols-2 gap-x-8">
+          <fieldset class="relative flex flex-col gap-4">
+            <legend>Horizontal - ltr</legend>
+            <InputSlider v-model="maxColors" :disabled="disabled" />
+          </fieldset>
+          <fieldset class="relative flex flex-col gap-4">
+            <legend>Horizontal - ltr - contained</legend>
+            <InputSlider v-model="maxColors" :disabled="disabled" contained="true" />
+          </fieldset>
+        </div>
 
-      <div class="grid grid-cols-2 gap-x-8">
-        <fieldset class="relative flex flex-col gap-4">
-          <legend>Horizontal - rtl</legend>
-          <InputSlider v-model="maxColors" :disabled="disabled" dir="rtl" />
-        </fieldset>
-        <fieldset class="relative flex flex-col gap-4">
-          <legend>Horizontal - rtl - contained</legend>
-          <InputSlider v-model="maxColors" :disabled="disabled" contained="true" dir="rtl" />
-        </fieldset>
-      </div>
-
-      <!--      <div class="grid grid-cols-2 gap-8 *:items-center *:justify-center">
-              <fieldset class="relative flex flex-col gap-4">
-                <legend>Vertical - ltr</legend>
-                <InputSlider v-model="balance" :disabled="disabled" orientation="vertical" />
-              </fieldset>
-              <fieldset class="relative flex flex-col gap-4">
-                <legend>Vertical - ltr - contained</legend>
-                <InputSlider v-model="balance" :disabled="disabled" contained="true" orientation="vertical" />
-              </fieldset>
-            </div>-->
+        <div class="grid grid-cols-2 gap-x-8">
+          <fieldset class="relative flex flex-col gap-4">
+            <legend>Horizontal - rtl</legend>
+            <InputSlider v-model="maxColors" :disabled="disabled" dir="rtl" />
+          </fieldset>
+          <fieldset class="relative flex flex-col gap-4">
+            <legend>Horizontal - rtl - contained</legend>
+            <InputSlider v-model="maxColors" :disabled="disabled" contained="true" dir="rtl" />
+          </fieldset>
+        </div>
+      </section>
+      <section class="mb-12 flex flex-col gap-12">
+        <div class="grid grid-cols-4 place-items-center gap-8">
+          <fieldset class="relative flex flex-col items-center justify-center gap-4">
+            <legend>Vertical - ttb</legend>
+            <InputSlider v-model="balance" :disabled="disabled" orientation="vertical" />
+          </fieldset>
+          <fieldset class="relative flex flex-col items-center justify-center gap-4">
+            <legend>Vertical - ttb - contained</legend>
+            <InputSlider
+              v-model="balance"
+              :disabled="disabled"
+              contained="true"
+              orientation="vertical"
+            />
+          </fieldset>
+          <fieldset class="relative flex flex-col items-center justify-center gap-4">
+            <legend>Vertical - btt</legend>
+            <InputSlider v-model="balance" :disabled="disabled" btt="true" orientation="vertical" />
+          </fieldset>
+          <fieldset class="relative flex flex-col items-center justify-center gap-4">
+            <legend>Vertical - btt - contained</legend>
+            <InputSlider
+              v-model="balance"
+              :disabled="disabled"
+              btt="true"
+              contained="true"
+              orientation="vertical"
+            />
+          </fieldset>
+        </div>
+        <div class="grid grid-cols-2 place-items-center gap-x-8"></div>
+      </section>
     </div>
   </div>
 </template>
 
 <style scoped>
 legend {
-  @apply mb-6 text-center text-sm font-semibold text-secondary;
+  @apply mb-2 text-center text-sm font-semibold text-secondary;
+  height: 48px;
 }
 </style>
