@@ -3,7 +3,7 @@
 <template>
   <div class="slider-handle" role="slider" tabindex="0">
     <slot />
-    <div class="slider-handle-touch-target" />
+    <div class="touch-target" />
   </div>
 </template>
 

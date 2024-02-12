@@ -344,7 +344,7 @@ const styleBinding = computed(() => {
         tabindex="0"
       >
         <slot name="handle">
-          <div class="slider-handle-touch-target" />
+          <div class="touch-target" />
         </slot>
         <div class="slider-label-container">
           <span class="slider-label-text">
@@ -359,8 +359,16 @@ const styleBinding = computed(() => {
 </template>
 
 <style lang="postcss">
+.slider-ticks {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  inset: 0;
+}
+
 :root {
-  /* Tooltip */
+  /* Label */
   --slider-label-offset: 8px;
   --slider-label-padding-x: 16px;
   --slider-label-padding-y: 12px;
@@ -411,8 +419,8 @@ const styleBinding = computed(() => {
   justify-content: center;
   flex-direction: row;
 
-  /* Size */
   inline-size: var(--slider-track-width, 180px);
+  //min-block-size: var(--slider-handle-height);
 
   &.v-disabled {
     pointer-events: none;
@@ -444,8 +452,6 @@ const styleBinding = computed(() => {
     --slider-track-width: var(--slider-horizontal-width);
     --slider-handle-width: var(--slider-horizontal-handle-width);
     --slider-handle-height: var(--slider-horizontal-handle-height);
-
-    min-block-size: var(--slider-handle-height);
 
     .slider-track-fill {
       transform: scaleX(var(--progress));
@@ -598,7 +604,7 @@ const styleBinding = computed(() => {
   border: none;
 }
 
-.slider-handle-touch-target {
+.touch-target {
   position: absolute;
   max-inline-size: 48px;
   max-block-size: 48px;
@@ -624,7 +630,7 @@ const styleBinding = computed(() => {
   height: var(--slider-handle-height);
   cursor: var(--slider-handle-cursor);
 
-  &:has(.slider-handle-touch-target) {
+  &:has(.touch-target) {
     border-radius: var(--slider-handle-border-radius);
     cursor: pointer;
     box-shadow: 0 0 0 var(--slider-handle-shadow-size) rgb(var(--primary-rgb) / 0.2);
