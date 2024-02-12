@@ -9,7 +9,7 @@ const props = withDefaults(defineProps<SliderProps & { numberOfTicks?: number }>
   max: 100
 })
 
-const { numberOfTicks, contained } = toRefs(props)
+const { numberOfTicks } = toRefs(props)
 
 const slider = ref<InstanceType<typeof InputSlider>>()
 
@@ -18,17 +18,19 @@ const modelValue = defineModel<number | number[]>({
   default: 0
 })
 
+type LabelGenerateOptions = {
+  min: number
+  max: number
+  count: number
+  decimalPlaces: number
+}
+
 function generateLabelsFromNumber({
   min,
   max,
   count,
   decimalPlaces
-}: {
-  min: number
-  max: number
-  count: number
-  decimalPlaces: number
-}): SliderMark[] {
+}: LabelGenerateOptions): SliderMark[] {
   const valueRange = max - min
   let spacing = valueRange / count
   let actualNumberOfLabels = Math.ceil(valueRange / spacing)
@@ -57,7 +59,13 @@ const ticks = computed(() => {
 <template>
   <InputRangeSlider id="vm-slider" ref="slider" v-model="modelValue" v-bind="$props">
     <template #ticks>
-      <InputSliderTicks v-model="modelValue" :ticks="ticks" />
+      <InputSliderTicks
+        v-model="modelValue"
+        :btt="btt"
+        :dir="dir"
+        :orientation="orientation"
+        :ticks="ticks"
+      />
     </template>
   </InputRangeSlider>
 

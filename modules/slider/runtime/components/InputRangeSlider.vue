@@ -46,11 +46,13 @@ const modelValue = defineModel<number | number[]>()
 
 const modelValueProgress = computed(() => {
   let returnValue = [0]
+
   if (isNumber(modelValue.value)) {
     returnValue = [getProgress(modelValue.value)]
   } else if (isArray(modelValue.value)) {
     returnValue = modelValue.value.map(getProgress)
   }
+
   return returnValue
 })
 

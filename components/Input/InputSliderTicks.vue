@@ -1,8 +1,18 @@
 <script lang="ts" setup>
 import type { SliderMark, SliderProps } from '~/modules/slider/types'
 
-const props = defineProps<{ ticks: SliderMark[]; contained?: SliderProps['contained'] }>()
+interface Props extends Partial<Pick<SliderProps, 'orientation' | 'contained' | 'btt' | 'dir'>> {
+  ticks: SliderMark[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  orientation: 'horizontal'
+})
+
+const rtl = computed(() => props.dir === 'rtl')
+const btt = computed(() => isTruthy(props.btt))
 const contained = computed(() => isTruthy(props.contained))
+const vertical = computed(() => props.orientation === 'vertical')
 
 const { ticks } = toRefs(props)
 
@@ -38,23 +48,49 @@ function isFuture(index: number) {
   return ticks.value[index].value > firstModelValue.value
 }
 
-function getTickTranslateX(index: number, width: number = 4) {
-  if (!contained.value) {
-    width = width / 2 + 0.5
+function getTickTranslate(index: number, size: number = 4) {
+  if (!isFirst(index) && !isLast(index)) {
+    return 'translateX(-50%) translateY(-50%)'
   }
-  if (isFirst(index)) {
-    return `translateX(${width * 0.5}px)`
+
+  if (contained.value) {
+    if (isFirst(index)) {
+      return vertical.value
+        ? `translateX(-50%) translateY(${size * 0.5}px)`
+        : `translateX(${size * 0.5}px) translateY(-50%)`
+    }
+    return vertical.value
+      ? `translateX(-50%) translateY(${size * -2}px)`
+      : `translateX(${size * -2}px) translateY(-50%)`
   }
-  if (isLast(index)) {
-    return `translateX(${width * -2}px)`
+
+  if (props.orientation === 'vertical') {
+    return isFirst(index)
+      ? `translateX(-50%) translateY(${size * 0.5}px)`
+      : `translateX(-50%) translateY(${size * -2}px)`
+  } else {
+    return isFirst(index)
+      ? `translateX(${size * 0.5}px) translateY(-50%)`
+      : `translateX(${size * -2}px) translateY(-50%)`
   }
-  return 'translateX(-50%)'
 }
 
-const getTickStyle = (mark: SliderMark, index: number) => ({
-  left: `${mark.at * 100}%`,
-  transform: `${getTickTranslateX(index)} translateY(-50%)`
-})
+const getTickStyle = (mark: SliderMark, index: number) => {
+  const isVertical = unref(vertical)
+  if (isVertical) {
+    return {
+      left: '50%',
+      top: `${mark.at * 100}%`,
+      transform: getTickTranslate(index)
+    }
+  } else {
+    return {
+      left: `${mark.at * 100}%`,
+      top: '50%',
+      transform: getTickTranslate(index)
+    }
+  }
+}
 </script>
 <template>
   <div>

@@ -4,9 +4,7 @@ interface SliderProps {
   max?: string | number
   step?: number | 'any' | (string & {})
   marks?: Marks
-
-  decimals?: string | number
-  round?: number | boolean | 'true' | 'false' | (string & {})
+  ticks?: SliderMark[]
 
   orientation?: 'horizontal' | 'vertical'
   dir?: 'ltr' | 'rtl'
