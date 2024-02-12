@@ -130,6 +130,9 @@ const getTickStyle = (mark: SliderMark, index: number) => {
   return {
     left: unref(toReversed) ? `${(1 - mark.at) * 100}%` : `${mark.at * 100}%`
   }
+  return {
+    left: unref(toReversed) ? `${(1 - mark.at) * 100}%` : `${mark.at * 100}%`
+  }
 }
 </script>
 <template>
