@@ -52,83 +52,11 @@ function isFuture(index: number) {
   return ticks.value[index].value > firstModelValue.value
 }
 
-function getTickTranslate(index: number, size: number = 4) {
-<<<<<<< HEAD
-  if (!contained.value) {
-    size = size * 0.5
-  }
-
-  if (isFirst(index)) {
-    return vertical.value
-      ? `translateX(-50%) translateY(${size * 0.5}px)`
-      : `translateX(${size * 0.5}px) translateY(-50%)`
-  }
-
-  if (isLast(index)) {
-    return vertical.value
-      ? `translateX(-50%) translateY(${size * (contained.value ? -2 : -2.5)}px)`
-      : `translateX(${size * (contained.value ? -2 : -2.5)}px) translateY(-50%)`
-  }
-
-  return 'translateX(-50%) translateY(-50%)'
-}
-
-function getTickStyle(mark: SliderMark, index: number) {
-  const isVertical = unref(vertical)
-  if (isVertical) {
-    return {
-      left: '50%',
-      top: `${mark.at * 100}%`,
-      transform: getTickTranslate(index)
-    }
-  }
-  return {
-    top: '50%',
-    left: `${mark.at * 100}%`,
-    transform: getTickTranslate(index)
-=======
-  // Horizontal - un-contained - first
-  // Horizontal - un-contained - last
-  // Horizontal - contained - first
-  // Horizontal - contained - last
-  // Horizontal - rtl - first
-  // Horizontal - rtl - last
-  // Horizontal - rtl - contained - first
-  // Horizontal - rtl - contained - last
-
-  // Vertical - un-contained : first
-  // Vertical - un-contained : last
-  // Vertical - contained - first
-  // Vertical - contained - last
-  // Vertical - btt - first
-  // Vertical - btt - last
-  // Vertical - btt - middle
-  // Vertical - btt - contained - first
-  // Vertical - btt - contained - last
-
-  /*
-   Handles all middle cases
-  */
-  // Vertical - un-contained : middle
-  // Vertical - contained - middle
-  // Vertical - btt - middle
-  // Vertical - btt - contained - middle
-  // Horizontal - rtl - middle
-  // Horizontal - un-contained - middle
-  // Horizontal - contained - middle
-  // Horizontal - rtl - contained - middle
-  return 'translateX(-50%) translateY(-50%)'
-}
-
 const getTickStyle = (mark: SliderMark, index: number) => {
   if (unref(vertical)) {
     return {
       top: unref(toReversed) ? `${(1 - mark.at) * 100}%` : `${mark.at * 100}%`
     }
->>>>>>> 528812f (fix: slider tick for horizontal - ltr/rtl)
-  }
-  return {
-    left: unref(toReversed) ? `${(1 - mark.at) * 100}%` : `${mark.at * 100}%`
   }
   return {
     left: unref(toReversed) ? `${(1 - mark.at) * 100}%` : `${mark.at * 100}%`
@@ -162,8 +90,8 @@ const getTickStyle = (mark: SliderMark, index: number) => {
 }
 
 /*
- // Horizontal - un-contained - first
-  // Horizontal - un-contained - last
+ // Horizontal - first
+  // Horizontal - last
   // Horizontal - contained - first
   // Horizontal - contained - last
   // Horizontal - rtl - first
@@ -172,8 +100,8 @@ const getTickStyle = (mark: SliderMark, index: number) => {
   // Horizontal - rtl - contained - last
 
 
-  // Vertical - un-contained : first
-  // Vertical - un-contained : last
+  // Vertical - first
+  // Vertical - last
   // Vertical - contained - first
   // Vertical - contained - last
   // Vertical - btt - first
@@ -200,9 +128,6 @@ const getTickStyle = (mark: SliderMark, index: number) => {
 
   &.v-contained {
     .input-tick-mark {
-      top: 50%;
-      transform: translateX(-50%) translateY(-50%);
-
       &:first-child {
         transform: translateX(50%) translateY(-50%);
       }
@@ -215,9 +140,6 @@ const getTickStyle = (mark: SliderMark, index: number) => {
 
   &.v-rtl {
     .input-tick-mark {
-      top: 50%;
-      transform: translateX(-50%) translateY(-50%);
-
       &:first-child {
         transform: translateX(calc(-50% - 3px)) translateY(-50%);
       }
@@ -229,9 +151,6 @@ const getTickStyle = (mark: SliderMark, index: number) => {
 
     &.v-contained {
       .input-tick-mark {
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%);
-
         &:first-child {
           transform: translateX(-150%) translateY(-50%);
         }
