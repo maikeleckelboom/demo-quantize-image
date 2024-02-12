@@ -91,7 +91,7 @@ function onMarkClick(mark: Mark) {
   --slider-horizontal-handle-width: 10px;
   --slider-horizontal-handle-height: 38px;
 
-  --slider-horizontal-height: 8px;
+  --slider-horizontal-track-height: 8px;
   --slider-track-border: 0px;
   --slider-tack-height: 12px;
   --slider-track-width: 100px;

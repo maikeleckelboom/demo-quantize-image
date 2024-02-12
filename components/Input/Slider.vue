@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import type { SliderProps } from '~/modules/slider/types'
+import type { SliderMark, SliderProps } from '~/modules/slider/types'
 import { InputSlider } from '#components'
+import InputSliderTicks from '~/components/Input/InputSliderTicks.vue'
 
 const props = withDefaults(defineProps<SliderProps & { numberOfTicks?: number }>(), {
   numberOfTicks: 2
@@ -18,30 +19,22 @@ const modelValue = defineModel<number | number[]>({
   default: 0
 })
 
-const currentValue = computed(() => {
-  if (Array.isArray(modelValue.value)) {
-    return <number>modelValue.value.at(0)
-  }
-  return modelValue.value
-})
-
-type Label = {
-  at: number
-  value: number
-  label: string
-}
-
-function generateLabelsFromNumber(
-  min: number,
-  max: number,
-  numberOfTicks: number,
+function generateLabelsFromNumber({
+  min,
+  max,
+  numberOfTicks,
+  decimalPlaces
+}: {
+  min: number
+  max: number
+  numberOfTicks: number
   decimalPlaces: number
-): Label[] {
+}): SliderMark[] {
   const valueRange = max - min
   let spacing = valueRange / numberOfTicks
-  let actualnumberOfTicks = Math.ceil(valueRange / spacing)
-  const labels: Label[] = []
-  for (let i = 0; i <= actualnumberOfTicks; i++) {
+  let actualNumberOfLabels = Math.ceil(valueRange / spacing)
+  const labels: SliderMark[] = []
+  for (let i = 0; i <= actualNumberOfLabels; i++) {
     let labelValue = min + i * spacing
     labelValue = parseFloat(labelValue.toFixed(decimalPlaces))
     labels.push({
@@ -55,81 +48,37 @@ function generateLabelsFromNumber(
 
 const ticks = computed(() => {
   if (numberOfTicks.value < 1) return []
-  return generateLabelsFromNumber(min.value, max.value, numberOfTicks.value, 0)
+  return generateLabelsFromNumber({
+    min: min.value,
+    max: max.value,
+    numberOfTicks: numberOfTicks.value,
+    decimalPlaces: 0
+  })
 })
-
-function isFirst(index: number) {
-  return index === 0
-}
-
-function isLast(index: number) {
-  return index === ticks.value.length - 1
-}
-
-function isCurrent(index: number) {
-  return ticks.value[index].value === currentValue.value
-}
-
-function isPast(index: number) {
-  return ticks.value[index].value < currentValue.value
-}
-
-function isFuture(index: number) {
-  return ticks.value[index].value > currentValue.value
-}
-
-function getTickTranslateX(index: number, width: number = 4) {
-  if (!isContained.value) {
-    width = width / 2 + 0.5
-  }
-  if (isFirst(index)) {
-    return `translateX(${width * 0.5}px)`
-  }
-  if (isLast(index)) {
-    return `translateX(${width * -2}px)`
-  }
-  return 'translateX(-50%)'
-}
 </script>
 
 <template>
   <InputRangeSlider id="vm-slider" ref="slider" v-model="modelValue" v-bind="$props">
-    <template #after>
-      <div
-        v-for="(mark, i) in ticks"
-        :key="i"
-        :class="[
-          'absolute top-1/2 size-[4px] rounded-full transition-transform duration-150',
-          {
-            'bg-primary-container': isCurrent(i) || isPast(i),
-            'bg-primary': isFuture(i)
-          }
-        ]"
-        :style="{
-          left: `${mark.at * 100}%`,
-          transform: `${getTickTranslateX(i)} translateY(-50%)`
-        }"
-      >
-        <span class="sr-only">{{ mark.label }}</span>
-      </div>
+    <template #ticks>
+      <InputSliderTicks v-model="modelValue" :ticks="ticks" />
     </template>
   </InputRangeSlider>
 
-  <div class="relative flex flex-nowrap">
-    <div
-      v-for="(mark, i) in ticks"
-      :key="`label-${i}`"
-      :aria-hidden="true"
-      :data-value="mark.value"
-      :style="{
-        left: `${mark.at * 100}%`,
-        transform: `${getTickTranslateX(i, 20)} translateY(-50%)`
-      }"
-      class="text-body-xs absolute text-on-surface-variant"
-    >
-      {{ mark.label }}
-    </div>
-  </div>
+  <!--  <div class="relative flex flex-nowrap">-->
+  <!--    <div-->
+  <!--      v-for="(mark, i) in ticks"-->
+  <!--      :key="`label-${i}`"-->
+  <!--      :aria-hidden="true"-->
+  <!--      :data-value="mark.value"-->
+  <!--      :style="{-->
+  <!--        left: `${mark.at * 100}%`,-->
+  <!--        transform: `${getTickTranslateX(i, 20)} translateY(-50%)`-->
+  <!--      }"-->
+  <!--      class="text-body-xs absolute text-on-surface-variant"-->
+  <!--    >-->
+  <!--      {{ mark.label }}-->
+  <!--    </div>-->
+  <!--  </div>-->
 </template>
 
 <style>
@@ -142,19 +91,23 @@ function getTickTranslateX(index: number, width: number = 4) {
   --slider-track-border-color: transparent;
   --slider-fill-color: rgb(var(--primary-rgb));
   --slider-handle-border-radius: 4px;
+
   --slider-horizontal-handle-width: 10px;
   --slider-horizontal-handle-height: 38px;
+  --slider-horizontal-track-height: 8px;
 
-  --slider-horizontal-height: 8px;
-  --slider-track-border: 0px;
-  --slider-tack-height: 12px;
-  --slider-track-width: 100px;
-  --slider-handle-shadow-size: 0px;
+  --slider-vertical-handle-width: 38px;
+  --slider-vertical-track-width: 8px;
+  --slider-vertical-track-height: 100%;
 
-  width: 100%;
+  &.v-horizontal {
+    .slider-track {
+    }
+  }
 
-  .slider-track {
-    width: 100%;
+  &.v-vertical {
+    .slide-track {
+    }
   }
 
   .slider-handle {
@@ -181,7 +134,7 @@ function getTickTranslateX(index: number, width: number = 4) {
       --slider-handle-shadow-size: 0px;
 
       &::before {
-        clip-path: inset(0.225em round 3px);
+        clip-path: inset(0.23em round 3px);
       }
     }
 
@@ -189,7 +142,7 @@ function getTickTranslateX(index: number, width: number = 4) {
       --slider-handle-shadow-size: 0px;
 
       &::before {
-        clip-path: inset(0.25em round 3px);
+        clip-path: inset(0.27em round 3px);
       }
     }
   }

@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<SliderProps>(), {
 defineSlots<{
   default: void
   before: void
-  after: void
+  ticks: void
   track(): void
   handle(): void
   labelText(): void
@@ -159,9 +159,8 @@ const { isSwiping, posEnd } = usePointerSwipe(rootRef, {
 
 function getClosestHandle(event: PointerEvent): HTMLElement {
   const progress = getProgressFromEvent(event)
-  const removeNaN = (v: number) => !isNaN(v)
   const getDistance = (v: number) => Math.abs(v - progress)
-  const distances = unref(modelValueProgress).filter(removeNaN).map(getDistance)
+  const distances = unref(modelValueProgress).filter(Number.isNaN).map(getDistance)
   const minDistance = Math.min(...distances)
   const index = distances.indexOf(minDistance)
   return handlesRef.value[index]
@@ -172,9 +171,7 @@ function getClickedHandle(evt: PointerEvent) {
 }
 
 function getDistanceToCenter(rect: DOMRect, { x, y }: Position) {
-  const center = isVertical.value
-    ? rect.top + rect.height / 2
-    : rect.left + rect.width / 2
+  const center = isVertical.value ? rect.top + rect.height / 2 : rect.left + rect.width / 2
   return isVertical.value ? y - center : x - center
 }
 
@@ -226,9 +223,7 @@ function getContainedRect(rect: DOMRect) {
 function handleSwipe(_event: PointerEvent) {
   const sliderEl = <HTMLElement>unrefElement(sliderRef)
   const sliderRect = getRect(sliderEl)
-  const maybeContainedRect = unref(isContained)
-    ? getContainedRect(sliderRect)
-    : sliderRect
+  const maybeContainedRect = unref(isContained) ? getContainedRect(sliderRect) : sliderRect
   const progress = calculateProgress(maybeContainedRect, posEnd, clickOffset)
   const currentValue = getValue(progress)
 
@@ -333,11 +328,14 @@ const styleBinding = computed(() => {
           <div class="slider-track-fill" />
         </div>
       </slot>
-      <slot name="after" />
+      <div class="slider-ticks">
+        <slot name="ticks" />
+      </div>
       <div
         v-for="(progress, index) in modelValueProgress"
         :key="index"
         :ref="handlesRef.set"
+        :inert="isDisabled"
         :style="{ '--_offset': `${progress}%` }"
         class="slider-handle"
         role="slider"

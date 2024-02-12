@@ -257,10 +257,10 @@
 
 .slider-label-container {
     position: absolute;
-    background: var(--slider-tooltip-background-color);
-    color: var(--slider-tooltip-text-color);
-    padding: var(--slider-tooltip-padding-y) var(--slider-tooltip-padding-x);
-    border-radius: var(--slider-tooltip-border-radius);
+    background: var(--slider-label-background-color);
+    color: var(--slider-label-text-color);
+    padding: var(--slider-label-padding-y) var(--slider-label-padding-x);
+    border-radius: var(--slider-label-border-radius);
     transform: translateX(-50%);
     max-inline-size: 48px;
     max-block-size: 44px;
@@ -300,7 +300,7 @@
 
     .v-vertical & {
         top: 50%;
-        left: calc(100% + var(--slider-tooltip-offset));
+        left: calc(100% + var(--slider-label-offset));
         transform: translateX(0) translateY(-50%);
         transform-origin: top left;
 
@@ -310,7 +310,7 @@
     }
 
     .v-horizontal & {
-        bottom: calc(100% + var(--slider-tooltip-offset));
+        bottom: calc(100% + var(--slider-label-offset));
         left: 50%;
 
         transform-origin: bottom left;

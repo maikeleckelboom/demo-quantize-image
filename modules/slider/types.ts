@@ -22,9 +22,15 @@ interface SliderProps {
   trackStyle?: Record<string, any>
 }
 
-export type { SliderProps }
+type SliderMark = {
+  at: number
+  value: number
+  label: string
+}
 
-type MarksObject = Record<string | number, string>
+export type { SliderProps, SliderMark }
+
+type MarksObject = SliderMark
 type MarkObjectArray = MarksObject[]
 type MarkNumberArray = number[]
 type MarkStringArray = string[]
@@ -66,25 +72,25 @@ export {
   isMarkFunction
 }
 
-const exampleMarkFn = (value: number) => {
-  return value % 20 === 0
-}
-
-// ___ All input types ___ //
-
-/* object */
-const examplePlainObject: MarksObject = {
-  '1': 'A',
-  '2': 'B',
-  '3': 'C',
-  '4': 'D',
-  '5': 'E',
-  '6': 'F',
-  '7': 'G'
-}
-
-/* string[] */
-const exampleAbcArray: MarkStringArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-
-/* number[] */
-const example123Array: MarkNumberArray = [1, 2, 3, 4, 5, 6, 7]
+// const exampleMarkFn = (value: number) => {
+//   return value % 20 === 0
+// }
+//
+// // ___ All input types ___ //
+//
+// /* object */
+// const examplePlainObject: MarksObject = {
+//   '1': 'A',
+//   '2': 'B',
+//   '3': 'C',
+//   '4': 'D',
+//   '5': 'E',
+//   '6': 'F',
+//   '7': 'G'
+// }
+//
+// /* string[] */
+// const exampleAbcArray: MarkStringArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+//
+// /* number[] */
+// const example123Array: MarkNumberArray = [1, 2, 3, 4, 5, 6, 7]

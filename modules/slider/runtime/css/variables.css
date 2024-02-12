@@ -1,12 +1,12 @@
 :root {
     /* Tooltip */
-    --slider-tooltip-offset: 8px;
-    --slider-tooltip-padding-x: 16px;
-    --slider-tooltip-padding-y: 12px;
-    --slider-tooltip-border-radius: 50%;
-    --slider-tooltip-background-color: rgb(var(--inverse-surface-rgb));
-    --slider-tooltip-text-color: rgb(var(--inverse-on-surface-rgb));
-
+    --slider-label-offset: 8px;
+    --slider-label-padding-x: 16px;
+    --slider-label-padding-y: 12px;
+    --slider-label-border-radius: 50%;
+    --slider-label-background-color: rgb(var(--inverse-surface-rgb));
+    --slider-label-text-color: rgb(var(--inverse-on-surface-rgb));
+    
     /* Handle */
     --slider-handle-shadow-size: 0px;
     --slider-handle-border-radius: 50%;
