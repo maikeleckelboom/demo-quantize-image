@@ -170,18 +170,18 @@ const getTickStyle = (mark: SliderMark, index: number) => {
     transform: translateX(-50%) translateY(-50%);
 
     &:first-child {
-      transform: translateY(calc(-50% + 3px)) translateX(-50%);
+      transform: translateY(calc(-50% + 4px)) translateX(-50%);
     }
 
     &:last-child {
-      transform: translateY(calc(-50% - 3px)) translateX(-50%);
+      transform: translateY(calc(-50% - 4px)) translateX(-50%);
     }
   }
 
   &.v-contained {
     .input-tick-mark {
       &:first-child {
-        transform: translateY(calc(50% - 1px)) translateX(-50%);
+        transform: translateY(calc(50% + 3px)) translateX(-50%);
       }
 
       &:last-child {
@@ -193,7 +193,7 @@ const getTickStyle = (mark: SliderMark, index: number) => {
   &.v-btt {
     .input-tick-mark {
       &:first-child {
-        transform: translateY(calc(-50% - 3px)) translateX(-50%);
+        transform: translateY(calc(-50% - 4px)) translateX(-50%);
       }
 
       &:last-child {
@@ -208,7 +208,7 @@ const getTickStyle = (mark: SliderMark, index: number) => {
         }
 
         &:last-child {
-          transform: translateY(calc(50% + 1px)) translateX(-50%);
+          transform: translateY(calc(50% + 3px)) translateX(-50%);
         }
       }
     }
