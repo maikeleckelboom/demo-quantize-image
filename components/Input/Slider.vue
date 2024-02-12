@@ -9,9 +9,6 @@ const props = withDefaults(defineProps<SliderProps & { numberOfTicks?: number }>
 
 const { numberOfTicks, contained } = toRefs(props)
 
-const isContained = computed(() => isTruthy(contained.value))
-const { min, max, step } = useSteps(props)
-
 const slider = ref<InstanceType<typeof InputSlider>>()
 
 const modelValue = defineModel<number | number[]>({
@@ -49,8 +46,8 @@ function generateLabelsFromNumber({
 const ticks = computed(() => {
   if (numberOfTicks.value < 1) return []
   return generateLabelsFromNumber({
-    min: min.value,
-    max: max.value,
+    min: !Number.isNaN(props.min) ? Number(props.min) : 0,
+    max: !Number.isNaN(props.max) ? Number(props.max) : 100,
     numberOfTicks: numberOfTicks.value,
     decimalPlaces: 0
   })
@@ -60,7 +57,13 @@ const ticks = computed(() => {
 <template>
   <InputRangeSlider id="vm-slider" ref="slider" v-model="modelValue" v-bind="$props">
     <template #ticks>
-      <InputSliderTicks v-model="modelValue" :ticks="ticks" />
+      <InputSliderTicks
+        v-model="modelValue"
+        :btt="$props.btt"
+        :contained="$props.contained"
+        :orientation="$props.orientation"
+        :ticks="ticks"
+      />
     </template>
   </InputRangeSlider>
 
@@ -92,30 +95,26 @@ const ticks = computed(() => {
   --slider-fill-color: rgb(var(--primary-rgb));
   --slider-handle-border-radius: 4px;
 
-  --slider-horizontal-handle-width: 10px;
-  --slider-horizontal-handle-height: 38px;
-  --slider-horizontal-track-height: 8px;
-
-  --slider-vertical-handle-width: 38px;
-  --slider-vertical-track-width: 8px;
-  --slider-vertical-track-height: 100%;
+  --slider-vertical-width: 10px;
+  --slider-vertical-height: 200px;
+  --slider-handle-cursor: ns-resize;
 
   &.v-horizontal {
-    .slider-track {
-    }
+    --slider-handle-width: 10px;
+    --slider-handle-height: 38px;
   }
 
   &.v-vertical {
-    .slide-track {
-    }
+    --slider-handle-width: 38px;
+    --slider-handle-height: 10px;
+
+    /** todo: **/
+    /*
+     */
   }
 
   .slider-handle {
-    --_duration: 100ms;
     background-color: rgb(var(--surface-rgb));
-    transition:
-      clip-path var(--_duration) var(--easing-standard-accelerate),
-      background-color var(--_duration) var(--easing-standard-accelerate);
 
     &::before {
       content: '';
@@ -126,20 +125,25 @@ const ticks = computed(() => {
       z-index: -1;
     }
 
-    &:focus {
-      --slider-handle-shadow-size: 0px;
-    }
-
     &:hover {
-      --slider-handle-shadow-size: 0px;
-
       &::before {
         clip-path: inset(0.23em round 3px);
       }
     }
 
-    &:active {
-      --slider-handle-shadow-size: 0px;
+    &:active,
+    &:focus {
+      &::before {
+        clip-path: inset(0.27em round 3px);
+      }
+    }
+  }
+
+  &.v-swiping {
+    transition: none;
+
+    .slider-handle {
+      transition: none;
 
       &::before {
         clip-path: inset(0.27em round 3px);

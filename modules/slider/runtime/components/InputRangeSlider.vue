@@ -355,3 +355,347 @@ const styleBinding = computed(() => {
     </div>
   </div>
 </template>
+
+<style lang="postcss">
+:root {
+  /* Tooltip */
+  --slider-label-offset: 8px;
+  --slider-label-padding-x: 16px;
+  --slider-label-padding-y: 12px;
+  --slider-label-border-radius: 50%;
+  --slider-label-background-color: rgb(var(--inverse-surface-rgb));
+  --slider-label-text-color: rgb(var(--inverse-on-surface-rgb));
+
+  /* Handle */
+  --slider-handle-shadow-size: 0px;
+  --slider-handle-border-radius: 50%;
+  --slider-handle-cursor: default;
+
+  /* Track */
+  --slider-track-border-radius: 16px;
+  --slider-track-border-width: 0px;
+  --slider-track-border: solid var(--slider-track-border-width) var(--slider-track-border-color);
+  --slider-track-color: rgb(var(--surface-variant-rgb));
+  --slider-track-border-color: rgb(var(--outline-variant-rgb));
+
+  /* Track Fill */
+  --slider-fill-color: rgb(var(--primary-rgb));
+
+  /* Horizontal */
+  --slider-horizontal-height: 8px;
+  --slider-horizontal-width: clamp(100px, 100%, 1000px);
+  --slider-horizontal-handle-width: 24px;
+  --slider-horizontal-handle-height: 24px;
+
+  /* Vertical */
+  --slider-vertical-height: clamp(100px, 100%, 1000px);
+  --slider-vertical-width: 8px;
+  --slider-vertical-handle-width: 24px;
+  --slider-vertical-handle-height: 24px;
+
+  --slider-track-width: var(--slider-horizontal-width);
+  --slider-track-height: var(--slider-horizontal-height);
+}
+
+.slider-root {
+  --progress: 0%;
+  --lower-bound-value: 0%;
+  --upper-bound-value: 0%;
+
+  /* Position */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+
+  /* Size */
+  inline-size: var(--slider-track-width, 180px);
+
+  &.v-disabled {
+    pointer-events: none;
+
+    .slider-handle {
+      pointer-events: all;
+      cursor: default;
+      background: rgb(var(--on-surface-rgb));
+    }
+  }
+
+  &.v-label-visible {
+    .slider-label-container {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  &.v-label-hidden {
+    .slider-label-container {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+  }
+
+  &.v-horizontal {
+    --slider-track-height: var(--slider-horizontal-height);
+    --slider-track-width: var(--slider-horizontal-width);
+    --slider-handle-width: var(--slider-horizontal-handle-width);
+    --slider-handle-height: var(--slider-horizontal-handle-height);
+
+    min-block-size: var(--slider-handle-height);
+
+    .slider-track-fill {
+      transform: scaleX(var(--progress));
+    }
+
+    &.v-ltr {
+      .slider-handle {
+        inset-block-start: calc(50% - calc(var(--slider-handle-height) / 2));
+        inset-inline-start: calc(var(--_offset) - calc(var(--slider-handle-width) / 2));
+      }
+
+      .slider-track-fill {
+        transform-origin: left;
+      }
+
+      &:has(.slider-handle:not(:last-child)) {
+        .slider-track-fill {
+          inset-inline-start: var(--lower-bound-value, 0%);
+        }
+      }
+    }
+
+    &.v-rtl {
+      .slider-handle {
+        inset-block-start: calc(50% - calc(var(--slider-handle-height) / 2));
+        inset-inline-start: calc(var(--_offset) - calc(var(--slider-handle-width) / 2));
+      }
+
+      .slider-track-fill {
+        inset-inline-start: var(--upper-bound-value, 0%);
+        transform-origin: right;
+      }
+
+      &:has(.slider-handle:not(:last-child)) {
+        .slider-track-fill {
+          inset-inline-start: var(--lower-bound-value, 0%);
+        }
+      }
+    }
+  }
+
+  &.v-vertical {
+    --slider-track-height: var(--slider-vertical-height);
+    --slider-track-width: var(--slider-vertical-width);
+    --slider-handle-width: var(--slider-vertical-handle-width);
+    --slider-handle-height: var(--slider-vertical-handle-height);
+
+    min-inline-size: var(--slider-handle-height);
+
+    .slider-handle {
+      inset-inline-start: calc(50% - calc(var(--slider-handle-width) / 2));
+      inset-block-start: calc(var(--_offset) - calc(var(--slider-handle-height) / 2));
+    }
+
+    .slider-track-fill {
+      transform: scaleY(var(--progress));
+      transform-origin: top;
+    }
+
+    &.v-btt {
+      .slider-handle {
+        inset-inline-start: calc(50% - calc(var(--slider-handle-width) / 2));
+        inset-block-start: calc(100% - var(--_offset) - calc(var(--slider-handle-height) / 2));
+      }
+
+      .slider-track-fill {
+        transform-origin: bottom;
+      }
+    }
+
+    &:has(.slider-handle:not(:last-child)) {
+      .slider-track-fill {
+        inset-block-start: var(--lower-bound-value, 0%);
+      }
+
+      &.v-btt {
+        .slider-track-fill {
+          transform-origin: top;
+          inset-block-start: calc(100% - var(--upper-bound-value));
+        }
+      }
+    }
+  }
+
+  &.v-contained {
+    padding-inline: 0;
+
+    &.v-horizontal {
+      &.v-ltr {
+        .slider-handle {
+          transform: translateX(calc(150% - var(--_offset) - var(--slider-handle-width)));
+        }
+      }
+
+      &.v-rtl {
+        .slider-handle {
+          transform: translateX(calc(var(--_offset) - 50%));
+        }
+      }
+    }
+
+    &.v-vertical {
+      &:not(.v-btt) {
+        .slider-handle {
+          transform: translateY(calc(150% - var(--_offset) - var(--slider-handle-height)));
+        }
+      }
+
+      &.v-btt {
+        .slider-handle {
+          transform: translateY(calc(var(--_offset) - 50%));
+        }
+      }
+    }
+  }
+}
+
+.slider-input {
+  position: relative;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.slider-track {
+  --_height: var(--slider-track-height);
+  --_width: var(--slider-track-width);
+  block-size: var(--_height, var(--slider-track-height));
+  inline-size: var(--_width, var(--slider-track-width));
+  border: var(--slider-track-border);
+  background-color: var(--slider-track-color);
+  border-radius: var(--slider-track-border-radius);
+  position: relative;
+  overflow: clip;
+  max-block-size: 100%;
+  min-inline-size: 80px;
+
+  .v-vertical & {
+    min-block-size: 80px;
+    min-inline-size: 100%;
+    max-inline-size: 100%;
+  }
+}
+
+.slider-track-fill {
+  background-color: var(--slider-fill-color);
+  block-size: 100%;
+  inline-size: 100%;
+  position: absolute;
+  inset: 0;
+  border: none;
+}
+
+.slider-handle-touch-target {
+  position: absolute;
+  max-inline-size: 48px;
+  max-block-size: 48px;
+  left: calc(var(--slider-handle-width) / -2);
+  top: calc(var(--slider-handle-height) / -2);
+  width: calc(var(--slider-handle-width) * 2);
+  height: calc(var(--slider-handle-height) * 2);
+  transform: translate(0%, 25%);
+
+  .v-vertical & {
+    background-color: transparent;
+    transform: translateY(50%);
+  }
+}
+
+.slider-handle {
+  position: absolute;
+  /*
+    block-size: var(--slider-handle-height);
+    inline-size: var(--slider-handle-width);
+    */
+  width: var(--slider-handle-width);
+  height: var(--slider-handle-height);
+  cursor: var(--slider-handle-cursor);
+
+  &:has(.slider-handle-touch-target) {
+    border-radius: var(--slider-handle-border-radius);
+    cursor: pointer;
+    box-shadow: 0 0 0 var(--slider-handle-shadow-size) rgb(var(--primary-rgb) / 0.2);
+    background: rgb(var(--primary-rgb));
+  }
+
+  z-index: 10;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.slider-label-container {
+  position: absolute;
+  background: var(--slider-label-background-color);
+  color: var(--slider-label-text-color);
+  padding: var(--slider-label-padding-y) var(--slider-label-padding-x);
+  border-radius: var(--slider-label-border-radius);
+  transform: translateX(-50%);
+  max-inline-size: 48px;
+  max-block-size: 44px;
+
+  min-inline-size: 40px;
+  min-block-size: 38px;
+
+  opacity: 0;
+  pointer-events: none;
+
+  scale: 0;
+  transition:
+    opacity 0.2s ease-in-out,
+    scale 0.2s ease-in-out;
+
+  .slider-label-text {
+    font-size: 0.875rem;
+    line-height: 20px;
+    letter-spacing: calc(0.875rem * -0.02);
+    font-weight: 500;
+    font-variant: tabular-nums;
+    text-align: center;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slider-handle:hover &,
+  .slider-handle:active &,
+  .slider-handle:focus & {
+    opacity: 1;
+    pointer-events: auto;
+    scale: 1;
+    transition-duration: 0.1s;
+  }
+
+  .v-vertical & {
+    top: 50%;
+    left: calc(100% + var(--slider-label-offset));
+    transform: translateX(0) translateY(-50%);
+    transform-origin: top left;
+
+    .v-btt & {
+      transform-origin: left bottom;
+    }
+  }
+
+  .v-horizontal & {
+    bottom: calc(100% + var(--slider-label-offset));
+    left: 50%;
+
+    transform-origin: bottom left;
+  }
+}
+</style>

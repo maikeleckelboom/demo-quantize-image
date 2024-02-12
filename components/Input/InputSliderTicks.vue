@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import type { SliderMark } from '~/modules/slider/types'
+import type { SliderMark, SliderProps } from '~/modules/slider/types'
 
-const props = defineProps<{ ticks: SliderMark[]; contained?: boolean }>()
+const props = defineProps<{ ticks: SliderMark[]; contained?: SliderProps['contained'] }>()
+const contained = computed(() => isTruthy(props.contained))
 
-const { ticks, contained } = toRefs(props)
+const { ticks } = toRefs(props)
 
 const modelValue = defineModel<number | number[]>('modelValue', {
   type: [Number, Array],
@@ -49,23 +50,27 @@ function getTickTranslateX(index: number, width: number = 4) {
   }
   return 'translateX(-50%)'
 }
+
+const getTickStyle = (mark: SliderMark, index: number) => ({
+  left: `${mark.at * 100}%`,
+  transform: `${getTickTranslateX(index)} translateY(-50%)`
+})
 </script>
 <template>
-  <div
-    v-for="(mark, i) in ticks"
-    :key="i"
-    :class="[
-      'absolute top-1/2 size-[4px] rounded-full transition-transform duration-150',
-      {
-        'bg-primary-container': isCurrent(i) || isPast(i),
-        'bg-primary': isFuture(i)
-      }
-    ]"
-    :style="{
-      left: `${mark.at * 100}%`,
-      transform: `${getTickTranslateX(i)} translateY(-50%)`
-    }"
-  >
-    <span class="sr-only">{{ mark.label }}</span>
+  <div>
+    <div
+      v-for="(mark, index) in ticks"
+      :key="index"
+      :class="[
+        'absolute top-1/2 size-[4px] rounded-full transition-transform duration-150',
+        {
+          'bg-primary-container': isCurrent(index) || isPast(index),
+          'bg-primary': isFuture(index)
+        }
+      ]"
+      :style="getTickStyle(mark, index)"
+    >
+      <span class="sr-only">{{ mark.label }}</span>
+    </div>
   </div>
 </template>
