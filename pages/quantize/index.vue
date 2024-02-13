@@ -186,21 +186,15 @@ onBeforeRouteLeave(() => {
 <style>
 img.selected {
   view-transition-name: selected;
-  z-index: 20;
-  position: relative;
-  object-fit: contain;
-
-  label {
-    view-transition-name: selected-label;
-  }
 }
 
 ::view-transition-old(selected) {
-  @apply rounded-lg;
+  object-fit: contain;
 }
 
 ::view-transition-new(selected) {
   object-fit: cover;
+  height: 100%;
 }
 
 ::view-transition-old(selected),
