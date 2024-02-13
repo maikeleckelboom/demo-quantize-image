@@ -129,9 +129,7 @@ function getSteps(): number[] {
 }
 
 function getClosestSnapValue(value: number) {
-  if (props.step === 'any') {
-    return value
-  }
+  if (props.step === 'any') return value
   const step = Number(props.step)
   const interval = getSteps()
   const closest = snap(interval)(value)
@@ -447,17 +445,12 @@ const styleBinding = computed(() => {
   }
 
   &.v-oversized {
-    --slider-box-height: var(--slider-track-height);
-    --slider-box-width: var(--slider-track-width);
-    inline-size: var(--slider-box-width);
-    block-size: var(--slider-box-height);
-
     &.v-horizontal {
-      --slider-box-height: var(--slider-handle-height);
+      block-size: var(--slider-handle-height);
     }
 
     &.v-vertical {
-      --slider-box-width: var(--slider-handle-width);
+      inline-size: var(--slider-handle-width);
     }
   }
 }
@@ -479,47 +472,13 @@ const styleBinding = computed(() => {
   overflow: clip;
 }
 
-.slider-root {
-  &.v-horizontal {
-    &.v-ltr {
-      .slider-track-fill {
-        border-top-right-radius: var(--slider-track-border-radius);
-        border-bottom-right-radius: var(--slider-track-border-radius);
-      }
-    }
-
-    &.v-rtl {
-      .slider-track-fill {
-        border-top-left-radius: var(--slider-track-border-radius);
-        border-bottom-left-radius: var(--slider-track-border-radius);
-      }
-    }
-  }
-
-  &.v-vertical {
-    &.v-ttb {
-      .slider-track-fill {
-        border-top-left-radius: var(--slider-track-border-radius);
-        border-top-right-radius: var(--slider-track-border-radius);
-      }
-    }
-
-    &.v-btt {
-      .slider-track-fill {
-        border-bottom-left-radius: var(--slider-track-border-radius);
-        border-bottom-right-radius: var(--slider-track-border-radius);
-      }
-    }
-  }
-}
-
 .slider-track-fill {
   background-color: var(--slider-fill-background-color);
   width: 100%;
   height: 100%;
   position: absolute;
   inset: 0;
-  border: none;
+  border: 0;
 }
 
 .slider-handle {
@@ -562,10 +521,8 @@ const styleBinding = computed(() => {
   transform: translateX(-50%);
   width: clamp(40px, 48px, 100%);
   height: clamp(38px, 44px, 100%);
-
-  opacity: 0;
   pointer-events: none;
-
+  opacity: 0;
   scale: 0;
   transition:
     opacity 0.2s ease-in-out,
@@ -586,9 +543,9 @@ const styleBinding = computed(() => {
   }
 
   :where(.slider-handle:is(:hover, :active, :focus-visible)) & {
+    pointer-events: auto;
     opacity: 1;
     scale: 1;
-    pointer-events: auto;
     transition-duration: 0.1s;
   }
 
@@ -606,7 +563,6 @@ const styleBinding = computed(() => {
   .v-horizontal & {
     bottom: calc(100% + var(--slider-label-offset));
     left: 50%;
-
     transform-origin: bottom left;
   }
 }
@@ -641,8 +597,23 @@ const styleBinding = computed(() => {
   }
 }
 
-.v-disabled {
+.slider-root.v-disabled {
   pointer-events: none;
+  opacity: 0.75;
+
+  .input-tick-mark {
+    background: rgb(var(--on-surface-rgb));
+  }
+
+  .slider-track {
+    filter: grayscale(0.75);
+  }
+
+  .slider-handle {
+    &::before {
+      background: rgb(var(--on-surface-rgb));
+    }
+  }
 }
 
 .v-horizontal {
