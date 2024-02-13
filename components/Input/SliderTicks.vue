@@ -113,6 +113,8 @@ const isTickInactive = (index: number) => {
   --edge-end: calc(-150% + (var(--_size) * 0.5));
   /* Half of the size as offset */
   --edge-offset: calc(var(--_size) * 0.5);
+  /* total offset when is contained */
+  --edge-contained-offset: calc(var(--_size) * 2);
 }
 
 .v-horizontal {
@@ -131,6 +133,18 @@ const isTickInactive = (index: number) => {
         transform: translateX(calc(var(--edge-end) - var(--edge-offset))) translateY(-50%);
       }
     }
+
+    &.v-contained {
+      .input-tick-mark {
+        &:first-child {
+          transform: translateX(calc(var(--edge-start) + var(--edge-contained-offset))) translateY(-50%);
+        }
+
+        &:last-child {
+          transform: translateX(calc(var(--edge-end) - var(--edge-contained-offset))) translateY(-50%);
+        }
+      }
+    }
   }
 
   &.v-rtl {
@@ -143,9 +157,18 @@ const isTickInactive = (index: number) => {
         transform: translateX(calc(var(--edge-start) + var(--edge-offset))) translateY(-50%);
       }
     }
-  }
 
-  &.v-contained {
+    &.v-contained {
+      .input-tick-mark {
+        &:first-child {
+          transform: translateX(calc(var(--edge-end) - var(--edge-contained-offset))) translateY(-50%);
+        }
+
+        &:last-child {
+          transform: translateX(calc(var(--edge-start) + var(--edge-contained-offset))) translateY(-50%);
+        }
+      }
+    }
   }
 }
 
@@ -158,13 +181,23 @@ const isTickInactive = (index: number) => {
   &.v-ttb {
     .input-tick-mark {
       &:first-child {
-        /* Touching the top edge */
         transform: translateY(calc(var(--edge-start) + var(--edge-offset))) translateX(-50%);
       }
 
       &:last-child {
-        /* Touching the bottom edge */
         transform: translateY(calc(var(--edge-end) - var(--edge-offset))) translateX(-50%);
+      }
+    }
+
+    &.v-contained {
+      .input-tick-mark {
+        &:first-child {
+          transform: translateY(calc(var(--edge-start) + var(--edge-contained-offset))) translateX(-50%);
+        }
+
+        &:last-child {
+          transform: translateY(calc(var(--edge-end) - var(--edge-contained-offset))) translateX(-50%);
+        }
       }
     }
   }
@@ -172,18 +205,25 @@ const isTickInactive = (index: number) => {
   &.v-btt {
     .input-tick-mark {
       &:first-child {
-        /* Touching the bottom edge */
         transform: translateY(calc(var(--edge-end) - var(--edge-offset))) translateX(-50%);
       }
 
       &:last-child {
-        /* Touching the top edge */
         transform: translateY(calc(var(--edge-start) + var(--edge-offset))) translateX(-50%);
       }
     }
-  }
 
-  &.v-contained {
+    &.v-contained {
+      .input-tick-mark {
+        &:first-child {
+          transform: translateY(calc(var(--edge-end) - var(--edge-contained-offset))) translateX(-50%);
+        }
+
+        &:last-child {
+          transform: translateY(calc(var(--edge-start) + var(--edge-contained-offset))) translateX(-50%);
+        }
+      }
+    }
   }
 }
 </style>
