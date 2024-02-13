@@ -14,8 +14,7 @@ const images = [
   '/img/islands.jpg',
   '/img/supernova.jpg',
   '/img/mushrooms.jpg',
-  '/img/forest-nightfall.jpg',
-  '/img/bird.jpg'
+  '/img/forest-nightfall.jpg'
 ] as const
 
 async function blobFromUrl(url: string) {
@@ -36,8 +35,7 @@ async function fileFromImagePath(img: string): Promise<File> {
 
 const state = reactive({
   isLoadingExample: false,
-  isLoadingNextPage: false,
-  isReadyForTransition: false
+  isLoadingNextPage: false
 })
 
 async function loadExampleImage() {
@@ -55,10 +53,11 @@ async function onExtractColors() {
 
   const triggerTransition = async () => {
     if (!selectedFile.value) return
-    return navigateTo({
+    await navigateTo({
       path: `/quantize/${selectedFile.value.name}`,
       query: { maxColors: maxColors.value }
     })
+    await nextTick()
   }
 
   if (!document.startViewTransition) {
@@ -68,22 +67,17 @@ async function onExtractColors() {
 
   const transition = document.startViewTransition(async () => {
     await triggerTransition()
-    await nextTick()
   })
 
-  await transition.ready.then(() => {
-    console.log('Transition ready')
-    state.isReadyForTransition = true
-  })
+  await transition.ready
 
   await transition.finished.then(() => {
-    console.log('Transition finished')
     state.isLoadingNextPage = false
   })
 }
 
 const textContent = reactive({
-  title: 'Quantize Image',
+  title: 'Extract Colors from Image',
   description: 'Utilize digital analysis to extract vibrant colors from your images.'
 })
 
@@ -107,22 +101,25 @@ whenever(cameraFiles, (capturedFiles) => {
 })
 
 const device = useDevice()
+
+const hasCapturedImage = computed(() => Array.from(cameraFiles?.value ?? []).length > 0)
+const hasLoadedExample = computed(() => files.value.some((file) => file.name === 'example.jpg'))
+const hasSelectedViaBrowse = computed(() => !!files.value.length && !hasCapturedImage.value)
 </script>
 
 <template>
   <div class="mx-auto flex w-full max-w-xl flex-col p-4">
-    <div class="mb-4 hidden flex-col md:mb-8 md:flex">
-      <h1 class="mb-2 text-3xl font-medium tracking-normal md:text-4xl">
+    <div class="mb-4 flex-col md:mb-8 md:flex">
+      <h1 class="text-title-lg font-medium md:mb-2 md:text-display-sm">
         {{ textContent.title }}
       </h1>
-      <p class="text-body-sm text-on-surface-variant">
+      <p class="hidden text-body-sm text-on-surface-variant md:flex">
         {{ textContent.description }}
       </p>
     </div>
-
     <div
       :class="[state.isLoadingExample ? 'animate-pulse duration-150' : '']"
-      class="relative mb-3 h-52 overflow-hidden rounded md:mb-2.5"
+      class="relative mb-2 h-52 overflow-hidden rounded md:mb-2.5 md:h-72"
     >
       <Transition mode="out-in" name="basic-out-in">
         <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected object-contain" />
@@ -130,15 +127,18 @@ const device = useDevice()
       </Transition>
     </div>
 
-    <div class="mb-6 flex justify-end gap-2 md:mb-8">
+    <div class="mb-4 flex justify-end gap-2">
       <div v-if="device.isMobileOrTablet" class="mr-auto">
         <Button class="rounded-md" intent="text" size="sm" @click="onTakeCapture">
           <Icon class="size-4" name="ic:round-photo-camera" />
+          Take Capture
         </Button>
       </div>
-      <Button v-if="selectedFile" intent="text" size="sm" @click="reset"> Clear</Button>
-
+      <Button v-if="selectedFile" class="rounded-md" intent="text" size="sm" @click="reset">
+        Clear
+      </Button>
       <Button
+        v-if="!files?.length"
         :disabled="state.isLoadingExample"
         class="rounded-md"
         intent="text"
@@ -150,13 +150,14 @@ const device = useDevice()
           <Spinner class="size-4" />
         </template>
         <template v-else>
-          {{ selectedFile ? 'Change image' : 'Load example image' }}
+          {{ hasLoadedExample ? 'Reload' : 'Load Example' }}
         </template>
       </Button>
     </div>
     <div class="">
       <MaxColorsInputSlider v-model="maxColors" max="128" min="1" step="1" />
     </div>
+
     <div class="mt-12 flex w-fit flex-col self-end">
       <div class="flex gap-3">
         <Button :disabled="!selectedFile || state.isLoadingNextPage" @click="onExtractColors">
@@ -226,7 +227,9 @@ const device = useDevice()
 }
 
 ::view-transition-old(selected) {
+  /*
   object-fit: contain;
+  */
 }
 
 ::view-transition-new(selected) {
@@ -237,7 +240,7 @@ const device = useDevice()
 ::view-transition-new(selected) {
   animation: none;
   mix-blend-mode: normal;
-  height: 100%;
   overflow: clip;
+  height: 100%;
 }
 </style>

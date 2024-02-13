@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import AppSlider from '~/components/Input/AppSlider.vue'
+
 const { isLabelled, toggleLabelled } = useNavStore()
 
 const { contrastLevel, isDark } = useThemeConfig()
@@ -27,7 +29,7 @@ const { contrastLevel, isDark } = useThemeConfig()
       <fieldset>
         <legend>Contrast Level</legend>
         <div>
-          <ContrastSlider id="contrast-level" v-model="contrastLevel" />
+          <AppSlider id="contrast-level" v-model="contrastLevel" max="1" min="-1" step="0.1" />
         </div>
       </fieldset>
       <!-- Navigation Bar -->

@@ -41,6 +41,7 @@ function isPastProcess(index: number) {
 const isLoading = ref<boolean>(false)
 
 const router = useRouter()
+
 const route = useRoute()
 
 const colorStore = useColorsStore()
@@ -51,7 +52,8 @@ const errors = ref<unknown>(null)
 
 const quantizeWorker = ref<QuantizeWorker | null>(null)
 
-onMounted(() => {
+onMounted(async () => {
+  await sleep(300)
   quantizeWorker.value = new Worker(new URL('~/workers/quantize/worker.ts', import.meta.url), {
     type: 'module'
   })
@@ -136,6 +138,19 @@ function onCustomize() {
           </div>
         </div>
       </div>
+
+      <div v-if="prominentColors?.size" class="mb-8 px-4">
+        <h2 class="mb-4 text-xl">Prominent Colors</h2>
+        <div class="flex flex-row flex-wrap gap-3">
+          <div
+            v-for="[color] in prominentColors"
+            :key="color"
+            :style="{ backgroundColor: hexFromArgb(color) }"
+            class="min-h-16 min-w-16 rounded-md"
+          />
+        </div>
+      </div>
+
       <div v-if="seedColors?.length" class="px-4">
         <h2 class="mb-4 text-xl">Suitable Colors</h2>
         <div class="flex flex-row flex-nowrap gap-x-3">
@@ -154,10 +169,9 @@ function onCustomize() {
             class="rounded-full bg-error font-semibold text-on-error"
             intent="none"
             @click="router.back()"
-            >Abort
-            <!--
-                        <Icon class="size-5" name="ic:outline-close" />
-            -->
+          >
+            <Icon class="size-5" name="ic:outline-close" />
+            Abort
           </Button>
         </div>
         <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">

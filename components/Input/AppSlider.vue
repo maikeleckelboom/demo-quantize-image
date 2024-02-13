@@ -32,8 +32,8 @@ function generateLabelsFromNumber({
   decimalPlaces
 }: LabelGenerateOptions): SliderMark[] {
   const valueRange = max - min
-  let spacing = valueRange / count
-  let actualNumberOfLabels = Math.ceil(valueRange / spacing)
+  const spacing = valueRange / count
+  const actualNumberOfLabels = Math.ceil(valueRange / spacing)
   const labels: SliderMark[] = []
   for (let i = 0; i <= actualNumberOfLabels; i++) {
     let labelValue = min + i * spacing
