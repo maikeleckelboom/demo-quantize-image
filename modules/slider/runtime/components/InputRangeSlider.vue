@@ -479,6 +479,40 @@ const styleBinding = computed(() => {
   overflow: clip;
 }
 
+.slider-root {
+  &.v-horizontal {
+    &.v-ltr {
+      .slider-track-fill {
+        border-top-right-radius: var(--slider-track-border-radius);
+        border-bottom-right-radius: var(--slider-track-border-radius);
+      }
+    }
+
+    &.v-rtl {
+      .slider-track-fill {
+        border-top-left-radius: var(--slider-track-border-radius);
+        border-bottom-left-radius: var(--slider-track-border-radius);
+      }
+    }
+  }
+
+  &.v-vertical {
+    &.v-ttb {
+      .slider-track-fill {
+        border-top-left-radius: var(--slider-track-border-radius);
+        border-top-right-radius: var(--slider-track-border-radius);
+      }
+    }
+
+    &.v-btt {
+      .slider-track-fill {
+        border-bottom-left-radius: var(--slider-track-border-radius);
+        border-bottom-right-radius: var(--slider-track-border-radius);
+      }
+    }
+  }
+}
+
 .slider-track-fill {
   background-color: var(--slider-fill-background-color);
   width: 100%;

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const disabled = ref(false)
 
-const maxColors = ref(128)
+const maxColors = ref(0)
 const temperature = ref(0)
 const tint = ref(0)
 
