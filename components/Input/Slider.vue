@@ -88,30 +88,25 @@ const ticks = computed(() => {
 </template>
 
 <style>
-:root {
-  --slider-handle-cursor: ew-resize;
-}
-
-#vm-slider {
-  --slider-track-color: rgb(var(--primary-container-rgb));
+#vm-slideaar {
+  /* Base - layer 0 */
+  --slider-track-background-color: rgb(var(--primary-container-rgb));
   --slider-track-border-color: transparent;
   --slider-fill-color: rgb(var(--primary-rgb));
   --slider-handle-border-radius: 4px;
 
-  --slider-vertical-width: 10px;
-  --slider-vertical-height: 200px;
+  /* Horizontal - layer 1 */
+  --slider-track-width--horizontal: 200px;
+  --slider-handle-width--horizontal: 10px;
+  --slider-handle-height--horizontal: 38px;
+  --slider-handle-cursor--horizontal: ew-resize;
 
-  &.v-horizontal {
-    --slider-handle-width: 10px;
-    --slider-handle-height: 38px;
-    --slider-handle-cursor: ew-resize;
-  }
-
-  &.v-vertical {
-    --slider-handle-width: 38px;
-    --slider-handle-height: 10px;
-    --slider-handle-cursor: ns-resize;
-  }
+  /* Vertical - layer 1 */
+  --slider-track-width--vertical: 10px;
+  --slider-track-height--vertical: 200px;
+  --slider-handle-width--vertical: 38px;
+  --slider-handle-height--vertical: 10px;
+  --slider-handle-cursor--vertical: ns-resize;
 
   .slider-handle {
     background-color: rgb(var(--surface-rgb));

@@ -1,34 +1,35 @@
+/*
 :root {
-    /* Tooltip */
+    !* Tooltip *!
     --slider-label-offset: 8px;
     --slider-label-padding-x: 16px;
     --slider-label-padding-y: 12px;
     --slider-label-border-radius: 50%;
     --slider-label-background-color: rgb(var(--inverse-surface-rgb));
     --slider-label-text-color: rgb(var(--inverse-on-surface-rgb));
-    
-    /* Handle */
+
+    !* Handle *!
     --slider-handle-shadow-size: 0px;
     --slider-handle-border-radius: 50%;
     --slider-handle-cursor: default;
 
-    /* Track */
+    !* Track *!
     --slider-track-border-radius: 16px;
     --slider-track-border-width: 0px;
     --slider-track-border: solid var(--slider-track-border-width) var(--slider-track-border-color);
     --slider-track-color: rgb(var(--surface-variant-rgb));
     --slider-track-border-color: rgb(var(--outline-variant-rgb));
 
-    /* Track Fill */
+    !* Track Fill *!
     --slider-fill-color: rgb(var(--primary-rgb));
 
-    /* Horizontal */
+    !* Horizontal *!
     --slider-horizontal-height: 8px;
     --slider-horizontal-width: clamp(100px, 100%, 1000px);
-    --slider-horizontal-handle-width: 24px;
-    --slider-horizontal-handle-height: 24px;
+    --slider-handle-width--horizontal: 24px;
+    --slider-handle-height--horizontal: 24px;
 
-    /* Vertical */
+    !* Vertical *!
     --slider-vertical-height: clamp(100px, 100%, 1000px);
     --slider-vertical-width: 8px;
     --slider-vertical-handle-width: 24px;
@@ -37,3 +38,4 @@
     --slider-track-width: var(--slider-horizontal-width);
     --slider-track-height: var(--slider-horizontal-height);
 }
+*/

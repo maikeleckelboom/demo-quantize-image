@@ -8,12 +8,12 @@ const modelValue = defineModel<number | number[]>()
 
 <style>
 .v-material-slider {
-  --slider-track-color: rgb(var(--primary-container-rgb));
+  --slider-track-background-color: rgb(var(--primary-container-rgb));
   --slider-fill-color: rgb(var(--primary-rgb));
-  --slider-horizontal-handle-width: 12px;
-  --slider-horizontal-handle-height: 50px;
-  --slider-vertical-handle-width: 48px;
-  --slider-vertical-handle-height: 12px;
+  --slider-handle-width--horizontal: 12px;
+  --slider-handle-height--horizontal: 50px;
+  --slider-handle-width--vertical: 48px;
+  --slider-handle-height--vertical: 12px;
   --slider-handle-border: solid 1px inherit;
   --slider-handle-border-radius: 4px;
 

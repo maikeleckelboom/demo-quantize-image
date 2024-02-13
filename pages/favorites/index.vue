@@ -22,33 +22,34 @@ const reverb = ref(0)
         {{ disabled ? 'Enable' : 'Disable' }}
       </Button>
       <section class="mb-12 flex flex-col gap-8">
-        <div class="grid grid-cols-2 gap-x-8">
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
           <fieldset class="relative flex flex-col gap-4">
             <legend>Horizontal - ltr</legend>
             <InputSlider v-model="maxColors" :disabled="disabled" />
+          </fieldset>
+          <fieldset class="relative flex flex-col gap-4">
+            <legend>Horizontal - rtl - contained</legend>
+            <InputSlider v-model="maxColors" :disabled="disabled" contained="true" dir="rtl" />
+          </fieldset>
+          <fieldset class="relative flex flex-col gap-4">
+            <legend>Horizontal - rtl</legend>
+            <InputSlider v-model="maxColors" :disabled="disabled" dir="rtl" />
           </fieldset>
           <fieldset class="relative flex flex-col gap-4">
             <legend>Horizontal - ltr - contained</legend>
             <InputSlider v-model="maxColors" :disabled="disabled" contained="true" />
           </fieldset>
         </div>
-
-        <div class="grid grid-cols-2 gap-x-8">
-          <fieldset class="relative flex flex-col gap-4">
-            <legend>Horizontal - rtl</legend>
-            <InputSlider v-model="maxColors" :disabled="disabled" dir="rtl" />
-          </fieldset>
-          <fieldset class="relative flex flex-col gap-4">
-            <legend>Horizontal - rtl - contained</legend>
-            <InputSlider v-model="maxColors" :disabled="disabled" contained="true" dir="rtl" />
-          </fieldset>
-        </div>
       </section>
       <section class="mb-12 flex flex-col gap-12">
-        <div class="grid grid-cols-4 place-items-center gap-8">
+        <div class="grid grid-cols-2 place-items-center gap-8 md:grid-cols-4">
           <fieldset class="relative flex flex-col items-center justify-center gap-4">
             <legend>Vertical - ttb</legend>
             <InputSlider v-model="balance" :disabled="disabled" orientation="vertical" />
+          </fieldset>
+          <fieldset class="relative flex flex-col items-center justify-center gap-4">
+            <legend>Vertical - btt</legend>
+            <InputSlider v-model="balance" :disabled="disabled" btt="true" orientation="vertical" />
           </fieldset>
           <fieldset class="relative flex flex-col items-center justify-center gap-4">
             <legend>Vertical - ttb - contained</legend>
@@ -58,10 +59,6 @@ const reverb = ref(0)
               contained="true"
               orientation="vertical"
             />
-          </fieldset>
-          <fieldset class="relative flex flex-col items-center justify-center gap-4">
-            <legend>Vertical - btt</legend>
-            <InputSlider v-model="balance" :disabled="disabled" btt="true" orientation="vertical" />
           </fieldset>
           <fieldset class="relative flex flex-col items-center justify-center gap-4">
             <legend>Vertical - btt - contained</legend>

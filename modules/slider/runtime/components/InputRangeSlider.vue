@@ -270,7 +270,7 @@ const VARIANT_CLASSES = {
   vertical: 'v-vertical',
   rtl: 'v-rtl',
   ltr: 'v-ltr',
-  btt: 'v-btt',
+  // btt: 'v-btt',
   labelVisibility: 'v-label-visible',
   labelHidden: 'v-label-hidden',
   glide: 'v-glide'
@@ -279,9 +279,6 @@ const VARIANT_CLASSES = {
 const STATE_CLASSES = {
   enabled: 'v-enabled',
   disabled: 'v-disabled',
-  focused: 'v-focused',
-  hovered: 'v-hovered',
-  pressed: 'v-pressed',
   swiping: 'v-swiping'
 } as const
 
@@ -299,7 +296,7 @@ const variantClasses = computed(() => {
     [VARIANT_CLASSES.vertical]: isVertical.value,
     [VARIANT_CLASSES.rtl]: isRtl.value,
     [VARIANT_CLASSES.ltr]: !isRtl.value,
-    [VARIANT_CLASSES.btt]: isBtt.value,
+    // [VARIANT_CLASSES.btt]: isBtt.value,
     [STATE_CLASSES.enabled]: !isDisabled.value,
     [STATE_CLASSES.disabled]: isDisabled.value
   }
@@ -318,7 +315,7 @@ const styleBinding = computed(() => {
 <template>
   <div
     ref="rootRef"
-    :class="[{ ...stateClasses, ...variantClasses }]"
+    :class="[{ ...stateClasses, ...variantClasses }, isVertical && !isBtt ? 'v-ttb' : 'v-btt']"
     :dir="dir"
     :style="styleBinding"
     class="slider-root"
@@ -381,193 +378,42 @@ const styleBinding = computed(() => {
   --slider-handle-border-radius: 50%;
   --slider-handle-cursor: default;
   --slider-handle-border: solid 1px inherit;
+  --slider-handle-background-color: var(--primary-rgb);
 
   /* Track */
   --slider-track-border-radius: 16px;
   --slider-track-border-width: 0px;
   --slider-track-border: solid var(--slider-track-border-width) var(--slider-track-border-color);
-  --slider-track-color: rgb(var(--surface-variant-rgb));
+  --slider-track-background-color: rgb(var(--surface-variant-rgb));
   --slider-track-border-color: rgb(var(--outline-variant-rgb));
 
   /* Track Fill */
   --slider-fill-color: rgb(var(--primary-rgb));
 
-  /* Horizontal */
-  --slider-horizontal-height: 8px;
-  --slider-horizontal-width: clamp(100px, 100%, 1000px);
-  --slider-horizontal-handle-width: 24px;
-  --slider-horizontal-handle-height: 24px;
+  /* Horizontal (+1) */
+  --slider-track-height--horizontal: 12px;
+  --slider-track-width--horizontal: 200px;
+  --slider-handle-width--horizontal: 24px;
+  --slider-handle-height--horizontal: 24px;
+  --slider-handle-cursor--horizontal: ew-resize;
 
-  /* Vertical */
-  --slider-vertical-height: clamp(100px, 100%, 1000px);
-  --slider-vertical-width: 8px;
-  --slider-vertical-handle-width: 24px;
-  --slider-vertical-handle-height: 24px;
-
-  --slider-track-width: var(--slider-horizontal-width);
-  --slider-track-height: var(--slider-horizontal-height);
+  /* Vertical (+1) */
+  --slider-track-height--vertical: 200px;
+  --slider-track-width--vertical: 12px;
+  --slider-handle-width--vertical: 24px;
+  --slider-handle-height--vertical: 24px;
+  --slider-handle-cursor--vertical: ns-resize;
 }
 
 .slider-root {
   --progress: 0%;
   --lower-bound-value: 0%;
   --upper-bound-value: 0%;
-
-  /* Position */
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-
-  inline-size: var(--slider-track-width, 180px);
-  //min-block-size: var(--slider-handle-height);
-
-  &.v-disabled {
-    pointer-events: none;
-
-    .slider-handle {
-      pointer-events: all;
-      cursor: default;
-      background: rgb(var(--on-surface-rgb));
-    }
-  }
-
-  &.v-label-visible {
-    .slider-label-container {
-      opacity: 1;
-      pointer-events: auto;
-    }
-  }
-
-  &.v-label-hidden {
-    .slider-label-container {
-      opacity: 0;
-      pointer-events: none;
-      visibility: hidden;
-    }
-  }
-
-  &.v-horizontal {
-    --slider-track-height: var(--slider-horizontal-height);
-    --slider-track-width: var(--slider-horizontal-width);
-    --slider-handle-width: var(--slider-horizontal-handle-width);
-    --slider-handle-height: var(--slider-horizontal-handle-height);
-
-    .slider-track-fill {
-      transform: scaleX(var(--progress));
-    }
-
-    &.v-ltr {
-      .slider-handle {
-        inset-block-start: calc(50% - calc(var(--slider-handle-height) / 2));
-        inset-inline-start: calc(var(--_offset) - calc(var(--slider-handle-width) / 2));
-      }
-
-      .slider-track-fill {
-        transform-origin: left;
-      }
-
-      &:has(.slider-handle:not(:last-child)) {
-        .slider-track-fill {
-          inset-inline-start: var(--lower-bound-value, 0%);
-        }
-      }
-    }
-
-    &.v-rtl {
-      .slider-handle {
-        inset-block-start: calc(50% - calc(var(--slider-handle-height) / 2));
-        inset-inline-start: calc(var(--_offset) - calc(var(--slider-handle-width) / 2));
-      }
-
-      .slider-track-fill {
-        inset-inline-start: var(--upper-bound-value, 0%);
-        transform-origin: right;
-      }
-
-      &:has(.slider-handle:not(:last-child)) {
-        .slider-track-fill {
-          inset-inline-start: var(--lower-bound-value, 0%);
-        }
-      }
-    }
-  }
-
-  &.v-vertical {
-    --slider-track-height: var(--slider-vertical-height);
-    --slider-track-width: var(--slider-vertical-width);
-    --slider-handle-width: var(--slider-vertical-handle-width);
-    --slider-handle-height: var(--slider-vertical-handle-height);
-
-    min-inline-size: var(--slider-handle-height);
-
-    .slider-handle {
-      inset-inline-start: calc(50% - calc(var(--slider-handle-width) / 2));
-      inset-block-start: calc(var(--_offset) - calc(var(--slider-handle-height) / 2));
-    }
-
-    .slider-track-fill {
-      transform: scaleY(var(--progress));
-      transform-origin: top;
-    }
-
-    &.v-btt {
-      .slider-handle {
-        inset-inline-start: calc(50% - calc(var(--slider-handle-width) / 2));
-        inset-block-start: calc(100% - var(--_offset) - calc(var(--slider-handle-height) / 2));
-      }
-
-      .slider-track-fill {
-        transform-origin: bottom;
-      }
-    }
-
-    &:has(.slider-handle:not(:last-child)) {
-      .slider-track-fill {
-        inset-block-start: var(--lower-bound-value, 0%);
-      }
-
-      &.v-btt {
-        .slider-track-fill {
-          transform-origin: top;
-          inset-block-start: calc(100% - var(--upper-bound-value));
-        }
-      }
-    }
-  }
-
-  &.v-contained {
-    padding-inline: 0;
-
-    &.v-horizontal {
-      &.v-ltr {
-        .slider-handle {
-          transform: translateX(calc(150% - var(--_offset) - var(--slider-handle-width)));
-        }
-      }
-
-      &.v-rtl {
-        .slider-handle {
-          transform: translateX(calc(var(--_offset) - 50%));
-        }
-      }
-    }
-
-    &.v-vertical {
-      &:not(.v-btt) {
-        .slider-handle {
-          transform: translateY(calc(150% - var(--_offset) - var(--slider-handle-height)));
-        }
-      }
-
-      &.v-btt {
-        .slider-handle {
-          transform: translateY(calc(var(--_offset) - 50%));
-        }
-      }
-    }
-  }
 }
 
 .slider-input {
@@ -577,48 +423,22 @@ const styleBinding = computed(() => {
 }
 
 .slider-track {
-  --_height: var(--slider-track-height);
-  --_width: var(--slider-track-width);
-  block-size: var(--_height, var(--slider-track-height));
-  inline-size: var(--_width, var(--slider-track-width));
+  block-size: var(--slider-track-height);
+  inline-size: var(--slider-track-width);
   border: var(--slider-track-border);
-  background-color: var(--slider-track-color);
+  background-color: var(--slider-track-background-color);
   border-radius: var(--slider-track-border-radius);
   position: relative;
   overflow: clip;
-  max-block-size: 100%;
-  min-inline-size: 80px;
-
-  .v-vertical & {
-    min-block-size: 80px;
-    min-inline-size: 100%;
-    max-inline-size: 100%;
-  }
 }
 
 .slider-track-fill {
   background-color: var(--slider-fill-color);
-  block-size: 100%;
-  inline-size: 100%;
+  width: 100%;
+  height: 100%;
   position: absolute;
   inset: 0;
   border: none;
-}
-
-.touch-target {
-  position: absolute;
-  max-inline-size: 48px;
-  max-block-size: 48px;
-  left: calc(var(--slider-handle-width) / -2);
-  top: calc(var(--slider-handle-height) / -2);
-  width: calc(var(--slider-handle-width) * 2);
-  height: calc(var(--slider-handle-height) * 2);
-  transform: translate(0%, 25%);
-
-  .v-vertical & {
-    background-color: transparent;
-    transform: translateY(50%);
-  }
 }
 
 .slider-handle {
@@ -627,14 +447,28 @@ const styleBinding = computed(() => {
   height: var(--slider-handle-height);
   cursor: var(--slider-handle-cursor);
   border: var(--slider-handle-border);
-
-  &:has(.touch-target) {
-  }
-
+  background: rgb(var(--slider-handle-background-color));
+  border-radius: var(--slider-handle-border-radius);
   z-index: 10;
 
   &:focus {
     outline: none;
+  }
+
+  .touch-target {
+    position: absolute;
+    max-inline-size: 48px;
+    max-block-size: 48px;
+    left: calc(var(--slider-handle-width) / -2);
+    top: calc(var(--slider-handle-height) / -2);
+    width: calc(var(--slider-handle-width) * 2);
+    height: calc(var(--slider-handle-height) * 2);
+    transform: translate(0%, 25%);
+
+    .v-vertical & {
+      background-color: transparent;
+      transform: translateY(50%);
+    }
   }
 }
 
@@ -645,11 +479,8 @@ const styleBinding = computed(() => {
   padding: var(--slider-label-padding-y) var(--slider-label-padding-x);
   border-radius: var(--slider-label-border-radius);
   transform: translateX(-50%);
-  max-inline-size: 48px;
-  max-block-size: 44px;
-
-  min-inline-size: 40px;
-  min-block-size: 38px;
+  width: clamp(40px, 48px, 100%);
+  height: clamp(38px, 44px, 100%);
 
   opacity: 0;
   pointer-events: none;
@@ -673,12 +504,10 @@ const styleBinding = computed(() => {
     align-items: center;
   }
 
-  .slider-handle:hover &,
-  .slider-handle:active &,
-  .slider-handle:focus & {
+  :where(.slider-handle:is(:hover, :active, :focus-visible)) & {
     opacity: 1;
-    pointer-events: auto;
     scale: 1;
+    pointer-events: auto;
     transition-duration: 0.1s;
   }
 
@@ -699,5 +528,152 @@ const styleBinding = computed(() => {
 
     transform-origin: bottom left;
   }
+}
+
+/* State classes */
+.v-horizontal {
+  --slider-track-height: var(--slider-track-height--horizontal);
+  --slider-track-width: max(var(--slider-track-width--horizontal), 100%);
+  --slider-handle-width: var(--slider-handle-width--horizontal);
+  --slider-handle-height: var(--slider-handle-height--horizontal);
+  --slider-handle-cursor: var(--slider-handle-cursor--horizontal);
+
+  .slider-track-fill {
+    transform: scaleX(var(--progress));
+  }
+
+  &.v-ltr {
+    .slider-handle {
+      inset-block-start: calc(50% - calc(var(--slider-handle-height) / 2));
+      inset-inline-start: calc(var(--_offset) - calc(var(--slider-handle-width) / 2));
+    }
+
+    .slider-track-fill {
+      transform-origin: left;
+    }
+
+    &:has(.slider-handle:not(:last-child)) {
+      .slider-track-fill {
+        inset-inline-start: var(--lower-bound-value, 0%);
+      }
+    }
+  }
+
+  &.v-rtl {
+    .slider-handle {
+      inset-block-start: calc(50% - calc(var(--slider-handle-height) / 2));
+      inset-inline-start: calc(var(--_offset) - calc(var(--slider-handle-width) / 2));
+    }
+
+    .slider-track-fill {
+      inset-inline-start: var(--upper-bound-value, 0%);
+      transform-origin: right;
+    }
+
+    &:has(.slider-handle:not(:last-child)) {
+      .slider-track-fill {
+        inset-inline-start: var(--lower-bound-value, 0%);
+      }
+    }
+  }
+}
+
+.v-vertical {
+  --slider-track-height: var(--slider-track-height--vertical);
+  --slider-track-width: var(--slider-track-width--vertical);
+  --slider-handle-width: var(--slider-handle-width--vertical);
+  --slider-handle-height: var(--slider-handle-height--vertical);
+  --slider-handle-cursor: var(--slider-handle-cursor--vertical);
+
+  .slider-handle {
+    inset-inline-start: calc(50% - calc(var(--slider-handle-width) / 2));
+    inset-block-start: calc(var(--_offset) - calc(var(--slider-handle-height) / 2));
+  }
+
+  .slider-track-fill {
+    transform: scaleY(var(--progress));
+    transform-origin: top;
+  }
+
+  &.v-btt {
+    .slider-handle {
+      inset-inline-start: calc(50% - calc(var(--slider-handle-width) / 2));
+      inset-block-start: calc(100% - var(--_offset) - calc(var(--slider-handle-height) / 2));
+    }
+
+    .slider-track-fill {
+      transform-origin: bottom;
+    }
+  }
+
+  &:has(.slider-handle:not(:last-child)) {
+    .slider-track-fill {
+      inset-block-start: var(--lower-bound-value, 0%);
+    }
+
+    &.v-btt {
+      .slider-track-fill {
+        transform-origin: top;
+        inset-block-start: calc(100% - var(--upper-bound-value));
+      }
+    }
+  }
+}
+
+.v-contained {
+  padding-inline: 0;
+
+  &.v-horizontal {
+    &.v-ltr {
+      .slider-handle {
+        transform: translateX(calc(150% - var(--_offset) - var(--slider-handle-width)));
+      }
+    }
+
+    &.v-rtl {
+      .slider-handle {
+        transform: translateX(calc(var(--_offset) - 50%));
+      }
+    }
+  }
+
+  &.v-vertical {
+    &:not(.v-btt) {
+      .slider-handle {
+        transform: translateY(calc(150% - var(--_offset) - var(--slider-handle-height)));
+      }
+    }
+
+    &.v-btt {
+      .slider-handle {
+        transform: translateY(calc(var(--_offset) - 50%));
+      }
+    }
+  }
+}
+
+/* Fix overflow when not contained */
+.slider-root:not(.v-contained) {
+  margin-inline-start: calc(var(--slider-handle-width) * 0.5);
+  margin-inline-end: calc(var(--slider-handle-width) * 0.5);
+}
+
+.v-label-visible {
+  .slider-label-container {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.v-label-hidden {
+  .slider-label-container {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
+.v-disabled {
+  pointer-events: none;
 }
 </style>

@@ -89,31 +89,39 @@ const getTickStyle = (mark: SliderMark, index: number) => {
   --slider-tick-size: 4px;
 }
 
+.input-tick-mark {
+  /*
+  transform: translateX(-50%) translateY(-50%);
+  */
+
+  /*  &:first-child {
+      transform: translateX(50%) translateY(-50%);
+    }
+
+    &:last-child {
+      transform: translateX(-150%) translateY(-50%);
+    }*/
+}
+
 /*
   Horizontal - ltr/rtl/contained
 */
 .v-horizontal {
   .input-tick-mark {
     top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-
-    &:first-child {
-      transform: translateX(calc(-50% + 3px)) translateY(-50%);
-    }
-
-    &:last-child {
-      transform: translateX(calc(-50% - 3px)) translateY(-50%);
-    }
+    transform: translateY(-50%);
   }
 
-  &.v-contained {
+  &.v-ltr {
     .input-tick-mark {
       &:first-child {
-        transform: translateX(50%) translateY(-50%);
+        /* Touching the left edge */
+        transform: translateX(calc(50% - (var(--slider-tick-size) * 0.5))) translateY(-50%);
       }
 
       &:last-child {
-        transform: translateX(-150%) translateY(-50%);
+        /* Touching the right edge */
+        transform: translateX(calc(-150% + (var(--slider-tick-size) * 0.5))) translateY(-50%);
       }
     }
   }
@@ -121,25 +129,18 @@ const getTickStyle = (mark: SliderMark, index: number) => {
   &.v-rtl {
     .input-tick-mark {
       &:first-child {
-        transform: translateX(calc(-50% - 3px)) translateY(-50%);
+        /* Touching the right edge */
+        transform: translateX(calc(-150% + (var(--slider-tick-size) * 0.5))) translateY(-50%);
       }
 
       &:last-child {
-        transform: translateX(calc(50% - 1px)) translateY(-50%);
+        /* Touching the left edge */
+        transform: translateX(calc(50% - (var(--slider-tick-size) * 0.5))) translateY(-50%);
       }
     }
+  }
 
-    &.v-contained {
-      .input-tick-mark {
-        &:first-child {
-          transform: translateX(-150%) translateY(-50%);
-        }
-
-        &:last-child {
-          transform: translateX(50%) translateY(-50%);
-        }
-      }
-    }
+  &.v-contained {
   }
 }
 
@@ -149,25 +150,19 @@ const getTickStyle = (mark: SliderMark, index: number) => {
 .v-vertical {
   .input-tick-mark {
     left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-
-    &:first-child {
-      transform: translateY(calc(-50% + 4px)) translateX(-50%);
-    }
-
-    &:last-child {
-      transform: translateY(calc(-50% - 4px)) translateX(-50%);
-    }
+    transform: translateX(-50%);
   }
 
-  &.v-contained {
+  &.v-ttb {
     .input-tick-mark {
       &:first-child {
-        transform: translateY(calc(50% + 3px)) translateX(-50%);
+        /* Touching the top edge */
+        transform: translateY(calc(50% - (var(--slider-tick-size) * 0.5))) translateX(-50%);
       }
 
       &:last-child {
-        transform: translateY(calc(-150% - 1px)) translateX(-50%);
+        /* Touching the bottom edge */
+        transform: translateY(calc(-150% + (var(--slider-tick-size) * 0.5))) translateX(-50%);
       }
     }
   }
@@ -175,25 +170,18 @@ const getTickStyle = (mark: SliderMark, index: number) => {
   &.v-btt {
     .input-tick-mark {
       &:first-child {
-        transform: translateY(calc(-50% - 4px)) translateX(-50%);
+        /* Touching the bottom edge */
+        transform: translateY(calc(-150% + (var(--slider-tick-size) * 0.5))) translateX(-50%);
       }
 
       &:last-child {
-        transform: translateY(calc(50% - 1px)) translateX(-50%);
+        /* Touching the top edge */
+        transform: translateY(calc(50% - (var(--slider-tick-size) * 0.5))) translateX(-50%);
       }
     }
+  }
 
-    &.v-contained {
-      .input-tick-mark {
-        &:first-child {
-          transform: translateY(calc(-150% - 1px)) translateX(-50%);
-        }
-
-        &:last-child {
-          transform: translateY(calc(50% + 3px)) translateX(-50%);
-        }
-      }
-    }
+  &.v-contained {
   }
 }
 </style>

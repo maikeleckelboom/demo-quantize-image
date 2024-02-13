@@ -13,7 +13,7 @@
     flex-direction: row;
 
     /* Size */
-    inline-size: var(--slider-track-width, var(--slider-horizontal-width));
+    inline-size: var(--slider-track-width, var(--slider-track-width--horizontal));
 
 
     &.v-disabled {
@@ -46,10 +46,10 @@
     }
 
     &.v-horizontal {
-        --slider-track-height: var(--slider-horizontal-height);
-        --slider-track-width: var(--slider-horizontal-width);
-        --slider-handle-width: var(--slider-horizontal-handle-width);
-        --slider-handle-height: var(--slider-horizontal-handle-height);
+        --slider-track-height: var(--slider-track-height--horizontal);
+        --slider-track-width: var(--slider-track-width--horizontal);
+        --slider-handle-width: var(--slider-handle-width--horizontal);
+        --slider-handle-height: var(--slider-handle-height--horizontal);
 
         min-block-size: var(--slider-handle-height);
 
@@ -98,10 +98,10 @@
     }
 
     &.v-vertical {
-        --slider-track-height: var(--slider-vertical-height);
-        --slider-track-width: var(--slider-vertical-width);
-        --slider-handle-width: var(--slider-vertical-handle-width);
-        --slider-handle-height: var(--slider-vertical-handle-height);
+        --slider-track-height: var(--slider-track-height--vertical);
+        --slider-track-width: var(--slider-track-width--vertical);
+        --slider-handle-width: var(--slider-handle-width--vertical);
+        --slider-handle-height: var(--slider-handle-height--vertical);
 
         min-inline-size: var(--slider-handle-height);
 
@@ -193,7 +193,7 @@
     block-size: var(--_height, var(--slider-track-height));
     inline-size: var(--_width, var(--slider-track-width));
     border: var(--slider-track-border);
-    background-color: var(--slider-track-color);
+    background-color: var(--slider-track-background-color);
     border-radius: var(--slider-track-border-radius);
     position: relative;
     overflow: clip;
