@@ -37,7 +37,7 @@ export default defineNuxtModule<ThemeModuleOptions>({
     /*
       nuxt.options.appConfig.theme = defu(nuxt.options.appConfig?.theme || {}, options)
     */
-    addPlugin({ src: resolve(`${runtimeDir}/plugin.ts`), mode: 'all' })
+    addPlugin({ src: resolve(`${runtimeDir}/plugin.ts`) })
 
     await addComponentsDir({
       pathPrefix: false,

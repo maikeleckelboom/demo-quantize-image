@@ -99,6 +99,21 @@ onUnmounted(() => {
 function onCustomize() {
   console.log('Customize')
 }
+
+async function onNavigateBack() {
+  if (!document.startViewTransition) {
+    navigateTo('/quantize')
+    return
+  }
+
+  const transition = document.startViewTransition(async () => {
+    await navigateTo('/quantize')
+    await nextTick()
+  })
+
+  await transition.ready
+  await transition.finished
+}
 </script>
 <template>
   <div class="mx-auto w-full max-w-xl p-4">
@@ -168,14 +183,14 @@ function onCustomize() {
           <Button
             class="rounded-full bg-error font-semibold text-on-error"
             intent="none"
-            @click="router.back()"
+            @click="onNavigateBack"
           >
             <Icon class="size-5" name="ic:outline-close" />
             Abort
           </Button>
         </div>
         <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">
-          <Button intent="text" stretch="true" @click="router.back()">Reset</Button>
+          <Button intent="text" stretch="true" @click="onNavigateBack">Reset</Button>
           <Button stretch="true" @click="onCustomize"> Continue</Button>
         </div>
       </template>

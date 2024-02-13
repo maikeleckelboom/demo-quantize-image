@@ -15,7 +15,7 @@ defineProps<SliderProps>()
     >
       Max Colors
       <span class="text-xs tabular-nums text-on-surface-variant">(1-128)</span>
-      <Tooltip class="justify-self-end">
+      <Tooltip class="hidden justify-self-end">
         <button class="flex items-center justify-center">
           <Icon class="ml-0.5 h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
         </button>

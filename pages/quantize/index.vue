@@ -39,14 +39,16 @@ const state = reactive({
 })
 
 async function loadExampleImage() {
-  state.isLoadingExample = true
+  isLoading.value = true
   const exampleImage = images[Math.floor(Math.random() * images.length)]
   const file = await fileFromImagePath(exampleImage)
   files.value = [file]
-  state.isLoadingExample = false
+  isLoading.value = false
 }
 
 const maxColors = ref<number>(128)
+
+const isLoading = ref<boolean>(false)
 
 async function onExtractColors() {
   state.isLoadingNextPage = true
@@ -92,12 +94,14 @@ const {
 })
 
 function onTakeCapture() {
+  isLoading.value = true
   resetCamera()
   openCamera()
 }
 
 whenever(cameraFiles, (capturedFiles) => {
   files.value = Array.from(capturedFiles)
+  isLoading.value = false
 })
 
 const device = useDevice()
@@ -105,11 +109,16 @@ const device = useDevice()
 const hasCapturedImage = computed(() => Array.from(cameraFiles?.value ?? []).length > 0)
 const hasLoadedExample = computed(() => files.value.some((file) => file.name === 'example.jpg'))
 const hasSelectedViaBrowse = computed(() => !!files.value.length && !hasCapturedImage.value)
+
+onBeforeRouteLeave(() => {
+  isLoading.value = false
+  state.isLoadingNextPage = false
+})
 </script>
 
 <template>
   <div class="mx-auto flex w-full max-w-xl flex-col p-4">
-    <div class="mb-4 flex-col md:mb-8 md:flex">
+    <div class="mb-12 flex-col md:mb-8 md:flex">
       <h1 class="text-title-lg font-medium md:mb-2 md:text-display-sm">
         {{ textContent.title }}
       </h1>
@@ -118,16 +127,14 @@ const hasSelectedViaBrowse = computed(() => !!files.value.length && !hasCaptured
       </p>
     </div>
     <div
-      :class="[state.isLoadingExample ? 'animate-pulse duration-150' : '']"
-      class="relative mb-2 h-52 overflow-hidden rounded md:mb-2.5 md:h-72"
+      :class="[isLoading ? 'animate-pulse' : '']"
+      class="relative mb-4 h-52 overflow-hidden rounded md:h-72"
     >
-      <Transition mode="out-in" name="basic-out-in">
-        <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected object-contain" />
-        <FileDropZone v-else class="rounded" @drop="onDrop" />
-      </Transition>
+      <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected rounded-lg" />
+      <FileDropZone v-else class="rounded-lg" @drop="onDrop" />
     </div>
 
-    <div class="mb-4 flex justify-end gap-2">
+    <div class="mb-12 flex justify-end gap-2">
       <div v-if="device.isMobileOrTablet" class="mr-auto">
         <Button class="rounded-md" intent="text" size="sm" @click="onTakeCapture">
           <Icon class="size-4" name="ic:round-photo-camera" />
@@ -150,86 +157,56 @@ const hasSelectedViaBrowse = computed(() => !!files.value.length && !hasCaptured
           <Spinner class="size-4" />
         </template>
         <template v-else>
-          {{ hasLoadedExample ? 'Reload' : 'Load Example' }}
+          <Icon name="ic:baseline-upload-file" />
+          Load Example Image
         </template>
       </Button>
     </div>
-    <div class="">
+    <div class="mb-12">
       <MaxColorsInputSlider v-model="maxColors" max="128" min="1" step="1" />
     </div>
 
-    <div class="mt-12 flex w-fit flex-col self-end">
-      <div class="flex gap-3">
-        <Button :disabled="!selectedFile || state.isLoadingNextPage" @click="onExtractColors">
-          <div class="flex items-center justify-center gap-2 px-4 leading-none">
-            {{ state.isLoadingNextPage ? 'Loading' : 'Extract Colors' }}
-          </div>
-        </Button>
-      </div>
+    <div class="flex flex-col">
+      <Button
+        :disabled="!selectedFile || state.isLoadingNextPage"
+        class="w-full"
+        intent="filled"
+        @click="onExtractColors"
+      >
+        <div class="flex items-center justify-center leading-none">
+          {{ state.isLoadingNextPage ? 'Loading' : 'Extract Colors' }}
+        </div>
+      </Button>
     </div>
   </div>
 </template>
 
 <style>
-.dropzone-container {
-  --_border-color: rgb(var(--outline-variant-rgb));
-
-  background-image: repeating-linear-gradient(
-      0deg,
-      var(--_border-color),
-      var(--_border-color) 10px,
-      transparent 10px,
-      transparent 20px,
-      var(--_border-color) 20px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      var(--_border-color),
-      var(--_border-color) 10px,
-      transparent 10px,
-      transparent 20px,
-      var(--_border-color) 20px
-    ),
-    repeating-linear-gradient(
-      180deg,
-      var(--_border-color),
-      var(--_border-color) 10px,
-      transparent 10px,
-      transparent 20px,
-      var(--_border-color) 20px
-    ),
-    repeating-linear-gradient(
-      270deg,
-      var(--_border-color),
-      var(--_border-color) 10px,
-      transparent 10px,
-      transparent 20px,
-      var(--_border-color) 20px
-    );
-  background-size:
-    2px 100%,
-    100% 2px,
-    2px 100%,
-    100% 2px;
-  background-position:
-    0 0,
-    0 0,
-    100% 0,
-    0 100%;
-  background-repeat: no-repeat;
+/*!* Entry transition *!
+::view-transition-new(sidebar):only-child {
+  animation: 300ms cubic-bezier(0, 0, 0.2, 1) both fade-in,
+  300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
 }
 
-:not(.prevent-transition) {
-  img.selected {
-    view-transition-name: selected;
-    z-index: 20;
+!* Exit transition *!
+::view-transition-old(sidebar):only-child {
+  animation: 150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+  300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-right;
+}*/
+
+img.selected {
+  view-transition-name: selected;
+  z-index: 20;
+  position: relative;
+  object-fit: contain;
+
+  label {
+    view-transition-name: selected-label;
   }
 }
 
 ::view-transition-old(selected) {
-  /*
-  object-fit: contain;
-  */
+  @apply rounded-lg;
 }
 
 ::view-transition-new(selected) {
@@ -238,9 +215,7 @@ const hasSelectedViaBrowse = computed(() => !!files.value.length && !hasCaptured
 
 ::view-transition-old(selected),
 ::view-transition-new(selected) {
-  animation: none;
   mix-blend-mode: normal;
   overflow: clip;
-  height: 100%;
 }
 </style>

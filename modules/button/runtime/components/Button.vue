@@ -54,12 +54,7 @@ const variants = cva({
       false: 'w-fit'
     },
     disabled: {
-      true: [
-        'opacity-50',
-        'text-on-surface-level-2',
-        'cursor-not-allowed',
-        'pointer-events-none'
-      ],
+      true: ['opacity-50', 'text-on-surface-level-2', 'cursor-not-allowed', 'pointer-events-none'],
       false: []
     },
     intent: {
@@ -163,22 +158,24 @@ const props = withDefaults(defineProps<Props>(), {
   dir: 'ltr',
   disabled: false
 })
-
-const buttonClasses = computed(() =>
-  twMerge(
-    variants({
-      intent: props.intent,
-      size: props.size,
-      dir: props.dir,
-      stretch: [true, 'true'].includes(props.stretch!),
-      disabled: props.disabled
-    })
-  )
-)
 </script>
 
 <template>
-  <button :class="buttonClasses">
+  <button
+    :class="
+      twMerge(
+        variants({
+          intent: props.intent,
+          size: props.size,
+          dir: props.dir,
+          stretch: isTruthy(props.stretch),
+          disabled: props.disabled,
+          class: $attrs?.class || ''
+        })
+      )
+    "
+    :disabled="props.disabled"
+  >
     <Ripple />
     <slot />
     <slot name="icon">

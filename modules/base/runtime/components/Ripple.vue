@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { easings, timingFunctions } from '~/modules/theme/motion-presets'
+import { easings, timingFunctions } from '~/modules/theme/runtime/utils/motion'
 
 const { x0, y0, x1, y1 } = timingFunctions.standardAccelerate
 const { duration } = easings.standard
