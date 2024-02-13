@@ -55,6 +55,10 @@ function isFuture(index: number) {
   return ticks.value[index].value > firstModelValue.value
 }
 
+const isTickActive = (index: number) => {
+  return isCurrent(index) || isPast(index)
+}
+
 const getTickStyle = (mark: SliderMark) => {
   return {
     [unref(vertical) ? 'top' : 'left']: unref(toReversed)
@@ -62,34 +66,14 @@ const getTickStyle = (mark: SliderMark) => {
       : `${mark.at * 100}%`
   }
 }
-
-const isTickActive = (index: number) => {
-  return isCurrent(index) || isPast(index)
-}
-
-const modelValueIsMinOrMax = computed(() => {
-  return firstModelValue.value === Number(props.min) || firstModelValue.value === Number(props.max)
-})
-
-function currentMarkValueIsMinMax(mark: SliderMark) {
-  const min = Number(props.min)
-  const max = Number(props.max)
-  const isBoundaryMark = mark.value === min || mark.value === max
-  const isCurrentMarkValue = mark.value === firstModelValue.value
-  return isBoundaryMark && isCurrentMarkValue
-}
 </script>
+
 <template>
   <div>
     <div
       v-for="(mark, index) in ticks"
       :key="index"
-      :class="[
-        isTickActive(index) ? 'v-active' : 'v-inactive',
-        mark.value === Number(min) && 'v-min',
-        mark.value === Number(max) && 'v-max',
-        mark.value === Number(min) && mark.value === Number(max) ? 'v-boundary' : ''
-      ]"
+      :class="isTickActive(index) ? 'v-active' : 'v-inactive'"
       :style="getTickStyle(mark)"
       class="input-tick-mark text-xs"
     >
@@ -109,17 +93,11 @@ function currentMarkValueIsMinMax(mark: SliderMark) {
   --_inactive-color: var(--slider-tick-inactive-color, rgb(var(--primary-rgb)));
   --_disabled-color: var(--slider-tick-disabled-color, rgb(var(--on-surface-rgb)));
 
-  &:not(.v-boundary) {
-    &.v-inactive {
-      --_background-color: var(--_inactive-color);
-    }
-
-    &.v-active {
-      --_background-color: var(--_active-color);
-    }
+  &.v-inactive {
+    --_background-color: var(--_inactive-color);
   }
 
-  &.v-boundary {
+  &.v-active {
     --_background-color: var(--_active-color);
   }
 

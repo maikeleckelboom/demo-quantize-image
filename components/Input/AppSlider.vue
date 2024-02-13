@@ -81,8 +81,8 @@ const ticks = computed(() => {
   /* todo: fix horizontal/vertical config mess */
   --slider-track-width--horizontal: 200px;
   --slider-track-height--vertical: 200px;
-  --slider-track-width--vertical: 8px;
-  --slider-track-height--horizontal: 8px;
+  --slider-track-width--vertical: 10px;
+  --slider-track-height--horizontal: 10px;
 
   --slider-handle-height--vertical: 10px;
   --slider-handle-width--horizontal: 10px;

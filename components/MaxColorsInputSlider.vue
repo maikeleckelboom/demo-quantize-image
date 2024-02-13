@@ -16,12 +16,19 @@ defineProps<SliderProps>()
         <button class="flex items-center justify-center">
           <Icon class="ml-0.5 h-4 w-4 text-on-surface-variant" name="ic:baseline-info" />
         </button>
-        <template #content> The maximum number of colors to generate from the image. </template>
+        <template #content> The maximum number of colors to generate from the image.</template>
       </Tooltip>
     </label>
     <div class="grid grid-cols-[1fr,52px] gap-x-3">
       <div class="">
-        <AppSlider v-model.number="modelValue" contained="true" max="128" min="1" step="1" />
+        <AppSlider
+          v-model.number="modelValue"
+          contained="true"
+          max="128"
+          min="1"
+          oversized="true"
+          step="1"
+        />
       </div>
       <div class="">
         <InputNumberText id="maxColors" v-model.number="modelValue" max="128" min="1" />

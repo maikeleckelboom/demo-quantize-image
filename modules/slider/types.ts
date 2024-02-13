@@ -5,6 +5,7 @@ interface SliderProps {
   step?: number | 'any' | (string & {})
   marks?: Marks
   ticks?: SliderMark[]
+  oversized?: boolean | `${boolean}`
 
   orientation?: 'horizontal' | 'vertical'
   dir?: 'ltr' | 'rtl'

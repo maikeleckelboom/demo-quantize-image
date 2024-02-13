@@ -6,7 +6,8 @@ import InputSliderTicks from '~/components/Input/SliderTicks.vue'
 const props = withDefaults(defineProps<SliderProps & { numberOfTicks?: number }>(), {
   numberOfTicks: 2,
   min: 0,
-  max: 100
+  max: 100,
+  oversized: true
 })
 
 const { numberOfTicks } = toRefs(props)
@@ -57,7 +58,12 @@ const ticks = computed(() => {
 </script>
 
 <template>
-  <InputRangeSlider id="vm-slider" ref="slider" v-model="modelValue" v-bind="$props">
+  <InputRangeSlider
+    ref="slider"
+    v-bind="{
+      ...props
+    }"
+  >
     <template #ticks>
       <InputSliderTicks
         v-model="modelValue"

@@ -270,7 +270,9 @@ const VARIANT_CLASSES = {
   vertical: 'v-vertical',
   rtl: 'v-rtl',
   ltr: 'v-ltr',
-  // btt: 'v-btt',
+  oversized: 'v-oversized',
+  btt: 'v-btt',
+  ttb: 'v-ttb',
   labelVisibility: 'v-label-visible',
   labelHidden: 'v-label-hidden',
   glide: 'v-glide'
@@ -289,17 +291,29 @@ const stateClasses = computed(() => {
   }
 })
 
+const isOversized = computed(() => isTruthy(props.oversized))
+
 const variantClasses = computed(() => {
-  return {
-    [VARIANT_CLASSES.contained]: isContained.value,
+  const map = {
+    [STATE_CLASSES.enabled]: !isDisabled.value,
+    [STATE_CLASSES.disabled]: isDisabled.value,
     [VARIANT_CLASSES.horizontal]: !isVertical.value,
     [VARIANT_CLASSES.vertical]: isVertical.value,
-    [VARIANT_CLASSES.rtl]: isRtl.value,
-    [VARIANT_CLASSES.ltr]: !isRtl.value,
-    // [VARIANT_CLASSES.btt]: isBtt.value,
-    [STATE_CLASSES.enabled]: !isDisabled.value,
-    [STATE_CLASSES.disabled]: isDisabled.value
+    [VARIANT_CLASSES.contained]: isContained.value,
+    [VARIANT_CLASSES.oversized]: isOversized.value
   }
+  if (unref(isVertical)) {
+    Object.assign(map, {
+      [VARIANT_CLASSES.btt]: unref(isBtt),
+      [VARIANT_CLASSES.ttb]: !unref(isBtt)
+    })
+  } else {
+    Object.assign(map, {
+      [VARIANT_CLASSES.rtl]: unref(isRtl),
+      [VARIANT_CLASSES.ltr]: !unref(isRtl)
+    })
+  }
+  return map
 })
 
 const styleBinding = computed(() => {
@@ -315,7 +329,7 @@ const styleBinding = computed(() => {
 <template>
   <div
     ref="rootRef"
-    :class="[{ ...stateClasses, ...variantClasses }, isVertical && !isBtt ? 'v-ttb' : 'v-btt']"
+    :class="[{ ...stateClasses, ...variantClasses }]"
     :dir="dir"
     :style="styleBinding"
     class="slider-root"
@@ -418,16 +432,41 @@ const styleBinding = computed(() => {
   --lower-bound-value: 0%;
   --upper-bound-value: 0%;
   position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
+
+  * {
+    flex-shrink: 0;
+    flex-grow: 1;
+  }
+
+  &.v-vertical {
+    flex-direction: column-reverse;
+  }
+
+  &.v-oversized {
+    --slider-box-height: var(--slider-track-height);
+    --slider-box-width: var(--slider-track-width);
+    inline-size: var(--slider-box-width);
+    block-size: var(--slider-box-height);
+
+    &.v-horizontal {
+      --slider-box-height: var(--slider-handle-height);
+    }
+
+    &.v-vertical {
+      --slider-box-width: var(--slider-handle-width);
+    }
+  }
 }
 
 .slider-input {
   position: relative;
-  inline-size: 100%;
-  block-size: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slider-track {
@@ -539,8 +578,8 @@ const styleBinding = computed(() => {
 }
 
 .slider-root:not(.v-contained) {
-  margin-inline-start: calc(var(--slider-handle-width) * 0.5);
-  margin-inline-end: calc(var(--slider-handle-width) * 0.5);
+  padding-inline-start: calc(var(--slider-handle-width) * 0.5);
+  padding-inline-end: calc(var(--slider-handle-width) * 0.5);
 }
 
 .v-label-visible {
@@ -555,6 +594,16 @@ const styleBinding = computed(() => {
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
+  }
+}
+
+.v-oversized {
+  &.v-horizontal {
+    --slider-box-height: var(--slider-handle-height);
+  }
+
+  &.v-vertical {
+    --slider-box-width: var(--slider-handle-width);
   }
 }
 
