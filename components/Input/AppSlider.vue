@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { SliderMark, SliderProps } from '~/modules/slider/types'
 import { InputSlider } from '#components'
-import InputSliderTicks from '~/components/Input/SliderTicks.vue'
+import InputSliderTicks from '~/modules/slider/runtime/components/SliderTicks.vue'
 
 const props = withDefaults(defineProps<SliderProps & { numberOfTicks?: number }>(), {
   numberOfTicks: 2,

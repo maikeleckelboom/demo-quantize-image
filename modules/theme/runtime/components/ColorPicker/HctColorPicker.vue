@@ -86,7 +86,13 @@ const customHandle = ref<HTMLElement>()
           @input="onTextUpdate($event, 'hue')"
         />
       </div>
-      <InputRangeSlider v-model="formModel.hue" class="color-input-slider" contained="true" max="360" min="0">
+      <InputRangeSlider
+        v-model="formModel.hue"
+        class="color-input-slider"
+        contained="true"
+        max="360"
+        min="0"
+      >
         <template #handle>
           <div ref="customHandle" class="custom-handle" />
         </template>
@@ -181,6 +187,7 @@ const customHandle = ref<HTMLElement>()
   --slider-track-height: 16px;
   --slider-handle-width: 20px;
   --slider-handle-height: 20px;
+  --slider-handle-background-color: transparent;
 }
 
 .custom-handle {

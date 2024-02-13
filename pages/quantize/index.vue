@@ -141,9 +141,9 @@ onBeforeRouteLeave(() => {
           Take Capture
         </Button>
       </div>
-      <!--      <Button v-if="selectedFile" class="rounded-md" intent="text" size="sm" @click="reset">-->
-      <!--        Clear-->
-      <!--      </Button>-->
+      <Button v-if="selectedFile" class="rounded-md" intent="text" size="sm" @click="reset">
+        Remove Image
+      </Button>
       <Button
         v-if="!files?.length"
         :disabled="state.isLoadingExample"
