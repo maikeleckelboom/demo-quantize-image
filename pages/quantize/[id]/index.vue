@@ -179,10 +179,10 @@ async function onNavigateBack() {
       </div>
 
       <template #footer>
-        <div class="grid w-full grid-cols-2 gap-x-2 md:gap-x-4">
+        <div class="grid w-full grid-cols-2 gap-x-2 px-4 md:gap-x-4">
           <Button
             v-if="isLoading"
-            class="col-start-2 w-full rounded-full bg-error font-semibold text-on-error"
+            class="col-span-2 w-full rounded-full bg-error font-semibold text-on-error"
             intent="none"
             @click="onNavigateBack"
           >

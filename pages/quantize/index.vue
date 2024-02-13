@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import MaxColorsInputSlider from '~/components/Input/MaxColorsInputSlider.vue'
+import { useDropZone } from '@vueuse/core'
 
 const store = useFilesStore()
 const { files, selectedFile, fileObjectUrl } = storeToRefs(store)
 const { reset } = store
 
-function onDrop(droppedFiles: File[]) {
+function onDrop(droppedFiles: File[] | null) {
+  if (!droppedFiles) return
   files.value = droppedFiles
 }
 
@@ -77,8 +79,10 @@ async function onExtractColors() {
 
 const textContent = reactive({
   title: 'Extract Colors from Image',
-  description:
-    'Utilize digital analysis to extract vibrant colors from your images. Use the extracted colors to create color palettes, themes, and more.'
+  description: [
+    'Utilize digital analysis to extract vibrant colors from your images.',
+    'Use the extracted colors to create color palettes, themes, and more.'
+  ]
 })
 
 const {
@@ -112,31 +116,82 @@ onBeforeRouteLeave(() => {
   isLoading.value = false
   isLoadingNav.value = false
 })
+
+const dropZoneRef = ref<HTMLElement | null>(null)
+const { isOverDropZone } = useDropZone(dropZoneRef, {
+  onDrop
+})
+
+watch(isOverDropZone, (value) => {
+  if (value) {
+    console.log('Entered drop zone')
+  } else {
+    console.log('Left drop zone')
+  }
+})
+
+const id = useId()
 </script>
 
 <template>
   <div class="mx-auto flex w-full max-w-xl flex-col p-4">
-    <div class="mb-12 flex-col md:mb-10 md:flex">
-      <h1 class="mb-2 text-title-lg font-medium md:text-display-sm">
+    <div class="mb-6 flex-col md:mb-10 md:flex">
+      <h1 class="mb-2 text-title-lg font-medium md:text-headline-md">
         {{ textContent.title }}
       </h1>
-      <p class="text-body-sm text-on-surface-variant md:flex">
-        {{ textContent.description }}
+      <p class="text-body-sm text-on-surface-variant md:inline">
+        {{ textContent.description.at(0) }}
+        <span class="hidden md:inline">
+          {{ textContent.description.at(1) }}
+        </span>
       </p>
     </div>
     <div
       :class="[isLoading ? 'animate-pulse' : '']"
-      class="relative mb-4 h-52 overflow-hidden rounded md:h-72"
+      class="relative mb-4 h-52 overflow-hidden rounded-lg border border-dotted border-surface-variant bg-surface-container/50 md:min-h-72"
     >
-      <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected rounded-lg" />
-      <FileDropZone v-else class="rounded-lg" @drop="onDrop" />
+      <template v-if="selectedFile">
+        <NuxtImg :src="fileObjectUrl" alt="" class="selected size-full rounded-lg object-scale-down" />
+      </template>
+      <template v-else>
+        <label
+          ref="dropZoneRef"
+          :class="[
+            { 'bg-secondary-container/50': isOverDropZone },
+            'rounded-lg',
+            'flex',
+            'size-full',
+            'min-h-32',
+            'cursor-pointer',
+            'flex-col',
+            'items-center',
+            'justify-center',
+            'overflow-hidden',
+            'bg-secondary-container/10',
+            'hover:bg-secondary-container/20',
+            'active:bg-secondary-container/30'
+          ]"
+          :for="`dropzone-file-${id}`"
+        >
+          <span id="dropzone-text" class="flex flex-col items-center justify-center">
+            <Icon class="md:md-2 size-8" name="ic:round-cloud-upload" />
+            <span class="text-sm leading-loose text-on-surface-variant">
+              <span class="font-semibold">
+                {{ device.isDesktopOrTablet ? 'Click here to upload' : 'Tap here to upload' }}
+              </span>
+              {{ device.isDesktopOrTablet ? ' or drag and drop' : '' }}
+            </span>
+            <span class="text-xs leading-snug">PNG, JPG, SVG or WEBP</span>
+          </span>
+          <input :id="`dropzone-file-${id}`" accept="image/*" class="hidden" type="file" />
+        </label>
+      </template>
     </div>
-
     <div class="mb-12 flex justify-end gap-2">
       <div v-if="device.isMobileOrTablet" class="mr-auto">
         <Button class="rounded-md" intent="text" size="sm" @click="onTakeCapture">
           <Icon class="size-4" name="ic:round-photo-camera" />
-          Take Capture
+          Take Photo
         </Button>
       </div>
       <Button v-if="selectedFile" class="rounded-md" intent="text" size="sm" @click="reset">
@@ -186,7 +241,6 @@ img.selected {
 }
 
 ::view-transition-old(selected) {
-  object-fit: contain;
 }
 
 ::view-transition-new(selected) {

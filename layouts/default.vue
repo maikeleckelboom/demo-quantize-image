@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { state, active, isLabelled } = storeToRefs(useNavStore())
+const { state, active, isLabeled } = storeToRefs(useNavStore())
 
 const { isMobileOrTablet, isMobile, isTablet, isDesktop, isApple, isAndroid } = useDevice()
 </script>
@@ -10,7 +10,7 @@ const { isMobileOrTablet, isMobile, isTablet, isDesktop, isApple, isAndroid } = 
     class="pb-[80px]"
   >
     <slot />
-    <NavBar :active="active" :items="state" :labeled="isLabelled" />
+    <NavBar :active="active" :items="state" :labeled="isLabeled" />
   </div>
   <DialogsRoot />
 </template>

@@ -34,7 +34,7 @@ function save() {
 }
 
 function getKeyColorName(keyColor: string) {
-  return sentenceCase(`sourceColor` === keyColor ? keyColor : `${keyColor} Key Color`)
+  return sentenceCase(`sourceColor` === keyColor ? keyColor : `${keyColor} key color`)
 }
 
 const bookmarked = ref<boolean>(false)
@@ -43,21 +43,21 @@ const bookmarked = ref<boolean>(false)
 <template>
   <DialogComponent ref="root" @close="exit">
     <template #header>
-      <h1 class="px-2 text-title-lg font-medium capitalize md:px-4">
+      <h1 class="px-2 text-title-lg font-medium capitalize md:px-4 md:text-headline-sm">
         {{ getKeyColorName(keyColor) }}
       </h1>
     </template>
     <template #header-actions>
-      <IconButton
-        :aria-label="bookmarked ? 'Remove bookmark' : 'Bookmark'"
-        :selected="bookmarked"
-        :title="bookmarked ? 'Remove bookmark' : 'Bookmark'"
-        size="sm"
-        @click="bookmarked = !bookmarked"
-      >
-        <Icon v-if="bookmarked" class="text-secondary" name="ic:round-bookmark" />
-        <Icon v-else name="ic:round-bookmark-border" />
-      </IconButton>
+      <!--      <IconButton
+              :aria-label="bookmarked ? 'Remove bookmark' : 'Bookmark'"
+              :selected="bookmarked"
+              :title="bookmarked ? 'Remove bookmark' : 'Bookmark'"
+              size="sm"
+              @click="bookmarked = !bookmarked"
+            >
+              <Icon v-if="bookmarked" class="text-secondary" name="ic:round-bookmark" />
+              <Icon v-else name="ic:round-bookmark-border" />
+            </IconButton>-->
     </template>
     <div class="relative mx-auto max-w-xl p-4">
       <KeyColorSettings v-model="colorValue" />

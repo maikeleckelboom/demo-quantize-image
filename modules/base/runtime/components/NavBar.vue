@@ -17,7 +17,7 @@ const isActive = (item: T) => item === props.active
 
 const itemsCount = computed(() => props.items.length)
 
-const { isLabelled } = useNavStore()
+const { isLabeled } = storeToRefs(useNavStore())
 </script>
 
 <template>
@@ -28,7 +28,7 @@ const { isLabelled } = useNavStore()
         :key="item.label"
         :active="isActive(item)"
         :item="item"
-        :labeled="isLabelled"
+        :labeled="isLabeled"
       />
     </div>
   </div>

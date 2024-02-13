@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import AppSlider from '~/components/Input/AppSlider.vue'
 
-const { isLabelled, toggleLabelled } = useNavStore()
+const { isLabeled, toggleLabeled } = useNavStore()
 
 const { contrastLevel, isDark } = useThemeConfig()
 </script>
@@ -40,7 +40,7 @@ const { contrastLevel, isDark } = useThemeConfig()
             <label for="labelled">Show Labels</label>
           </div>
           <div class="flex justify-center">
-            <input id="labelled" v-model="isLabelled" type="checkbox" @change="toggleLabelled" />
+            <input id="labelled" v-model="isLabeled" type="checkbox" @change="toggleLabeled" />
           </div>
         </div>
         <div class="grid grid-cols-[140px,1fr]">

@@ -38,22 +38,22 @@ const useNavStore = defineStore('nav', () => {
     state.value.find((item) => item.path === router.currentRoute.value.path)
   )
 
-  const isLabelled = ref<boolean>(true)
+  const isLabeled = ref<boolean>(true)
   const possibleBackgroundTokens = ['bg-surface', 'bg-surface-container', 'bg-surface-variant'] as const
   const backgroundToken = ref<(typeof possibleBackgroundTokens)[number]>('bg-surface')
   const textToken = computed(() =>
     ['text', 'on', ...backgroundToken.value.split('-').slice(1)].join('-')
   )
 
-  watchEffect(() => {
-    console.log('Background token:', backgroundToken.value)
-    console.log('Text token:', textToken.value)
-  })
+  function toggleLabeled() {
+    isLabeled.value = !isLabeled.value
+  }
 
   return {
     state,
     active,
-    isLabelled,
+    isLabeled,
+    toggleLabeled,
     possibleBackgroundTokens,
     backgroundToken,
     textToken

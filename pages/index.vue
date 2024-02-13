@@ -53,6 +53,10 @@ async function onOpenColorPicker(keyColor: string, initialColor: number) {
 function onFabClick() {
   console.log('FAB clicked')
 }
+
+function onDrop(droppedFiles: File[]) {
+  console.log('Dropped files', droppedFiles)
+}
 </script>
 
 <template>

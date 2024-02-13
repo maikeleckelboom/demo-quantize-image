@@ -52,49 +52,83 @@ function onChange(event: Event) {
 const device = useDevice()
 
 const id = useId()
+
+watch(isOverDropZone, (value) => {
+  if (value) {
+    console.log('Entered drop zone')
+  } else {
+    console.log('Left drop zone')
+  }
+})
 </script>
 
 <template>
-  <div ref="dropZoneRef" :class="{ isOverDropZone }" class="group relative size-full overflow-hidden">
-    <label
-      :class="[
-        { 'bg-secondary-container/50': isOverDropZone },
-        'flex',
-        'size-full',
-        'min-h-32',
-        'cursor-pointer',
-        'flex-col',
-        'items-center',
-        'justify-center',
-        'overflow-hidden',
-        'bg-secondary-container/10',
-        'hover:bg-secondary-container/20',
-        'active:bg-secondary-container/30',
-        'transition-colors',
-        'duration-200'
-      ]"
-      :for="`dropzone-file-${id}`"
-      v-bind="$attrs"
-    >
-      <span class="dropzone-label-text flex flex-col items-center justify-center">
-        <Icon class="md:md-2 size-8" name="ic:round-cloud-upload" />
-        <span class="text-sm leading-loose text-on-surface-variant">
-          <span class="font-semibold">
-            {{ device.isDesktopOrTablet ? 'Click here to upload' : 'Tap here to upload' }}
-          </span>
-          {{ device.isDesktopOrTablet ? ' or drag and drop' : '' }}
+  <label
+    ref="dropZoneRef"
+    :class="[
+      { 'bg-secondary-container/50': isOverDropZone },
+      'flex',
+      'size-full',
+      'min-h-32',
+      'cursor-pointer',
+      'flex-col',
+      'items-center',
+      'justify-center',
+      'overflow-hidden',
+      'bg-secondary-container/10',
+      'hover:bg-secondary-container/20',
+      'active:bg-secondary-container/30'
+    ]"
+    :for="`dropzone-file-${id}`"
+  >
+    <span id="dropzone-text" class="flex flex-col items-center justify-center">
+      <Icon class="md:md-2 size-8" name="ic:round-cloud-upload" />
+      <span class="text-sm leading-loose text-on-surface-variant">
+        <span class="font-semibold">
+          {{ device.isDesktopOrTablet ? 'Click here to upload' : 'Tap here to upload' }}
         </span>
-        <span class="text-xs leading-snug">PNG, JPG, SVG or WEBP</span>
+        {{ device.isDesktopOrTablet ? ' or drag and drop' : '' }}
       </span>
-      <input
-        :id="`dropzone-file-${id}`"
-        accept="image/*"
-        class="hidden"
-        type="file"
-        @change="onChange"
-      />
-    </label>
-  </div>
+      <span class="text-xs leading-snug">PNG, JPG, SVG or WEBP</span>
+    </span>
+    <input :id="`dropzone-file-${id}`" accept="image/*" class="hidden" type="file" @change="onChange" />
+  </label>
 </template>
 
-<style></style>
+<style>
+/*#dropzone-text {
+  view-transition-name: dropzone-text;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+!* Entry transition *!
+::view-transition-new(dropzone-text):only-child {
+  animation: 300ms cubic-bezier(0, 0, 0.2, 1) both fade-in;
+}
+
+!* Exit transition *!
+::view-transition-old(dropzone-text):only-child {
+  animation: 150ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
+}*/
+</style>
