@@ -43,7 +43,7 @@ const bookmarked = ref<boolean>(false)
 <template>
   <DialogComponent ref="root" @close="exit">
     <template #header>
-      <h1 class="text-headline-sm font-medium capitalize md:text-headline-md">
+      <h1 class="px-2 text-title-lg font-medium capitalize md:px-4">
         {{ getKeyColorName(keyColor) }}
       </h1>
     </template>

@@ -57,11 +57,8 @@ function onFabClick() {
 
 <template>
   <div class="mx-auto w-full max-w-xl p-4">
-    <section class="mb-2"></section>
-  </div>
-  <div class="mx-auto w-full max-w-xl p-4">
-    <div class="flex flex-wrap gap-4">
-      <div class="size-fit">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="col-span-2">
         <h1 class="mb-2 overflow-hidden overflow-ellipsis text-nowrap capitalize">Source Color</h1>
         <ColorPreview
           :color="$dynamicScheme.sourceColorArgb"
@@ -70,7 +67,7 @@ function onFabClick() {
         />
       </div>
       <div v-for="{ key, palette } in palettes" :key="key">
-        <h1 class="mb-2 overflow-hidden overflow-ellipsis text-nowrap capitalize">
+        <h1 class="mb-2 overflow-hidden overflow-ellipsis text-nowrap text-title-lg capitalize">
           {{ removePaletteFromKey(key) }}
         </h1>
         <ColorPreview
@@ -80,8 +77,6 @@ function onFabClick() {
         />
       </div>
     </div>
-    <section class="mb-2"></section>
-    <Glossary />
   </div>
   <div class="pointer-events-none fixed inset-x-0 bottom-[92px]">
     <div class="mx-auto flex size-full max-w-xl justify-end px-4">

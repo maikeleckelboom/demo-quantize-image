@@ -33,10 +33,8 @@ async function fileFromImagePath(img: string): Promise<File> {
   return fileFromBlob(blob, img)
 }
 
-const state = reactive({
-  isLoadingExample: false,
-  isLoadingNextPage: false
-})
+const isLoadingImage = ref<boolean>(false)
+const isLoadingNav = ref<boolean>(false)
 
 async function loadExampleImage() {
   isLoading.value = true
@@ -51,31 +49,30 @@ const maxColors = ref<number>(128)
 const isLoading = ref<boolean>(false)
 
 async function onExtractColors() {
-  state.isLoadingNextPage = true
+  isLoadingNav.value = true
 
-  const triggerTransition = async () => {
+  const trigger = async () => {
     if (!selectedFile.value) return
-    await navigateTo({
+    await nextTick()
+    navigateTo({
       path: `/quantize/${selectedFile.value.name}`,
       query: { maxColors: maxColors.value }
     })
-    await nextTick()
   }
 
   if (!document.startViewTransition) {
-    await triggerTransition()
+    await trigger()
     return
   }
 
   const transition = document.startViewTransition(async () => {
-    await triggerTransition()
+    await trigger()
   })
 
   await transition.ready
+  await transition.finished
 
-  await transition.finished.then(() => {
-    state.isLoadingNextPage = false
-  })
+  isLoadingNav.value = false
 }
 
 const textContent = reactive({
@@ -113,7 +110,7 @@ const hasSelectedViaBrowse = computed(() => !!files.value.length && !hasCaptured
 
 onBeforeRouteLeave(() => {
   isLoading.value = false
-  state.isLoadingNextPage = false
+  isLoadingNav.value = false
 })
 </script>
 
@@ -148,13 +145,13 @@ onBeforeRouteLeave(() => {
       </Button>
       <Button
         v-if="!files?.length"
-        :disabled="state.isLoadingExample"
+        :disabled="isLoadingImage"
         class="rounded-md"
         intent="text"
         size="sm"
         @click="loadExampleImage"
       >
-        <template v-if="state.isLoadingExample">
+        <template v-if="isLoadingImage">
           Loading
           <Spinner class="size-4" />
         </template>
@@ -170,13 +167,13 @@ onBeforeRouteLeave(() => {
 
     <div class="flex flex-col">
       <Button
-        :disabled="!selectedFile || state.isLoadingNextPage"
+        :disabled="!selectedFile || isLoadingNav"
         class="w-full"
         intent="filled"
         @click="onExtractColors"
       >
         <div class="flex items-center justify-center leading-none">
-          {{ state.isLoadingNextPage ? 'Loading' : 'Extract Colors' }}
+          {{ isLoadingNav ? 'Loading' : 'Extract Colors' }}
         </div>
       </Button>
     </div>

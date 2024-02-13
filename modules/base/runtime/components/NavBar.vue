@@ -6,11 +6,9 @@ const props = withDefaults(
   defineProps<{
     items?: T[]
     active?: T | null
-    labeled?: boolean
   }>(),
   {
     active: null,
-    labeled: true,
     items: () => []
   }
 )
@@ -18,6 +16,8 @@ const props = withDefaults(
 const isActive = (item: T) => item === props.active
 
 const itemsCount = computed(() => props.items.length)
+
+const { isLabelled } = useNavStore()
 </script>
 
 <template>
@@ -28,7 +28,7 @@ const itemsCount = computed(() => props.items.length)
         :key="item.label"
         :active="isActive(item)"
         :item="item"
-        :labeled="labeled"
+        :labeled="isLabelled"
       />
     </div>
   </div>
@@ -50,6 +50,7 @@ const itemsCount = computed(() => props.items.length)
   display: grid;
   grid-template-columns: repeat(var(--_items-count), 1fr);
   background-color: rgb(var(--surface-container-rgb));
+  background-color: rgb(var(--surface-rgb));
   column-gap: 8px;
   @apply max-w-xl;
   margin-inline: auto;
