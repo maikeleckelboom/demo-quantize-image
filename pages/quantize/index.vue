@@ -11,13 +11,7 @@ function onDrop(droppedFiles: File[] | null) {
   files.value = droppedFiles
 }
 
-const images = [
-  '/img/purplish-landscape.jpg',
-  '/img/islands.jpg',
-  '/img/supernova.jpg',
-  '/img/mushrooms.jpg',
-  '/img/forest-nightfall.jpg'
-] as const
+const images = ['/img/islands.jpg', '/img/mushrooms.jpg', '/img/forest-nightfall.jpg'] as const
 
 async function blobFromUrl(url: string) {
   const response = await fetch(url)
@@ -54,10 +48,9 @@ async function onExtractColors() {
   isLoadingNav.value = true
 
   const trigger = async () => {
-    if (!selectedFile.value) return
     await nextTick()
     navigateTo({
-      path: `/quantize/${selectedFile.value.name}`,
+      path: `/quantize/${selectedFile.value?.name || 'image'}`,
       query: { maxColors: maxColors.value }
     })
   }
@@ -131,6 +124,13 @@ watch(isOverDropZone, (value) => {
 })
 
 const id = useId()
+
+function onFileHandleResult(event: Event) {
+  const target = event.target as HTMLInputElement
+  const files = target.files
+  if (!files) return
+  store.files = Array.from(files)
+}
 </script>
 
 <template>
@@ -183,7 +183,13 @@ const id = useId()
             </span>
             <span class="text-xs leading-snug">PNG, JPG, SVG or WEBP</span>
           </span>
-          <input :id="`dropzone-file-${id}`" accept="image/*" class="hidden" type="file" />
+          <input
+            :id="`dropzone-file-${id}`"
+            accept="image/*"
+            class="hidden"
+            type="file"
+            @change="onFileHandleResult"
+          />
         </label>
       </template>
     </div>
@@ -191,7 +197,7 @@ const id = useId()
       <div v-if="device.isMobileOrTablet" class="mr-auto">
         <Button class="rounded-md" intent="text" size="sm" @click="onTakeCapture">
           <Icon class="size-4" name="ic:round-photo-camera" />
-          Take Photo
+          Take a Photo
         </Button>
       </div>
       <Button v-if="selectedFile" class="rounded-md" intent="text" size="sm" @click="reset">
@@ -216,6 +222,7 @@ const id = useId()
         </template>
       </Button>
     </div>
+
     <div class="mb-12">
       <MaxColorsInputSlider v-model="maxColors" max="128" min="1" step="1" />
     </div>
@@ -228,7 +235,7 @@ const id = useId()
         @click="onExtractColors"
       >
         <div class="flex items-center justify-center leading-none">
-          {{ isLoadingNav ? 'Loading' : 'Extract Colors' }}
+          {{ isLoadingNav ? 'Loading' : `Extract ${maxColors === 1 ? 'Color' : 'Colors'}` }}
         </div>
       </Button>
     </div>

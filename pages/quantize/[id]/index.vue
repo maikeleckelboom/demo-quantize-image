@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { steps } from '~/workers/quantize/worker'
+import { steps } from '~/workers/quantize/future/worker'
 import { hexFromArgb } from '@material/material-color-utilities'
 import {
   isDoneEvent,
@@ -25,8 +25,9 @@ if (!store.fileObjectUrl || !selectedFile) {
 
 const processes = ref(
   steps.map((step) => ({
-    step,
-    done: false
+    ...step,
+    done: false,
+    open: false
   }))
 )
 
@@ -53,10 +54,9 @@ const errors = ref<unknown>(null)
 const quantizeWorker = ref<QuantizeWorker | null>(null)
 
 onBeforeMount(async () => {
-  quantizeWorker.value = new Worker(new URL('~/workers/quantize/worker.ts', import.meta.url), {
+  quantizeWorker.value = new Worker(new URL('~/workers/quantize/future/worker.ts', import.meta.url), {
     type: 'module'
   })
-  await sleep(300)
 })
 
 whenever(quantizeWorker, (worker) => {
@@ -73,6 +73,8 @@ whenever(quantizeWorker, (worker) => {
   worker.postMessage(startMessage)
 
   worker.onmessage = (event: MessageEvent<WorkerEventData>) => {
+    console.log('Received event', event.data)
+
     if (isProgressEvent(event)) {
       processes.value[event.data.step - 1].done = true
     }
@@ -80,6 +82,7 @@ whenever(quantizeWorker, (worker) => {
     if (isDoneEvent(event)) {
       prominentColors.value = event.data.prominentColors
       seedColors.value = event.data.suitableColors
+      processes.value[processes.value.length - 1].done = true
       isLoading.value = false
     }
 
@@ -130,26 +133,38 @@ async function onNavigateBack() {
       <div class="p-4">
         <div
           v-for="(process, index) in processes"
-          :key="process.step"
-          class="grid h-[30px] grid-cols-[28px,1fr] items-center"
+          :key="index"
+          class="grid grid-cols-[28px,1fr] items-center"
         >
-          <div class="grid items-center">
-            <Spinner v-if="isCurrentProcess(index)" class="size-5" />
+          <div class="flex items-start self-start py-2.5">
+            <Spinner v-if="isCurrentProcess(index)" class="size-4" />
             <Icon v-else-if="process.done" class="size-5 text-primary" name="ic:check" />
             <Icon v-else class="size-5" name="ic:outline-circle" />
           </div>
-          <div class="relative flex w-fit flex-col">
-            <p
+          <div class="relative flex flex-col">
+            <div
               :class="[
                 isPastProcess(index) ? 'text-on-surface-variant/50' : 'text-on-surface',
                 {
                   'animate-pulse': isCurrentProcess(index)
                 }
               ]"
-              class="relative w-fit text-body-md"
+              class="relative flex w-full items-center justify-between"
             >
-              {{ process.step }}
-            </p>
+              <p class="text-body-md">
+                {{ process.name }}
+              </p>
+              <button class="p-2" @click="process.open = !process.open">
+                <Icon v-if="process.open" class="size-5" name="ic:round-unfold-less" />
+                <Icon v-else class="size-5" name="ic:round-unfold-more" />
+              </button>
+            </div>
+
+            <div v-if="process.open" class="right-0 top-0">
+              <p class="text-body-sm text-on-surface-variant">
+                {{ process.description }}
+              </p>
+            </div>
           </div>
         </div>
       </div>

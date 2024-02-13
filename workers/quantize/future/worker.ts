@@ -1,9 +1,10 @@
 import { argbFromRgb, QuantizerCelebi, Score } from '@material/material-color-utilities'
 import type { StartEventData } from '../types'
 
-function pixelsFromImageBytes(imageBytes: Uint8ClampedArray) {
+function pixelsFromImageBytes(imageBytes: Uint8ClampedArray): number[] {
   const pixels: number[] = []
-  for (let i = 0; i < imageBytes.length; i += 4) {
+  const len = imageBytes.length
+  for (let i = 0; i < len; i += 4) {
     const r = imageBytes[i]
     const g = imageBytes[i + 1]
     const b = imageBytes[i + 2]
@@ -17,93 +18,94 @@ function pixelsFromImageBytes(imageBytes: Uint8ClampedArray) {
   return pixels
 }
 
-async function retrieveImageData(data: StartEventData) {
+async function retrieveImageData(data: StartEventData): Promise<ImageData> {
   const img = await createImageBitmap(data.file)
   const canvas = createNewOffscreenCanvas(img)
   return imageDataFromCanvas(img, canvas)
 }
 
-function createNewOffscreenCanvas(img: ImageBitmap) {
+function createNewOffscreenCanvas(img: ImageBitmap): OffscreenCanvas {
   return new OffscreenCanvas(img.width, img.height)
 }
 
-function imageDataFromCanvas(img: ImageBitmap, canvas: OffscreenCanvas) {
+function imageDataFromCanvas(img: ImageBitmap, canvas: OffscreenCanvas): ImageData {
   const ctx = canvas.getContext('2d')!
   ctx.drawImage(img, 0, 0)
   return ctx.getImageData(0, 0, img.width, img.height)
 }
 
-function bytesFromImageData(imageData: ImageData) {
+function bytesFromImageData(imageData: ImageData): Uint8ClampedArray {
   return new Uint8ClampedArray(imageData.data.buffer)
 }
 
-function quantizePixels(pixels: number[], maxColors: number) {
-  return QuantizerCelebi.quantize(pixels, maxColors)
+function quantizePixels<T>(pixels: number[], maxColors: number): T {
+  return QuantizerCelebi.quantize(pixels, maxColors) as T
 }
 
-function getSuitableColors(prominentColors: Map<number, number>) {
+function getSuitableColors(prominentColors: Map<number, number>): Score {
   return Score.score(prominentColors)
 }
 
-type Process = {
-  index: number
+type QuantizeFn<T> =
+  | ((data: StartEventData) => Promise<ImageData>)
+  | ((imageData: ImageData) => Uint8ClampedArray)
+  | ((imageBytes: Uint8ClampedArray) => number[])
+  | ((pixels: number[], maxColors: number) => T)
+  | ((prominentColors: Map<number, number>) => Score)
+
+type QuantizeProcess<T> = {
   name: string
   description: string
+  fn: QuantizeFn<T>
 }
 
-type QuantizeFn =
-  | typeof retrieveImageData
-  | typeof bytesFromImageData
-  | typeof pixelsFromImageBytes
-  | typeof quantizePixels
-  | typeof getSuitableColors
-
-type QuantizeProcess = {
-  name: string
-  description: string
-  fn: QuantizeFn
-  params: string[]
-}
-
-const steps: QuantizeProcess[] = [
+const steps: QuantizeProcess<unknown>[] = [
   {
     name: 'Retrieve Image Data',
     description:
       'Obtain the raw image data, containing information about the color values of each pixel in the image.',
-    fn: retrieveImageData,
-    params: ['data']
+    fn: retrieveImageData
   },
   {
     name: 'Convert Bitmap to Byte Array',
     description:
       'Transform the image bitmap into a byte array representation, which is more suitable for processing and manipulation.',
-    fn: bytesFromImageData,
-    params: ['imageData']
+    fn: bytesFromImageData
   },
   {
     name: 'Decode Bytes into Pixel Values',
     description:
       'Decode the byte array back into pixel values, reconstructing the image data in its original form.',
-    fn: pixelsFromImageBytes,
-    params: ['imageBytes']
+    fn: pixelsFromImageBytes
   },
   {
     name: 'Quantize Pixels to Reduce Colors',
     description:
       'Apply pixel quantization to reduce the number of distinct colors present in the image while maintaining its visual integrity.',
-    fn: quantizePixels,
-    params: ['pixels', 'maxColors']
+    fn: quantizePixels
   },
   {
     name: 'Evaluate and Score Colors',
     description:
       'Assess the quantized colors based on various criteria such as contrast, brightness, or harmony to determine their suitability for further use or display.',
-    fn: getSuitableColors,
-    params: ['prominentColors']
+    fn: getSuitableColors
   }
 ]
 
-async function* quantizeProcessGenerator({ data }: MessageEvent<StartEventData>) {}
+async function* quantizeProcessGenerator({ data }: MessageEvent<StartEventData>) {
+  let result: any = null
+  let step = 1
+  for (const { name, description, fn } of steps) {
+    const type = step === steps.length ? 'done' : 'progress'
+    try {
+      result = await fn(result || data, data.maxColors)
+      yield { type, step: step++, name, description, result }
+    } catch (error) {
+      yield { type: 'error', error }
+      return
+    }
+  }
+}
 
 if (typeof self !== 'undefined') {
   self.onmessage = async (event: MessageEvent<StartEventData>) => {

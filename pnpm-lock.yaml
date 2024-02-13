@@ -22,6 +22,9 @@ dependencies:
   cva:
     specifier: 1.0.0-beta.1
     version: 1.0.0-beta.1(typescript@5.3.3)
+  defu:
+    specifier: ^6.1.4
+    version: 6.1.4
   hast-util-to-html:
     specifier: ^9.0.0
     version: 9.0.0

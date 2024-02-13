@@ -1,5 +1,6 @@
 import { addComponentsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
 import type { ThemeModuleOptions } from '~/modules/theme/types'
+import defu from 'defu'
 
 const { resolve } = createResolver(import.meta.url)
 
@@ -20,13 +21,7 @@ export default defineNuxtModule<ThemeModuleOptions>({
     isDark: false,
     variant: 'content',
     contrastLevel: 0.35,
-    staticColors: [
-      {
-        blend: true,
-        name: 'Indigo',
-        value: '#5c6ac4'
-      }
-    ]
+    staticColors: []
   },
   hooks: {
     'imports:dirs'(dirs) {
@@ -34,9 +29,8 @@ export default defineNuxtModule<ThemeModuleOptions>({
     }
   },
   setup: async (options: ThemeModuleOptions, nuxt) => {
-    /*
-      nuxt.options.appConfig.theme = defu(nuxt.options.appConfig?.theme || {}, options)
-    */
+    const merged = defu(nuxt.options.appConfig?.theme || {}, options)
+    console.log('merged', merged)
     addPlugin({ src: resolve(`${runtimeDir}/plugin.ts`) })
 
     await addComponentsDir({
