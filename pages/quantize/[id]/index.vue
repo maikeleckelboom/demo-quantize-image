@@ -38,7 +38,7 @@ function isPastProcess(index: number) {
   return index < processes.value.findIndex((process) => !process.done)
 }
 
-const isLoading = ref<boolean>(false)
+const isLoading = ref<boolean>(true)
 
 const router = useRouter()
 
@@ -179,9 +179,9 @@ async function onNavigateBack() {
       </div>
 
       <template #footer>
-        <div v-if="isLoading" class="flex justify-end">
+        <div v-if="isLoading" class="flex w-full">
           <Button
-            class="rounded-full bg-error font-semibold text-on-error"
+            class="w-full rounded-full bg-error font-semibold text-on-error"
             intent="none"
             @click="onNavigateBack"
           >
@@ -189,7 +189,7 @@ async function onNavigateBack() {
             Abort
           </Button>
         </div>
-        <div v-else class="grid grid-cols-2 gap-x-2 md:gap-x-4">
+        <div v-else class="grid w-full grid-cols-2 gap-x-2 md:gap-x-4">
           <Button intent="text" stretch="true" @click="onNavigateBack">Reset</Button>
           <Button stretch="true" @click="onCustomize"> Continue</Button>
         </div>
