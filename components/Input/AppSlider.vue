@@ -4,7 +4,7 @@ import { InputSlider } from '#components'
 import InputSliderTicks from '~/components/Input/SliderTicks.vue'
 
 const props = withDefaults(defineProps<SliderProps & { numberOfTicks?: number }>(), {
-  numberOfTicks: 4,
+  numberOfTicks: 2,
   min: 0,
   max: 100
 })

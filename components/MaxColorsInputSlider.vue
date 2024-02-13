@@ -9,7 +9,10 @@ defineProps<SliderProps>()
 
 <template>
   <div class="flex flex-col justify-between">
-    <label class="mb-2 flex flex-nowrap items-center gap-x-2 text-label-lg" for="maxColors">
+    <label
+      class="mb-2 flex flex-nowrap items-center gap-x-2 text-label-md md:text-label-lg"
+      for="maxColors"
+    >
       Max Colors
       <span class="text-xs tabular-nums text-on-surface-variant">(1-128)</span>
       <Tooltip class="justify-self-end">

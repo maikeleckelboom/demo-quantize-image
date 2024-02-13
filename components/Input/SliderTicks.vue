@@ -13,11 +13,10 @@ const props = withDefaults(defineProps<Props>(), {
   max: 100
 })
 
+const { ticks } = toRefs(props)
 const rtl = computed(() => props.dir === 'rtl')
 const btt = computed(() => isTruthy(props.btt))
 const vertical = computed(() => props.orientation === 'vertical')
-
-const { ticks } = toRefs(props)
 
 const modelValue = defineModel<number | number[]>('modelValue', {
   type: [Number, Array],
@@ -35,14 +34,6 @@ const toReversed = computed(() => {
   return unref(rtl) || (unref(btt) && unref(vertical))
 })
 
-function isFirst(index: number) {
-  return index === 0
-}
-
-function isLast(index: number) {
-  return index === ticks.value.length - 1
-}
-
 function isCurrent(index: number) {
   return ticks.value[index].value === firstModelValue.value
 }
@@ -59,13 +50,11 @@ const isTickActive = (index: number) => {
   return isCurrent(index) || isPast(index)
 }
 
-const getTickStyle = (mark: SliderMark) => {
-  return {
-    [unref(vertical) ? 'top' : 'left']: unref(toReversed)
-      ? `${(1 - mark.at) * 100}%`
-      : `${mark.at * 100}%`
-  }
-}
+const getTickStyle = (mark: SliderMark) => ({
+  [unref(vertical) ? 'top' : 'left']: unref(toReversed)
+    ? `${(1 - mark.at) * 100}%`
+    : `${mark.at * 100}%`
+})
 </script>
 
 <template>
