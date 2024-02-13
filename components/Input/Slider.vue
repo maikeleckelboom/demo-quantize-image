@@ -64,6 +64,8 @@ const ticks = computed(() => {
         :btt="btt"
         :contained="contained"
         :dir="dir"
+        :max="max"
+        :min="min"
         :orientation="orientation"
         :ticks="ticks"
       />

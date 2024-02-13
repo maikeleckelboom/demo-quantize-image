@@ -373,7 +373,7 @@ const styleBinding = computed(() => {
   --slider-handle-shadow-size: 0px;
   --slider-handle-border-radius: 50%;
   --slider-handle-cursor: default;
-  --slider-handle-border: solid 1px inherit;
+  --slider-handle-border: solid 0px transparent;
   --slider-handle-background-color: var(--primary-rgb);
 
   /* Label */

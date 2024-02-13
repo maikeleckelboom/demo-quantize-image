@@ -1,17 +1,20 @@
 <script lang="ts" setup>
 import type { SliderMark, SliderProps } from '~/modules/slider/types'
 
-interface Props extends Partial<Pick<SliderProps, 'orientation' | 'contained' | 'btt' | 'dir'>> {
+interface Props extends Partial<Pick<SliderProps, 'orientation' | 'btt' | 'dir' | 'min' | 'max'>> {
   ticks: SliderMark[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  orientation: 'horizontal'
+  orientation: 'horizontal',
+  btt: false,
+  dir: 'ltr',
+  min: 0,
+  max: 100
 })
 
 const rtl = computed(() => props.dir === 'rtl')
 const btt = computed(() => isTruthy(props.btt))
-const contained = computed(() => isTruthy(props.contained))
 const vertical = computed(() => props.orientation === 'vertical')
 
 const { ticks } = toRefs(props)
@@ -64,22 +67,36 @@ const isTickActive = (index: number) => {
   return isCurrent(index) || isPast(index)
 }
 
-const isTickInactive = (index: number) => {
-  return isFuture(index)
+const modelValueIsMinOrMax = computed(() => {
+  return firstModelValue.value === Number(props.min) || firstModelValue.value === Number(props.max)
+})
+
+function currentMarkValueIsMinMax(mark: SliderMark) {
+  const min = Number(props.min)
+  const max = Number(props.max)
+  const isBoundaryMark = mark.value === min || mark.value === max
+  const isCurrentMarkValue = mark.value === firstModelValue.value
+  return isBoundaryMark && isCurrentMarkValue
 }
 </script>
 <template>
-  <div
-    v-for="(mark, index) in ticks"
-    :key="index"
-    :class="[isTickActive(index) ? 'v-active' : 'v-inactive']"
-    :style="getTickStyle(mark)"
-    class="input-tick-mark text-xs"
-  >
-    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs leading-none">
-      <slot :index="index" :mark="mark" name="tick" />
+  <div>
+    <div
+      v-for="(mark, index) in ticks"
+      :key="index"
+      :class="[
+        isTickActive(index) ? 'v-active' : 'v-inactive',
+        mark.value === 0 && firstModelValue === 0 ? 'v-boundary' : '',
+        mark.value === Number(max) && firstModelValue === Number(max) ? 'v-boundary' : ''
+      ]"
+      :style="getTickStyle(mark)"
+      class="input-tick-mark text-xs"
+    >
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs leading-none">
+        <slot :index="index" :mark="mark" name="tick" />
+      </div>
+      <span class="sr-only">{{ mark.label }}</span>
     </div>
-    <span class="sr-only">{{ mark.label }}</span>
   </div>
 </template>
 
@@ -90,7 +107,25 @@ const isTickInactive = (index: number) => {
   --_active-color: var(--slider-tick-active-color, rgb(var(--primary-container-rgb)));
   --_inactive-color: var(--slider-tick-inactive-color, rgb(var(--primary-rgb)));
   --_disabled-color: var(--slider-tick-disabled-color, rgb(var(--on-surface-rgb)));
-  --_background-color: var(--_inactive-color);
+
+  &:not(.v-boundary) {
+    &.v-inactive {
+      --_background-color: var(--_inactive-color);
+    }
+
+    &.v-active {
+      --_background-color: var(--_active-color);
+    }
+  }
+
+  &.v-boundary {
+    --_background-color: var(--_active-color);
+  }
+
+  --boundary-start: calc(50% - (var(--_size) * 0.5));
+  --boundary-end: calc(-150% + (var(--_size) * 0.5));
+  --boundary-offset: calc(var(--_size) * 0.5);
+  --boundary-offset-contained: calc(var(--_size) * 2);
 
   position: absolute;
   width: var(--_size);
@@ -98,23 +133,6 @@ const isTickInactive = (index: number) => {
   border-radius: var(--_radius);
   background: var(--_background-color);
   z-index: 1;
-
-  &.v-active {
-    --_background-color: var(--slider-tick-active-color);
-  }
-
-  &.v-inactive {
-    --_background-color: var(--slider-tick-inactive-color);
-  }
-
-  /* Touching the left/top edge */
-  --edge-start: calc(50% - (var(--_size) * 0.5));
-  /* Touching the right/bottom edge */
-  --edge-end: calc(-150% + (var(--_size) * 0.5));
-  /* Half of the size as offset */
-  --edge-offset: calc(var(--_size) * 0.5);
-  /* total offset when is contained */
-  --edge-contained-offset: calc(var(--_size) * 2);
 }
 
 .v-horizontal {
@@ -126,22 +144,24 @@ const isTickInactive = (index: number) => {
   &.v-ltr {
     .input-tick-mark {
       &:first-child {
-        transform: translateX(calc(var(--edge-start) + var(--edge-offset))) translateY(-50%);
+        transform: translateX(calc(var(--boundary-start) + var(--boundary-offset))) translateY(-50%);
       }
 
       &:last-child {
-        transform: translateX(calc(var(--edge-end) - var(--edge-offset))) translateY(-50%);
+        transform: translateX(calc(var(--boundary-end) - var(--boundary-offset))) translateY(-50%);
       }
     }
 
     &.v-contained {
       .input-tick-mark {
         &:first-child {
-          transform: translateX(calc(var(--edge-start) + var(--edge-contained-offset))) translateY(-50%);
+          transform: translateX(calc(var(--boundary-start) + var(--boundary-offset-contained)))
+            translateY(-50%);
         }
 
         &:last-child {
-          transform: translateX(calc(var(--edge-end) - var(--edge-contained-offset))) translateY(-50%);
+          transform: translateX(calc(var(--boundary-end) - var(--boundary-offset-contained)))
+            translateY(-50%);
         }
       }
     }
@@ -150,22 +170,24 @@ const isTickInactive = (index: number) => {
   &.v-rtl {
     .input-tick-mark {
       &:first-child {
-        transform: translateX(calc(var(--edge-end) - var(--edge-offset))) translateY(-50%);
+        transform: translateX(calc(var(--boundary-end) - var(--boundary-offset))) translateY(-50%);
       }
 
       &:last-child {
-        transform: translateX(calc(var(--edge-start) + var(--edge-offset))) translateY(-50%);
+        transform: translateX(calc(var(--boundary-start) + var(--boundary-offset))) translateY(-50%);
       }
     }
 
     &.v-contained {
       .input-tick-mark {
         &:first-child {
-          transform: translateX(calc(var(--edge-end) - var(--edge-contained-offset))) translateY(-50%);
+          transform: translateX(calc(var(--boundary-end) - var(--boundary-offset-contained)))
+            translateY(-50%);
         }
 
         &:last-child {
-          transform: translateX(calc(var(--edge-start) + var(--edge-contained-offset))) translateY(-50%);
+          transform: translateX(calc(var(--boundary-start) + var(--boundary-offset-contained)))
+            translateY(-50%);
         }
       }
     }
@@ -181,22 +203,24 @@ const isTickInactive = (index: number) => {
   &.v-ttb {
     .input-tick-mark {
       &:first-child {
-        transform: translateY(calc(var(--edge-start) + var(--edge-offset))) translateX(-50%);
+        transform: translateY(calc(var(--boundary-start) + var(--boundary-offset))) translateX(-50%);
       }
 
       &:last-child {
-        transform: translateY(calc(var(--edge-end) - var(--edge-offset))) translateX(-50%);
+        transform: translateY(calc(var(--boundary-end) - var(--boundary-offset))) translateX(-50%);
       }
     }
 
     &.v-contained {
       .input-tick-mark {
         &:first-child {
-          transform: translateY(calc(var(--edge-start) + var(--edge-contained-offset))) translateX(-50%);
+          transform: translateY(calc(var(--boundary-start) + var(--boundary-offset-contained)))
+            translateX(-50%);
         }
 
         &:last-child {
-          transform: translateY(calc(var(--edge-end) - var(--edge-contained-offset))) translateX(-50%);
+          transform: translateY(calc(var(--boundary-end) - var(--boundary-offset-contained)))
+            translateX(-50%);
         }
       }
     }
@@ -205,22 +229,24 @@ const isTickInactive = (index: number) => {
   &.v-btt {
     .input-tick-mark {
       &:first-child {
-        transform: translateY(calc(var(--edge-end) - var(--edge-offset))) translateX(-50%);
+        transform: translateY(calc(var(--boundary-end) - var(--boundary-offset))) translateX(-50%);
       }
 
       &:last-child {
-        transform: translateY(calc(var(--edge-start) + var(--edge-offset))) translateX(-50%);
+        transform: translateY(calc(var(--boundary-start) + var(--boundary-offset))) translateX(-50%);
       }
     }
 
     &.v-contained {
       .input-tick-mark {
         &:first-child {
-          transform: translateY(calc(var(--edge-end) - var(--edge-contained-offset))) translateX(-50%);
+          transform: translateY(calc(var(--boundary-end) - var(--boundary-offset-contained)))
+            translateX(-50%);
         }
 
         &:last-child {
-          transform: translateY(calc(var(--edge-start) + var(--edge-contained-offset))) translateX(-50%);
+          transform: translateY(calc(var(--boundary-start) + var(--boundary-offset-contained)))
+            translateX(-50%);
         }
       }
     }
