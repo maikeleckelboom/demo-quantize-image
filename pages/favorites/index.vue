@@ -16,13 +16,14 @@ const reverb = ref(0)
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-xl gap-y-24 p-4">
+  <div class="mx-auto w-full max-w-4xl gap-y-24 p-4 md:max-w-4xl">
     <div class="mb-12 mt-4">
       <Button class="rounded-md" intent="outlined" size="sm" @click="disabled = !disabled">
         {{ disabled ? 'Enable' : 'Disable' }}
       </Button>
     </div>
     <div class="mb-12 flex flex-col gap-12">
+      <h1>Standard</h1>
       <section class="mb-12 flex flex-col gap-8">
         <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
           <fieldset class="relative flex flex-col gap-4">
@@ -77,6 +78,7 @@ const reverb = ref(0)
     </div>
     <!-- repeat but with InputAppSlider instead of InputSlider -->
     <div class="mb-12 flex flex-col gap-12">
+      <h1>Custom Styled</h1>
       <section class="mb-12 flex flex-col gap-8">
         <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
           <fieldset class="relative flex flex-col gap-4">

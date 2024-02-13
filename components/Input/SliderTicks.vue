@@ -52,14 +52,11 @@ function isFuture(index: number) {
   return ticks.value[index].value > firstModelValue.value
 }
 
-const getTickStyle = (mark: SliderMark, index: number) => {
-  if (unref(vertical)) {
-    return {
-      top: unref(toReversed) ? `${(1 - mark.at) * 100}%` : `${mark.at * 100}%`
-    }
-  }
+const getTickStyle = (mark: SliderMark) => {
   return {
-    left: unref(toReversed) ? `${(1 - mark.at) * 100}%` : `${mark.at * 100}%`
+    [unref(vertical) ? 'top' : 'left']: unref(toReversed)
+      ? `${(1 - mark.at) * 100}%`
+      : `${mark.at * 100}%`
   }
 }
 
@@ -76,7 +73,7 @@ const isTickInactive = (index: number) => {
     v-for="(mark, index) in ticks"
     :key="index"
     :class="[isTickActive(index) ? 'v-active' : 'v-inactive']"
-    :style="getTickStyle(mark, index)"
+    :style="getTickStyle(mark)"
     class="input-tick-mark text-xs"
   >
     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs leading-none">
@@ -87,30 +84,35 @@ const isTickInactive = (index: number) => {
 </template>
 
 <style lang="postcss">
-:root {
-  /* Ticks - duplicate */
-  --slider-tick-size: 4px;
-  --slider-tick-active-color: rgb(var(--primary-container-rgb));
-  --slider-tick-inactive-color: rgb(var(--primary-rgb));
-  --slider-tick-disabled-color: rgb(var(--on-surface-rgb));
-  --slider-tick-border-radius: 50%;
-}
-
 .input-tick-mark {
+  --_size: var(--slider-tick-size, 4px);
+  --_radius: var(--slider-tick-border-radius, 50%);
+  --_active-color: var(--slider-tick-active-color, rgb(var(--primary-container-rgb)));
+  --_inactive-color: var(--slider-tick-inactive-color, rgb(var(--primary-rgb)));
+  --_disabled-color: var(--slider-tick-disabled-color, rgb(var(--on-surface-rgb)));
+  --_background-color: var(--_inactive-color);
+
   position: absolute;
-  width: var(--slider-tick-size);
-  height: var(--slider-tick-size);
-  border-radius: var(--slider-tick-border-radius);
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  width: var(--_size);
+  height: var(--_size);
+  border-radius: var(--_radius);
+  background: var(--_background-color);
   z-index: 1;
 
   &.v-active {
-    background-color: var(--slider-tick-active-color);
+    --_background-color: var(--slider-tick-active-color);
   }
 
   &.v-inactive {
-    background-color: var(--slider-tick-inactive-color);
+    --_background-color: var(--slider-tick-inactive-color);
   }
+
+  /* Touching the left/top edge */
+  --edge-start: calc(50% - (var(--_size) * 0.5));
+  /* Touching the right/bottom edge */
+  --edge-end: calc(-150% + (var(--_size) * 0.5));
+  /* Half of the size as offset */
+  --edge-offset: calc(var(--_size) * 0.5);
 }
 
 .v-horizontal {
@@ -122,13 +124,11 @@ const isTickInactive = (index: number) => {
   &.v-ltr {
     .input-tick-mark {
       &:first-child {
-        /* Touching the left edge */
-        transform: translateX(calc(50% - (var(--slider-tick-size) * 0.5))) translateY(-50%);
+        transform: translateX(calc(var(--edge-start) + var(--edge-offset))) translateY(-50%);
       }
 
       &:last-child {
-        /* Touching the right edge */
-        transform: translateX(calc(-150% + (var(--slider-tick-size) * 0.5))) translateY(-50%);
+        transform: translateX(calc(var(--edge-end) - var(--edge-offset))) translateY(-50%);
       }
     }
   }
@@ -136,13 +136,11 @@ const isTickInactive = (index: number) => {
   &.v-rtl {
     .input-tick-mark {
       &:first-child {
-        /* Touching the right edge */
-        transform: translateX(calc(-150% + (var(--slider-tick-size) * 0.5))) translateY(-50%);
+        transform: translateX(calc(var(--edge-end) - var(--edge-offset))) translateY(-50%);
       }
 
       &:last-child {
-        /* Touching the left edge */
-        transform: translateX(calc(50% - (var(--slider-tick-size) * 0.5))) translateY(-50%);
+        transform: translateX(calc(var(--edge-start) + var(--edge-offset))) translateY(-50%);
       }
     }
   }
@@ -161,12 +159,12 @@ const isTickInactive = (index: number) => {
     .input-tick-mark {
       &:first-child {
         /* Touching the top edge */
-        transform: translateY(calc(50% - (var(--slider-tick-size) * 0.5))) translateX(-50%);
+        transform: translateY(calc(var(--edge-start) + var(--edge-offset))) translateX(-50%);
       }
 
       &:last-child {
         /* Touching the bottom edge */
-        transform: translateY(calc(-150% + (var(--slider-tick-size) * 0.5))) translateX(-50%);
+        transform: translateY(calc(var(--edge-end) - var(--edge-offset))) translateX(-50%);
       }
     }
   }
@@ -175,12 +173,12 @@ const isTickInactive = (index: number) => {
     .input-tick-mark {
       &:first-child {
         /* Touching the bottom edge */
-        transform: translateY(calc(-150% + (var(--slider-tick-size) * 0.5))) translateX(-50%);
+        transform: translateY(calc(var(--edge-end) - var(--edge-offset))) translateX(-50%);
       }
 
       &:last-child {
         /* Touching the top edge */
-        transform: translateY(calc(50% - (var(--slider-tick-size) * 0.5))) translateX(-50%);
+        transform: translateY(calc(var(--edge-start) + var(--edge-offset))) translateX(-50%);
       }
     }
   }

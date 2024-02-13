@@ -4,7 +4,7 @@ import { InputSlider } from '#components'
 import InputSliderTicks from '~/components/Input/SliderTicks.vue'
 
 const props = withDefaults(defineProps<SliderProps & { numberOfTicks?: number }>(), {
-  numberOfTicks: 2,
+  numberOfTicks: 4,
   min: 0,
   max: 100
 })
@@ -72,15 +72,13 @@ const ticks = computed(() => {
 </template>
 
 <style>
-:root {
-}
-
 .app-slider {
   --slider-track-background-color: rgb(var(--primary-container-rgb));
   --slider-track-border-color: transparent;
   --slider-fill-background-color: rgb(var(--primary-rgb));
   --slider-handle-border-radius: 4px;
 
+  /* todo: fix horizontal/vertical config mess */
   --slider-track-width--horizontal: 200px;
   --slider-track-height--vertical: 200px;
   --slider-track-width--vertical: 8px;
@@ -111,17 +109,7 @@ const ticks = computed(() => {
       }
     }
 
-    &:is(:active, :focus-visible) {
-      &::before {
-        clip-path: inset(0.28em round 3px);
-      }
-    }
-  }
-
-  &.v-swiping {
-    transition: none;
-
-    .slider-handle {
+    &:is(:active, :focus-visible, .v-swiping &) {
       &::before {
         clip-path: inset(0.28em round 3px);
       }
