@@ -356,22 +356,18 @@ const styleBinding = computed(() => {
 </template>
 
 <style lang="postcss">
-.slider-ticks {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  position: absolute;
-  inset: 0;
-}
-
 :root {
-  /* Label */
-  --slider-label-offset: 8px;
-  --slider-label-padding-x: 16px;
-  --slider-label-padding-y: 12px;
-  --slider-label-border-radius: 50%;
-  --slider-label-background-color: rgb(var(--inverse-surface-rgb));
-  --slider-label-text-color: rgb(var(--inverse-on-surface-rgb));
+  /* Track */
+  --slider-track-border-radius: 16px;
+  --slider-track-border-color: transparent;
+  --slider-track-border-width: 0px;
+  --slider-track-border-style: solid;
+  --slider-track-border: var(--slider-track-border-style) var(--slider-track-border-width)
+    var(--slider-track-border-color);
+  --slider-track-background-color: rgb(var(--surface-variant-rgb));
+
+  /* Track Fill */
+  --slider-fill-background-color: rgb(var(--primary-rgb));
 
   /* Handle */
   --slider-handle-shadow-size: 0px;
@@ -380,15 +376,20 @@ const styleBinding = computed(() => {
   --slider-handle-border: solid 1px inherit;
   --slider-handle-background-color: var(--primary-rgb);
 
-  /* Track */
-  --slider-track-border-radius: 16px;
-  --slider-track-border-width: 0px;
-  --slider-track-border: solid var(--slider-track-border-width) var(--slider-track-border-color);
-  --slider-track-background-color: rgb(var(--surface-variant-rgb));
-  --slider-track-border-color: rgb(var(--outline-variant-rgb));
+  /* Label */
+  --slider-label-offset: 8px;
+  --slider-label-padding-x: 16px;
+  --slider-label-padding-y: 12px;
+  --slider-label-border-radius: 50%;
+  --slider-label-background-color: rgb(var(--inverse-surface-rgb));
+  --slider-label-text-color: rgb(var(--inverse-on-surface-rgb));
 
-  /* Track Fill */
-  --slider-fill-color: rgb(var(--primary-rgb));
+  /* Ticks */
+  --slider-tick-size: 4px;
+  --slider-tick-active-color: rgb(var(--primary-container-rgb));
+  --slider-tick-inactive-color: rgb(var(--primary-rgb));
+  --slider-tick-disabled-color: rgb(var(--on-surface-rgb));
+  --slider-tick-border-radius: 50%;
 
   /* Horizontal (+1) */
   --slider-track-height--horizontal: 12px;
@@ -403,6 +404,13 @@ const styleBinding = computed(() => {
   --slider-handle-width--vertical: 24px;
   --slider-handle-height--vertical: 24px;
   --slider-handle-cursor--vertical: ns-resize;
+}
+
+.slider-ticks {
+  block-size: 100%;
+  inline-size: 100%;
+  position: absolute;
+  inset: 0;
 }
 
 .slider-root {
@@ -433,7 +441,7 @@ const styleBinding = computed(() => {
 }
 
 .slider-track-fill {
-  background-color: var(--slider-fill-color);
+  background-color: var(--slider-fill-background-color);
   width: 100%;
   height: 100%;
   position: absolute;
@@ -530,7 +538,30 @@ const styleBinding = computed(() => {
   }
 }
 
-/* State classes */
+.slider-root:not(.v-contained) {
+  margin-inline-start: calc(var(--slider-handle-width) * 0.5);
+  margin-inline-end: calc(var(--slider-handle-width) * 0.5);
+}
+
+.v-label-visible {
+  .slider-label-container {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.v-label-hidden {
+  .slider-label-container {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
+.v-disabled {
+  pointer-events: none;
+}
+
 .v-horizontal {
   --slider-track-height: var(--slider-track-height--horizontal);
   --slider-track-width: max(var(--slider-track-width--horizontal), 100%);
@@ -650,30 +681,5 @@ const styleBinding = computed(() => {
       }
     }
   }
-}
-
-/* Fix overflow when not contained */
-.slider-root:not(.v-contained) {
-  margin-inline-start: calc(var(--slider-handle-width) * 0.5);
-  margin-inline-end: calc(var(--slider-handle-width) * 0.5);
-}
-
-.v-label-visible {
-  .slider-label-container {
-    opacity: 1;
-    pointer-events: auto;
-  }
-}
-
-.v-label-hidden {
-  .slider-label-container {
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-  }
-}
-
-.v-disabled {
-  pointer-events: none;
 }
 </style>

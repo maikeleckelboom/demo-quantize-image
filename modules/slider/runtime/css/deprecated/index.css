@@ -210,7 +210,7 @@
 }
 
 .slider-track-fill {
-    background-color: var(--slider-fill-color);
+    background-color: var(--slider-fill-background-color);
     block-size: 100%;
     inline-size: 100%;
     position: absolute;

@@ -86,13 +86,12 @@ function onMarkClick(mark: Mark) {
 .v-contrast-slider {
   --slider-track-background-color: rgb(var(--primary-container-rgb));
   --slider-track-border-color: transparent;
-  --slider-fill-color: rgb(var(--primary-rgb));
+  --slider-fill-background-color: rgb(var(--primary-rgb));
   --slider-handle-border-radius: 4px;
   --slider-handle-width--horizontal: 10px;
   --slider-handle-height--horizontal: 38px;
 
   --slider-horizontal-track-height: 8px;
-  --slider-track-border: 0px;
   --slider-tack-height: 12px;
   --slider-track-width: 100px;
   --slider-handle-shadow-size: 0px;

@@ -9,7 +9,7 @@ const modelValue = defineModel<number | number[]>()
 <style>
 .v-material-slider {
   --slider-track-background-color: rgb(var(--primary-container-rgb));
-  --slider-fill-color: rgb(var(--primary-rgb));
+  --slider-fill-background-color: rgb(var(--primary-rgb));
   --slider-handle-width--horizontal: 12px;
   --slider-handle-height--horizontal: 50px;
   --slider-handle-width--vertical: 48px;

@@ -62,18 +62,20 @@ const getTickStyle = (mark: SliderMark, index: number) => {
     left: unref(toReversed) ? `${(1 - mark.at) * 100}%` : `${mark.at * 100}%`
   }
 }
+
+const isTickActive = (index: number) => {
+  return isCurrent(index) || isPast(index)
+}
+
+const isTickInactive = (index: number) => {
+  return isFuture(index)
+}
 </script>
 <template>
   <div
     v-for="(mark, index) in ticks"
     :key="index"
-    :class="[
-      'absolute size-[4px] rounded-full transition-transform duration-150',
-      {
-        'bg-primary-container': isCurrent(index) || isPast(index),
-        'bg-primary': isFuture(index)
-      }
-    ]"
+    :class="[isTickActive(index) ? 'v-active' : 'v-inactive']"
     :style="getTickStyle(mark, index)"
     class="input-tick-mark text-xs"
   >
@@ -86,26 +88,31 @@ const getTickStyle = (mark: SliderMark, index: number) => {
 
 <style lang="postcss">
 :root {
+  /* Ticks - duplicate */
   --slider-tick-size: 4px;
+  --slider-tick-active-color: rgb(var(--primary-container-rgb));
+  --slider-tick-inactive-color: rgb(var(--primary-rgb));
+  --slider-tick-disabled-color: rgb(var(--on-surface-rgb));
+  --slider-tick-border-radius: 50%;
 }
 
 .input-tick-mark {
-  /*
-  transform: translateX(-50%) translateY(-50%);
-  */
+  position: absolute;
+  width: var(--slider-tick-size);
+  height: var(--slider-tick-size);
+  border-radius: var(--slider-tick-border-radius);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
 
-  /*  &:first-child {
-      transform: translateX(50%) translateY(-50%);
-    }
+  &.v-active {
+    background-color: var(--slider-tick-active-color);
+  }
 
-    &:last-child {
-      transform: translateX(-150%) translateY(-50%);
-    }*/
+  &.v-inactive {
+    background-color: var(--slider-tick-inactive-color);
+  }
 }
 
-/*
-  Horizontal - ltr/rtl/contained
-*/
 .v-horizontal {
   .input-tick-mark {
     top: 50%;
@@ -144,9 +151,6 @@ const getTickStyle = (mark: SliderMark, index: number) => {
   }
 }
 
-/*
-  Vertical - ttb/btt/contained
-*/
 .v-vertical {
   .input-tick-mark {
     left: 50%;

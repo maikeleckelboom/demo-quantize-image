@@ -57,7 +57,7 @@ const ticks = computed(() => {
 </script>
 
 <template>
-  <InputRangeSlider id="vm-slider" ref="slider" v-model="modelValue" v-bind="$props">
+  <InputRangeSlider ref="slider" v-model="modelValue" class="app-slider" v-bind="$props">
     <template #ticks>
       <InputSliderTicks
         v-model="modelValue"
@@ -70,3 +70,62 @@ const ticks = computed(() => {
     </template>
   </InputRangeSlider>
 </template>
+
+<style>
+:root {
+}
+
+.app-slider {
+  --slider-track-background-color: rgb(var(--primary-container-rgb));
+  --slider-track-border-color: transparent;
+  --slider-fill-background-color: rgb(var(--primary-rgb));
+  --slider-handle-border-radius: 4px;
+
+  --slider-track-width--horizontal: 200px;
+  --slider-track-height--vertical: 200px;
+  --slider-track-width--vertical: 8px;
+  --slider-track-height--horizontal: 8px;
+
+  --slider-handle-height--vertical: 10px;
+  --slider-handle-width--horizontal: 10px;
+  --slider-handle-height--horizontal: 38px;
+  --slider-handle-width--vertical: 38px;
+  --slider-handle-cursor--horizontal: ew-resize;
+  --slider-handle-cursor--vertical: ns-resize;
+
+  .slider-handle {
+    background-color: rgb(var(--surface-rgb));
+
+    &::before {
+      content: '';
+      clip-path: inset(0.2em round 3px);
+      background-color: rgb(var(--primary-rgb));
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+
+    &:hover {
+      &::before {
+        clip-path: inset(0.24em round 3px);
+      }
+    }
+
+    &:is(:active, :focus-visible) {
+      &::before {
+        clip-path: inset(0.28em round 3px);
+      }
+    }
+  }
+
+  &.v-swiping {
+    transition: none;
+
+    .slider-handle {
+      &::before {
+        clip-path: inset(0.28em round 3px);
+      }
+    }
+  }
+}
+</style>
