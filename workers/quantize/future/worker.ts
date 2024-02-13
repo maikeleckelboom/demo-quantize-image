@@ -96,10 +96,15 @@ async function* quantizeProcessGenerator({ data }: MessageEvent<StartEventData>)
   let result: any = null
   let step = 1
   for (const { name, description, fn } of steps) {
-    const type = step === steps.length ? 'done' : 'progress'
     try {
       result = await fn(result || data, data.maxColors)
-      yield { type, step: step++, name, description, result }
+      yield {
+        type: step < steps.length ? 'progress' : 'done',
+        step: step++,
+        name,
+        description,
+        result
+      }
     } catch (error) {
       yield { type: 'error', error }
       return

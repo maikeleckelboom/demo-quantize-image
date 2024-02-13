@@ -119,7 +119,7 @@ async function onNavigateBack() {
 }
 </script>
 <template>
-  <div class="mx-auto w-full max-w-xl p-4">
+  <div class="mx-auto w-full max-w-xl">
     <DialogComponent>
       <template #breakout>
         <div class="relative flex size-full rounded-md md:pt-4">
@@ -130,14 +130,14 @@ async function onNavigateBack() {
           />
         </div>
       </template>
-      <div class="p-4">
+      <div class="mt-2">
         <div
           v-for="(process, index) in processes"
           :key="index"
-          class="grid grid-cols-[28px,1fr] items-center"
+          class="grid grid-cols-[28px,1fr] items-center gap-x-2 p-2 pb-0 pl-3 pr-4"
         >
-          <div class="flex items-start self-start py-2.5">
-            <Spinner v-if="isCurrentProcess(index)" class="size-4" />
+          <div class="flex items-start justify-start self-start pt-1">
+            <Spinner v-if="isCurrentProcess(index)" class="size-5" />
             <Icon v-else-if="process.done" class="size-5 text-primary" name="ic:check" />
             <Icon v-else class="size-5" name="ic:outline-circle" />
           </div>
@@ -149,18 +149,17 @@ async function onNavigateBack() {
                   'animate-pulse': isCurrentProcess(index)
                 }
               ]"
-              class="relative flex w-full items-center justify-between"
+              class="relative mb-1 flex w-full items-center justify-between"
+              @click="process.open = !process.open"
             >
-              <p class="text-body-md">
+              <p class="text-body-md leading-loose">
                 {{ process.name }}
               </p>
-              <button class="p-2" @click="process.open = !process.open">
-                <Icon v-if="process.open" class="size-5" name="ic:round-unfold-less" />
-                <Icon v-else class="size-5" name="ic:round-unfold-more" />
-              </button>
+              <Icon v-if="process.open" class="size-5" name="ic:round-unfold-less" />
+              <Icon v-else class="size-5" name="ic:round-unfold-more" />
             </div>
 
-            <div v-if="process.open" class="right-0 top-0">
+            <div v-if="process.open" class="pb-2">
               <p class="text-body-sm text-on-surface-variant">
                 {{ process.description }}
               </p>
