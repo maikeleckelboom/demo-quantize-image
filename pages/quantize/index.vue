@@ -154,8 +154,8 @@ const device = useDevice()
         </template>
       </Button>
     </div>
-    <div class="h-20">
-      <MaxColorsInputSlider v-model="maxColors" :disabled="!selectedFile" max="128" min="1" step="1" />
+    <div class="">
+      <MaxColorsInputSlider v-model="maxColors" max="128" min="1" step="1" />
     </div>
     <div class="mt-12 flex w-fit flex-col self-end">
       <div class="flex gap-3">
