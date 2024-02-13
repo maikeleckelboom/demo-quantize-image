@@ -86,8 +86,9 @@ function currentMarkValueIsMinMax(mark: SliderMark) {
       :key="index"
       :class="[
         isTickActive(index) ? 'v-active' : 'v-inactive',
-        mark.value === 0 && firstModelValue === 0 ? 'v-boundary' : '',
-        mark.value === Number(max) && firstModelValue === Number(max) ? 'v-boundary' : ''
+        mark.value === Number(min) && 'v-min',
+        mark.value === Number(max) && 'v-max',
+        mark.value === Number(min) && mark.value === Number(max) ? 'v-boundary' : ''
       ]"
       :style="getTickStyle(mark)"
       class="input-tick-mark text-xs"
@@ -122,8 +123,8 @@ function currentMarkValueIsMinMax(mark: SliderMark) {
     --_background-color: var(--_active-color);
   }
 
-  --boundary-start: calc(50% - (var(--_size) * 0.5));
-  --boundary-end: calc(-150% + (var(--_size) * 0.5));
+  --boundary-start: calc(50% - (var(--_size) * 1));
+  --boundary-end: calc(-150% + (var(--_size) * 1));
   --boundary-offset: calc(var(--_size) * 0.5);
   --boundary-offset-contained: calc(var(--_size) * 2);
 
