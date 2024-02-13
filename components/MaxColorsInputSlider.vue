@@ -23,6 +23,7 @@ defineProps<SliderProps>()
       <div class="">
         <AppSlider
           v-model.number="modelValue"
+          :disabled="$props.disabled"
           contained="true"
           max="128"
           min="1"

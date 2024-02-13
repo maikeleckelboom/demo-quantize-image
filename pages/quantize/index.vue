@@ -122,7 +122,7 @@ const device = useDevice()
 
     <div
       :class="[state.isLoadingExample ? 'animate-pulse duration-150' : '']"
-      class="dropzone-container relative mb-3 h-52 overflow-hidden rounded md:mb-2.5"
+      class="relative mb-3 h-52 overflow-hidden rounded md:mb-2.5"
     >
       <Transition mode="out-in" name="basic-out-in">
         <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected object-contain" />
@@ -171,6 +171,51 @@ const device = useDevice()
 
 <style>
 .dropzone-container {
+  --_border-color: rgb(var(--outline-variant-rgb));
+
+  background-image: repeating-linear-gradient(
+      0deg,
+      var(--_border-color),
+      var(--_border-color) 10px,
+      transparent 10px,
+      transparent 20px,
+      var(--_border-color) 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      var(--_border-color),
+      var(--_border-color) 10px,
+      transparent 10px,
+      transparent 20px,
+      var(--_border-color) 20px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      var(--_border-color),
+      var(--_border-color) 10px,
+      transparent 10px,
+      transparent 20px,
+      var(--_border-color) 20px
+    ),
+    repeating-linear-gradient(
+      270deg,
+      var(--_border-color),
+      var(--_border-color) 10px,
+      transparent 10px,
+      transparent 20px,
+      var(--_border-color) 20px
+    );
+  background-size:
+    2px 100%,
+    100% 2px,
+    2px 100%,
+    100% 2px;
+  background-position:
+    0 0,
+    0 0,
+    100% 0,
+    0 100%;
+  background-repeat: no-repeat;
 }
 
 :not(.prevent-transition) {
