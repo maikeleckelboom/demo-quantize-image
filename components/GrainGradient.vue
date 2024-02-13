@@ -8,21 +8,12 @@
       <feBlend in="SourceGraphic" in2="" mode="multiply"></feBlend>
     </filter>
   </svg>
-  <div></div>
+  <div class="size-full"></div>
 </template>
 
 <style scoped>
-/* ===== Relevant styles ===== */
-svg[height='0'] {
-  position: fixed;
-}
-
 div {
-  background: radial-gradient(circle, mediumturquoise, darkslateblue)
-    /* also works with an actual image,
-   * not just with a CSS gradient *
-  url(https://images.unsplash.com/photo-1633596683562-4a47eb4983c5?w=1400)
-    50%/ cover/**/;
+  background: radial-gradient(circle, rgb(var(--primary-rgb)), rgb(var(--inverse-primary-rgb)));
   filter: url(#grainy);
 }
 </style>

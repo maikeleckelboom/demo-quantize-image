@@ -16,7 +16,7 @@ function toggle(event: MouseEvent) {
   const y = event.clientY
   const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
 
-  document.documentElement.classList.add('prevent-transition')
+  document.documentElement.classList.add('prevent-transitions')
 
   const transition = document.startViewTransition(async () => {
     isDark.value = !isDark.value
@@ -24,10 +24,7 @@ function toggle(event: MouseEvent) {
   })
 
   transition.ready.then(() => {
-    const circleClipPath = [
-      `circle(0px at ${x}px ${y}px)`,
-      `circle(${endRadius}px at ${x}px ${y}px)`
-    ]
+    const circleClipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
 
     document.documentElement.animate(
       {
@@ -36,15 +33,13 @@ function toggle(event: MouseEvent) {
       {
         duration: 400,
         easing: 'ease-in',
-        pseudoElement: isDark.value
-          ? '::view-transition-old(root)'
-          : '::view-transition-new(root)'
+        pseudoElement: isDark.value ? '::view-transition-old(root)' : '::view-transition-new(root)'
       }
     )
   })
 
   transition.finished.then(() => {
-    document.documentElement.classList.remove('prevent-transition')
+    document.documentElement.classList.remove('prevent-transitions')
   })
 }
 
@@ -58,7 +53,7 @@ const context = { isDark, toggle }
 </template>
 
 <style>
-html.prevent-transition {
+html.prevent-transitions {
   &::view-transition-old(root),
   &::view-transition-new(root) {
     animation: none;
@@ -74,7 +69,7 @@ html.prevent-transition {
   }
 }
 
-html.dark.prevent-transition {
+html.dark.prevent-transitions {
   &::view-transition-old(root) {
     z-index: 999;
   }

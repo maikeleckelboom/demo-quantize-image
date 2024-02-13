@@ -32,8 +32,8 @@ const device = useDevice()
 
 async function onOpenColorPicker(keyColor: string, initialColor: number) {
   const { data, isCanceled } = await openColorPicker({
-    keyColor, // name
-    initialColor, // color
+    keyColor,
+    initialColor,
     type: device.isMobile ? 'fullScreen' : 'basic',
     onColorChange: (color) => {
       //

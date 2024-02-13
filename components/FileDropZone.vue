@@ -76,7 +76,7 @@ const id = useId()
       :for="`dropzone-file-${id}`"
       v-bind="$attrs"
     >
-      <span class="flex flex-col items-center justify-center">
+      <span class="dropzone-label-text flex flex-col items-center justify-center">
         <Icon class="md:md-2 size-8" name="ic:round-cloud-upload" />
         <span class="text-sm leading-loose text-on-surface-variant">
           <span class="font-semibold">
@@ -97,4 +97,4 @@ const id = useId()
   </div>
 </template>
 
-<style scoped></style>
+<style></style>

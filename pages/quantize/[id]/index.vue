@@ -52,11 +52,11 @@ const errors = ref<unknown>(null)
 
 const quantizeWorker = ref<QuantizeWorker | null>(null)
 
-onMounted(async () => {
-  await sleep(300)
+onBeforeMount(async () => {
   quantizeWorker.value = new Worker(new URL('~/workers/quantize/worker.ts', import.meta.url), {
     type: 'module'
   })
+  await sleep(300)
 })
 
 whenever(quantizeWorker, (worker) => {
@@ -107,8 +107,8 @@ async function onNavigateBack() {
   }
 
   const transition = document.startViewTransition(async () => {
-    await navigateTo('/quantize')
     await nextTick()
+    navigateTo('/quantize')
   })
 
   await transition.ready
@@ -179,19 +179,20 @@ async function onNavigateBack() {
       </div>
 
       <template #footer>
-        <div v-if="isLoading" class="flex w-full">
+        <div class="grid w-full grid-cols-2 gap-x-2 md:gap-x-4">
           <Button
-            class="w-full rounded-full bg-error font-semibold text-on-error"
+            v-if="isLoading"
+            class="col-start-2 w-full rounded-full bg-error font-semibold text-on-error"
             intent="none"
             @click="onNavigateBack"
           >
             <Icon class="size-5" name="ic:outline-close" />
             Abort
           </Button>
-        </div>
-        <div v-else class="grid w-full grid-cols-2 gap-x-2 md:gap-x-4">
-          <Button intent="text" stretch="true" @click="onNavigateBack">Reset</Button>
-          <Button stretch="true" @click="onCustomize"> Continue</Button>
+          <template v-else>
+            <Button intent="text" stretch="true" @click="onNavigateBack">Reset</Button>
+            <Button stretch="true" @click="onCustomize"> Continue</Button>
+          </template>
         </div>
       </template>
     </DialogComponent>

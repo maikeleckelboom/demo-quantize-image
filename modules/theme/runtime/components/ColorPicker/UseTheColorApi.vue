@@ -54,12 +54,12 @@ watchDebounced(
 const filteredData = computed(() => {
   if (!data.value) return
   return {
-    name: data.value?.name?.value || 'unknown',
-    hex: data.value?.hex?.value || 'unknown',
-    rgb: data.value?.rgb?.value || 'unknown',
-    hsl: data.value?.hsl?.value || 'unknown',
-    hsv: data.value?.hsv?.value || 'unknown',
-    cmyk: data.value?.cmyk?.value || 'unknown'
+    name: data.value?.name?.value || '',
+    hex: data.value?.hex?.value || '',
+    rgb: data.value?.rgb?.value || '',
+    hsl: data.value?.hsl?.value || '',
+    hsv: data.value?.hsv?.value || '',
+    cmyk: data.value?.cmyk?.value || ''
   }
 })
 </script>
@@ -84,9 +84,7 @@ const filteredData = computed(() => {
               v-html="highlightColorCode(key)"
             />
           </div>
-          <div
-            class="group relative flex size-full rounded-md pr-12 hover:bg-surface-bright/50"
-          >
+          <div class="group relative flex size-full rounded-md pr-12 hover:bg-surface-bright/50">
             <div
               :class="key === 'name' ? 'text-title-lg font-medium text-primary' : ''"
               class="w-full text-nowrap p-2"

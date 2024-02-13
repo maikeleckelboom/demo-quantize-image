@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     }
   },
 
-  css: ['~/assets/css/images.css'],
+  css: ['~/assets/css/images.css', '~/assets/css/view-transitions.css'],
 
   tailwindcss: {
     viewer: false,
@@ -72,7 +72,11 @@ export default defineNuxtConfig({
       pathPrefix: true
     }
   ],
-
+  image: {
+    sirv: {
+      baseURL: 'https://exclave.sirv.com'
+    }
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
@@ -81,6 +85,8 @@ export default defineNuxtConfig({
     '@nuxtjs/device',
     'nuxt-icon',
     'nuxt-viewport',
+    '@vueuse/motion/nuxt',
+    '@nuxtjs/cloudinary',
     '~/modules/theme/module.ts',
     '~/modules/slider/module.ts',
     '~/modules/json-pretty/module.ts',

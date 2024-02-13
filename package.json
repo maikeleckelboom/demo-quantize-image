@@ -54,8 +54,10 @@
   "dependencies": {
     "@floating-ui/vue": "^1.0.6",
     "@nuxt/kit": "^3.9.3",
+    "@nuxtjs/cloudinary": "^2.5.2",
     "@statelyai/inspect": "^0.2.2",
     "@wooorm/starry-night": "^3.2.0",
+    "appwrite": "^13.0.1",
     "cva": "1.0.0-beta.1",
     "hast-util-to-html": "^9.0.0",
     "open-props": "^1.6.18",

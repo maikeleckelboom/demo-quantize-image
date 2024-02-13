@@ -15,9 +15,9 @@ defineProps<SliderProps>()
     >
       Max Colors
       <span class="text-xs tabular-nums text-on-surface-variant">(1-128)</span>
-      <Tooltip class="justify-self-end">
-        <button class="flex items-center justify-center">
-          <Icon class="mb-1 ml-0.5 size-3" name="ic:outline-info" />
+      <Tooltip class="">
+        <button class="flex items-center justify-center p-1">
+          <Icon class="mb-0.5 size-3" name="ic:outline-info" />
         </button>
         <template #content> The maximum number of colors to generate from the image.</template>
       </Tooltip>

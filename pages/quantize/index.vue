@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import MaxColorsInputSlider from '~/components/MaxColorsInputSlider.vue'
+import MaxColorsInputSlider from '~/components/Input/MaxColorsInputSlider.vue'
 
 const store = useFilesStore()
 const { files, selectedFile, fileObjectUrl } = storeToRefs(store)
@@ -80,7 +80,8 @@ async function onExtractColors() {
 
 const textContent = reactive({
   title: 'Extract Colors from Image',
-  description: 'Utilize digital analysis to extract vibrant colors from your images.'
+  description:
+    'Utilize digital analysis to extract vibrant colors from your images. Use the extracted colors to create color palettes, themes, and more.'
 })
 
 const {
@@ -118,11 +119,11 @@ onBeforeRouteLeave(() => {
 
 <template>
   <div class="mx-auto flex w-full max-w-xl flex-col p-4">
-    <div class="mb-12 flex-col md:mb-8 md:flex">
-      <h1 class="text-title-lg font-medium md:mb-2 md:text-display-sm">
+    <div class="mb-12 flex-col md:mb-10 md:flex">
+      <h1 class="mb-2 text-title-lg font-medium md:text-display-sm">
         {{ textContent.title }}
       </h1>
-      <p class="hidden text-body-sm text-on-surface-variant md:flex">
+      <p class="text-body-sm text-on-surface-variant md:flex">
         {{ textContent.description }}
       </p>
     </div>
@@ -142,7 +143,8 @@ onBeforeRouteLeave(() => {
         </Button>
       </div>
       <Button v-if="selectedFile" class="rounded-md" intent="text" size="sm" @click="reset">
-        Remove Image
+        <Icon class="size-4" name="ic:round-remove-circle-outline" />
+        Remove
       </Button>
       <Button
         v-if="!files?.length"
@@ -158,7 +160,7 @@ onBeforeRouteLeave(() => {
         </template>
         <template v-else>
           <Icon name="ic:baseline-upload-file" />
-          Load Example Image
+          Load Example
         </template>
       </Button>
     </div>
@@ -182,18 +184,6 @@ onBeforeRouteLeave(() => {
 </template>
 
 <style>
-/*!* Entry transition *!
-::view-transition-new(sidebar):only-child {
-  animation: 300ms cubic-bezier(0, 0, 0.2, 1) both fade-in,
-  300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
-}
-
-!* Exit transition *!
-::view-transition-old(sidebar):only-child {
-  animation: 150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-  300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-right;
-}*/
-
 img.selected {
   view-transition-name: selected;
   z-index: 20;
