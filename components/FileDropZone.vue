@@ -55,11 +55,7 @@ const id = useId()
 </script>
 
 <template>
-  <div
-    ref="dropZoneRef"
-    :class="{ isOverDropZone }"
-    class="group relative size-full overflow-hidden"
-  >
+  <div ref="dropZoneRef" :class="{ isOverDropZone }" class="group relative size-full overflow-hidden">
     <label
       :class="[
         { 'bg-secondary-container/50': isOverDropZone },
@@ -76,14 +72,12 @@ const id = useId()
         'active:bg-secondary-container/30',
         'transition-colors',
         'duration-200'
-        // 'hover:bg-surface-container-high',
-        // 'focus:bg-surface-container-high'
       ]"
       :for="`dropzone-file-${id}`"
       v-bind="$attrs"
     >
       <span class="flex flex-col items-center justify-center">
-        <Icon class="mb-2 size-8" name="ic:round-cloud-upload" />
+        <Icon class="md:md-2 size-8" name="ic:round-cloud-upload" />
         <span class="text-sm leading-loose text-on-surface-variant">
           <span class="font-semibold">
             {{ device.isDesktopOrTablet ? 'Click here to upload' : 'Tap here to upload' }}
@@ -102,3 +96,5 @@ const id = useId()
     </label>
   </div>
 </template>
+
+<style scoped></style>

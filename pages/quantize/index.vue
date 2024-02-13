@@ -111,38 +111,37 @@ const device = useDevice()
 
 <template>
   <div class="mx-auto flex w-full max-w-xl flex-col p-4">
-    <div class="mb-4 md:mb-8">
+    <div class="mb-4 hidden flex-col md:mb-8 md:flex">
       <h1 class="mb-2 text-3xl font-medium tracking-normal md:text-4xl">
         {{ textContent.title }}
       </h1>
-      <p class="hidden text-body-sm text-on-surface-variant md:inline-flex">
+      <p class="text-body-sm text-on-surface-variant">
         {{ textContent.description }}
       </p>
     </div>
 
     <div
-      :class="[
-        selectedFile ? 'border-secondary-container/40' : 'border-dashed border-secondary-container',
-        state.isLoadingExample ? 'animate-pulse duration-150' : ''
-      ]"
-      class="relative mb-3 h-52 overflow-hidden rounded-md border-2 md:mb-2.5 md:h-64"
+      :class="[state.isLoadingExample ? 'animate-pulse duration-150' : '']"
+      class="dropzone-container relative mb-3 h-52 overflow-hidden rounded md:mb-2.5"
     >
       <Transition mode="out-in" name="basic-out-in">
         <NuxtImg v-if="selectedFile" :src="fileObjectUrl" alt="" class="selected object-contain" />
-        <FileDropZone v-else class="rounded-md" @drop="onDrop" />
+        <FileDropZone v-else class="rounded" @drop="onDrop" />
       </Transition>
     </div>
 
-    <div class="mb-6 flex gap-2 md:mb-8">
-      <div v-if="device.isMobileOrTablet" class="flex gap-2">
-        <Button class="rounded-md" intent="outlined" size="sm" @click="onTakeCapture">
+    <div class="mb-6 flex justify-end gap-2 md:mb-8">
+      <div v-if="device.isMobileOrTablet" class="mr-auto">
+        <Button class="rounded-md" intent="text" size="sm" @click="onTakeCapture">
           <Icon class="size-4" name="ic:round-photo-camera" />
         </Button>
       </div>
+      <Button v-if="selectedFile" intent="text" size="sm" @click="reset"> Clear</Button>
+
       <Button
         :disabled="state.isLoadingExample"
         class="rounded-md"
-        intent="outlined"
+        intent="text"
         size="sm"
         @click="loadExampleImage"
       >
@@ -151,7 +150,7 @@ const device = useDevice()
           <Spinner class="size-4" />
         </template>
         <template v-else>
-          {{ selectedFile ? 'Change image' : 'Load example' }}
+          {{ selectedFile ? 'Change image' : 'Load example image' }}
         </template>
       </Button>
     </div>
@@ -160,9 +159,8 @@ const device = useDevice()
     </div>
     <div class="mt-12 flex w-fit flex-col self-end">
       <div class="flex gap-3">
-        <Button v-if="selectedFile" intent="text" size="md" @click="reset"> Cancel </Button>
         <Button :disabled="!selectedFile || state.isLoadingNextPage" @click="onExtractColors">
-          <div class="flex items-center justify-center gap-2 leading-none">
+          <div class="flex items-center justify-center gap-2 px-4 leading-none">
             {{ state.isLoadingNextPage ? 'Loading' : 'Extract Colors' }}
           </div>
         </Button>
@@ -172,6 +170,9 @@ const device = useDevice()
 </template>
 
 <style>
+.dropzone-container {
+}
+
 :not(.prevent-transition) {
   img.selected {
     view-transition-name: selected;

@@ -404,7 +404,7 @@ const styleBinding = computed(() => {
   --slider-tick-border-radius: 50%;
 
   /* Horizontal (+1) */
-  --slider-track-height--horizontal: 12px;
+  --slider-track-height--horizontal: 10px;
   --slider-track-width--horizontal: 200px;
   --slider-handle-width--horizontal: 24px;
   --slider-handle-height--horizontal: 24px;
@@ -412,7 +412,7 @@ const styleBinding = computed(() => {
 
   /* Vertical (+1) */
   --slider-track-height--vertical: 200px;
-  --slider-track-width--vertical: 12px;
+  --slider-track-width--vertical: 10px;
   --slider-handle-width--vertical: 24px;
   --slider-handle-height--vertical: 24px;
   --slider-handle-cursor--vertical: ns-resize;
