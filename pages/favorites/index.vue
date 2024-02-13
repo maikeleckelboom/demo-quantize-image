@@ -85,19 +85,19 @@ const reverb = ref(0)
         <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
           <fieldset class="relative flex flex-col gap-4">
             <legend>Horizontal - ltr</legend>
-            <InputSlider v-model="maxColors" :disabled="disabled" />
+            <InputSlider v-model="balance" :disabled="disabled" />
           </fieldset>
           <fieldset class="relative flex flex-col gap-4">
             <legend>Horizontal - ltr - contained</legend>
-            <InputSlider v-model="maxColors" :disabled="disabled" contained="true" />
+            <InputSlider v-model="balance" :disabled="disabled" contained="true" />
           </fieldset>
           <fieldset class="relative flex flex-col gap-4">
             <legend>Horizontal - rtl</legend>
-            <InputSlider v-model="maxColors" :disabled="disabled" dir="rtl" />
+            <InputSlider v-model="balance" :disabled="disabled" dir="rtl" />
           </fieldset>
           <fieldset class="relative flex flex-col gap-4">
             <legend>Horizontal - rtl - contained</legend>
-            <InputSlider v-model="maxColors" :disabled="disabled" contained="true" dir="rtl" />
+            <InputSlider v-model="balance" :disabled="disabled" contained="true" dir="rtl" />
           </fieldset>
         </div>
       </section>

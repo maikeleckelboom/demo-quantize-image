@@ -75,7 +75,7 @@ const getTickStyle = (mark: SliderMark) => {
       :key="index"
       :class="isTickActive(index) ? 'v-active' : 'v-inactive'"
       :style="getTickStyle(mark)"
-      class="input-tick-mark text-xs"
+      class="input-tick-mark"
     >
       <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs leading-none">
         <slot :index="index" :mark="mark" name="tick" />
@@ -107,8 +107,8 @@ const getTickStyle = (mark: SliderMark) => {
   --boundary-offset-contained: calc(var(--_size) * 2);
 
   position: absolute;
-  width: var(--_size);
-  height: var(--_size);
+  inline-size: var(--_size);
+  block-size: var(--_size);
   border-radius: var(--_radius);
   background: var(--_background-color);
   z-index: 1;

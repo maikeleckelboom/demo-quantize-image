@@ -58,12 +58,7 @@ const ticks = computed(() => {
 </script>
 
 <template>
-  <InputRangeSlider
-    ref="slider"
-    v-bind="{
-      ...props
-    }"
-  >
+  <InputRangeSlider ref="slider" v-model="modelValue" v-bind="$props">
     <template #ticks>
       <InputSliderTicks
         v-model="modelValue"
