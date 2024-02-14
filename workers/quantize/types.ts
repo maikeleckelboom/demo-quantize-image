@@ -1,3 +1,22 @@
+import { Score } from '@material/material-color-utilities'
+
+type QuantizeWorker = Omit<Worker, 'postMessage'> & {
+  postMessage(data: StartEventData): void
+}
+
+type QuantizeFn<T> =
+  | ((data: StartEventData) => Promise<ImageData>)
+  | ((imageData: ImageData) => Uint8ClampedArray)
+  | ((imageBytes: Uint8ClampedArray) => number[])
+  | ((pixels: number[], maxColors: number) => T)
+  | ((prominentColors: Map<number, number>) => Score)
+
+type QuantizeProcess<T> = {
+  name: string
+  description: string
+  fn: QuantizeFn<T>
+}
+
 type StartEventData = {
   type: 'start'
   file: File
@@ -7,9 +26,9 @@ type StartEventData = {
 type ProgressEventData = {
   type: 'progress'
   step: number
-  result: any
   name: string
   description: string
+  result: ReturnType<QuantizeFn<unknown>>
 }
 
 type ErrorEventData = {
@@ -25,17 +44,15 @@ type DoneEventData = {
 
 type WorkerEventData = ProgressEventData | DoneEventData | ErrorEventData
 
-interface QuantizeWorker extends Omit<Worker, 'postMessage'> {
-  postMessage(data: StartEventData): void
-}
-
 export type {
   QuantizeWorker,
   WorkerEventData,
   StartEventData,
   ProgressEventData,
   DoneEventData,
-  ErrorEventData
+  ErrorEventData,
+  QuantizeFn,
+  QuantizeProcess
 }
 
 function isProgressEvent(
