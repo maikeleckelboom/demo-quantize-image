@@ -180,7 +180,7 @@ const highlightedCode = (code: string) => highlight.highlightAuto(code, ['javasc
                 <ClientOnly>
                   <pre
                     class="rounded-lg bg-surface-container-lowest p-2"
-                  ><code v-html="highlightedCode(`${process.fn}`)" /></pre>
+                  ><code v-html="highlightedCode(`${steps[index].fn}`)" /></pre>
                 </ClientOnly>
               </div>
             </div>
