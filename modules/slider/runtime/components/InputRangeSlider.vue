@@ -542,7 +542,7 @@ const styleBinding = computed(() => {
     align-items: center;
   }
 
-  :where(.slider-handle:is(:hover, :active, :focus-visible)) & {
+  :where(.slider-handle:is(:hover, :exactactive, :focus-visible)) & {
     pointer-events: auto;
     opacity: 1;
     scale: 1;

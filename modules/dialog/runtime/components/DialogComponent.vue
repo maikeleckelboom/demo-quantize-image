@@ -1,7 +1,25 @@
 <script lang="ts" setup>
-const props = withDefaults(defineProps<{ type?: 'fullScreen' | 'basic' }>(), {
+import type { DialogOptions } from '~/modules/dialog/runtime/factory'
+
+const props = withDefaults(defineProps<DialogOptions>(), {
   type: 'fullScreen'
 })
+
+const emit = defineEmits<{
+  close: []
+}>()
+
+const dialogEl = ref<HTMLDialogElement>()
+const backdropEl = ref<HTMLDivElement>()
+
+const { isTop } = useStack()
+
+async function close() {
+  if (!isTop.value) return
+  emit('close')
+}
+
+onClickOutside(dialogEl, () => close())
 
 const dialogVariant = cva({
   base: ['fixed', 'text-on-surface', 'grid grid-rows-[auto,1fr,auto]', 'overflow-hidden'],
@@ -50,26 +68,11 @@ const articleVariant = cva({
     }
   }
 })
-
-const emit = defineEmits<{
-  close: []
-}>()
-
-const dialogRef = ref<HTMLDialogElement>()
-
-const { isTop } = useStack()
-
-function close() {
-  if (!isTop.value) return
-  emit('close')
-}
-
-onClickOutside(dialogRef, () => close())
 </script>
 
 <template>
-  <div :class="backdropVariant({ isTop })">
-    <dialog ref="dialogRef" :class="dialogVariant({ type })" open>
+  <div ref="backdropEl" :class="backdropVariant({ isTop })">
+    <dialog ref="dialogEl" :class="dialogVariant({ type })">
       <header v-if="$slots['header'] || $slots['header-actions']">
         <div class="mx-auto grid w-full max-w-xl grid-cols-[1fr,auto] gap-x-2 px-4 pt-4 md:px-0">
           <div class="flex flex-nowrap">
@@ -97,4 +100,4 @@ onClickOutside(dialogRef, () => close())
   </div>
 </template>
 
-<style scoped></style>
+<style></style>

@@ -1,87 +1,8 @@
 <script lang="ts" setup>
-import { TonalPalette } from '@material/material-color-utilities'
-import { openColorPicker } from '~/modules/dialog/runtime/factory'
-
-const { $dynamicScheme } = useNuxtApp()
-
-const palettes = computed(() =>
-  Object.keys($dynamicScheme.value).reduce(
-    (acc, key) => {
-      const palette = $dynamicScheme.value[key as keyof typeof $dynamicScheme.value]
-      if (palette instanceof TonalPalette) {
-        acc.push({
-          key,
-          palette
-        })
-      }
-      return acc
-    },
-    [] as { key: string; palette: TonalPalette }[]
-  )
-)
-
-function removePaletteFromKey(key: string) {
-  return key
-    .split(/(?=[A-Z])/)
-    .filter((s) => s !== 'palette' && s !== 'key' && s !== 'color')
-    .map((s) => s.toLowerCase())
-    .join(' ')
-}
-
-const device = useDevice()
-
-async function onOpenColorPicker(keyColor: string, initialColor: number) {
-  const { data, isCanceled } = await openColorPicker({
-    keyColor,
-    initialColor,
-    type: device.isMobile ? 'fullScreen' : 'basic',
-    onColorChange: (color) => {
-      //
-    }
-  })
-
-  if (isCanceled) {
-    console.log('Color picker was canceled')
-    return
-  }
-
-  if (data) {
-    console.log('Color picker returned', data)
-  }
-}
-
-function onFabClick() {
-  console.log('FAB clicked')
-}
-
-function onDrop(droppedFiles: File[]) {
-  console.log('Dropped files', droppedFiles)
-}
+function onFabClick() {}
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-xl p-4">
-    <div class="grid grid-cols-2 gap-4">
-      <div class="col-span-2">
-        <h1 class="mb-2 overflow-hidden overflow-ellipsis text-nowrap capitalize">Source Color</h1>
-        <ColorPreview
-          :color="$dynamicScheme.sourceColorArgb"
-          class="h-12"
-          @click="onOpenColorPicker('sourceColor', $dynamicScheme.sourceColorArgb)"
-        />
-      </div>
-      <div v-for="{ key, palette } in palettes" :key="key">
-        <h1 class="mb-2 overflow-hidden overflow-ellipsis text-nowrap text-title-lg capitalize">
-          {{ removePaletteFromKey(key) }}
-        </h1>
-        <ColorPreview
-          :color="palette.keyColor.toInt()"
-          class="h-12"
-          @click="onOpenColorPicker(key, palette.keyColor.toInt())"
-        />
-      </div>
-    </div>
-  </div>
   <div class="pointer-events-none fixed inset-x-0 bottom-[92px]">
     <div class="mx-auto flex size-full max-w-xl justify-end px-4">
       <Button

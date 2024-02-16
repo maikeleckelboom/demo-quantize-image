@@ -5,6 +5,7 @@ import type { NuxtLink } from '#components'
 const props = defineProps<{
   item: NavBarItem
   active: boolean
+  exactActive: boolean
   labeled: boolean
 }>()
 
@@ -18,8 +19,6 @@ const baseIcon = computed(() => {
 const activeIcon = computed(() => props.item?.icon?.[1])
 
 const isLarge = computed(() => props.item?.badge?.type === 'large')
-
-const target = ref<HTMLElement>()
 </script>
 
 <template>

@@ -1,14 +1,14 @@
 import { argbFromRgb, QuantizerCelebi, Score } from '@material/material-color-utilities'
-import type { QuantizeProcess, StartEventData } from './types'
+import type { QuantizeFn, QuantizeProcess, StartEventData } from './types'
 
 function pixelsFromImageBytes(imageBytes: Uint8ClampedArray): number[] {
   const pixels: number[] = []
   const { length } = imageBytes
   for (let i = 0; i < length; i += 4) {
-    const r = imageBytes[i]
-    const g = imageBytes[i + 1]
-    const b = imageBytes[i + 2]
-    const a = imageBytes[i + 3]
+    const r = imageBytes[i],
+      g = imageBytes[i + 1],
+      b = imageBytes[i + 2],
+      a = imageBytes[i + 3]
     if (a < 255) continue
     const argb = argbFromRgb(r, g, b)
     pixels.push(argb)
@@ -78,7 +78,7 @@ const steps: QuantizeProcess<unknown>[] = [
 ]
 
 async function* quantizeProcessGenerator({ data }: MessageEvent<StartEventData>) {
-  let result: any = null
+  let result: ReturnType<QuantizeFn<any>> = null
   let step = 1
   for (const { name, description, fn } of steps) {
     try {

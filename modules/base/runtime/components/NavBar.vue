@@ -5,15 +5,16 @@ import type { NavBarItem as TNavBarItem } from '~/modules/base/types'
 const props = withDefaults(
   defineProps<{
     items?: T[]
-    active?: T | null
+    active?: T
+    exactActive?: T
   }>(),
   {
-    active: null,
     items: () => []
   }
 )
 
 const isActive = (item: T) => item === props.active
+const isExactActive = (item: T) => item === props.exactActive
 
 const itemsCount = computed(() => props.items.length)
 
@@ -27,6 +28,7 @@ const { isLabeled } = storeToRefs(useNavStore())
         v-for="item in items"
         :key="item.label"
         :active="isActive(item)"
+        :exactActive="isExactActive(item)"
         :item="item"
         :labeled="isLabeled"
       />

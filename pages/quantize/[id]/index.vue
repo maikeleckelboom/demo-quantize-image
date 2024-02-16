@@ -9,8 +9,6 @@ import {
   type StartEventData,
   type WorkerEventData
 } from '~/workers/quantize/types'
-
-import highlight from 'highlight.js'
 import 'highlight.js/styles/github.css'
 
 definePageMeta({
@@ -56,7 +54,7 @@ const errors = ref<unknown>(null)
 
 const quantizeWorker = ref<QuantizeWorker | null>(null)
 
-onBeforeMount(async () => {
+onMounted(async () => {
   quantizeWorker.value = new Worker(new URL('~/workers/quantize/worker.ts', import.meta.url), {
     type: 'module'
   })
@@ -110,15 +108,14 @@ async function onNavigateBack() {
 
   const transition = document.startViewTransition(async () => {
     await nextTick()
-    navigateTo('/quantize')
+    await navigateTo('/quantize')
   })
 
   await transition.ready
   await transition.finished
 }
-
-const highlightedCode = (code: string) => highlight.highlightAuto(code, ['javascript'])?.value ?? ''
 </script>
+
 <template>
   <div class="mx-auto w-full max-w-xl">
     <div v-if="errors">
@@ -146,7 +143,7 @@ const highlightedCode = (code: string) => highlight.highlightAuto(code, ['javasc
           <div
             v-for="(process, index) in processes"
             :key="index"
-            class="grid grid-cols-[24px,1fr] items-center gap-x-2 p-2 pb-0 pl-3 pr-4"
+            class="grid grid-cols-[24px,1fr] items-center gap-x-2 p-1.5 pb-0 pl-3 pr-4"
           >
             <div class="flex items-start justify-start self-start pt-1">
               <Spinner v-if="isCurrentProcess(index)" class="size-5" />
@@ -162,26 +159,19 @@ const highlightedCode = (code: string) => highlight.highlightAuto(code, ['javasc
                   }
                 ]"
                 class="relative flex w-full items-center justify-between"
-                @click="process.open = !process.open"
               >
                 <p class="text-body-md leading-loose">
                   {{ process.name }}
                 </p>
-                <Icon v-if="process.open" class="size-5" name="ic:round-unfold-less" />
-                <Icon v-else class="size-5" name="ic:round-unfold-more" />
+                <!--                <Icon v-if="process.open" class="size-5" name="ic:round-unfold-less" />-->
+                <!--                <Icon v-else class="size-5" name="ic:round-unfold-more" />-->
               </div>
             </div>
             <div class="col-span-2 col-start-1">
-              <div v-if="process.open" class="flex flex-col gap-4">
+              <div v-if="process.open" class="flex flex-col gap-4 p-2">
                 <p class="text-body-sm text-on-surface-variant">
                   {{ process.description }}
                 </p>
-
-                <ClientOnly>
-                  <pre
-                    class="rounded-lg bg-surface-container-lowest p-2"
-                  ><code v-html="highlightedCode(`${steps[index].fn}`)" /></pre>
-                </ClientOnly>
               </div>
             </div>
           </div>

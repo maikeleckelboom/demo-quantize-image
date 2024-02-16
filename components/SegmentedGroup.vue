@@ -18,7 +18,7 @@
     @apply flex flex-row flex-nowrap items-center px-4;
     @apply text-label-lg leading-none;
 
-    &:active {
+    &:exactactive {
       @apply bg-surface-level-3;
     }
 
@@ -29,7 +29,7 @@
     &.active {
       @apply bg-surface-level-2;
 
-      &:active {
+      &:exactactive {
         @apply bg-surface-level-3;
       }
     }

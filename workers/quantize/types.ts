@@ -28,7 +28,7 @@ type ProgressEventData = {
   step: number
   name: string
   description: string
-  result: ReturnType<QuantizeFn<unknown>>
+  result: ReturnType<QuantizeFn<any>>
 }
 
 type ErrorEventData = {

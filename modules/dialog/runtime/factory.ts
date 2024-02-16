@@ -1,23 +1,24 @@
 import { KeyColorDialog, SelectColorsDialog } from '#components'
 
+interface DialogOptions {
+  type?: 'fullScreen' | 'basic'
+  onBeforeClose?: (dialogEl: HTMLDialogElement, backdropEl: HTMLDivElement) => Promise<void> | void
+  onBeforeOpen?: (dialogEl: HTMLDialogElement, backdropEl: HTMLDivElement) => Promise<void> | void
+  onClosed?: () => void
+  onOpened?: () => void
+}
+
 interface ColorPickerOptions {
   keyColor: string
   initialColor: number
   onColorChange: (color: number) => void
 }
 
-type DialogOptions = {
-  type?: 'basic' | 'fullScreen'
-}
+type ColorPickerDialogProps = DialogOptions & ColorPickerOptions
 
-async function openColorPicker({
-  keyColor,
-  initialColor,
-  onColorChange,
-  type
-}: ColorPickerOptions & DialogOptions) {
+async function openColorPicker(props: ColorPickerDialogProps) {
   const { open } = useDialogs()
-  return await open(KeyColorDialog, { keyColor, initialColor, onColorChange, type })
+  return await open(KeyColorDialog, props)
 }
 
 export { openColorPicker }
@@ -34,4 +35,4 @@ async function openSelectColorsDialog(props: SelectColorsProps) {
 }
 
 export { openSelectColorsDialog }
-export type { SelectColorsProps }
+export type { SelectColorsProps, DialogOptions }

@@ -13,6 +13,11 @@ const useNavStore = defineStore('nav', () => {
       icon: ['ic:baseline-favorite-border', 'ic:baseline-favorite']
     },*/
     {
+      label: 'Colors',
+      path: '/colors',
+      icon: ['ic:baseline-colorize', 'ic:baseline-colorize']
+    },
+    {
       label: 'Quantize',
       path: '/quantize',
       icon: ['ic:baseline-image', 'ic:baseline-image'],
@@ -34,11 +39,16 @@ const useNavStore = defineStore('nav', () => {
 
   const router = useRouter()
 
-  const active = computed(() =>
+  const exactActive = computed(() =>
     state.value.find((item) => item.path === router.currentRoute.value.path)
   )
 
+  const active = computed(() =>
+    state.value.find((item) => router.currentRoute.value.path.startsWith(item.path))
+  )
+
   const isLabeled = ref<boolean>(true)
+
   const possibleBackgroundTokens = ['bg-surface', 'bg-surface-container', 'bg-surface-variant'] as const
   const backgroundToken = ref<(typeof possibleBackgroundTokens)[number]>('bg-surface')
   const textToken = computed(() =>
@@ -52,6 +62,7 @@ const useNavStore = defineStore('nav', () => {
   return {
     state,
     active,
+    exactActive,
     isLabeled,
     toggleLabeled,
     possibleBackgroundTokens,

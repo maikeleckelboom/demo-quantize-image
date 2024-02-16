@@ -49,8 +49,8 @@ const setVariant = async (v: Variant) => {
       v-for="variant in variants"
       :key="variant.value"
       :ref="chips.set"
-      :aria-pressed="variant.active"
-      :selected="variant.active"
+      :aria-pressed="variant.exactActive"
+      :selected="variant.exactActive"
       @click="setVariant(variant.value)"
     >
       {{ variant.text }}

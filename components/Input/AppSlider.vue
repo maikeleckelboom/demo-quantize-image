@@ -109,7 +109,7 @@ const ticks = computed(() => {
       }
     }
 
-    &:is(:active, :focus-visible, .v-swiping &) {
+    &:is(:exactactive, :focus-visible, .v-swiping &) {
       &::before {
         clip-path: inset(0.28em round 3px);
       }

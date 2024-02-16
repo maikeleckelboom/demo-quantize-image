@@ -4,7 +4,8 @@ import {
   DynamicScheme,
   Hct,
   MaterialDynamicColors,
-  rgbaFromArgb
+  rgbaFromArgb,
+  TonalPalette
 } from '@material/material-color-utilities'
 import { capitalize } from 'vue'
 import type { Variant } from '~/modules/theme/types'
@@ -39,6 +40,22 @@ function groupByBaseColor(colors: Record<string, number>): Record<string, Record
   )
 }
 
+function groupSchemeByKeyAndPalette(scheme: DynamicScheme) {
+  return Object.keys(scheme).reduce(
+    (acc, key) => {
+      const palette = scheme[key as keyof typeof scheme]
+      if (palette instanceof TonalPalette) {
+        acc.push({
+          key,
+          palette
+        })
+      }
+      return acc
+    },
+    [] as { key: string; palette: TonalPalette }[]
+  )
+}
+
 function makeDynamicScheme(
   sourceColor: Hct | string | number,
   isDark: boolean,
@@ -62,9 +79,7 @@ function makeDynamicScheme(
   return schemes
 }
 
-function colorsFromDynamicSchemeMap(
-  dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>
-) {
+function colorsFromDynamicSchemeMap(dynamicSchemes: Map<'system' | 'light' | 'dark', DynamicScheme>) {
   return Array.from(dynamicSchemes.entries()).reduce(
     (acc, [key, value]) => ({
       ...acc,
@@ -136,6 +151,7 @@ export {
   propertiesFromColors,
   textFromProperties,
   groupByBaseColor,
+  groupSchemeByKeyAndPalette,
   repeatingLinearGradient,
   repeatingRadialGradient,
   schemeVariants
